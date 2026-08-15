@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Funcionario | Agenda System</title>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body>
+    <div id="tela-profissional" class="tela ativa" hidden>
+        <div class="auth-container auth-container--largo">
+            <h1 class="tela__titulo">Crie seu perfil profissional</h1>
+            <p class="tela__subtitulo">Essas informações aparecem para clientes e para a empresa que você vai integrar.</p>
+
+            <form id="form-auth" class="form-auth" novalidate>
+                <div class="campo">
+                    <label for="pro-foto">Foto (3x4)</label>
+                    <input type="file" id="pro-foto" accept="image/*" autocomplete="off">
+                    <span class="campo__erro" id="erro-prof-foto"></span>
+                </div>
+                <div class="campo">
+                    <label for="pro-telefone">Telefone*</label>
+                    <input type="tel" id="pro-telefone" placeholder="(00) 00000-0000" autocomplete="off" required>
+                    <span class="campo__erro" id="erro-prof-tel"></span>
+                </div>
+                <div class="campo">
+                    <label for="pro-cargo">Cargo / Especialidade*</label>
+                    <input type="text" id="pro-cargo" placeholder="Ex: Barbeiro sênior" autocomplete="off">
+                    <span class="campo__erro" id="erro-prof-cargo"></span>
+                </div>
+                <div class="campo">
+                    <label for="experiencia">Tempo de experiência</label>
+                    <select id="experiencia">
+                        <option value="">Selecionar</option>
+                        <option>Menos de 1 ano</option>
+                        <option>1 a 3 anos</option>
+                        <option>3 a 5 anos</option>
+                        <option>5 a 10 anos</option>
+                        <option>Mais de 10 anos</option>
+                    </select>
+                </div>
+                
+                <div class="nav-duplo">
+                    <button type="button" class="btn-ghost" onclick="voltar()">← Voltar</button>
+                    <button type="button" class="btn-primario" onclick="salvarProfissional()">Próximo →</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="js/cadastroProfissional.js"></script>
+</body>
+</html>

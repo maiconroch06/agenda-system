@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipo Usuário | Agenda System</title>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body>
+    <!-- ============================================================
+     TELA 2: TIPO DE USUÁRIO
+     ============================================================ -->
+    <div id="tela-tipo" class="tela ativa" hidden>
+        <div class="auth-container">
+            <h1 class="tela__titulo">Bem-vindo, <span id="nome-boas-vindas"></span>!</h1>
+            <p class="tela__subtitulo">Como você vai usar o sistema?</p>
+
+            <div class="tipo-grid">
+                <button class="tipo-card" onclick="escolherTipo('admin')">
+                    <div class="tipo-card__icone">🏢</div>
+                    <strong>Sou administrador</strong>
+                    <span>Cadastro e gerencio uma empresa</span>
+                </button>
+                <button class="tipo-card" onclick="escolherTipo('funcionario')">
+                    <div class="tipo-card__icone">✂️</div>
+                    <strong>Sou funcionário</strong>
+                    <span>Entro com o código da minha empresa</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="aviso" id="aviso"></div>
+
+    <script src="js/tipoUsuario.js"></script>
+</body>
+</html>

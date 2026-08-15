@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro | Agenda System</title>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body>
+
+<!-- ============================================================
+     TELA 1: AUTENTICAÇÃO (Login / Cadastro)
+     ============================================================ -->
+    <div id="tela-auth" class="tela ativa">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <div class="auth-logo__icone">B</div>
+                <span class="auth-logo__nome">BarberSystem</span>
+            </div>
+
+            <!-- Abas -->
+            <div class="auth-abas">
+                <button class="auth-aba ativa" data-aba="login">Entrar</button>
+                <button class="auth-aba" data-aba="cadastro">Criar conta</button>
+            </div>
+
+            <!-- Login -->
+            <form id="form-login" class="form-auth" novalidate>
+                <div class="campo">
+                    <label for="login-usuario">Usuário ou e-mail</label>
+                    <input type="text" id="login-usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off">
+                    <span class="campo__erro" id="erro-login-usuario"></span>
+                </div>
+                <div class="campo">
+                    <label for="login-senha">Senha</label>
+                    <input type="password" id="login-senha" placeholder="Digite sua senha">
+                    <span class="campo__erro" id="erro-login-senha"></span>
+                </div>
+                <button type="button" class="btn-primario" onclick="fazerLogin()">Entrar</button>
+            </form>
+
+            <!-- Cadastro -->
+            <form id="form-cadastro" class="form-auth" novalidate hidden>
+                <div class="campo">
+                    <label for="cad-nome">Nome de usuário</label>
+                    <input type="text" id="cad-nome" placeholder="Escolha um nome de usuário" autocomplete="off">
+                    <span class="campo__erro" id="erro-cad-nome"></span>
+                </div>
+                <div class="campo">
+                    <label for="cad-email">E-mail</label>
+                    <input type="email" id="cad-email" placeholder="seuemail@exemplo.com" autocomplete="off">
+                    <span class="campo__erro" id="erro-cad-email"></span>
+                </div>
+                <div class="campo">
+                    <label for="cad-senha">Senha</label>
+                    <input type="password" id="cad-senha" placeholder="Mínimo 6 caracteres">
+                    <span class="campo__erro" id="erro-cad-senha"></span>
+                </div>
+                <div class="campo">
+                    <label for="cad-confirmar">Confirmar senha</label>
+                    <input type="password" id="cad-confirmar" placeholder="Repita a senha">
+                    <span class="campo__erro" id="erro-cad-confirmar"></span>
+                </div>
+                <button type="button" class="btn-primario" onclick="fazerCadastro()">Criar conta</button>
+            </form>    
+        </div>
+    </div>
+    <script src="js/autenticacao.js"></script>
+</body>
+</html>

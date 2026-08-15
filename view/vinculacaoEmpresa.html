@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinculação com Empresa | Agenda System</title>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body>
+    <div id="tela-auth" class="tela ativa" hidden>
+        <div class="auth-container auth-container--largo">
+            <h1 class="tela__titulo">Vincule-se a uma Empresa</h1>
+            <p class="tela__subtitulo">Peça ao administrador da empresa o código de acesso da equipe.</p>
+
+            <form id="form-auth" class="form-auth" novalidate>
+                <div class="grupo-codigo">
+                    <div class="bloco-codigo">
+                        <input type="text" id="codigo-1" class="codigo" maxlength="1" inputmode="numeric" autocomplete="off">
+                        <input type="text" id="codigo-2" class="codigo" maxlength="1" inputmode="numeric" autocomplete="off">
+                        <input type="text" id="codigo-3" class="codigo" maxlength="1" inputmode="numeric" autocomplete="off">
+                        <input type="text" id="codigo-4" class="codigo" maxlength="1" inputmode="numeric" autocomplete="off">
+                    
+                        <input type="text" id="codigo-5" class="codigo" maxlength="1" inputmode="numeric" autocomplete="off">
+                        <input type="text" id="codigo-6" class="codigo" maxlength="1" inputmode="numeric" autocomplete="off">
+                        <input type="text" id="codigo-7" class="codigo" maxlength="1" inputmode="numeric" autocomplete="off">
+                        <input type="text" id="codigo-8" class="codigo" maxlength="1" inputmode="numeric" autocomplete="off">
+                    </div>
+                </div>
+                <span id="erro-codigo" class="campo__erro"></span>
+                
+                
+                <div class="nav-duplo">
+                    <button type="button" class="btn-ghost" onclick="voltar()">← Voltar</button>
+                    <button type="button" class="btn-primario" onclick="vincular()">Vincule-se →</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    
+
+    <script src="js/vinculacaoEmpresa.js"></script>
+</body>
+</html>

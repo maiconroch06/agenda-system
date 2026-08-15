@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Funcionário</title>
+    <link rel="stylesheet" href="styles/profissional.css">
+</head>
+<body>
+
+<div class="painel-func">
+
+    <!-- ============================================================
+         TOPBAR
+         ============================================================ -->
+    <header class="topbar-func">
+        <div class="topbar-func__esquerda"> <!-- Isso deve ser dedados da empresa-->
+            <div class="topbar-func__avatar" id="topbar-avatar">M</div>
+            <div>
+                <div class="topbar-func__nome" id="topbar-nome">—</div>
+                <div class="topbar-func__empresa" id="topbar-empresa">—</div>
+            </div>
+        </div>
+        <div class="topbar-func__direita">
+            <button class="btn-sino" onclick="irParaAba('notificacoes')" title="Notificações">
+                🔔
+                <span class="sino-badge" id="sino-badge" hidden>0</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="painel-func__body">
+
+        <!-- ============================================================
+             SIDEBAR (desktop, lg+)
+             ============================================================ -->
+        <aside class="sidebar-func">
+            <div class="sidebar-func__perfil">
+                <div class="sidebar-func__avatar" id="sidebar-avatar">M</div>
+                <div>
+                    <div class="sidebar-func__nome" id="sidebar-nome">—</div>
+                    <div class="sidebar-func__empresa-nome" id="sidebar-empresa">—</div>
+                </div>
+            </div>
+            <nav class="sidebar-func__nav">
+                <button class="sidebar-func__item ativo" data-aba="inicio" onclick="irParaAba('inicio')">
+                    <span>🏠</span> Início
+                </button>
+                <button class="sidebar-func__item" data-aba="agenda" onclick="irParaAba('agenda')">
+                    <span>📅</span> Agenda
+                </button>
+                <button class="sidebar-func__item" data-aba="servicos" onclick="irParaAba('servicos')">
+                    <span>✂️</span> Serviços
+                </button>
+                <button class="sidebar-func__item" data-aba="ganhos" onclick="irParaAba('ganhos')">
+                    <span>💰</span> Ganhos
+                </button>
+                <button class="sidebar-func__item" data-aba="avaliacoes" onclick="irParaAba('avaliacoes')">
+                    <span>⭐</span> Avaliações
+                </button>
+                <button class="sidebar-func__item" data-aba="notificacoes" onclick="irParaAba('notificacoes')">
+                    <span>🔔</span> Notificações
+                    <span class="sidebar-func__notif-dot" id="sidebar-notif-dot" hidden></span>
+                </button>
+                <button class="sidebar-func__item" data-aba="configuracoes" onclick="irParaAba('configuracoes')">
+                    <span>⚙️</span> Configurações
+                </button>
+            </nav>
+            <button class="sidebar-func__sair" onclick="sairDaConta()">Sair da conta</button>
+        </aside>
+
+        <!-- ============================================================
+             CONTEÚDO PRINCIPAL
+             ============================================================ -->
+        <main class="painel-func__main">
+
+            <!-- ================= ABA INÍCIO ================= -->
+            <section class="aba-func ativa" id="aba-inicio">
+                <div class="aba-cabecalho">
+                    <h1>Olá, <span id="inicio-primeiro-nome">—</span> 👋</h1>
+                </div>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-card--acento">
+                        <div class="kpi-card__rotulo">Agendamentos hoje</div>
+                        <div class="kpi-card__valor" id="kpi-total-hoje">0</div>
+                        <div class="kpi-card__sub" id="kpi-total-hoje-sub">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-card__rotulo">Próximo atendimento</div>
+                        <div class="kpi-card__valor" id="kpi-proximo">—</div>
+                        <div class="kpi-card__sub" id="kpi-proximo-sub">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-card__rotulo">Ganhos hoje</div>
+                        <div class="kpi-card__valor" id="kpi-ganhos-hoje">R$ 0,00</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-card__rotulo">Avaliação média</div>
+                        <div class="kpi-card__valor" id="kpi-avaliacao">—</div>
+                        <div class="kpi-card__sub" id="kpi-avaliacao-sub">—</div>
+                    </div>
+                </div>
+
+                <div class="progresso-dia">
+                    <div class="progresso-dia__cabecalho">
+                        <span>Progresso do dia</span>
+                        <span id="progresso-texto">0 de 0 concluídos</span>
+                    </div>
+                    <div class="progresso-barra">
+                        <div class="progresso-barra__fill" id="progresso-fill" style="width:0%"></div>
+                    </div>
+                    <div class="progresso-legenda">
+                        <span><span class="dot dot--concluido"></span> Concluídos</span>
+                        <span><span class="dot dot--pendente"></span> Pendentes</span>
+                        <span><span class="dot dot--cancelado"></span> Cancelados</span>
+                    </div>
+                </div>
+
+                <div class="secao-titulo">Atendimentos de hoje</div>
+                <div class="agenda-lista" id="lista-inicio-hoje"></div>
+            </section>
+
+            <!-- ================= ABA AGENDA ================= -->
+            <section class="aba-func" id="aba-agenda">
+                <div class="aba-cabecalho">
+                    <h1>Agenda</h1>
+                </div>
+
+                <div class="agenda-filtros">
+                    <button class="filtro-btn ativo" data-filtro="dia" onclick="mudarVisaoAgenda('dia')">Dia</button>
+                    <button class="filtro-btn" data-filtro="semana" onclick="mudarVisaoAgenda('semana')">Semana</button>
+                    <button class="filtro-btn" data-filtro="mes" onclick="mudarVisaoAgenda('mes')">Mês</button>
+                </div>
+
+                <div id="agenda-visao-dia">
+                    <div class="agenda-lista" id="lista-agenda-dia"></div>
+                </div>
+
+                <div id="agenda-visao-semana" hidden>
+                    <div class="agenda-semana-scroll" id="semana-scroll"></div>
+                </div>
+
+                <div id="agenda-visao-mes" hidden>
+                    <div class="mes-nav">
+                        <button onclick="mudarMes(-1)">‹</button>
+                        <h3 id="mes-titulo">—</h3>
+                        <button onclick="mudarMes(1)">›</button>
+                    </div>
+                    <div class="mes-grid" id="mes-grid"></div>
+                    <div class="secao-titulo" style="margin-top:20px" id="mes-dia-selecionado-titulo">Selecione um dia</div>
+                    <div class="agenda-lista" id="lista-mes-dia"></div>
+                </div>
+
+                <button class="btn-bloquear" onclick="abrirModalBloquear()">
+                    🔒 Bloquear horário
+                </button>
+            </section>
+
+            <!-- ================= ABA SERVIÇOS ================= -->
+            <section class="aba-func" id="aba-servicos">
+                <div class="aba-cabecalho">
+                    <h1>Meus serviços</h1>
+                </div>
+                <p style="color:var(--cor-texto-suave);font-size:13px;margin-bottom:16px">
+                    Você pode desativar temporariamente um serviço para não recebê-lo em sua agenda.
+                </p>
+                <div class="servicos-lista" id="lista-servicos-func"></div>
+            </section>
+
+            <!-- ================= ABA GANHOS ================= -->
+            <section class="aba-func" id="aba-ganhos">
+                <div class="aba-cabecalho">
+                    <h1>Meus ganhos</h1>
+                </div>
+
+                <div class="ganhos-kpi">
+                    <div class="kpi-card">
+                        <div class="kpi-card__rotulo">Hoje</div>
+                        <div class="kpi-card__valor" id="ganhos-hoje">R$ 0,00</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-card__rotulo">Esta semana</div>
+                        <div class="kpi-card__valor" id="ganhos-semana">R$ 0,00</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-card__rotulo">Este mês</div>
+                        <div class="kpi-card__valor" id="ganhos-mes">R$ 0,00</div>
+                    </div>
+                </div>
+
+                <div class="comissao-aviso" id="comissao-aviso"></div>
+
+                <div class="secao-titulo">Evolução (últimos 7 dias)</div>
+                <div id="grafico-ganhos" style="display:flex;align-items:flex-end;gap:8px;height:120px;margin-bottom:24px;padding:0 4px"></div>
+
+                <div class="secao-titulo">Histórico de atendimentos</div>
+                <div class="tabela-wrapper">
+                    <table class="tabela">
+                        <thead>
+                            <tr><th>Data</th><th>Cliente</th><th>Serviço</th><th>Valor</th><th>Comissão</th></tr>
+                        </thead>
+                        <tbody id="tabela-ganhos-corpo"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ================= ABA AVALIAÇÕES ================= -->
+            <section class="aba-func" id="aba-avaliacoes">
+                <div class="aba-cabecalho">
+                    <h1>Avaliações</h1>
+                </div>
+
+                <div class="media-card">
+                    <div>
+                        <div class="media-card__num" id="media-avaliacao">—</div>
+                        <div class="estrelas">☆☆☆☆☆</div>
+                    </div>
+                    <div>
+                        <div class="media-card__total" id="total-avaliacoes">—</div>
+                    </div>
+                </div>
+
+                <div id="lista-avaliacoes"></div>
+            </section>
+
+            <!-- ================= ABA NOTIFICAÇÕES ================= -->
+            <section class="aba-func" id="aba-notificacoes">
+                <div class="aba-cabecalho">
+                    <h1>Notificações</h1>
+                </div>
+                <div class="notif-acoes">
+                    <button class="btn-ghost" onclick="marcarTodasLidas()">Marcar todas como lidas</button>
+                </div>
+                <div id="lista-notificacoes"></div>
+            </section>
+
+            <!-- ================= ABA CONFIGURAÇÕES ================= -->
+            <section class="aba-func" id="aba-configuracoes">
+                <div class="aba-cabecalho">
+                    <h1>Configurações</h1>
+                </div>
+
+                <div class="config-grupo">
+                    <div class="config-grupo__titulo">Perfil</div>
+                    <div class="config-item" onclick="document.getElementById('inp-nova-foto').click()">
+                        <div><div class="config-item__label">Alterar foto</div></div>
+                        <span class="config-item__seta">›</span>
+                    </div>
+                    <div class="config-item" onclick="abrirModalConfig('telefone')">
+                        <div>
+                            <div class="config-item__label">Alterar telefone</div>
+                            <div class="config-item__sub" id="config-telefone-atual">—</div>
+                        </div>
+                        <span class="config-item__seta">›</span>
+                    </div>
+                    <div class="config-item" onclick="abrirModalConfig('descricao')">
+                        <div><div class="config-item__label">Editar descrição profissional</div></div>
+                        <span class="config-item__seta">›</span>
+                    </div>
+                    <div class="config-item" onclick="abrirModalConfig('senha')">
+                        <div><div class="config-item__label">Alterar senha</div></div>
+                        <span class="config-item__seta">›</span>
+                    </div>
+                </div>
+
+                <div class="config-grupo">
+                    <div class="config-grupo__titulo">Preferências</div>
+                    <div class="config-item">
+                        <div>
+                            <div class="config-item__label">Notificações push</div>
+                            <div class="config-item__sub">Receber avisos de novos agendamentos</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="toggle-notif" checked onchange="alternarNotificacoes()">
+                            <span class="toggle__slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-item">
+                        <div><div class="config-item__label">Tema escuro</div></div>
+                        <label class="toggle">
+                            <input type="checkbox" id="toggle-tema" checked onchange="alternarTema()">
+                            <span class="toggle__slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="config-grupo">
+                    <div class="config-item config-item--perigo" onclick="sairDaConta()">
+                        <div class="config-item__label">Sair da conta</div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ============================================================
+         BOTTOM NAV (mobile, até lg)
+         ============================================================ -->
+    <nav class="bottom-nav">
+        <button class="bottom-nav__item ativo" data-aba="inicio" onclick="irParaAba('inicio')">
+            <span class="icone">🏠</span> Início
+        </button>
+        <button class="bottom-nav__item" data-aba="agenda" onclick="irParaAba('agenda')">
+            <span class="icone">📅</span> Agenda
+        </button>
+        <button class="bottom-nav__item" data-aba="servicos" onclick="irParaAba('servicos')">
+            <span class="icone">✂️</span> Serviços
+        </button>
+        <button class="bottom-nav__item" data-aba="ganhos" onclick="irParaAba('ganhos')">
+            <span class="icone">💰</span> Ganhos
+        </button>
+        <button class="bottom-nav__item" data-aba="mais" onclick="abrirMenuMais()">
+            <span class="icone">⋯</span> Mais
+            <span class="bottom-nav__dot" id="bottomnav-notif-dot" hidden></span>
+        </button>
+    </nav>
+
+</div>
+
+<!-- ============================================================
+     MODAL: DETALHES DO ATENDIMENTO
+     ============================================================ -->
+<div class="modal-overlay" id="overlay-detalhe" hidden onclick="fecharModalDetalhe()"></div>
+<div class="modal" id="modal-detalhe" hidden onclick="if(event.target===this) fecharModalDetalhe()">
+    <div class="modal__caixa">
+        <div class="modal__cabecalho">
+            <h2>Detalhes do atendimento</h2>
+            <button class="modal__fechar" onclick="fecharModalDetalhe()">✕</button>
+        </div>
+
+        <div id="detalhe-status-badge" style="margin-bottom:12px"></div>
+
+        <div class="detalhe-linha">
+            <span class="detalhe-linha__icone">👤</span>
+            <div><div class="detalhe-linha__rotulo">Cliente</div><div class="detalhe-linha__valor" id="detalhe-cliente">—</div></div>
+        </div>
+        <div class="detalhe-linha">
+            <span class="detalhe-linha__icone">✂️</span>
+            <div><div class="detalhe-linha__rotulo">Serviço</div><div class="detalhe-linha__valor" id="detalhe-servico">—</div></div>
+        </div>
+        <div class="detalhe-linha">
+            <span class="detalhe-linha__icone">🕐</span>
+            <div><div class="detalhe-linha__rotulo">Horário</div><div class="detalhe-linha__valor" id="detalhe-horario">—</div></div>
+        </div>
+        <div class="detalhe-linha">
+            <span class="detalhe-linha__icone">💵</span>
+            <div><div class="detalhe-linha__rotulo">Valor</div><div class="detalhe-linha__valor" id="detalhe-valor">—</div></div>
+        </div>
+        <div class="detalhe-linha">
+            <span class="detalhe-linha__icone">📞</span>
+            <div><div class="detalhe-linha__rotulo">Telefone</div><div class="detalhe-linha__valor" id="detalhe-telefone">—</div></div>
+        </div>
+        <div class="detalhe-linha">
+            <span class="detalhe-linha__icone">📝</span>
+            <div><div class="detalhe-linha__rotulo">Observações</div><div class="detalhe-linha__valor" id="detalhe-obs">—</div></div>
+        </div>
+
+        <div class="modal-acoes" id="detalhe-acoes"></div>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL: BLOQUEAR HORÁRIO
+     ============================================================ -->
+<div class="modal-overlay" id="overlay-bloquear" hidden onclick="fecharModalBloquear()"></div>
+<div class="modal" id="modal-bloquear" hidden onclick="if(event.target===this) fecharModalBloquear()">
+    <div class="modal__caixa">
+        <div class="modal__cabecalho">
+            <h2>Bloquear horário</h2>
+            <button class="modal__fechar" onclick="fecharModalBloquear()">✕</button>
+        </div>
+        <form class="onboard-form" novalidate>
+            <div class="campo">
+                <label for="bloq-data">Data</label>
+                <input type="date" id="bloq-data">
+            </div>
+            <div class="campo">
+                <label for="bloq-inicio">Início</label>
+                <input type="time" id="bloq-inicio" value="12:00">
+            </div>
+            <div class="campo">
+                <label for="bloq-fim">Fim</label>
+                <input type="time" id="bloq-fim" value="13:00">
+            </div>
+            <div class="campo">
+                <label for="bloq-motivo">Motivo (opcional)</label>
+                <input type="text" id="bloq-motivo" placeholder="Ex: Almoço, compromisso pessoal">
+            </div>
+            <button type="button" class="btn-prim" onclick="confirmarBloqueio()">Bloquear horário</button>
+        </form>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL: EDITAR CONFIGURAÇÃO (telefone / descrição / senha)
+     ============================================================ -->
+<div class="modal-overlay" id="overlay-config" hidden onclick="fecharModalConfig()"></div>
+<div class="modal" id="modal-config" hidden onclick="if(event.target===this) fecharModalConfig()">
+    <div class="modal__caixa">
+        <div class="modal__cabecalho">
+            <h2 id="config-modal-titulo">Editar</h2>
+            <button class="modal__fechar" onclick="fecharModalConfig()">✕</button>
+        </div>
+        <form class="onboard-form" novalidate>
+            <div class="campo" id="config-campo-texto">
+                <label id="config-campo-label" for="config-input">Valor</label>
+                <input type="text" id="config-input">
+            </div>
+            <div class="campo" id="config-campo-textarea" hidden>
+                <label for="config-textarea">Descrição</label>
+                <textarea id="config-textarea"></textarea>
+            </div>
+            <div class="campo" id="config-campo-senha" hidden>
+                <label for="config-senha-atual">Senha atual</label>
+                <input type="password" id="config-senha-atual">
+                <label for="config-senha-nova" style="margin-top:8px">Nova senha</label>
+                <input type="password" id="config-senha-nova">
+            </div>
+            <button type="button" class="btn-prim" onclick="salvarConfig()">Salvar</button>
+        </form>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL: MAIS OPÇÕES (mobile bottom sheet)
+     ============================================================ -->
+<div class="modal-overlay" id="overlay-mais" hidden onclick="fecharMenuMais()"></div>
+<div class="modal" id="modal-mais" hidden onclick="if(event.target===this) fecharMenuMais()">
+    <div class="modal__caixa">
+        <div class="modal__cabecalho">
+            <h2>Mais opções</h2>
+            <button class="modal__fechar" onclick="fecharMenuMais()">✕</button>
+        </div>
+        <div class="config-grupo" style="margin-bottom:0">
+            <div class="config-item" onclick="irParaAba('avaliacoes'); fecharMenuMais()">
+                <div class="config-item__label">⭐ Avaliações</div>
+                <span class="config-item__seta">›</span>
+            </div>
+            <div class="config-item" onclick="irParaAba('notificacoes'); fecharMenuMais()">
+                <div class="config-item__label">🔔 Notificações</div>
+                <span class="config-item__seta">›</span>
+            </div>
+            <div class="config-item" onclick="irParaAba('configuracoes'); fecharMenuMais()">
+                <div class="config-item__label">⚙️ Configurações</div>
+                <span class="config-item__seta">›</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="inp-nova-foto" accept="image/*" hidden>
+
+<div class="aviso" id="aviso"></div>
+
+<script src="js/painelProfissional.js"></script>
+</body>
+</html>

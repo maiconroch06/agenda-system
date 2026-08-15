@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Cortes</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+    <header class="topbar">
+
+        <div class="topbar_logo">
+            <div class="topbar__brand">
+                <img src="assets/images/logos/barbearia-dark.png" alt="logo-barbearia">
+                <div class="topbar__nome">Barbearia do Zé</div>
+            </div>
+        </div>
+        <button class="btn-historico" id="btn-historico">
+            <i class="botao hitorico"></i>
+            Meus Agendamentos
+        </button>
+
+    </header>
+
+    <main class="conteiner">
+
+        <ol class="etapa" id="etapa">
+            <li class="etapa__item ativo">
+                <span class="etapa__ciclo">1</span>
+                <span class="etapa__label">Serviço</span>
+            </li>
+            <li class="etapa__item">
+                <span class="etapa__ciclo">2</span>
+                <span class="etapa__label">Profissional</span>
+            </li>
+            <li class="etapa__item">
+                <span class="etapa__ciclo">3</span>
+                <span class="etapa__label">Horário</span>
+            </li>
+            <li class="etapa__item">
+                <span class="etapa__ciclo">4</span>
+                <span class="etapa__label">Confirmação</span>
+            </li>
+        </ol>
+
+        <!-- ETAPA 1: SERVIÇOS -->
+        <section id="painel-1">
+            <h1 class="etapa-titulo">Escolha o serviço:</h1>
+            <p class="etapa__subtitulo">Selecione o serviço que você deseja agendar</p>
+            <div class="sequencia" id="lista-servico"></div>
+        </section>
+
+        <!-- ETAPA 2: PROFISSIONAIS -->
+        <section id="painel-2" hidden>
+            <h1 class="etapa-titulo">Escolha o profissional:</h1>
+            <p class="etapa__subtitulo">Selecione quem irá realizar o seu atendimento</p>
+            <div class="sequencia" id="lista-profissionais"></div>
+        </section>
+
+        <!-- ETAPA 3: HORÁRIO -->
+        <section id="painel-3" hidden>
+            <h1 class="etapa-titulo">Escolha um horário</h1>
+            <p class="etapa__subtitulo">Selecione um dia e depois escolha um horário disponível</p>
+            <div class="abas-dias" id="abas-dias"></div>
+            <div class="grade-horarios" id="grade-horarios"></div>
+        </section>
+
+        <!-- ETAPA 4: CONFIRMAÇÃO -->
+        <section id="painel-4" hidden>
+            <h1 class="etapa-titulo">Confirme seu agendamento:</h1>
+            <p class="etapa__subtitulo">Revise os dados e informe seus dados de contato</p>
+
+            <!--<div class="resumo" id="resumo"></div>-->
+
+            <form class="formulario" id="formulario" novalidate>
+                <div class="campo">
+                    <label for="inp-nome">Nome</label>
+                    <input type="text" id="inp-nome" name="inputNome" autocomplete="off" placeholder="Digite seu nome...">
+                    <span class="campo__erro" id="erro-nome"></span>
+                </div>
+                <div class="campo">
+                    <label for="inp-tel">Telefone / WhatsApp</label>
+                    <input type="tel" id="inp-tel" name="inputTel" autocomplete="off" placeholder="(00) 00000-0000">
+                    <span class="campo__erro" id="erro-tel"></span>
+                </div>
+                <!--<div class="campo">
+                    <label for="inp-email">E-mail</label>
+                    <input type="email" id="inp-email" name="inputEmail" autocomplete="off" placeholder="seuemail@exemplo.com">
+                    <span class="campo__erro" id="erro-email"></span>
+                </div>-->
+                <div class="campo">
+                    <label class="checkbox">
+                        <input type="checkbox" id="inp-consentimento">
+                        <span>Concordo com o uso dos meus dados para realizar este agendamento</span>
+                    </label>
+                    <span class="campo__erro" id="erro-consentimento"></span>
+                </div>
+            </form>
+        </section>
+
+        <!-- TELA DE SUCESSO -->
+        <section id="painel-sucesso" hidden>
+            <div class="sucesso">
+                <div class="sucesso__icone">✓</div>
+                <h1 class="etapa-titulo">Agendamento confirmado!</h1>
+                <p class="etapa__subtitulo" id="sucesso-texto"></p>
+                <button class="btn-novo" onclick="reiniciar()">Fazer novo agendamento</button>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="nav-etapa" id="nav-etapa">
+        <button onclick="voltarEtapa()" id="btn-voltar">Voltar</button>
+        <button onclick="avancarEtapa()" id="btn-continuar">Continuar</button>
+    </nav>
+
+    <div class="aviso" id="aviso"></div>
+
+    <footer>
+        <p>Interface do administrador <a href="autenticacao.html" target="_blank">clique aqui.</a></p>
+    </footer>
+
+    <script src="js/agendamento.js"></script>
+</body>
+</html>
