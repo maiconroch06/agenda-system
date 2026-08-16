@@ -1,0 +1,1 @@
+pendente restante do sql;
