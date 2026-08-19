@@ -3,49 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/admin.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    
     <title>Cadastro Empresa | Agenda System</title>
 </head>
 <body>
     <!-- ============================================================
      TELA 3: DADOS DA EMPRESA
      ============================================================ -->
-    <div id="tela-empresa" class="tela ativa" hidden>
+    <div id="tela-empresa" class="tela ativa">
          <div class="auth-container auth-container--largo">
-            <!--<div class="passo-indicador">
-                <span class="passo ativo">1. Empresa</span>
+          <div class="passo-indicador">
+                <span class="passo">1. Dados do Proprietário</span>
                 <span class="passo-linha"></span>
-                <span class="passo">2. Serviços</span>
+                <span class="passo">2. Endereço do Proprietário</span>
                 <span class="passo-linha"></span>
-                <span class="passo">3. Profissionais</span>
-            </div> -->
+                <span class="passo ativo">3. Perfil da Empresa</span>
+                <span class="passo-linha"></span>
+                <span class="passo">4. Endereço da Empresa</span>
+                <span class="passo-linha"></span>
+                <span class="passo">5. Finalizar cadastro</span>
+            </div>
 
             <h1 class="tela__titulo">Dados da empresa</h1>
             <p class="tela__subtitulo">Preencha as informações do seu estabelecimento</p>
 
-            <form id="form-empresa" class="form-auth" novalidate>
+            <form id="form-empresa" class="form-auth" action="/cadastrar_endereco"  method="post" novalidate>
                 <div class="campo">
                     <label for="emp-nome">Nome da empresa</label>
                     <input type="text" id="emp-nome" placeholder="Ex: Barbearia do Zé" autocomplete="off">
                     <span class="campo__erro" id="erro-emp-nome"></span>
                 </div>
-                <div class="campo">
-                    <label for="emp-categoria">Categoria</label>
-                    <select id="emp-categoria">
-                        <option value="">Selecione uma categoria</option>
-                        <option value="barbearia">Barbearia</option>
-                        <option value="salao">Salão de beleza</option>
-                        <option value="estetica">Estética</option>
-                        <option value="clinica">Clínica</option>
-                        <option value="outro">Outro</option>
-                    </select>
-                    <span class="campo__erro" id="erro-emp-categoria"></span>
+                  <div class="campo">
+                    <label for="emp-descripition">Descrição da empresa</label>
+                    <textarea type="textarea" rows="4" cols="50" id="emp-descripition" placeholder="Ex:minha empresa é do ramo [seu ramo] e realiza serviços por agendamentos para melhor comodidade do cliente" autocomplete="off"></textarea>
+                    <span class="campo__erro" id="erro-emp-nome"></span>
                 </div>
-                <div class="campo">
+                    <div class="campo">
                     <label for="emp-cnpj">CNPJ</label>
                     <input type="text" id="emp-cnpj" placeholder="00.000.000/0000-00" maxlength="18" autocomplete="off">
                     <span class="campo__erro" id="erro-emp-cnpj"></span>
                 </div>
+                 <div class="campo">
+                    <label for="emp-email">E-mail da empresa</label>
+                    <input type="email" id="emp-email" placeholder="emaildoaempresa@gmail.com" maxlength="70" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-cnpj"></span>
+                </div>  
+                <div class="campo">
+                    <label for="emp-categoria">Categoria</label>
+                    <select id="emp-categoria">
+                        {% for categoriasEmpresa in  categoriasEmpresas %}
+                            <option value="{{categoriasEmpresa}}" > {{categoriasEmpresa}}</option>
+                        {% endfor %}
+
+                    </select>
+                    <span class="campo__erro" id="erro-emp-categoria"></span>
+                </div>
+          
                 <div class="campo">
                     <label>Horário de expediente</label>
                     <div class="expediente-grid">
@@ -71,10 +85,18 @@
                         <button type="button" class="dia-btn" data-dia="dom">Dom</button>
                     </div>
                 </div>
+
+                  <div class="campo">
+                    <label for="emp-foto">Logo da empresa (1:1)</label>
+                    <input type="file" id="emp-pfoto" accept="image/*" autocomplete="off">
+                    <span class="campo__erro" id="erro-prof-foto"></span>
+                </div> 
+                <input type="number" name="tipo-end" value="1" hidden>
                 <div class="nav-duplo">
-                    <button type="button" class="btn-ghost" onclick="voltar()">← Voltar</button>
-                    <button type="button" class="btn-primario" onclick="salvarEmpresa()">Próximo →</button>
+                    <button type="button" class="btn-ghost" onclick="history.go(-1)">← Voltar</button>
+                    <button type="submit" class="btn-primario">Próximo →</button>
                 </div>
+                
             </form>
         </div>
     </div>

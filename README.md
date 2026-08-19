@@ -3,6 +3,7 @@ Instalação do ambiente Virtual - LINUX
 sudo apt update
 
 //Esse comando instala o pacote necessário para criar ambientes virtuais do Python
+
 sudo apt install python3-venv -y
 
 

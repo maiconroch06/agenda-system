@@ -251,6 +251,16 @@ body {
     font-size: 15px;
 }
 
+.campo textarea{
+    padding: 14px 14px 12px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--cor-borda-forte);
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: inherit;
+    font-size: 15px;
+}
+
 .campo input[type="file"] {
     padding: 10px 14px;
     border-radius: var(--radius);
@@ -263,6 +273,7 @@ body {
 }
 
 .campo input:focus,
+.campo textarea:focus,
 .campo select:focus {
     outline: none;
     border-color: var(--cor-acento);
