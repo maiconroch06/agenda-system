@@ -21,12 +21,41 @@ def singUpAddress():
     #tipoEndereco = request.form.get("tipo-end",type=int)
     # Se idade não existir, retorna: None -> é uma busca opcional, diferente do anterior.
     typepersona = ["Proprietário", "Empresa"]
-    estado_siglas = [
-    "AC", "AL", "AP", "AM", "BA", "CE", "DF",
-    "ES", "GO", "MA", "MT", "MS", "MG", "PA",
-    "PB", "PR", "PE", "PI", "RJ", "RN", "RS",
-    "RO", "RR", "SC", "SP", "SE", "TO"
-    ]
+
+    #esse modelo é um dicionário
+    estado_siglas =  {
+    "AC": "Acre",
+    "AL": "Alagoas",
+    "AP": "Amapá",
+    "AM": "Amazonas",
+    "BA": "Bahia",
+    "CE": "Ceará",
+    "DF": "Distrito Federal",
+    "ES": "Espírito Santo",
+    "GO": "Goiás",
+    "MA": "Maranhão",
+    "MT": "Mato Grosso",
+    "MS": "Mato Grosso do Sul",
+    "MG": "Minas Gerais",
+    "PA": "Pará",
+    "PB": "Paraíba",
+    "PR": "Paraná",
+    "PE": "Pernambuco",
+    "PI": "Piauí",
+    "RJ": "Rio de Janeiro",
+    "RN": "Rio Grande do Norte",
+    "RS": "Rio Grande do Sul",
+    "RO": "Rondônia",
+    "RR": "Roraima",
+    "SC": "Santa Catarina",
+    "SP": "São Paulo",
+    "SE": "Sergipe",
+    "TO": "Tocantins"
+}
+    #Esse formato seria uma lista;
+    #estados = [
+    #{"sigla": "AC", "nome": "Acre"},
+    #]
     return render_template("cadastrar_endereco.html", tipoEndereco=tipoEndereco, typepersona=typepersona[tipoEndereco], estado_siglas=estado_siglas)
 
 @app.route("/cadastrar_empresa", methods=["POST"])
