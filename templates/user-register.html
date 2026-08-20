@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    
+    <title>Cadastro da empresa | Agenda System</title>
+</head>
+<body>
+    <!-- ============================================================
+     TELA 3: DADOS Do USUÁRIO
+     ============================================================ -->
+
+     
+    <div id="tela-empresa" class="tela ativa">
+         <div class="auth-container auth-container--largo">
+            
+            <div class="passo-indicador">
+                
+                <span class="passo ativo">1. Dados do Usuário</span>
+                <span class="passo-linha"></span>
+                <span class="passo">2. Endereço do Usuário</span>
+                <span class="passo-linha"></span>
+                <span class="passo">5. Finalizar cadastro</span>
+            </div>
+
+            <h1 class="tela__titulo">Dados do Proprietário</h1>
+            <p class="tela__subtitulo">Preencha as informações referente ao proprietário/p>
+
+            <form id="form-empresa" class="form-auth" action="/cadastrar-endereco" method="post" novalidate>
+                <div class="campo">
+                    <label for="emp-nome">Nome</label>
+                    <input type="text" id="prop-nome" placeholder="Ex: nome do proprietário" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-nome"></span>
+                </div>
+                 <div class="campo">
+                    <label for="emp-sobrenome">Sobrenome</label>
+                    <input type="text" id="prop-nome" placeholder="Ex: sobrenome do proprietário" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-nome"></span>
+                </div>
+                 <div class="campo">
+                    <label for="prop-cpf">CPF</label>
+                    <input type="text" id="prop-cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-cnpj"></span>
+                </div>
+                   <div class="campo">
+                    <label for="prop-telefone">Telefone:</label>
+                    <input type="tel" id="prop-telefone" placeholder="(84) 00000.0000" maxlength="15" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-cnpj"></span>
+                </div>
+               
+                    <div class="campo">
+                    <label for="prop-email">E-mail:</label>
+                    <input type="email" id="prop-email" placeholder="emaildoproprietario@gmail.com" maxlength="70" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-cnpj"></span>
+                </div>   
+                <div class="campo">
+                    <label for="prop-senha">senha: </label>
+                    <input type="password" id="prop-senha" placeholder="*************" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-cnpj"></span>
+                </div>  
+                <div class="campo">
+                    <label for="prop-foto">Foto (3x4)</label>
+                    <input type="file" id="prop-foto" accept="image/*" autocomplete="off">
+                    <span class="campo__erro" id="erro-prof-foto"></span>
+                </div>         
+               
+                   
+                <input type="number" name="tipo-end" value="0" hidden>
+                   
+                
+                
+                <div class="nav-duplo">
+                    
+                    <button type="button" class="btn-ghost" onclick="history.go(-1)">Voltar</button>
+                    <button type="submit" class="btn-primario">Próximo →</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="aviso" id="aviso"></div>
+
+    <script src="js/cadastroEmpresa.js"></script>
+</body>
+</html>
