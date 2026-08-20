@@ -1,3 +1,5 @@
+import { limparErro, definirErro } from 'ultis/ultil.js'
+
 /* ============================================================
    ESTADO AUTENICAÇÃO
    ============================================================ */
@@ -9,26 +11,9 @@ let usuario = JSON.parse(localStorage.getItem("usuario")) || {
     tipo: ""
 };
 
+// Teste: se usuario 
 console.log(usuario)
 console.log(JSON.parse(localStorage.getItem("empresa")))
-
-/*  ===========================================================
-    UTILITÁRIOS
-    =========================================================== */
-
-function limparErro(inputId, erroId) {
-    const input = document.getElementById(inputId);
-    const erro = document.getElementById(erroId);
-    if (input) input.classList.remove("invalido");
-    if (erro) erro.textContent = "";
-}
-
-function definirErro(inputId, erroId, msg) {
-    const input = document.getElementById(inputId);
-    const erro = document.getElementById(erroId);
-    if (input) input.classList.add("invalido");
-    if (erro) erro.textContent = msg;
-}
 
 /* ============================================================
    ABAS DE AUTH
