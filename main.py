@@ -4,23 +4,23 @@ app = Flask(__name__)
 
 @app.route("/")
 def homaPage():
-    return render_template("index.html")
+    return render_template("homePage.html")
 
 
 @app.route("/login")
 def loginPage():
-    return render_template("all-authentication.html")
+    return render_template("autenticacao.html")
 
-@app.route("/cadastro-usuario")
+@app.route("/cadastro_usuario")
 def singUpUser():
-    return render_template("user-register.html")
+    return render_template("cadastro_usuario.html")
 
-@app.route("/cadastrar-endereco", methods=["POST"])
+@app.route("/cadastrar_endereco", methods=["POST"])
 def singUpAddress():
     tipoEndereco = int(request.form["tipo-end"])
     #tipoEndereco = request.form.get("tipo-end",type=int)
     # Se idade não existir, retorna: None -> é uma busca opcional, diferente do anterior.
-    typepersona = ["Usuário", "Empresa"]
+    typepersona = ["Proprietário", "Empresa"]
 
     #esse modelo é um dicionário
     estado_siglas =  {
@@ -56,26 +56,17 @@ def singUpAddress():
     #estados = [
     #{"sigla": "AC", "nome": "Acre"},
     #]
-    return render_template("adress-register.html", tipoEndereco=tipoEndereco, typepersona=typepersona[tipoEndereco], estado_siglas=estado_siglas)
+    return render_template("cadastrar_endereco.html", tipoEndereco=tipoEndereco, typepersona=typepersona[tipoEndereco], estado_siglas=estado_siglas)
 
-
-@app.route("/finalizar-cadastro-usuario", methods=["POST"])
-def finishRegister():
-       return render_template("finish-register.html")
-
-@app.route("/panel-categoria-do-usuario", methods=["POST","GET"])
-def userCategoryTypePanel():
-       return render_template("user-category-type-panel.html")
-
-@app.route("/cadastrar-empresa", methods=["POST","GET"])
+@app.route("/cadastrar_empresa", methods=["POST"])
 def singUpEnterprise():
     categoriasEmpresas = ["Selecione uma categoria","Barbearia","Salão de beleza","Estética"]
-    return render_template("company-register.html", categoriasEmpresas=categoriasEmpresas)
+    return render_template("cadastroEmpresa.html", categoriasEmpresas=categoriasEmpresas)
 
 
-@app.route("/painel-Administrativo", methods=["POST"])
-def panelAdmin():
-       return render_template("painel-administrativo.html")
+@app.route("/painelAdministrativo", methods=["POST"])
+def completeRegistration():
+       return render_template("painelAdministrativo.html")
 
 
 

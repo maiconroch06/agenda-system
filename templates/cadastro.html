@@ -6,7 +6,6 @@
     <title>Cadastro | Agenda System</title>
   
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
-     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
 <body>
 
@@ -15,12 +14,11 @@
      ============================================================ -->
     <div id="tela-auth" class="tela ativa">
         <div class="auth-container">
-            <div class="auth-abas">
-                <a href="/" class="logo">
-                <div class="logo-icon">A</div>
-                <span>Agenda System</span>
-                </a>
+            <div class="auth-logo">
+                <div class="auth-logo__icone">B</div>
+                <span class="auth-logo__nome">BarberSystem</span>
             </div>
+
             <!-- Abas -->
             <div class="auth-abas">
                 <button class="auth-aba ativa" data-aba="login">Entrar</button>
@@ -39,11 +37,6 @@
                     <input type="password" id="login-senha" placeholder="Digite sua senha">
                     <span class="campo__erro" id="erro-login-senha"></span>
                 </div>
-                  <div class="campo">
-                        <a class="btn-ghost" href="/panel-categoria-do-usuario">Esqueci minha senha?</a>
-                    <span class="campo__erro" id="erro-login-senha"></span>
-                </div>
-
                 <button type="button" class="btn-primario" onclick="fazerLogin()">Entrar</button>
             </form>
 
