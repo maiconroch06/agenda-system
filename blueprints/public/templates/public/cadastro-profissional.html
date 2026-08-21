@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,6 +47,6 @@
             </form>
         </div>
     </div>
-    <script src="js/cadastroProfissional.js"></script>
+    <script src="{{ url_for('static', filename='js/cadastroProfissional.js') }}"></script>
 </body>
 </html>

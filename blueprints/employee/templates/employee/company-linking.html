@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,6 +40,6 @@
 
     
 
-    <script src="js/vinculacaoEmpresa.js"></script>
+    <script src="{{ url_for('static', filename='js/vinculacaoEmpresa.js') }}"></script>
 </body>
 </html>

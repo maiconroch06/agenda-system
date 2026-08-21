@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,6 +122,6 @@
         <p>Interface do administrador <a href="autenticacao.html" target="_blank">clique aqui.</a></p>
     </footer>
 
-    <script src="js/agendamento.js"></script>
+    <script src="{{ url_for('static', filename='js/agendamento.js') }}"></script>
 </body>
 </html>

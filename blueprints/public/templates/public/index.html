@@ -31,11 +31,11 @@
     </nav>
 
     <div class="topbar__acoes">
-        <a href="/login" class="btn-login">
+        <a href="{{ url_for('auth.userAuth') }}" class="btn-login">
             Entrar
         </a>
 
-        <a href="/cadastro-usuario" class="btn-principal">
+        <a href="{{ url_for('register.userRegister') }}" class="btn-principal">
             Começar agora
         </a>
     </div>
@@ -70,7 +70,7 @@
 
             <div class="hero__botoes">
 
-                <a href="/cadastro" class="btn-principal">
+                <a href="{{ url_for('register.userRegister') }}" class="btn-principal">
                     Começar gratuitamente →
                 </a>
 
@@ -460,7 +460,7 @@
                 profissionais e clientes em um único lugar.
             </p>
 
-            <a href="/cadastro" class="btn-principal">
+            <a href="{{ url_for('register.userRegister') }}" class="btn-principal">
                 Criar minha conta →
             </a>
 
