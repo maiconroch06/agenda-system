@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect
+from
 
 app = Flask(__name__)
+
+app.register_blue
 
 @app.route("/")
 def homaPage():
