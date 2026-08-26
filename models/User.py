@@ -1,7 +1,7 @@
 import sqlite3
 from flask import current_app
 
-class Usuario:
+class User:
     def __init__(self, cpf, nome, sobrenome, telefone, email, senha, foto):
         self.cpf = cpf
         self.nome = nome

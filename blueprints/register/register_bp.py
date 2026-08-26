@@ -1,13 +1,13 @@
 from flask import Blueprint, render_template, redirect, session, url_for, request
 import sqlite3
-from models.Usuario import Usuario
-from models.Endereco import Endereco
+from models.User import User
+from models.Address import Endereco
 
 register_bp = Blueprint('register', __name__, template_folder='templates')
 
 @register_bp.route('/')
 def userRegister():
-    return render_template('register/user-register.html')
+    return render_template('view/register/user-register.html')
 
 @register_bp.route('/endereco', methods=['GET', 'POST'])
 def adressRegister():
@@ -24,8 +24,8 @@ def adressRegister():
     }
 
     if request.method == 'POST':
-        # Instancia o objeto Usuario com os dados do formulário
-        novo_usuario = Usuario(
+        # Instancia o objeto User com os dados do formulário
+        novo_usuario = User(
             cpf=request.form.get('cpf'),
             nome=request.form.get('nome'),
             sobrenome=request.form.get('sobrenome'),
