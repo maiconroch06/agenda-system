@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    
+    <title>Cadastro da empresa | Agenda System</title>
+</head>
+<body>
+    <!-- ============================================================
+     TELA 3: DADOS Do USUÁRIO
+     ============================================================ -->
+    <div id="tela-empresa" class="tela ativa">
+         <div class="auth-container auth-container--largo">
+            <div class="passo-indicador">
+               
+                 <span class="passo">1. Dados do Usuário</span>
+                <span class="passo-linha"></span>
+                <span class="passo ativo">2. Endereço   {% if tipoEndereco == 0 %} do Usuário {% else %} da Empresa {% endif %} </span>
+                <span class="passo-linha"></span>
+                <span class="passo">5. Finalizar cadastro</span>
+               </div>
+
+            <h1 class="tela__titulo">Dados do {{typepersona}}</h1>
+            <p class="tela__subtitulo">Preencha as informações referente {% if tipoEndereco== 0 %} ao{% else %} a {%endif%} {{typepersona}}</p>
+
+            <form id="form-empresa" class="form-auth" action="{%if tipoEndereco == 0 %} /finalizar-cadastro-usuario {%else%} /finalizar-cadastro-empresa {%endif%}" method="post" novalidate>  
+                <div class="campo">
+                    <label for="end-cep">CEP: </label>
+                    <input type="text" name="end-cep" id="end-cep"  placeholder="00.000-000" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-nome"></span>
+                </div>
+                 <div class="campo">
+                    <label for="end-cidade">Cidade: </label>
+                    <input type="text"  name="end-cidade" id="end-cidade" placeholder="Informe a sua cidade" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-nome"></span>
+                </div>
+                 <div class="campo">
+                    <label for="end_estado_sigla">Estado: </label>
+                   <select id="emp-categoria">
+                        {% for estado_sigla in  estado_siglas %}
+                            <option value="{{estado_sigla}}" > {{estado_sigla}}</option>
+                        {% endfor %}
+
+                    </select>
+                    <div class="campo">
+                    <label for="end-logradouro">Logradouro: </label>
+                    <input type="text"  name="end-logradouro" id="end-logradouro" placeholder="Informe o nome da sua rua" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-nome"></span>
+                </div>
+
+                    <div class="campo">
+                    <label for="end-numero">Numero: </label>
+                    <input type="number"  name="end-numero" id="end-bairro" placeholder="Número da sua casa/apartamento" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-nome"></span>
+                </div>
+                <div class="campo">
+                    <label for="end-bairro">Bairro: </label>
+                    <input type="text"  name="end-bairro" id="end-bairro" placeholder="Informe o seu bairro" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-nome"></span>
+                </div>
+                 <div class="campo">
+                    <label for="end-sequencia">sequência: </label>
+                    <input type="text"  name="end-sequencia" id="end-sequencia" placeholder="sequencia da casa: 1, 2" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-nome"></span>
+                </div>
+                 <div class="campo">
+                    <label for="end-complemento">Complemento: </label>
+                    <input type="text"  name="end-complemento" id="end-complemento" placeholder="casa/apartamento/bloco" autocomplete="off">
+                    <span class="campo__erro" id="erro-emp-nome"></span>
+                </div>
+                 
+
+                    <span class="campo__erro" id="erro-emp-nome"></span>
+                </div>
+                       
+
+                
+                <div class="nav-duplo">
+                  
+                    <button type="button" class="btn-ghost" onclick="history.go(-1)">Voltar</button>
+                    <button type="submit" class="btn-primario">Próximo →</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="aviso" id="aviso"></div>
+
+    <script src="{{ url_for('static', filename='js/cadastroEmpresa.js') }}"></script>
+</body>
+</html>

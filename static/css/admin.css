@@ -68,7 +68,7 @@ body {
 
 .auth-container {
     width: 100%;
-    max-width: 420px;
+    max-width: 500px;
     background: var(--cor-superficie);
     border: 1px solid var(--cor-borda);
     border-radius: var(--radius-lg);
@@ -151,7 +151,7 @@ body {
 
 .tipo-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr; 
     gap: 16px;
 }
 
