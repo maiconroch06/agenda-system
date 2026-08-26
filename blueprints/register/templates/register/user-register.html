@@ -22,57 +22,58 @@
                 <span class="passo-linha"></span>
                 <span class="passo">2. Endereço do Usuário</span>
                 <span class="passo-linha"></span>
-                <span class="passo">5. Finalizar cadastro</span>
+                <span class="passo">3. Finalizar cadastro</span>
             </div>
 
             <h1 class="tela__titulo">Dados do Proprietário</h1>
             <p class="tela__subtitulo">Preencha as informações referente ao proprietário/p>
 
-            <form id="form-empresa" class="form-auth" action="/cadastrar-endereco" method="post" novalidate>
+            <form id="form-empresa" class="form-auth" action="/register/endereco" method="post" enctype="multipart/form-data" novalidate>
                 <div class="campo">
-                    <label for="emp-nome">Nome</label>
-                    <input type="text" id="prop-nome" placeholder="Ex: nome do proprietário" autocomplete="off">
-                    <span class="campo__erro" id="erro-emp-nome"></span>
+                    <label for="prop-nome">Nome</label>
+                    <input type="text" id="prop-nome" name="nome" placeholder="Ex: nome do proprietário" autocomplete="off">
+                    <span class="campo__erro" id="erro-prop-nome"></span>
                 </div>
-                 <div class="campo">
-                    <label for="emp-sobrenome">Sobrenome</label>
-                    <input type="text" id="prop-nome" placeholder="Ex: sobrenome do proprietário" autocomplete="off">
-                    <span class="campo__erro" id="erro-emp-nome"></span>
+
+                <div class="campo">
+                    <label for="prop-sobrenome">Sobrenome</label>
+                    <input type="text" id="prop-sobrenome" name="sobrenome" placeholder="Ex: sobrenome do proprietário" autocomplete="off">
+                    <span class="campo__erro" id="erro-prop-sobrenome"></span>
                 </div>
-                 <div class="campo">
+
+                <div class="campo">
                     <label for="prop-cpf">CPF</label>
-                    <input type="text" id="prop-cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off">
-                    <span class="campo__erro" id="erro-emp-cnpj"></span>
+                    <input type="text" id="prop-cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off">
+                    <span class="campo__erro" id="erro-prop-cpf"></span>
                 </div>
-                   <div class="campo">
-                    <label for="prop-telefone">Telefone:</label>
-                    <input type="tel" id="prop-telefone" placeholder="(84) 00000.0000" maxlength="15" autocomplete="off">
-                    <span class="campo__erro" id="erro-emp-cnpj"></span>
-                </div>
-               
-                    <div class="campo">
-                    <label for="prop-email">E-mail:</label>
-                    <input type="email" id="prop-email" placeholder="emaildoproprietario@gmail.com" maxlength="70" autocomplete="off">
-                    <span class="campo__erro" id="erro-emp-cnpj"></span>
-                </div>   
+
                 <div class="campo">
-                    <label for="prop-senha">senha: </label>
-                    <input type="password" id="prop-senha" placeholder="*************" autocomplete="off">
-                    <span class="campo__erro" id="erro-emp-cnpj"></span>
+                    <label for="prop-telefone">Telefone:</label>
+                    <input type="tel" id="prop-telefone" name="telefone" placeholder="(84) 00000.0000" maxlength="15" autocomplete="off">
+                    <span class="campo__erro" id="erro-prop-telefone"></span>
+                </div>
+
+                <div class="campo">
+                    <label for="prop-email">E-mail:</label>
+                    <input type="email" id="prop-email" name="email" placeholder="emaildoproprietario@gmail.com" maxlength="70" autocomplete="off">
+                    <span class="campo__erro" id="erro-prop-email"></span>
+                </div>   
+
+                <div class="campo">
+                    <label for="prop-senha">Senha:</label>
+                    <input type="password" id="prop-senha" name="senha" placeholder="*************" autocomplete="off">
+                    <span class="campo__erro" id="erro-prop-senha"></span>
                 </div>  
+
                 <div class="campo">
                     <label for="prop-foto">Foto (3x4)</label>
-                    <input type="file" id="prop-foto" accept="image/*" autocomplete="off">
-                    <span class="campo__erro" id="erro-prof-foto"></span>
+                    <input type="text" id="prop-foto" name="foto" accept="image/*" autocomplete="off">
+                    <span class="campo__erro" id="erro-prop-foto"></span>
                 </div>         
-               
-                   
-                <input type="number" name="tipo-end" value="0" hidden>
-                   
-                
-                
+
+                <input type="number" name="tipo_end" value="0" hidden>
+
                 <div class="nav-duplo">
-                    
                     <button type="button" class="btn-ghost" onclick="history.go(-1)">Voltar</button>
                     <button type="submit" class="btn-primario">Próximo →</button>
                 </div>
@@ -82,6 +83,6 @@
 
     <div class="aviso" id="aviso"></div>
 
-    <script src="{{ url_for('static', filename='js/cadastroEmpresa.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/user-register.js') }}"></script>
 </body>
 </html>

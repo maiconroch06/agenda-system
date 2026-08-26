@@ -23,15 +23,15 @@
             </div>
             
             <!-- Login -->
-            <form id="form-login" class="form-auth" novalidate>
+            <form id="form-login" class="form-auth" action="{{ url_for('auth.login') }}" method="POST" novalidate>
                 <div class="campo">
                     <label for="login-usuario">Usuário ou e-mail</label>
-                    <input type="text" id="login-usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off">
+                    <input type="text" id="login-usuario" name="all-authentication-usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off">
                     <span class="campo__erro" id="erro-login-usuario"></span>
                 </div>
                 <div class="campo">
                     <label for="login-senha">Senha</label>
-                    <input type="password" id="login-senha" placeholder="Digite sua senha">
+                    <input type="password" id="login-senha" name="all-authentication-senha" placeholder="Digite sua senha">
                     <span class="campo__erro" id="erro-login-senha"></span>
                 </div>
                   <div class="campo">
@@ -39,7 +39,8 @@
                     <span class="campo__erro" id="erro-login-senha"></span>
                 </div>
                         <!-- tem que validar o tipo usuario para envaminha para tela certa -->
-                <button type="button" class="btn-primario" onclick="fazerLogin()">Entrar</button>
+                         <!-- onclick="fazerLogin()" -->
+                <button type="submit" class="btn-primario">Entrar</button>
             </form>
   
         </div>
