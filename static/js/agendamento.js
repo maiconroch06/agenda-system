@@ -15,9 +15,9 @@ const SERVICOS = [
 
 const PROFISSIONAIS = [
     { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "" },
-    { id: "thiago", name: "Thiago",          description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/thiago.jpg", alt: "samuel" },
+    { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/thiago.jpg", alt: "thiago" },
     { id: "samuel", name: "Samuel",          description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/samuel.jpg", alt: "samuel" },
-    { id: "maik",   name: "Maik",            description: "Barbeiro",                          icon: "../assets/images/funcionarios/maik.png",   alt: "maik" },
+    { id: "maik",   name: "Maik",            description: "Barbeiro novato",                          icon: "../assets/images/funcionarios/maik.png",   alt: "maik" },
 ];
 
 const NOMES_DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -48,6 +48,7 @@ const estado = {
     profissionalSelecionado: null,
     diaSelecionado: null,
     horarioSelecionado: null,
+    nome: "Maicon Rocha"
 };
 
 /* ============================================================
@@ -70,12 +71,12 @@ const els = {
 };
 
 const form = {
-    nome:           document.getElementById("inp-nome"),
-    tel:            document.getElementById("inp-tel"),
+    // nome:           document.getElementById("inp-nome"),
+    // tel:            document.getElementById("inp-tel"),
     //email:          document.getElementById("inp-email"),
     consentimento:  document.getElementById("inp-consentimento"),
-    erroNome:       document.getElementById("erro-nome"),
-    erroTel:        document.getElementById("erro-tel"),
+    // erroNome:       document.getElementById("erro-nome"),
+    // erroTel:        document.getElementById("erro-tel"),
     //erroEmail:      document.getElementById("erro-email"),
     erroConsentimento: document.getElementById("erro-consentimento"),
 };
@@ -174,9 +175,9 @@ function avancarEtapa() {
         renderizarHorarios();
     }
 
-    /*if (estado.etapaAtual === 4) {
+    if (estado.etapaAtual === 4) {
         renderizarResumo();
-    }*/
+    }
 
     mostrarPainel(estado.etapaAtual);
 }
@@ -385,21 +386,21 @@ function definirErro(input, erroEl, mensagem) {
 function validarFormulario() {
     let valido = true;
 
-    limparErro(form.nome, form.erroNome);
-    limparErro(form.tel, form.erroTel);
+    // limparErro(form.nome, form.erroNome);
+    // limparErro(form.tel, form.erroTel);
     //limparErro(form.email, form.erroEmail);
     form.erroConsentimento.textContent = "";
 
-    if (form.nome.value.trim().length < 3) {
-        definirErro(form.nome, form.erroNome, "Informe seu nome completo");
-        valido = false;
-    }
+    // if (form.nome.value.trim().length < 3) {
+    //     definirErro(form.nome, form.erroNome, "Informe seu nome completo");
+    //     valido = false;
+    // }
 
-    const digitos = form.tel.value.replace(/\D/g, "");
-    if (digitos.length < 10) {
-        definirErro(form.tel, form.erroTel, "Informe um telefone válido com DDD");
-        valido = false;
-    }
+    // const digitos = form.tel.value.replace(/\D/g, "");
+    // if (digitos.length < 10) {
+    //     definirErro(form.tel, form.erroTel, "Informe um telefone válido com DDD");
+    //     valido = false;
+    // }
 
     /*const emailValor = form.email.value.trim();
     if (emailValor && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValor)) {
@@ -431,7 +432,7 @@ function confirmarAgendamento() {
     els.etapa.hidden = true;
 
     els.sucessoTexto.textContent =
-        `${form.nome.value.trim()}, seu agendamento de ${servico.name.toLowerCase()} foi confirmado ` +
+        `${estado.nome.trim()}, seu agendamento de ${servico.name.toLowerCase()} foi confirmado ` +
         `para ${formatarData()} às ${estado.horarioSelecionado}. ` +
         `Você receberá uma confirmação em breve.`;
 
@@ -450,9 +451,10 @@ function reiniciar() {
     estado.diaSelecionado = null;
     estado.horarioSelecionado = null;
 
-    document.getElementById("formulario").reset();
-    [form.nome, form.tel/*, form.email*/].forEach(i => i.classList.remove("invalido"));
-    document.querySelectorAll(".campo__erro").forEach(e => e.textContent = "");
+    //Limpa o formulario que esta comentado 
+    // document.getElementById("formulario").reset();
+    // [form.nome, form.tel/*, form.email*/].forEach(i => i.classList.remove("invalido"));
+    // document.querySelectorAll(".campo__erro").forEach(e => e.textContent = "");
 
     els.navEtapa.hidden = false;
     els.etapa.hidden = false;
