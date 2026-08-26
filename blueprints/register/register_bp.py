@@ -7,7 +7,7 @@ register_bp = Blueprint('register', __name__, template_folder='templates')
 
 @register_bp.route('/')
 def userRegister():
-    return render_template('view/register/user-register.html')
+    return render_template('pages/register/user-register.html')
 
 @register_bp.route('/endereco', methods=['GET', 'POST'])
 def adressRegister():
