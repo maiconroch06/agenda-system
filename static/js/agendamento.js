@@ -15,7 +15,8 @@ const SERVICOS = [
 
 const PROFISSIONAIS = [
     { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "" },
-    { id: "samuel", name: "Samuel",          description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/maicon.jpg", alt: "samuel" },
+    { id: "thiago", name: "Thiago",          description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/thiago.jpg", alt: "samuel" },
+    { id: "samuel", name: "Samuel",          description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/samuel.jpg", alt: "samuel" },
     { id: "maik",   name: "Maik",            description: "Barbeiro",                          icon: "../assets/images/funcionarios/maik.png",   alt: "maik" },
 ];
 

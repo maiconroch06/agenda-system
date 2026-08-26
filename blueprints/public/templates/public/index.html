@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+   
+    <title>Agenda System | Agendamento de serviços</title>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="topbar">
+
+    <a href="/" class="logo">
+        <div class="logo-icon">A</div>
+        <span>Agenda System</span>
+    </a>
+
+    <nav class="menu">
+        <a href="#beneficios">Benefícios</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#depoimentos">Depoimentos</a>
+    </nav>
+
+    <div class="topbar__acoes">
+        <a href="{{ url_for('auth.userAuth') }}" class="btn-login">
+            Entrar
+        </a>
+
+        <a href="{{ url_for('register.userRegister') }}" class="btn-principal">
+            Começar agora
+        </a>
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<main>
+
+    <section class="hero">
+
+        <div class="hero__conteudo">
+
+            <span class="badge">
+                Gestão simples para o seu negócio
+            </span>
+
+            <h1>
+                Seus clientes agendam.
+                <span>Você cuida do seu negócio.</span>
+            </h1>
+
+            <p>
+                Organize seus horários, serviços e profissionais em um
+                único sistema. Automatize seus agendamentos e ofereça
+                uma experiência muito melhor para seus clientes.
+            </p>
+
+            <div class="hero__botoes">
+
+                <a href="{{ url_for('register.userRegister') }}" class="btn-principal">
+                    Começar gratuitamente →
+                </a>
+
+                <a href="#como-funciona" class="btn-secundario">
+                    Conhecer o sistema
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BENEFÍCIOS
+    ====================================================== -->
+
+    <section class="beneficios" id="beneficios">
+
+        <div class="section-header">
+
+            <span class="section-header__label">
+                Por que usar?
+            </span>
+
+            <h2>
+                Mais organização para você.
+                Mais facilidade para seus clientes.
+            </h2>
+
+            <p>
+                O Agenda System foi criado para ajudar empresas de
+                serviços a perder menos tempo com tarefas manuais
+                e aproveitar melhor cada horário disponível.
+            </p>
+
+        </div>
+
+
+        <div class="beneficios-grid">
+
+            <article class="beneficio">
+
+                <div class="beneficio__icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Agendamento online
+                </h3>
+
+                <p>
+                    Permita que seus clientes encontrem horários
+                    disponíveis e façam seus próprios agendamentos
+                    sem precisar entrar em contato com sua empresa.
+                </p>
+
+            </article>
+
+
+            <article class="beneficio">
+
+                <div class="beneficio__icon">
+                    ◷
+                </div>
+
+                <h3>
+                    Sua agenda organizada
+                </h3>
+
+                <p>
+                    Visualize seus compromissos de forma simples,
+                    organize profissionais e serviços e tenha
+                    controle completo dos seus horários.
+                </p>
+
+            </article>
+
+
+            <article class="beneficio">
+
+                <div class="beneficio__icon">
+                    +
+                </div>
+
+                <h3>
+                    Mais clientes atendidos
+                </h3>
+
+                <p>
+                    Aproveite melhor seus horários disponíveis e
+                    reduza espaços vazios na agenda.
+                </p>
+
+            </article>
+
+
+            <article class="beneficio">
+
+                <div class="beneficio__icon">
+                    $
+                </div>
+
+                <h3>
+                    Aumente seu faturamento
+                </h3>
+
+                <p>
+                    Com uma agenda mais organizada, sua empresa
+                    consegue aproveitar melhor sua capacidade
+                    de atendimento.
+                </p>
+
+            </article>
+
+
+            <article class="beneficio">
+
+                <div class="beneficio__icon">
+                    ⚙
+                </div>
+
+                <h3>
+                    Menos trabalho manual
+                </h3>
+
+                <p>
+                    Pare de depender de planilhas, cadernos ou
+                    mensagens espalhadas para controlar seus
+                    agendamentos.
+                </p>
+
+            </article>
+
+
+            <article class="beneficio">
+
+                <div class="beneficio__icon">
+                    ★
+                </div>
+
+                <h3>
+                    Experiência profissional
+                </h3>
+
+                <p>
+                    Ofereça aos seus clientes uma experiência
+                    moderna, rápida e profissional desde o
+                    primeiro agendamento.
+                </p>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         COMO FUNCIONA
+    ====================================================== -->
+
+    <section class="como-funciona" id="como-funciona">
+
+        <div class="section-header">
+
+            <span class="section-header__label">
+                Simples de usar
+            </span>
+
+            <h2>
+                Comece a organizar sua agenda em poucos passos
+            </h2>
+
+            <p>
+                Configure sua empresa e deixe o sistema cuidar
+                da organização dos seus agendamentos.
+            </p>
+
+        </div>
+
+
+        <div class="passos">
+
+            <article class="passo">
+
+                <div class="passo__numero">
+                    1
+                </div>
+
+                <h3>
+                    Cadastre sua empresa
+                </h3>
+
+                <p>
+                    Informe os dados do seu negócio,
+                    horários de funcionamento e serviços.
+                </p>
+
+            </article>
+
+
+            <article class="passo">
+
+                <div class="passo__numero">
+                    2
+                </div>
+
+                <h3>
+                    Configure sua agenda
+                </h3>
+
+                <p>
+                    Cadastre profissionais, serviços,
+                    horários e disponibilidade.
+                </p>
+
+            </article>
+
+
+            <article class="passo">
+
+                <div class="passo__numero">
+                    3
+                </div>
+
+                <h3>
+                    Receba agendamentos
+                </h3>
+
+                <p>
+                    Seus clientes escolhem o serviço,
+                    profissional e horário disponíveis.
+                </p>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DEPOIMENTOS
+    ====================================================== -->
+
+    <section class="depoimentos" id="depoimentos">
+
+        <div class="section-header">
+
+            <span class="section-header__label">
+                Quem usa recomenda
+            </span>
+
+            <h2>
+                O que nossos usuários dizem
+            </h2>
+
+            <p>
+                Empresas que escolheram simplificar sua rotina
+                e transformar a forma como trabalham.
+            </p>
+
+        </div>
+
+
+        <div class="depoimentos-grid">
+
+            <article class="depoimento">
+
+                <div class="estrelas">
+                    ★★★★★
+                </div>
+
+                <p>
+                    "Antes eu controlava tudo pelo WhatsApp e
+                    acabava me perdendo nos horários. Hoje minha
+                    agenda está muito mais organizada."
+                </p>
+
+                <div class="usuario">
+
+                    <div class="avatar">
+                        M
+                    </div>
+
+                    <div>
+                        <strong>
+                            Mariana Costa
+                        </strong>
+
+                        <span>
+                            Salão de beleza
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="depoimento">
+
+                <div class="estrelas">
+                    ★★★★★
+                </div>
+
+                <p>
+                    "O sistema facilitou muito o atendimento.
+                    Meus clientes conseguem agendar sem precisar
+                    ficar esperando uma resposta."
+                </p>
+
+                <div class="usuario">
+
+                    <div class="avatar">
+                        R
+                    </div>
+
+                    <div>
+                        <strong>
+                            Rafael Almeida
+                        </strong>
+
+                        <span>
+                            Barbearia
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="depoimento">
+
+                <div class="estrelas">
+                    ★★★★★
+                </div>
+
+                <p>
+                    "Consegui organizar os horários de todos os
+                    profissionais em um só lugar. Ficou muito
+                    mais fácil administrar a empresa."
+                </p>
+
+                <div class="usuario">
+
+                    <div class="avatar">
+                        C
+                    </div>
+
+                    <div>
+                        <strong>
+                            Camila Santos
+                        </strong>
+
+                        <span>
+                            Clínica de estética
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+    <section class="cta">
+
+        <div class="cta__box">
+
+            <h2>
+                Pronto para deixar sua agenda mais inteligente?
+            </h2>
+
+            <p>
+                Comece agora a organizar seus serviços,
+                profissionais e clientes em um único lugar.
+            </p>
+
+            <a href="{{ url_for('register.userRegister') }}" class="btn-principal">
+                Criar minha conta →
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div class="footer-content">
+
+        <div class="footer-text">
+            © 2026 Agenda System. Todos os direitos reservados.
+        </div>
+
+        <div class="footer-links">
+
+            <a href="#">
+                Termos de uso
+            </a>
+
+            <a href="#">
+                Privacidade
+            </a>
+
+            <a href="#">
+                Contato
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+</body>
+</html>
+:::
