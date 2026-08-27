@@ -44,21 +44,18 @@
             </li>
         </ol>
 
-        <!-- ETAPA 1: SERVIÇOS -->
         <section id="painel-1">
             <h1 class="etapa-titulo">Escolha o serviço:</h1>
             <p class="etapa__subtitulo">Selecione o serviço que você deseja agendar</p>
             <div class="sequencia" id="lista-servico"></div>
         </section>
 
-        <!-- ETAPA 2: PROFISSIONAIS -->
         <section id="painel-2" hidden>
             <h1 class="etapa-titulo">Escolha o profissional:</h1>
             <p class="etapa__subtitulo">Selecione quem irá realizar o seu atendimento</p>
             <div class="sequencia" id="lista-profissionais"></div>
         </section>
 
-        <!-- ETAPA 3: HORÁRIO -->
         <section id="painel-3" hidden>
             <h1 class="etapa-titulo">Escolha um horário</h1>
             <p class="etapa__subtitulo">Selecione um dia e depois escolha um horário disponível</p>
@@ -66,29 +63,13 @@
             <div class="grade-horarios" id="grade-horarios"></div>
         </section>
 
-        <!-- ETAPA 4: CONFIRMAÇÃO -->
         <section id="painel-4" hidden>
             <h1 class="etapa-titulo">Confirme seu agendamento:</h1>
             <p class="etapa__subtitulo">Revise os dados e informe seus dados de contato</p>
 
             <div class="resumo" id="resumo"></div>
 
-            <!-- <form class="formulario" id="formulario" novalidate>
-                <div class="campo">
-                    <label for="inp-nome">Nome</label>
-                    <input type="text" id="inp-nome" name="inputNome" autocomplete="off" placeholder="Digite seu nome...">
-                    <span class="campo__erro" id="erro-nome"></span>
-                </div>
-                <div class="campo">
-                    <label for="inp-tel">Telefone / WhatsApp</label>
-                    <input type="tel" id="inp-tel" name="inputTel" autocomplete="off" placeholder="(00) 00000-0000">
-                    <span class="campo__erro" id="erro-tel"></span>
-                </div>
-                <div class="campo">
-                    <label for="inp-email">E-mail</label>
-                    <input type="email" id="inp-email" name="inputEmail" autocomplete="off" placeholder="seuemail@exemplo.com">
-                    <span class="campo__erro" id="erro-email"></span>
-                </div>
+            <form class="formulario" id="formulario" novalidate>
                 <div class="campo">
                     <label class="checkbox">
                         <input type="checkbox" id="inp-consentimento">
@@ -96,10 +77,20 @@
                     </label>
                     <span class="campo__erro" id="erro-consentimento"></span>
                 </div>
-            </form> -->
+            </form>
         </section>
 
-        <!-- TELA DE SUCESSO -->
+        <section id="painel-historico" hidden>
+            <h1 class="etapa-titulo">Meus Agendamentos</h1>
+            <p class="etapa__subtitulo">Consulte o histórico dos seus agendamentos anteriores</p>
+            
+            <div class="grade-historico" id="lista-historico"></div>
+
+            <div style="margin-top: 24px;">
+                <button class="btn-historico" onclick="voltarParaAgendamento()">← Voltar ao Agendamento</button>
+            </div>
+        </section>
+
         <section id="painel-sucesso" hidden>
             <div class="sucesso">
                 <div class="sucesso__icone">✓</div>
@@ -111,6 +102,16 @@
 
     </main>
 
+    <div class="modal-historico" id="modal-historico" hidden>
+        <div class="modal-historico__conteudo">
+            <div class="modal-historico__header">
+                <h2>Resumo do Agendamento</h2>
+                <button class="modal-historico__fechar" onclick="fecharModalHistorico()">&times;</button>
+            </div>
+            <div class="resumo" id="resumo-modal-conteudo"></div>
+        </div>
+    </div>
+
     <nav class="nav-etapa" id="nav-etapa">
         <button onclick="voltarEtapa()" id="btn-voltar">Voltar</button>
         <button onclick="avancarEtapa()" id="btn-continuar">Continuar</button>
@@ -119,8 +120,7 @@
     <div class="aviso" id="aviso"></div>
 
     <footer>
-        <!-- <p>Interface do administrador <a href="autenticacao.html" target="_blank">clique aqui.</a></p> -->
-    </footer>
+        </footer>
 
     <script src="{{ url_for('static', filename='js/agendamento.js') }}"></script>
 </body>

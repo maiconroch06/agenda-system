@@ -2,9 +2,9 @@
    DADOS
    ============================================================ */
 
-const SERVICOS = [
-    { id: "infantil",       name: "Corte Infantil",   duration: 30, price: 20, icon: "../assets/images/cortes/corte-infantil.jpeg",        alt: "corte-infantil" },
-    { id: "social",         name: "Corte Social",      duration: 30, price: 18, icon: "../assets/images/cortes/corte-social.jpeg",           alt: "corte-social" },
+   const SERVICOS = [
+    { id: "infantil",       name: "Corte Infantil",      duration: 30, price: 20, icon: "../assets/images/cortes/corte-infantil.jpeg",        alt: "corte-infantil" },
+    { id: "social",         name: "Corte Social",        duration: 30, price: 18, icon: "../assets/images/cortes/corte-social.jpeg",           alt: "corte-social" },
     { id: "social-barba",   name: "Social & Barba",    duration: 50, price: 30, icon: "../assets/images/cortes/corte-social&barba.jpeg",     alt: "corte-social-barba" },
     { id: "degrade",        name: "Degradê",           duration: 40, price: 22, icon: "../assets/images/cortes/corte-degrade.jpeg",          alt: "corte-degrade" },
     { id: "degrade-barba",  name: "Degradê & Barba",   duration: 60, price: 30, icon: "../assets/images/cortes/corte-degradê&barba.jpeg",   alt: "corte-degrade-barba" },
@@ -16,8 +16,8 @@ const SERVICOS = [
 const PROFISSIONAIS = [
     { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "" },
     { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/thiago.jpg", alt: "thiago" },
-    { id: "samuel", name: "Samuel",          description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/samuel.jpg", alt: "samuel" },
-    { id: "maik",   name: "Maik",            description: "Barbeiro novato",                          icon: "../assets/images/funcionarios/maik.png",   alt: "maik" },
+    { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/samuel.jpg", alt: "samuel" },
+    { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../assets/images/funcionarios/maik.png",   alt: "maik" },
 ];
 
 const NOMES_DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -38,6 +38,38 @@ const HORARIOS_OCUPADOS = {
     6: TODOS_HORARIOS
 };
 
+const dadosIniciais = [
+    {
+        id: "101",
+        servico: "Social & Barba",
+        profissional: "Thiago Tomaz",
+        data: "Sábado, 15 de Agosto",
+        horario: "14:00",
+        valor: "R$ 30,00",
+        status: "Concluído"
+    },
+    {
+        id: "102",
+        servico: "Degradê",
+        profissional: "Samuel",
+        data: "Quinta-feira, 20 de Agosto",
+        horario: "10:30",
+        valor: "R$ 22,00",
+        status: "Concluído"
+    },
+    {
+        id: "103",
+        servico: "Corte Militar",
+        profissional: "Maik",
+        data: "Sexta-feira, 28 de Agosto",
+        horario: "16:00",
+        valor: "R$ 15,00",
+        status: "Confirmado"
+    }
+];
+
+// 
+
 /* ============================================================
    ESTADO
    ============================================================ */
@@ -56,18 +88,23 @@ const estado = {
    ============================================================ */
 
 const els = {
-    etapa:            document.getElementById("etapa"),
-    listaServico:     document.getElementById("lista-servico"),
+    etapa:             document.getElementById("etapa"),
+    listaServico:      document.getElementById("lista-servico"),
     listaProfissionais: document.getElementById("lista-profissionais"),
-    abasDias:         document.getElementById("abas-dias"),
-    gradeHorarios:    document.getElementById("grade-horarios"),
-    resumo:           document.getElementById("resumo"),
-    btnVoltar:        document.getElementById("btn-voltar"),
-    btnContinuar:     document.getElementById("btn-continuar"),
-    navEtapa:         document.getElementById("nav-etapa"),
-    aviso:            document.getElementById("aviso"),
-    sucesso:          document.getElementById("painel-sucesso"),
-    sucessoTexto:     document.getElementById("sucesso-texto"),
+    abasDias:          document.getElementById("abas-dias"),
+    gradeHorarios:     document.getElementById("grade-horarios"),
+    resumo:            document.getElementById("resumo"),
+    btnVoltar:         document.getElementById("btn-voltar"),
+    btnContinuar:      document.getElementById("btn-continuar"),
+    navEtapa:          document.getElementById("nav-etapa"),
+    aviso:             document.getElementById("aviso"),
+    sucesso:           document.getElementById("painel-sucesso"),
+    sucessoTexto:      document.getElementById("sucesso-texto"),
+    btnHistorico:      document.getElementById("btn-historico"),
+    painelHistorico:   document.getElementById("painel-historico"),
+    listaHistorico:    document.getElementById("lista-historico"),
+    modalHistorico:    document.getElementById("modal-historico"),
+    resumoModal:       document.getElementById("resumo-modal-conteudo")
 };
 
 const form = {
@@ -80,6 +117,55 @@ const form = {
     //erroEmail:      document.getElementById("erro-email"),
     erroConsentimento: document.getElementById("erro-consentimento"),
 };
+
+/* ============================================================
+   LOCALSTORAGE & HISTÓRICO INITIALIZATION
+   ============================================================ */
+
+// function inicializarLocalStorage() {
+//     if (!localStorage.getItem("historicoAgendamentos")) {
+//         const dadosIniciais = [
+//             {
+//                 id: "101",
+//                 servico: "Social & Barba",
+//                 profissional: "Thiago Tomaz",
+//                 data: "Sábado, 15 de Agosto",
+//                 horario: "14:00",
+//                 valor: "R$ 30,00",
+//                 status: "Concluído"
+//             },
+//             {
+//                 id: "102",
+//                 servico: "Degradê",
+//                 profissional: "Samuel",
+//                 data: "Quinta-feira, 20 de Agosto",
+//                 horario: "10:30",
+//                 valor: "R$ 22,00",
+//                 status: "Concluído"
+//             },
+//             {
+//                 id: "103",
+//                 servico: "Corte Militar",
+//                 profissional: "Maik",
+//                 data: "Sexta-feira, 28 de Agosto",
+//                 horario: "16:00",
+//                 valor: "R$ 15,00",
+//                 status: "Confirmado"
+//             }
+//         ];
+//         localStorage.setItem("historicoAgendamentos", JSON.stringify(dadosIniciais));
+//     }
+// }
+
+function obterHistorico() {
+    return JSON.parse(localStorage.getItem("historicoAgendamentos")) || [];
+}
+
+function salvarNoHistorico(novoItem) {
+    const historico = obterHistorico();
+    historico.unshift(novoItem);
+    localStorage.setItem("historicoAgendamentos", JSON.stringify(historico));
+}
 
 /* ============================================================
    AVISO (toast)
@@ -101,9 +187,101 @@ function mostrarPainel(numero) {
         if (painel) painel.hidden = i !== numero;
     }
     els.sucesso.hidden = true;
+    if (els.painelHistorico) els.painelHistorico.hidden = true;
     atualizarStepper();
     atualizarBotoes();
     window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ============================================================
+   HISTÓRICO DE AGENDAMENTOS
+   ============================================================ */
+
+function abrirHistorico() {
+    for (let i = 1; i <= 4; i++) {
+        const painel = document.getElementById(`painel-${i}`);
+        if (painel) painel.hidden = true;
+    }
+    els.sucesso.hidden = true;
+    els.etapa.hidden = true;
+    els.navEtapa.hidden = true;
+    els.painelHistorico.hidden = false;
+
+    carregarHistorico();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function voltarParaAgendamento() {
+    els.painelHistorico.hidden = true;
+    els.etapa.hidden = false;
+    els.navEtapa.hidden = false;
+    mostrarPainel(estado.etapaAtual);
+}
+
+function carregarHistorico() {
+    const historico = obterHistorico();
+
+    if (historico.length === 0) {
+        els.listaHistorico.innerHTML = `<p class="mensagem">Nenhum agendamento encontrado.</p>`;
+        return;
+    }
+
+    els.listaHistorico.innerHTML = historico.map(item => `
+        <div class="card-historico" onclick="exibirDetalhesHistorico('${item.id}')">
+            <div class="card-historico__topo">
+                <span class="card-historico__servico">${item.servico}</span>
+                <span class="card-historico__status status--${item.status.toLowerCase()}">${item.status}</span>
+            </div>
+            <div class="card-historico__info">
+                <span><strong>Profissional:</strong> ${item.profissional}</span>
+                <span><strong>Data:</strong> ${item.data}</span>
+                <span><strong>Horário:</strong> ${item.horario}</span>
+            </div>
+            <div class="card-historico__rodape">
+                <span class="card-historico__valor">${item.valor}</span>
+                <span class="card-historico__link">Ver resumo &rarr;</span>
+            </div>
+        </div>
+    `).join("");
+}
+
+function exibirDetalhesHistorico(id) {
+    const historico = obterHistorico();
+    const item = historico.find(h => h.id === id);
+    if (!item) return;
+
+    els.resumoModal.innerHTML = `
+        <div class="resumo__linha">
+            <span class="resumo__rotulo">Serviço</span>
+            <span class="resumo__valor">${item.servico}</span>
+        </div>
+        <div class="resumo__linha">
+            <span class="resumo__rotulo">Profissional</span>
+            <span class="resumo__valor">${item.profissional}</span>
+        </div>
+        <div class="resumo__linha">
+            <span class="resumo__rotulo">Data</span>
+            <span class="resumo__valor">${item.data}</span>
+        </div>
+        <div class="resumo__linha">
+            <span class="resumo__rotulo">Horário</span>
+            <span class="resumo__valor">${item.horario}</span>
+        </div>
+        <div class="resumo__linha">
+            <span class="resumo__rotulo">Valor</span>
+            <span class="resumo__valor">${item.valor}</span>
+        </div>
+        <div class="resumo__linha">
+            <span class="resumo__rotulo">Status</span>
+            <span class="resumo__valor">${item.status}</span>
+        </div>
+    `;
+
+    els.modalHistorico.hidden = false;
+}
+
+function fecharModalHistorico() {
+    els.modalHistorico.hidden = true;
 }
 
 /* ============================================================
@@ -357,17 +535,17 @@ function renderizarResumo() {
    MÁSCARA DE TELEFONE
    ============================================================ */
 
-form.tel.addEventListener("input", () => {
-    let digitos = form.tel.value.replace(/\D/g, "").slice(0, 11);
-    if (digitos.length > 6) {
-        digitos = digitos.replace(/^(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
-    } else if (digitos.length > 2) {
-        digitos = digitos.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
-    } else {
-        digitos = digitos.replace(/^(\d{0,2})/, "($1");
-    }
-    form.tel.value = digitos;
-});
+// form.tel.addEventListener("input", () => {
+//     let digitos = form.tel.value.replace(/\D/g, "").slice(0, 11);
+//     if (digitos.length > 6) {
+//         digitos = digitos.replace(/^(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
+//     } else if (digitos.length > 2) {
+//         digitos = digitos.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+//     } else {
+//         digitos = digitos.replace(/^(\d{0,2})/, "($1");
+//     }
+//     form.tel.value = digitos;
+// });
 
 /* ============================================================
    VALIDAÇÃO DO FORMULÁRIO
@@ -422,6 +600,19 @@ function validarFormulario() {
 
 function confirmarAgendamento() {
     const servico = SERVICOS.find(s => s.id === estado.servicoSelecionado);
+    const profissional = PROFISSIONAIS.find(p => p.id === estado.profissionalSelecionado);
+
+    // Salva o agendamento
+    const novoAgendamento = {
+        id: Date.now().toString(),
+        servico: servico.name,
+        profissional: profissional.name,
+        data: formatarData(),
+        horario: estado.horarioSelecionado,
+        valor: `R$ ${servico.price.toFixed(2).replace(".", ",")}`,
+        status: "Confirmado"
+    };
+    salvarNoHistorico(novoAgendamento);
 
     for (let i = 1; i <= 4; i++) {
         const painel = document.getElementById(`painel-${i}`);
@@ -465,9 +656,11 @@ function reiniciar() {
 }
 
 /* ============================================================
-   INICIALIZAÇÃO
+   INICIALIZAÇÃO & LISTENERS
    ============================================================ */
 
+els.btnHistorico.addEventListener("click", abrirHistorico);
+//inicializarLocalStorage();
 carregarServicos();
 carregarProfissionais();
 mostrarPainel(1);
