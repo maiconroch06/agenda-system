@@ -57,22 +57,17 @@ conexao.close()
 # ==========================================
 # 2. IMPORTS DOS BLUEPRINTS (Apenas APÓS criar o banco)
 # ==========================================
-from blueprints.auth.auth_bp import auth_bp
-from blueprints.companies.companies_bp import companies_bp
-from blueprints.customer.customer_bp import customer_bp
-from blueprints.employee.employee_bp import employee_bp
-from blueprints.public.public_bp import public_bp
-from blueprints.register.register_bp import register_bp
+from routers.register import user_register
+from routers.public import publics
+from routers.customer_bp import customer_bp
+
 
 # ==========================================
 # 3. REGISTRO DOS BLUEPRINTS
 # ==========================================
-app.register_blueprint(auth_bp, url_prefix='/auth')
-app.register_blueprint(companies_bp, url_prefix='/companies')
+app.register_blueprint(user_register, url_prefix='/register')
+app.register_blueprint(publics)
 app.register_blueprint(customer_bp, url_prefix='/customer')
-app.register_blueprint(employee_bp, url_prefix='/employee')
-app.register_blueprint(public_bp, url_prefix='/')
-app.register_blueprint(register_bp, url_prefix='/register')
 
 if __name__ == "__main__":
     app.run(debug=True)

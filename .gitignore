@@ -20,3 +20,6 @@ database/banco.db
 # IDEs
 .vscode/
 .idea/
+
+# node_modules PASTA DO TAILWIND 
+node_modules/

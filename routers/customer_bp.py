@@ -4,4 +4,4 @@ customer_bp = Blueprint('customer', __name__, template_folder='templates')
 
 @customer_bp.route('/')
 def agendamento():
-    return render_template('cunstoner/page-etapas-agendamento.html')
+    return render_template('pages/custoner/page-etapas-agendamento.html')
