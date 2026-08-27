@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
-    
     <title>Painel Adminstraivo | Agenda System</title>
 </head>
+
 <body>
     <!-- ============================================================
      TELA 6: PAINEL DO ADMINISTRADOR
@@ -111,7 +112,8 @@
                         </div>
                         <div class="nav-duplo">
                             <button type="button" class="btn-ghost" onclick="fecharFormServico()">Cancelar</button>
-                            <button type="button" class="btn-secundario" onclick="adicionarServicoPainel()">Salvar serviço</button>
+                            <button type="button" class="btn-secundario" onclick="adicionarServicoPainel()">Salvar
+                                serviço</button>
                         </div>
                     </form>
                     <hr class="divisor">
@@ -127,7 +129,7 @@
                 <div class="painel-cabecalho">
                     <h1>Profissionais</h1>
                     <!-- <button class="btn-secundario" onclick="abrirFormProfissional()">+ Novo profissional</button> -->
-                </div> 
+                </div>
 
                 <div id="form-profissional-painel" hidden>
                     <form class="form-inline form-inline--painel" novalidate>
@@ -147,7 +149,8 @@
                         </div>
                         <div class="nav-duplo">
                             <button type="button" class="btn-ghost" onclick="fecharFormProfissional()">Cancelar</button>
-                            <button type="button" class="btn-secundario" onclick="adicionarProfissionalPainel()">Salvar profissional</button>
+                            <button type="button" class="btn-secundario" onclick="adicionarProfissionalPainel()">Salvar
+                                profissional</button>
                         </div>
                     </form>
                     <hr class="divisor">
@@ -254,4 +257,5 @@
 
     <script src="{{ url_for('static', filename='js/painelAdminstrativo.js') }}"></script>
 </body>
+
 </html>

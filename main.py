@@ -1,5 +1,4 @@
 import os
-
 from flask import Flask 
 from database import create_database 
 
@@ -13,7 +12,6 @@ create_database(app,os)
 from routers.register import user_register
 from routers.public import publics
 from routers.customer_bp import customer_bp
-
 
 # ==========================================
 # 3. REGISTRO DOS BLUEPRINTS
