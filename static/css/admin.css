@@ -69,7 +69,11 @@ body {
 .auth-container {
     width: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
     max-width: 700px;
+=======
+    max-width: 500px;
+>>>>>>> feature-backend
 =======
     max-width: 500px;
 >>>>>>> feature-backend

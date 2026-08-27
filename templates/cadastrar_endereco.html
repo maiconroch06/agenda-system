@@ -14,18 +14,21 @@
     <div id="tela-empresa" class="tela ativa">
          <div class="auth-container auth-container--largo">
             <div class="passo-indicador">
-               
-                 <span class="passo">1. Dados do Usuário</span>
+                <span class="passo">1. Dados do Proprietário</span>
                 <span class="passo-linha"></span>
-                <span class="passo ativo">2. Endereço   {% if tipoEndereco == 0 %} do Usuário {% else %} da Empresa {% endif %} </span>
+                <span class="passo {% if tipoEndereco == 0 %}ativo {% endif %}">2. Endereço do Proprietário</span>
+                <span class="passo-linha"></span>
+                <span class="passo">3. Perfil da Empresa</span>
+                <span class="passo-linha"></span>
+                <span class="passo {% if tipoEndereco == 1 %}ativo {% endif %}">4. Endereço da Empresa</span>
                 <span class="passo-linha"></span>
                 <span class="passo">5. Finalizar cadastro</span>
-               </div>
+            </div>
 
             <h1 class="tela__titulo">Dados do {{typepersona}}</h1>
             <p class="tela__subtitulo">Preencha as informações referente {% if tipoEndereco== 0 %} ao{% else %} a {%endif%} {{typepersona}}</p>
 
-            <form id="form-empresa" class="form-auth" action="{%if tipoEndereco == 0 %} /finalizar-cadastro-usuario {%else%} /finalizar-cadastro-empresa {%endif%}" method="post" novalidate>  
+            <form id="form-empresa" class="form-auth" action="{%if tipoEndereco == 0 %} /cadastrar_empresa {%else%} /painelAdministrativo {%endif%}" method="post" novalidate>
                 <div class="campo">
                     <label for="end-cep">CEP: </label>
                     <input type="text" name="end-cep" id="end-cep"  placeholder="00.000-000" autocomplete="off">
@@ -78,7 +81,7 @@
 
                 
                 <div class="nav-duplo">
-                  
+                    
                     <button type="button" class="btn-ghost" onclick="history.go(-1)">Voltar</button>
                     <button type="submit" class="btn-primario">Próximo →</button>
                 </div>
