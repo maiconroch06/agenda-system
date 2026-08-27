@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro Funcionario | Agenda System</title>
-    <link rel="stylesheet" href="styles/admin.css">
+    <link rel="stylesheet" href="../static/css/admin.css">
 </head>
 <body>
     <div id="tela-profissional" class="tela ativa">
@@ -47,6 +47,10 @@
             </form>
         </div>
     </div>
-    <script src="js/cadastroProfissional.js"></script>
+<<<<<<<< HEAD:templates/cadastroProfissional.html
+    <script src="../static/js/cadastroProfissional.js"></script>
+========
+    <script src="{{ url_for('static', filename='js/cadastroProfissional.js') }}"></script>
+>>>>>>>> feature-backend:blueprints/public/templates/public/cadastro-profissional.html
 </body>
 </html>

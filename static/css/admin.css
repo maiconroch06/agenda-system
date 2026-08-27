@@ -68,7 +68,15 @@ body {
 
 .auth-container {
     width: 100%;
+<<<<<<< HEAD
+<<<<<<< HEAD
     max-width: 700px;
+=======
+    max-width: 500px;
+>>>>>>> feature-backend
+=======
+    max-width: 500px;
+>>>>>>> feature-backend
     background: var(--cor-superficie);
     border: 1px solid var(--cor-borda);
     border-radius: var(--radius-lg);
@@ -960,21 +968,45 @@ body {
 }
 
 .bloco-codigo:first-child::after{
-
     content:"-";
-
     position:absolute;
-
     right:268px;
-
     top:50%;
-
     transform:translateY(-50%);
-
     font-size:28px;
-
     font-weight:bold;
-
     color:#888780;
+}
 
+.registro-caption {
+    color: #e0e0e0;
+    font-size: 14px;
+    padding-left: 20px;
+    text-align: center;
+    margin-top: 16px;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.registro-link {
+    color: #ffffff;          /* Define a cor branca */
+    text-decoration: none;   /* Remove o sublinhado */
+    font-weight: bold;       /* Deixa o texto em negrito */
+    /*font-weight: 600;*/
+    margin-left: 4px;
+    transition: opacity 0.2s ease;
+}
+
+/* Garante que ele continue branco mesmo após ser clicado */
+.register-link:visited {
+  color: #ffffff;
+}
+
+.registro-link:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+/* Opcional: Adiciona um efeito suave ao passar o mouse */
+.register-link:hover {
+  opacity: 0.8;            /* Fica levemente transparente ao passar o mouse */
 }

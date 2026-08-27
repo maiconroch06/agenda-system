@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tipo Usuário | Agenda System</title>
+<<<<<<<< HEAD:templates/tipoUsuario.html
+    <link rel="stylesheet" href="../static/css/admin.css">
+========
    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+>>>>>>>> feature-backend:blueprints/register/templates/register/user-category-type-panel.html
 </head>
 <body>
     <!-- ============================================================
@@ -37,6 +41,10 @@
 
     <div class="aviso" id="aviso"></div>
 
-    <script src="js/tipoUsuario.js"></script>
+<<<<<<<< HEAD:templates/tipoUsuario.html
+    <script src="../static/js/tipoUsuario.js"></script>
+========
+    <script src="{{ url_for('static', filename='js/tipoUsuario.js') }}"></script>
+>>>>>>>> feature-backend:blueprints/register/templates/register/user-category-type-panel.html
 </body>
 </html>

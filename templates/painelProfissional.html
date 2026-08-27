@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
-    <link rel="stylesheet" href="styles/profissional.css">
+    <link rel="stylesheet" href="../static/css/profissional.css">
 </head>
 <body>
 
@@ -454,6 +454,10 @@
 
 <div class="aviso" id="aviso"></div>
 
-<script src="js/painelProfissional.js"></script>
+<<<<<<<< HEAD:templates/painelProfissional.html
+<script src="../static/js/painelProfissional.js"></script>
+========
+<script src="{{ url_for('static', filename='js/painelProfissional.js') }}"></script>
+>>>>>>>> feature-backend:blueprints/employee/templates/employee/painel-profissional.html
 </body>
 </html>

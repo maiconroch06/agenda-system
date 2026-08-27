@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,7 @@
                 <span class="passo-linha"></span>
                 <span class="passo">2. Endereço   {% if tipoEndereco == 0 %} do Usuário {% else %} da Empresa {% endif %} </span>
                 <span class="passo-linha"></span>
-                <span class="passo ativo">5. Finalizar cadastro</span>
+                <span class="passo ativo">3. Finalizar cadastro</span>
                </div>
 
             <h1 class="tela__titulo">Finalizar o cadastro do usuário</h1>
@@ -27,7 +27,7 @@
 
                <div class="nav-duplo">
                       
-                    <a class="btn-ghost" href="/panel-categoria-do-usuario">Voltar e corrigir informações</a>
+                    <a class="btn-ghost" href="/register/endereco">Voltar e corrigir informações</a>
                     <a class="btn-ghost" href="/panel-categoria-do-usuario">Finalizar Cadastro →</a>
                 </div>
         </div>
@@ -35,6 +35,6 @@
 
     <div class="aviso" id="aviso"></div>
 
-    <script src="js/cadastroEmpresa.js"></script>
+    <script src="{{ url_for('static', filename='js/cadastroEmpresa.js') }}"></script>
 </body>
 </html>

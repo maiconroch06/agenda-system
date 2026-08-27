@@ -11,16 +11,16 @@
     <!-- ============================================================
      TELA 3: DADOS Do USUÁRIO
      ============================================================ -->
-
-     
     <div id="tela-empresa" class="tela ativa">
          <div class="auth-container auth-container--largo">
-            
             <div class="passo-indicador">
-                
-                <span class="passo ativo">1. Dados do Usuário</span>
+                <span class="passo ativo">1. Dados do Proprietário</span>
                 <span class="passo-linha"></span>
-                <span class="passo">2. Endereço do Usuário</span>
+                <span class="passo">2. Endereço do Proprietário</span>
+                <span class="passo-linha"></span>
+                <span class="passo">3. Perfil da Empresa</span>
+                <span class="passo-linha"></span>
+                <span class="passo">4. Endereço da Empresa</span>
                 <span class="passo-linha"></span>
                 <span class="passo">5. Finalizar cadastro</span>
             </div>
@@ -28,7 +28,7 @@
             <h1 class="tela__titulo">Dados do Proprietário</h1>
             <p class="tela__subtitulo">Preencha as informações referente ao proprietário/p>
 
-            <form id="form-empresa" class="form-auth" action="/cadastrar-endereco" method="post" novalidate>
+            <form id="form-empresa" class="form-auth" action="/cadastrar_endereco" method="post" novalidate>
                 <div class="campo">
                     <label for="emp-nome">Nome</label>
                     <input type="text" id="prop-nome" placeholder="Ex: nome do proprietário" autocomplete="off">
