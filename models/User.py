@@ -242,7 +242,7 @@ class User:
             conexao.close()
 
     # ============================================================
-    # UPDATE
+    # UPDATE A PARTIR DE UM DO INSTANCIA USUÁRIO
     # ============================================================
 
     def atualizar(self):
