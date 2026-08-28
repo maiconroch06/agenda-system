@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Agenda System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
+
 <body>
     <div id="tela-auth" class="tela ativa">
         <div class="auth-container">
@@ -29,9 +31,10 @@
             </form>
             <p class="registro-caption">
                 Novo por aqui? <a href="/cadastro" class="register-link">Faça seu cadastro</a>
-            </p>  
+            </p>
         </div>
     </div>
     <script src="../static/js/autenticacao.js"></script>
 </body>
+
 </html>

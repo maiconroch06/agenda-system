@@ -11,6 +11,10 @@ user_register = Blueprint('register', __name__, template_folder='templates')
 def homePage():
     return render_template('pages/register/user-register.html')
 
+@user_register.route('/login', methods=['GET','POST'])
+def login():
+    return render_template('/login.html')
+
 @user_register.route('/endereco', methods=['GET', 'POST'])
 def adressRegister():
 
