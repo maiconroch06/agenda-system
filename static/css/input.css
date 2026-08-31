@@ -1,0 +1,733 @@
+@import "tailwindcss";
+
+/* CSS do AGENDAMENTO  */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --cor-fundo: #161513;
+    --cor-card: #1c1c1c;
+    --cor-superficie: #232220;
+    --cor-borda: #4a473f;
+    --cor-borda-suave: #38362f;
+    --cor-texto: #f1efe8;
+    --cor-texto-suave: #888780;
+    --cor-texto-muted: #6b6963;
+    --cor-primaria: #f1efe8;
+    --cor-primaria-texto: #161513;
+    --cor-selecionado: #085041;
+    --cor-selecionado-borda: #0f6e56;
+    --cor-selecionado-texto: #9fe1cb;
+    --cor-perigo: #993c1d;
+    --cor-perigo-texto: #f0997b;
+    --radius: 10px;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 300px;
+}
+
+h1 {
+    /* font-size responsivo agora é definido pela classe Tailwind
+       em cada elemento (text-[1.3rem] md:text-2xl) */
+    font-weight: 500;
+}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+
+.topbar {
+    border-bottom: 0.5px solid var(--cor-borda-suave);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--cor-superficie);
+}
+
+.topbar__brand {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.topbar__nome {
+    font-weight: 500;
+}
+
+.btn-historico {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius);
+    border: 1px solid var(--cor-borda);
+    background: transparent;
+    color: var(--cor-texto);
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s ease;
+}
+
+.btn-historico:hover {
+    background: var(--cor-borda-suave);
+}
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+
+.conteiner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 24px;
+    padding-bottom: 100px;
+    overflow-x: hidden; /* rede de segurança contra overflow horizontal */
+}
+
+/* ============================================================
+   ETAPA (stepper)
+   ============================================================
+   Sem mudanças: os itens usam flex:1 sem largura fixa, então já
+   se ajustam a qualquer tela sem risco de overflow horizontal.
+   ============================================================ */
+
+.etapa {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+}
+
+.etapa__item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    font-size: 12px;
+    color: var(--cor-texto-suave);
+}
+
+.etapa__item::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: -50%;
+    width: 100%;
+    height: 1px;
+    background: var(--cor-borda);
+    z-index: -1;
+}
+
+.etapa__item:first-child::before {
+    content: none;
+}
+
+.etapa__ciclo {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--cor-superficie);
+    border: 1px solid var(--cor-borda);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cor-texto-suave);
+}
+
+.etapa__item.ativo .etapa__ciclo {
+    background: var(--cor-primaria);
+    color: var(--cor-primaria-texto);
+    border-color: var(--cor-primaria);
+}
+
+.etapa__item.ativo .etapa__label {
+    color: var(--cor-texto);
+    font-weight: 500;
+}
+
+.etapa__item.concluido .etapa__ciclo {
+    background: var(--cor-selecionado);
+    color: var(--cor-selecionado-texto);
+    border-color: var(--cor-selecionado-borda);
+}
+
+.etapa-titulo {
+    margin-bottom: 4px;
+}
+
+.etapa__subtitulo {
+    color: var(--cor-texto-suave);
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+/* ============================================================
+   CARDS (serviços e profissionais)
+   ============================================================
+   #lista-servico / #lista-profissionais existem no HTML estático
+   (mobile: flex + scroll horizontal via Tailwind no próprio HTML).
+   Os .card dentro deles são injetados pelo JS, então a largura
+   responsiva deles (140px → 100% dentro do grid) é feita aqui.
+   ============================================================ */
+
+.sequencia {
+    gap: 18px;
+    padding: 15px 5px;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+.card {
+    width: 140px;
+    min-height: 150px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border: 2px solid #2a2825;
+    border-radius: var(--radius);
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    background: var(--cor-card);
+    transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+@media (min-width: 768px) {
+    .card {
+        width: 100%;
+    }
+}
+
+.card:hover {
+    border-color: var(--cor-borda);
+}
+
+.card img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+@media (min-width: 768px) {
+    .card img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+.titulo {
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--cor-texto);
+}
+
+.dados {
+    font-size: 12px;
+    color: var(--cor-texto-muted);
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 4px;
+}
+
+input[type="radio"]:checked + .card {
+    border-color: var(--cor-selecionado-borda);
+    background: #0d2b24;
+    transform: scale(1.03);
+}
+
+input[type="radio"]:checked + .card .titulo {
+    color: var(--cor-selecionado-texto);
+}
+
+/* ============================================================
+   AGENDA (dias e horários)
+   ============================================================
+   Sem mudanças: .abas-dias já rola horizontalmente e
+   .grade-horarios já usa auto-fill/minmax — ambos já são
+   responsivos por natureza.
+   ============================================================ */
+
+.abas-dias {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-bottom: 20px;
+    padding-bottom: 4px;
+}
+
+.dia {
+    min-width: 64px;
+    padding: 10px 8px;
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--radius);
+    background: var(--cor-card);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-family: inherit;
+    font-size: 13px;
+    transition: background 0.12s ease;
+}
+
+.dia strong {
+    font-size: 17px;
+}
+
+.dia.ativo {
+    background: var(--cor-primaria);
+    color: var(--cor-primaria-texto);
+    border-color: var(--cor-primaria);
+}
+
+.dia:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.grade-horarios {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 10px;
+}
+
+.horario {
+    padding: 10px;
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--radius);
+    background: var(--cor-card);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: background 0.12s ease;
+}
+
+.horario:hover:not(:disabled) {
+    border-color: var(--cor-texto-suave);
+}
+
+.horario.ativo {
+    background: var(--cor-selecionado);
+    border-color: var(--cor-selecionado-borda);
+    color: var(--cor-selecionado-texto);
+    font-weight: 500;
+}
+
+.horario:disabled {
+    opacity: 0.35;
+    text-decoration: line-through;
+    cursor: not-allowed;
+}
+
+.mensagem {
+    text-align: center;
+    color: var(--cor-texto-suave);
+    padding: 20px;
+    grid-column: 1 / -1;
+    font-size: 14px;
+}
+
+/* ============================================================
+   RESUMO (etapa 4)
+   ============================================================ */
+
+.resumo {
+    background: var(--cor-superficie);
+    border: 1px solid var(--cor-borda-suave);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.resumo__linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+.resumo__linha + .resumo__linha {
+    border-top: 0.5px solid var(--cor-borda-suave);
+}
+
+.resumo__rotulo {
+    color: var(--cor-texto-suave);
+    flex-shrink: 0;
+}
+
+.resumo__valor {
+    font-weight: 500;
+    text-align: right;
+}
+
+/* ============================================================
+   FORMULÁRIO
+   ============================================================ */
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cor-texto-suave);
+}
+
+.campo input[type="text"],
+.campo input[type="tel"],
+.campo input[type="email"] {
+    height: 44px;
+    padding: 0 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--cor-borda);
+    background: var(--cor-superficie);
+    color: var(--cor-texto);
+    font-family: inherit;
+    font-size: 16px; /* era 15px: abaixo de 16px o Safari iOS dá zoom automático no foco */
+}
+
+.campo input:focus {
+    outline: none;
+    border-color: var(--cor-selecionado-borda);
+    box-shadow: 0 0 0 3px #04342c;
+}
+
+.campo input.invalido {
+    border-color: var(--cor-perigo);
+}
+
+.campo__erro {
+    font-size: 12px;
+    color: var(--cor-perigo-texto);
+    min-height: 14px;
+}
+
+.checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--cor-texto-suave);
+    cursor: pointer;
+}
+
+.checkbox input {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    accent-color: var(--cor-selecionado-borda);
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   SUCESSO
+   ============================================================ */
+
+.sucesso {
+    text-align: center;
+    padding: 48px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.sucesso__icone {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--cor-selecionado);
+    color: var(--cor-selecionado-texto);
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-novo {
+    margin-top: 12px;
+    height: 44px;
+    padding: 0 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--cor-borda);
+    background: transparent;
+    color: var(--cor-texto);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s ease;
+}
+
+.btn-novo:hover {
+    background: var(--cor-superficie);
+}
+
+/* ============================================================
+   NAVEGAÇÃO FIXA
+   ============================================================
+   flex/altura foram para o Tailwind no HTML, que agora envolve os
+   dois botões num wrapper com max-width para alinhar com o
+   .conteiner em telas grandes, em vez de esticar de ponta a ponta.
+   ============================================================ */
+
+.nav-etapa {
+    background: var(--cor-superficie);
+    border-top: 0.5px solid var(--cor-borda-suave);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.nav-etapa button {
+    border-radius: var(--radius);
+    border: 1px solid var(--cor-borda);
+    background: transparent;
+    color: var(--cor-texto);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s ease, transform 0.08s ease;
+}
+
+.nav-etapa button:hover {
+    background: #464441;
+}
+
+.nav-etapa button:active {
+    transform: scale(0.98);
+}
+
+.nav-etapa button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#btn-continuar {
+    background: var(--cor-primaria);
+    color: var(--cor-primaria-texto);
+    border-color: var(--cor-primaria);
+}
+
+#btn-continuar:hover {
+    opacity: 0.9;
+}
+
+#btn-continuar:disabled {
+    opacity: 0.4;
+}
+
+/* ============================================================
+   AVISO (toast)
+   ============================================================ */
+
+.aviso {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--cor-texto);
+    color: var(--cor-fundo);
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 100;
+    max-width: calc(100vw - 32px); /* era white-space:nowrap — mensagem longa vazava da tela */
+    text-align: center;
+}
+
+.aviso.visivel {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================================
+   HISTÓRICO DE AGENDAMENTOS
+   ============================================================
+   .grade-historico (existe no HTML estático) agora é 1 coluna no
+   mobile, 2 no tablet e 3 no desktop, via Tailwind no HTML — por
+   isso a regra abaixo ficou só com o que não é responsivo.
+   ============================================================ */
+
+.card-historico {
+    background: var(--cor-card);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.card-historico:hover {
+    border-color: var(--cor-selecionado-borda);
+    transform: translateY(-2px);
+}
+
+.card-historico__topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.5px solid var(--cor-borda-suave);
+    padding-bottom: 8px;
+}
+
+.card-historico__servico {
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--cor-texto);
+}
+
+.card-historico__status {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
+.status--concluído, .status--concluido {
+    background: rgba(136, 135, 128, 0.2);
+    color: var(--cor-texto-suave);
+}
+
+.status--confirmado, .status--agendado {
+    background: var(--cor-selecionado);
+    color: var(--cor-selecionado-texto);
+    border: 1px solid var(--cor-selecionado-borda);
+}
+
+.card-historico__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--cor-texto-suave);
+}
+
+.card-historico__info strong {
+    color: var(--cor-texto);
+}
+
+.card-historico__rodape {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 0.5px solid var(--cor-borda-suave);
+}
+
+.card-historico__valor {
+    font-weight: bold;
+    color: var(--cor-selecionado-texto);
+    font-size: 14px;
+}
+
+.card-historico__link {
+    font-size: 12px;
+    color: var(--cor-texto-suave);
+}
+
+.card-historico:hover .card-historico__link {
+    color: var(--cor-texto);
+}
+
+/* ============================================================
+   MODAL DE RESUMO / DETALHES
+   ============================================================
+   .modal-historico__conteudo tinha width:450px fixo (quebrava em
+   qualquer tela menor). Virou max-width responsivo via Tailwind
+   no HTML, com max-height + scroll interno para telas baixas.
+   ============================================================ */
+
+.modal-historico {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal-historico[hidden] {
+    display: none;
+}
+
+.modal-historico__conteudo {
+    background: var(--cor-fundo);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-historico__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--cor-borda-suave);
+    padding-bottom: 8px;
+}
+
+.modal-historico__header h2 {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.modal-historico__fechar {
+    background: transparent;
+    border: none;
+    color: var(--cor-texto-suave);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-historico__fechar:hover {
+    color: var(--cor-texto);
+}
