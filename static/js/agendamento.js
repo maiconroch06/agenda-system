@@ -3,21 +3,21 @@
    ============================================================ */
 
    const SERVICOS = [
-    { id: "infantil",       name: "Corte Infantil",      duration: 30, price: 20, icon: "../assets/images/cortes/corte-infantil.jpeg",        alt: "corte-infantil" },
-    { id: "social",         name: "Corte Social",        duration: 30, price: 18, icon: "../assets/images/cortes/corte-social.jpeg",           alt: "corte-social" },
-    { id: "social-barba",   name: "Social & Barba",    duration: 50, price: 30, icon: "../assets/images/cortes/corte-social&barba.jpeg",     alt: "corte-social-barba" },
-    { id: "degrade",        name: "Degradê",           duration: 40, price: 22, icon: "../assets/images/cortes/corte-degrade.jpeg",          alt: "corte-degrade" },
-    { id: "degrade-barba",  name: "Degradê & Barba",   duration: 60, price: 30, icon: "../assets/images/cortes/corte-degradê&barba.jpeg",   alt: "corte-degrade-barba" },
-    { id: "militar",        name: "Corte Militar",     duration: 20, price: 15, icon: "../assets/images/cortes/corte-militar.jpeg",          alt: "corte-militar" },
-    { id: "barba",          name: "Barba",             duration: 25, price: 15, icon: "../assets/images/cortes/corte-barba.jpeg",            alt: "corte-barba" },
-    { id: "sobrancelha",    name: "Sobrancelha",       duration: 5,  price: 15, icon: "../assets/images/cortes/sombrancelha.png",            alt: "sombrancelha" },
+    { id: "infantil",       name: "Corte Infantil",      duration: 30, price: 20, icon: "../static/assets/img/cortes/corte-infantil.jpeg",        alt: "corte-infantil" },
+    { id: "social",         name: "Corte Social",        duration: 30, price: 18, icon: "../static/assets/img/cortes/corte-social.jpeg",           alt: "corte-social" },
+    { id: "social-barba",   name: "Social & Barba",    duration: 50, price: 30, icon: "../static/assets/img/cortes/corte-social&barba.jpeg",     alt: "corte-social-barba" },
+    { id: "degrade",        name: "Degradê",           duration: 40, price: 22, icon: "../static/assets/img/cortes/corte-degrade.jpeg",          alt: "corte-degrade" },
+    { id: "degrade-barba",  name: "Degradê & Barba",   duration: 60, price: 30, icon: "../static/assets/img/cortes/corte-degradê&barba.jpeg",   alt: "corte-degrade-barba" },
+    { id: "militar",        name: "Corte Militar",     duration: 20, price: 15, icon: "../static/assets/img/cortes/corte-militar.jpeg",          alt: "corte-militar" },
+    { id: "barba",          name: "Barba",             duration: 25, price: 15, icon: "../static/assets/img/cortes/corte-barba.jpeg",            alt: "corte-barba" },
+    { id: "sobrancelha",    name: "Sobrancelha",       duration: 5,  price: 15, icon: "../static/assets/img/cortes/sombrancelha.png",            alt: "sombrancelha" },
 ];
 
 const PROFISSIONAIS = [
     { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "" },
-    { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/thiago.jpg", alt: "thiago" },
-    { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../assets/images/funcionarios/samuel.jpg", alt: "samuel" },
-    { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../assets/images/funcionarios/maik.png",   alt: "maik" },
+    { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../static/assets/img/funcionarios/thiago.jpg", alt: "thiago" },
+    { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../static/assets/img/funcionarios/samuel.jpg", alt: "samuel" },
+    { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../static/assets/img/funcionarios/maik.png",   alt: "maik" },
 ];
 
 const NOMES_DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
