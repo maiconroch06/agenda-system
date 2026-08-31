@@ -4,9 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro Funcionario | Agenda System</title>
-    <link rel="stylesheet" href="../static/css/admin.css">
+    <link rel="stylesheet" href="../static/assents/css/admin.css">
+    <link rel="stylesheet" href="../static/assents/css/style.css">
 </head>
 <body>
+    <div id="tela-profissionais" class="tela">
+        <div class="auth-container auth-container--largo">
+            <!--
+            <div class="passo-indicador">
+                <span class="passo concluido">1. Empresa</span>
+                <span class="passo-linha"></span>
+                <span class="passo concluido">2. Serviços</span>
+                <span class="passo-linha"></span>
+                <span class="passo ativo">3. Profissionais</span>
+            </div>
+            -->
+
+            <ol class="etapa" id="etapa">
+                <li class="etapa__item ativo">
+                    <span class="etapa__ciclo">1</span>
+                    <span class="etapa__label">Empresa</span>
+                </li>
+                <li class="etapa__item">
+                    <span class="etapa__ciclo">2</span>
+                    <span class="etapa__label">Serviços</span>
+                </li>
+                <li class="etapa__item">
+                    <span class="etapa__ciclo">3</span>
+                    <span class="etapa__label">Profissionais</span>
+                </li>
+            </ol>
+
+            <h1 class="tela__titulo">Profissionais</h1>
+            <p class="tela__subtitulo">Adicione os profissionais que trabalham na empresa</p>
+
+            <form id="form-profissional" class="form-inline" novalidate>
+                <div class="form-inline__campos">
+                    <div class="campo">
+                        <label for="pro-foto">Foto (3x4)</label>
+                        <input type="file" id="pro-foto" accept="image/*">
+                    </div>
+                    <div class="campo">
+                        <label for="pro-nome">Nome completo</label>
+                        <input type="text" id="pro-nome" placeholder="Nome do profissional" autocomplete="off">
+                    </div>
+                    <div class="campo">
+                        <label for="pro-cargo">Cargo / Especialidade</label>
+                        <input type="text" id="pro-cargo" placeholder="Ex: Barbeiro sênior" autocomplete="off">
+                    </div>
+                </div>
+                <button type="button" class="btn-secundario" onclick="adicionarProfissional()">+ Adicionar profissional</button>
+            </form>
+            
+            <div class="cards-lista" id="lista-cards-profissionais">
+                <p class="lista-vazia" id="vazia-profissionais">Nenhum profissional adicionado ainda.</p>
+            </div>
+
+            <div class="nav-duplo">
+                <button class="btn-ghost" onclick="voltar()">← Voltar</button>
+                <button class="btn-primario" onclick="salvarProfissionais()">Concluir cadastro →</button>
+            </div>
+        </div>
+    </div>
+    <script src="../static/assents/js/cadastroProfissional.js"></script>
+    <!-- <script src="{{ url_for('static', filename='js/cadastroProfissional.js') }}"></script> -->
+</body>
+</html>
+
+<!--  TELA ANTIGA
     <div id="tela-profissional" class="tela ativa">
         <div class="auth-container auth-container--largo">
             <h1 class="tela__titulo">Crie seu perfil profissional</h1>
@@ -41,16 +106,15 @@
                 </div>
                 
                 <div class="nav-duplo">
-                    <button type="button" class="btn-ghost" onclick="voltar()">← Voltar</button>
-                    <button type="button" class="btn-primario" onclick="salvarProfissional()">Próximo →</button>
+                    <button type="button" class="btn-ghost">← Voltar</button>
+                    <button type="button" class="btn-primario">Próximo →</button>
                 </div>
             </form>
         </div>
     </div>
-<<<<<<<< HEAD:templates/cadastroProfissional.html
+    <<<<<<<< HEAD:templates/cadastroProfissional.html
     <script src="../static/js/cadastroProfissional.js"></script>
-========
+    ========
     <script src="{{ url_for('static', filename='js/cadastroProfissional.js') }}"></script>
->>>>>>>> feature-backend:blueprints/public/templates/public/cadastro-profissional.html
-</body>
-</html>
+    >>>>>>>> feature-backend:blueprints/public/templates/public/cadastro-profissional.html
+-->

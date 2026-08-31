@@ -106,3 +106,5 @@ async function salvarProfissional() {
     localStorage.setItem("profissional", JSON.stringify(profissional));
     window.location.href = "vinculacaoEmpresa.html"
 }
+
+
