@@ -45,6 +45,12 @@
 
 ---
 
+# 4 Comandos de Execução
+
+    Backend Python: ```phyton run dev```
+    Frontend Tailwind: ```npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch```
+
+
 
 ## 4. COMANDOS FUTUROS
 
