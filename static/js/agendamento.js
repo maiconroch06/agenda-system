@@ -10,7 +10,6 @@
     { id: "degrade-barba",  name: "Degradê & Barba",   duration: 60, price: 30, icon: "../static/assets/img/cortes/corte-degradê&barba.jpeg",   alt: "corte-degrade-barba" },
     { id: "militar",        name: "Corte Militar",     duration: 20, price: 15, icon: "../static/assets/img/cortes/corte-militar.jpeg",          alt: "corte-militar" },
     { id: "barba",          name: "Barba",             duration: 25, price: 15, icon: "../static/assets/img/cortes/corte-barba.jpeg",            alt: "corte-barba" },
-    { id: "sobrancelha",    name: "Sobrancelha",       duration: 5,  price: 15, icon: "../static/assets/img/cortes/sombrancelha.png",            alt: "sombrancelha" },
 ];
 
 const PROFISSIONAIS = [
@@ -38,7 +37,7 @@ const HORARIOS_OCUPADOS = {
     6: TODOS_HORARIOS
 };
 
-const dadosIniciais = [
+const historicoCortes = [ // dadosIniciais <- Nome antigo
     {
         id: "101",
         servico: "Social & Barba",
@@ -122,7 +121,7 @@ const form = {
    LOCALSTORAGE & HISTÓRICO INITIALIZATION
    ============================================================ */
 
-// function inicializarLocalStorage() {
+// function inicializarLocalStorage() { ANTIGO NOME DA FUNÇÃO
 //     if (!localStorage.getItem("historicoAgendamentos")) {
 //         const dadosIniciais = [
 //             {
@@ -157,12 +156,13 @@ const form = {
 //     }
 // }
 
-function obterHistorico() {
-    return JSON.parse(localStorage.getItem("historicoAgendamentos")) || [];
-}
+// function obterHistorico() {
+//     return JSON.parse(localStorage.getItem("historicoAgendamentos")) || [];
+// }
 
 function salvarNoHistorico(novoItem) {
-    const historico = obterHistorico();
+    // const historico = obterHistorico();
+    const historico = historicoCortes;
     historico.unshift(novoItem);
     localStorage.setItem("historicoAgendamentos", JSON.stringify(historico));
 }
@@ -219,7 +219,7 @@ function voltarParaAgendamento() {
 }
 
 function carregarHistorico() {
-    const historico = obterHistorico();
+    const historico = historicoCortes;
 
     if (historico.length === 0) {
         els.listaHistorico.innerHTML = `<p class="mensagem">Nenhum agendamento encontrado.</p>`;
@@ -246,7 +246,8 @@ function carregarHistorico() {
 }
 
 function exibirDetalhesHistorico(id) {
-    const historico = obterHistorico();
+    // const historico = obterHistorico();
+    const historico = historicoCortes;
     const item = historico.find(h => h.id === id);
     if (!item) return;
 
