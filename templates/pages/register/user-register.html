@@ -28,53 +28,54 @@
             <h1 class="tela__titulo">Dados do Proprietário</h1>
             <p class="tela__subtitulo">Preencha as informações referente ao proprietário/p>
 
-            <form id="form-empresa" class="form-auth" action="/register/endereco" method="post" enctype="multipart/form-data" novalidate>
+            <!-- Os dados de preenchimento do formulário vem da session -->
+            <form id="form-empresa" class="form-auth" action="/register" method="post" enctype="multipart/form-data" novalidate>
                 <div class="campo">
                     <label for="prop-nome">Nome</label>
-                    <input type="text" id="prop-nome" name="nome" placeholder="Ex: nome do proprietário" autocomplete="off">
+                    <input type="text" value="{{ session['dados-usuario']['nome'] if session.get('dados-usuario') else 'Teste' }}" id="prop-nome" name="nome" placeholder="Ex: nome do proprietário" autocomplete="off">
                     <span class="campo__erro" id="erro-prop-nome"></span>
                 </div>
 
                 <div class="campo">
                     <label for="prop-sobrenome">Sobrenome</label>
-                    <input type="text" id="prop-sobrenome" name="sobrenome" placeholder="Ex: sobrenome do proprietário" autocomplete="off">
+                    <input type="text" value="{{ session['dados-usuario']['sobrenome'] if session.get('dados-usuario') else 'Tentinha' }}" id="prop-sobrenome" name="sobrenome" placeholder="Ex: sobrenome do proprietário" autocomplete="off">
                     <span class="campo__erro" id="erro-prop-sobrenome"></span>
                 </div>
 
                 <div class="campo">
                     <label for="prop-cpf">CPF</label>
-                    <input type="text" id="prop-cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off">
+                    <input type="text" value="{{ session['dados-usuario']['cpf'] if session.get('dados-usuario') else '000.000.000-00' }}" id="prop-cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off">
                     <span class="campo__erro" id="erro-prop-cpf"></span>
                 </div>
 
                 <div class="campo">
                     <label for="prop-telefone">Telefone:</label>
-                    <input type="tel" id="prop-telefone" name="telefone" placeholder="(84) 00000.0000" maxlength="15" autocomplete="off">
+                    <input type="tel" value="{{ session['dados-usuario']['telefone'] if session.get('dados-usuario') else '(84) 00000-0000' }}" id="prop-telefone" name="telefone" placeholder="(84) 00000-0000" maxlength="15" autocomplete="off">
                     <span class="campo__erro" id="erro-prop-telefone"></span>
                 </div>
 
                 <div class="campo">
                     <label for="prop-email">E-mail:</label>
-                    <input type="email" id="prop-email" name="email" placeholder="emaildoproprietario@gmail.com" maxlength="70" autocomplete="off">
+                    <input type="email" value="{{ session['dados-usuario']['email'] if session.get('dados-usuario') else 'emaildoproprietario@gmail.com' }}" id="prop-email" name="email" placeholder="emaildoproprietario@gmail.com" maxlength="70" autocomplete="off">
                     <span class="campo__erro" id="erro-prop-email"></span>
                 </div>   
 
                 <div class="campo">
                     <label for="prop-senha">Senha:</label>
-                    <input type="password" id="prop-senha" name="senha" placeholder="*************" autocomplete="off">
+                    <input type="password" value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '*************' }}" id="prop-senha" name="senha" placeholder="*************" autocomplete="off">
                     <span class="campo__erro" id="erro-prop-senha"></span>
                 </div>  
 
                 <div class="campo">
                     <label for="prop-foto">Foto (3x4)</label>
-                    <input type="text" id="prop-foto" name="foto" accept="image/*" autocomplete="off">
+                    <input type="text" value="{{ session['dados-usuario']['foto'] if session.get('dados-usuario') else 'foto.jpg' }}" id="prop-foto" name="foto" accept="image/*" autocomplete="off">
                     <span class="campo__erro" id="erro-prop-foto"></span>
                 </div>         
 
                 <input type="number" name="tipo_end" value="0" hidden>
 
                 <div class="nav-duplo">
-                    <button type="button" class="btn-ghost" onclick="history.go(-1)">Voltar</button>
+                    <button type="button" class="btn-ghost" onclick="window.location.href='/'">Voltar</button>
                     <button type="submit" class="btn-primario">Próximo →</button>
                 </div>
             </form>

@@ -24,16 +24,17 @@
             <h1 class="tela__titulo">Dados do Usuário</h1>
             <p class="tela__subtitulo">Preencha as informações referente ao usuário</p>
 
-            <form id="form-empresa" class="form-auth" action="/register/finalizacao" method="post" novalidate>  
+            <!-- Os dados de preenchimento do formulário vem da session -->
+            <form id="form-empresa" class="form-auth" action="/register/endereco" method="post" novalidate>  
                 <div class="campo">
                     <label for="end-cep">CEP: </label>
-                    <input type="text" name="end-cep" id="end-cep" placeholder="00.000-000" autocomplete="off">
+                    <input type="text" value="{{ session['dados-endereco']['cep'] if session.get('dados-endereco') else '11.111-111' }}"  name="end-cep" id="end-cep" placeholder="00.000-000" autocomplete="off">
                     <span class="campo__erro" id="erro-cep"></span>
                 </div>
 
                 <div class="campo">
                     <label for="end-cidade">Cidade: </label>
-                    <input type="text" name="end-cidade" id="end-cidade" placeholder="Informe a sua cidade" autocomplete="off">
+                    <input type="text" value="{{ session['dados-endereco']['cidade'] if session.get('dados-endereco') else 'Serrote dos Bezerra' }}" name="end-cidade" id="end-cidade" placeholder="Informe a sua cidade" autocomplete="off">
                     <span class="campo__erro" id="erro-cidade"></span>
                 </div>
 
@@ -41,7 +42,10 @@
                     <label for="end-estado-sigla">Estado: </label>
                     <select id="emp-categoria" name="end-estado-sigla">
                         {% for estado_sigla in estado_siglas %}
-                            <option value="{{estado_sigla}}">{{estado_sigla}}</option>
+                            <option value="{{ estado_sigla }}" 
+                                {% if session.get('dados-endereco') and session['dados-endereco']['estado_sigla'] == estado_sigla %} selected {% endif %}>
+                                {{ estado_sigla }}
+                            </option>
                         {% endfor %}
                     </select>
                     <span class="campo__erro" id="erro-estado"></span>
@@ -49,37 +53,37 @@
 
                 <div class="campo">
                     <label for="end-logradouro">Logradouro: </label>
-                    <input type="text" name="end-logradouro" id="end-logradouro" placeholder="Informe o nome da sua rua" autocomplete="off">
+                    <input type="text" value="{{ session['dados-endereco']['logradouro'] if session.get('dados-endereco') else 'Zona Rural' }}" name="end-logradouro" id="end-logradouro" placeholder="Informe o nome da sua rua" autocomplete="off">
                     <span class="campo__erro" id="erro-logradouro"></span>
                 </div>
 
                 <div class="campo">
                     <label for="end-numero">Numero: </label>
-                    <input type="number" name="end-numero" id="end-numero" placeholder="Número da sua casa/apartamento" autocomplete="off">
+                    <input type="number" value="{{ session['dados-endereco']['numero'] if session.get('dados-endereco') else '12' }}" name="end-numero" id="end-numero" placeholder="Número da sua casa/apartamento" autocomplete="off">
                     <span class="campo__erro" id="erro-numero"></span>
                 </div>
 
                 <div class="campo">
                     <label for="end-bairro">Bairro: </label>
-                    <input type="text" name="end-bairro" id="end-bairro" placeholder="Informe o seu bairro" autocomplete="off">
+                    <input type="text" value="{{ session['dados-endereco']['bairro'] if session.get('dados-endereco') else 'Zona Rural' }}" name="end-bairro" id="end-bairro" placeholder="Informe o seu bairro" autocomplete="off">
                     <span class="campo__erro" id="erro-bairro"></span>
                 </div>
 
                 <div class="campo">
                     <label for="end-sequencia">Sequência: </label>
-                    <input type="text" name="end-sequencia" id="end-sequencia" placeholder="sequencia da casa: 1, 2" autocomplete="off">
+                    <input type="text" value="{{ session['dados-endereco']['sequencia'] if session.get('dados-endereco') else 'casa 12' }}" name="end-sequencia" id="end-sequencia" placeholder="sequencia da casa: 1, 2" autocomplete="off">
                     <span class="campo__erro" id="erro-sequencia"></span>
                 </div>
 
                 <div class="campo">
                     <label for="end-complemento">Complemento: </label>
-                    <input type="text" name="end-complemento" id="end-complemento" placeholder="casa/apartamento/bloco" autocomplete="off">
+                    <input type="text" value="{{ session['dados-endereco']['complemento'] if session.get('dados-endereco') else 'Casa com Portão' }}" name="end-complemento" id="end-complemento" placeholder="casa/apartamento/bloco" autocomplete="off">
                     <span class="campo__erro" id="erro-complemento"></span>
                 </div>
 
                 <div class="nav-duplo">
                     <!-- Vai se usar js para o retorno da página anterior, pois aparecerá em dois fluxos diferentes -->
-                    <button type="button" class="btn-ghost" onclick="history.go(-1)">Voltar</button>
+                    <button type="button" class="btn-ghost" onclick="window.location.href='/register'">Voltar</button>
                     <button type="submit" class="btn-primario">Próximo →</button>
                 </div>
             </form>

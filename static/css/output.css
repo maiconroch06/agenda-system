@@ -1,5 +1,8 @@
 /*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+<<<<<<< HEAD
 @layer properties;
+=======
+>>>>>>> feature-backend
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
@@ -8,6 +11,7 @@
       "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+<<<<<<< HEAD
     --color-amber-400: oklch(82.8% 0.189 84.429);
     --color-amber-800: oklch(47.3% 0.137 46.201);
     --color-amber-900: oklch(41.4% 0.112 45.904);
@@ -27,6 +31,10 @@
     --radius-xl: 0.75rem;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+=======
+    --color-amber-500: oklch(76.9% 0.188 70.08);
+    --radius-lg: 0.5rem;
+>>>>>>> feature-backend
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
   }
@@ -180,6 +188,7 @@
   }
 }
 @layer utilities {
+<<<<<<< HEAD
   .pointer-events-none {
     pointer-events: none;
   }
@@ -234,6 +243,11 @@
   .col-span-full {
     grid-column: 1 / -1;
   }
+=======
+  .static {
+    position: static;
+  }
+>>>>>>> feature-backend
   .container {
     width: 100%;
     @media (width >= 40rem) {
@@ -252,6 +266,7 @@
       max-width: 96rem;
     }
   }
+<<<<<<< HEAD
   .mx-4 {
     margin-inline: calc(var(--spacing) * 4);
   }
@@ -993,5 +1008,15 @@
       --tw-duration: initial;
       --tw-content: "";
     }
+=======
+  .block {
+    display: block;
+  }
+  .hidden {
+    display: none;
+  }
+  .bg-amber-500 {
+    background-color: var(--color-amber-500);
+>>>>>>> feature-backend
   }
 }
