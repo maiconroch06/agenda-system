@@ -87,33 +87,33 @@ const estado = {
    ============================================================ */
 
 const els = {
-    etapa:             document.getElementById("etapa"),
-    listaServico:      document.getElementById("lista-servico"),
+    etapa:              document.getElementById("etapa"),
+    listaServico:       document.getElementById("lista-servico"),
     listaProfissionais: document.getElementById("lista-profissionais"),
-    abasDias:          document.getElementById("abas-dias"),
-    gradeHorarios:     document.getElementById("grade-horarios"),
-    resumo:            document.getElementById("resumo"),
-    btnVoltar:         document.getElementById("btn-voltar"),
-    btnContinuar:      document.getElementById("btn-continuar"),
-    navEtapa:          document.getElementById("nav-etapa"),
-    aviso:             document.getElementById("aviso"),
-    sucesso:           document.getElementById("painel-sucesso"),
-    sucessoTexto:      document.getElementById("sucesso-texto"),
-    btnHistorico:      document.getElementById("btn-historico"),
-    painelHistorico:   document.getElementById("painel-historico"),
-    listaHistorico:    document.getElementById("lista-historico"),
-    modalHistorico:    document.getElementById("modal-historico"),
-    resumoModal:       document.getElementById("resumo-modal-conteudo")
+    abasDias:           document.getElementById("abas-dias"),
+    gradeHorarios:      document.getElementById("grade-horarios"),
+    resumo:             document.getElementById("resumo"),
+    btnVoltar:          document.getElementById("btn-voltar"),
+    btnContinuar:       document.getElementById("btn-continuar"),
+    navEtapa:           document.getElementById("nav-etapa"),
+    aviso:              document.getElementById("aviso"),
+    sucesso:            document.getElementById("painel-sucesso"),
+    sucessoTexto:       document.getElementById("sucesso-texto"),
+    btnHistorico:       document.getElementById("btn-historico"),
+    painelHistorico:    document.getElementById("painel-historico"),
+    listaHistorico:     document.getElementById("lista-historico"),
+    modalHistorico:     document.getElementById("modal-historico"),
+    resumoModal:        document.getElementById("resumo-modal-conteudo")
 };
 
 const form = {
     // nome:           document.getElementById("inp-nome"),
     // tel:            document.getElementById("inp-tel"),
-    //email:          document.getElementById("inp-email"),
-    consentimento:  document.getElementById("inp-consentimento"),
+    //email:           document.getElementById("inp-email"),
+    consentimento:     document.getElementById("inp-consentimento"),
     // erroNome:       document.getElementById("erro-nome"),
     // erroTel:        document.getElementById("erro-tel"),
-    //erroEmail:      document.getElementById("erro-email"),
+    //erroEmail:       document.getElementById("erro-email"),
     erroConsentimento: document.getElementById("erro-consentimento"),
 };
 
@@ -222,59 +222,60 @@ function carregarHistorico() {
     const historico = historicoCortes;
 
     if (historico.length === 0) {
-        els.listaHistorico.innerHTML = `<p class="mensagem">Nenhum agendamento encontrado.</p>`;
+        els.listaHistorico.innerHTML = `<p class="text-[#888780] text-sm text-center">Nenhum agendamento encontrado.</p>`;
         return;
     }
 
     els.listaHistorico.innerHTML = historico.map(item => `
-        <div class="card-historico" onclick="exibirDetalhesHistorico('${item.id}')">
-            <div class="card-historico__topo">
-                <span class="card-historico__servico">${item.servico}</span>
-                <span class="card-historico__status status--${item.status.toLowerCase()}">${item.status}</span>
+        <div class="bg-[#1c1c1c] border border-[#38362f] rounded-xl p-4 flex flex-col gap-3 hover:border-[#4a473f] cursor-pointer transition-all" onclick="exibirDetalhesHistorico('${item.id}')">
+            <div class="flex justify-between items-center border-b border-[#2e2d29] pb-2">
+                <span class="font-medium text-[#f1efe8] text-[15px]">${item.servico}</span>
+                <span class="text-[12px] px-2 py-0.5 rounded-full font-medium ${item.status === 'Concluído' ? 'bg-green-900/40 text-green-400 border border-green-800' : 'bg-amber-900/40 text-amber-400 border border-amber-800'}">${item.status}</span>
             </div>
-            <div class="card-historico__info">
-                <span><strong>Profissional:</strong> ${item.profissional}</span>
-                <span><strong>Data:</strong> ${item.data}</span>
-                <span><strong>Horário:</strong> ${item.horario}</span>
+            <div class="flex flex-col gap-1 text-[13px] text-[#888780]">
+                <span><strong class="text-[#f1efe8]">Profissional:</strong> ${item.profissional}</span>
+                <span><strong class="text-[#f1efe8]">Data:</strong> ${item.data}</span>
+                <span><strong class="text-[#f1efe8]">Horário:</strong> ${item.horario}</span>
             </div>
-            <div class="card-historico__rodape">
-                <span class="card-historico__valor">${item.valor}</span>
-                <span class="card-historico__link">Ver resumo &rarr;</span>
+            <div class="flex justify-between items-center pt-2 border-t border-[#2e2d29]">
+                <span class="font-bold text-[#f1efe8] text-[14px]">${item.valor}</span>
+                <span class="text-[12px] text-[#9fe1cb] hover:underline">Ver resumo &rarr;</span>
             </div>
         </div>
     `).join("");
 }
 
 function exibirDetalhesHistorico(id) {
-    // const historico = obterHistorico();
     const historico = historicoCortes;
     const item = historico.find(h => h.id === id);
     if (!item) return;
 
     els.resumoModal.innerHTML = `
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Serviço</span>
-            <span class="resumo__valor">${item.servico}</span>
-        </div>
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Profissional</span>
-            <span class="resumo__valor">${item.profissional}</span>
-        </div>
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Data</span>
-            <span class="resumo__valor">${item.data}</span>
-        </div>
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Horário</span>
-            <span class="resumo__valor">${item.horario}</span>
-        </div>
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Valor</span>
-            <span class="resumo__valor">${item.valor}</span>
-        </div>
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Status</span>
-            <span class="resumo__valor">${item.status}</span>
+        <div class="divide-y divide-[#38362f] text-[14px]">
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Serviço</span>
+                <span class="font-medium text-[#f1efe8]">${item.servico}</span>
+            </div>
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Profissional</span>
+                <span class="font-medium text-[#f1efe8]">${item.profissional}</span>
+            </div>
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Data</span>
+                <span class="font-medium text-[#f1efe8]">${item.data}</span>
+            </div>
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Horário</span>
+                <span class="font-medium text-[#f1efe8]">${item.horario}</span>
+            </div>
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Valor</span>
+                <span class="font-medium text-[#f1efe8]">${item.valor}</span>
+            </div>
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Status</span>
+                <span class="font-medium text-[#f1efe8]">${item.status}</span>
+            </div>
         </div>
     `;
 
@@ -374,16 +375,16 @@ function voltarEtapa() {
 
 function carregarServicos() {
     els.listaServico.innerHTML = SERVICOS.map(servico => `
-        <input type="radio" name="inputCorte" id="${servico.id}" value="${servico.id}">
-        <label class="card" for="${servico.id}">
-            <span class="icon">
-                <img src="${servico.icon}" alt="${servico.alt}">
-            </span>
-            <span class="titulo">${servico.name}</span>
-            <span class="dados">
-                <span>${servico.duration} min</span>
-                <span>R$ ${servico.price.toFixed(2).replace(".", ",")}</span>
-            </span>
+        <label class="cursor-pointer shrink-0">
+            <input type="radio" name="inputCorte" id="${servico.id}" class="peer hidden" value="${servico.id}">
+            <div class="w-[150px] bg-[#1c1c1c] border-2 border-[#2a2825] rounded-xl p-3 flex flex-col items-center gap-2 transition-all peer-checked:border-[#0f6e56] peer-checked:bg-[#0d2b24] hover:border-[#4a473f]">
+                <img src="${servico.icon}" alt="${servico.alt}" class="w-full h-[90px] object-cover rounded-lg">
+                <span class="font-medium text-[13px] text-[#f1efe8] text-center peer-checked:text-[#9fe1cb]">${servico.name}</span>
+                <div class="flex justify-between w-full text-[12px] text-[#888780] pt-1 border-t border-[#2e2d29]">
+                    <span>${servico.duration} min</span>
+                    <span class="font-medium text-[#f1efe8]">R$ ${servico.price.toFixed(2).replace(".", ",")}</span>
+                </div>
+            </div>
         </label>
     `).join("");
 
@@ -401,16 +402,20 @@ function carregarServicos() {
 
 function carregarProfissionais() {
     els.listaProfissionais.innerHTML = PROFISSIONAIS.map(profissional => `
-        <input type="radio" name="inputFuncionario" id="${profissional.id}" value="${profissional.id}">
-        <label class="card" for="${profissional.id}">
-            ${profissional.icon
-                ? `<img src="${profissional.icon}" alt="${profissional.alt}">`
-                : `<div class="card__sem-foto">${profissional.name.charAt(0)}</div>`
-            }
-            <span class="titulo">${profissional.name}</span>
-            <span class="dados" style="justify-content:center">
-                <span>${profissional.description}</span>
-            </span>
+        <label class="cursor-pointer shrink-0">
+            <input type="radio" name="inputFuncionario" id="${profissional.id}" class="peer hidden" value="${profissional.id}">
+            <div class="w-[140px] h-[160px] bg-[#1c1c1c] border-2 border-[#2a2825] rounded-xl p-3 flex flex-col items-center justify-between text-center transition-all peer-checked:border-[#0f6e56] peer-checked:bg-[#0d2b24] hover:border-[#4a473f]">
+                <div class="w-[70px] h-[70px] rounded-lg bg-[#232220] flex items-center justify-center overflow-hidden">
+                    ${profissional.icon
+                        ? `<img src="${profissional.icon}" alt="${profissional.alt}" class="w-full h-full object-cover">`
+                        : `<div class="w-full h-full flex items-center justify-center text-[#f1efe8] font-bold text-xl">${profissional.name.charAt(0)}</div>`
+                    }
+                </div>
+                <div>
+                    <h3 class="font-medium text-[13px] text-[#f1efe8] peer-checked:text-[#9fe1cb]">${profissional.name}</h3>
+                    <p class="text-[11px] text-[#888780] mt-0.5">${profissional.description}</p>
+                </div>
+            </div>
         </label>
     `).join("");
 
@@ -441,14 +446,20 @@ function renderizarDias() {
     const dias = obterProximosDias();
     els.abasDias.innerHTML = dias.map((data, indice) => {
         const fechado = HORARIOS_OCUPADOS[indice]?.length === TODOS_HORARIOS.length;
+        const ativo = estado.diaSelecionado === indice;
+
+        const classeEstado = ativo
+            ? "bg-[#f1efe8] text-[#161513] border-[#f1efe8]"
+            : "bg-[#1c1c1c] border-[#38362f] text-[#f1efe8] hover:border-[#888780]";
+
         return `
             <button
-                class="dia ${estado.diaSelecionado === indice ? "ativo" : ""}"
+                class="flex flex-col items-center justify-center min-w-[60px] py-2 px-3 rounded-xl border transition-all ${classeEstado} ${fechado ? "opacity-35 cursor-not-allowed" : ""}"
                 data-dia="${indice}"
                 ${fechado ? "disabled" : ""}
             >
-                <span>${NOMES_DIAS[data.getDay()]}</span>
-                <strong>${data.getDate()}</strong>
+                <span class="text-[12px] uppercase font-medium">${NOMES_DIAS[data.getDay()]}</span>
+                <strong class="text-[16px] font-bold">${data.getDate()}</strong>
             </button>
         `;
     }).join("");
@@ -466,7 +477,7 @@ function renderizarDias() {
 
 function renderizarHorarios() {
     if (estado.diaSelecionado === null) {
-        els.gradeHorarios.innerHTML = `<p class="mensagem">Escolha um dia para visualizar os horários.</p>`;
+        els.gradeHorarios.innerHTML = `<p class="text-[#888780] text-sm text-center col-span-full">Escolha um dia para visualizar os horários.</p>`;
         return;
     }
 
@@ -474,9 +485,18 @@ function renderizarHorarios() {
 
     els.gradeHorarios.innerHTML = TODOS_HORARIOS.map(horario => {
         const ocupado = ocupados.includes(horario);
+        const ativo = estado.horarioSelecionado === horario;
+
+        let classeEstado = "bg-[#1c1c1c] border-[#38362f] text-[#f1efe8] hover:border-[#888780]";
+        if (ativo) {
+            classeEstado = "bg-[#085041] border-[#0f6e56] text-[#9fe1cb] font-medium";
+        } else if (ocupado) {
+            classeEstado = "bg-[#1c1c1c] border-[#38362f] text-[#f1efe8] opacity-35 line-through cursor-not-allowed";
+        }
+
         return `
             <button
-                class="horario ${estado.horarioSelecionado === horario ? "ativo" : ""}"
+                class="py-2.5 px-3 border rounded-xl text-[14px] text-center transition-all ${classeEstado}"
                 data-horario="${horario}"
                 ${ocupado ? "disabled" : ""}
             >
@@ -509,25 +529,27 @@ function renderizarResumo() {
     const profissional = PROFISSIONAIS.find(p => p.id === estado.profissionalSelecionado);
 
     els.resumo.innerHTML = `
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Serviço</span>
-            <span class="resumo__valor">${servico.name}</span>
-        </div>
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Profissional</span>
-            <span class="resumo__valor">${profissional.name}</span>
-        </div>
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Data</span>
-            <span class="resumo__valor">${formatarData()}</span>
-        </div>
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Horário</span>
-            <span class="resumo__valor">${estado.horarioSelecionado}</span>
-        </div>
-        <div class="resumo__linha">
-            <span class="resumo__rotulo">Valor</span>
-            <span class="resumo__valor">R$ ${servico.price.toFixed(2).replace(".", ",")}</span>
+        <div class="divide-y divide-[#38362f] text-[14px]">
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Serviço</span>
+                <span class="font-medium text-[#f1efe8]">${servico.name}</span>
+            </div>
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Profissional</span>
+                <span class="font-medium text-[#f1efe8]">${profissional.name}</span>
+            </div>
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Data</span>
+                <span class="font-medium text-[#f1efe8]">${formatarData()}</span>
+            </div>
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Horário</span>
+                <span class="font-medium text-[#f1efe8]">${estado.horarioSelecionado}</span>
+            </div>
+            <div class="flex justify-between py-2.5">
+                <span class="text-[#888780]">Valor</span>
+                <span class="font-medium text-[#f1efe8]">R$ ${servico.price.toFixed(2).replace(".", ",")}</span>
+            </div>
         </div>
     `;
 }
@@ -637,22 +659,31 @@ function confirmarAgendamento() {
    ============================================================ */
 
 function reiniciar() {
+    // 1. Reseta o estado na memória JS
     estado.etapaAtual = 1;
     estado.servicoSelecionado = null;
     estado.profissionalSelecionado = null;
     estado.diaSelecionado = null;
     estado.horarioSelecionado = null;
 
-    //Limpa o formulario que esta comentado 
-    // document.getElementById("formulario").reset();
-    // [form.nome, form.tel/*, form.email*/].forEach(i => i.classList.remove("invalido"));
-    // document.querySelectorAll(".campo__erro").forEach(e => e.textContent = "");
-
+    // 2. Restaura a visibilidade dos elementos da tela
     els.navEtapa.hidden = false;
     els.etapa.hidden = false;
     els.sucesso.hidden = true;
 
+    // 3. Recarrega as listas para gerar inputs sem a propriedade 'checked'
     carregarServicos();
+    carregarProfissionais(); // <--- Adicionado: limpa a seleção dos cards de profissionais
+
+    // 4. Desmarca o checkbox de consentimento e limpa mensagens de erro
+    if (form.consentimento) {
+        form.consentimento.checked = false;
+    }
+    if (form.erroConsentimento) {
+        form.erroConsentimento.textContent = "";
+    }
+
+    // 5. Exibe o painel inicial
     mostrarPainel(1);
 }
 
