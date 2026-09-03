@@ -74,12 +74,12 @@ const historicoCortes = [ // dadosIniciais <- Nome antigo
    ============================================================ */
 
 const estado = {
-    etapaAtual: 1,
-    servicoSelecionado: null,
+    etapaAtual:              1,
+    servicoSelecionado:      null,
     profissionalSelecionado: null,
-    diaSelecionado: null,
-    horarioSelecionado: null,
-    nome: "Maicon Rocha"
+    diaSelecionado:          null,
+    horarioSelecionado:      null,
+    nome:                   "Maicon Rocha"
 };
 
 /* ============================================================
@@ -378,7 +378,7 @@ function carregarServicos() {
         <label class="cursor-pointer shrink-0">
             <input type="radio" name="inputCorte" id="${servico.id}" class="peer hidden" value="${servico.id}">
             <div class="w-[150px] bg-[#1c1c1c] border-2 border-[#2a2825] rounded-xl p-3 flex flex-col items-center gap-2 transition-all peer-checked:border-[#0f6e56] peer-checked:bg-[#0d2b24] hover:border-[#4a473f]">
-                <img src="${servico.icon}" alt="${servico.alt}" class="w-full h-[90px] object-cover rounded-lg">
+                <img src="${servico.icon}" alt="${servico.alt}" class="w-full h-full object-cover rounded-lg">
                 <span class="font-medium text-[13px] text-[#f1efe8] text-center peer-checked:text-[#9fe1cb]">${servico.name}</span>
                 <div class="flex justify-between w-full text-[12px] text-[#888780] pt-1 border-t border-[#2e2d29]">
                     <span>${servico.duration} min</span>
@@ -404,15 +404,15 @@ function carregarProfissionais() {
     els.listaProfissionais.innerHTML = PROFISSIONAIS.map(profissional => `
         <label class="cursor-pointer shrink-0">
             <input type="radio" name="inputFuncionario" id="${profissional.id}" class="peer hidden" value="${profissional.id}">
-            <div class="w-[140px] h-[160px] bg-[#1c1c1c] border-2 border-[#2a2825] rounded-xl p-3 flex flex-col items-center justify-between text-center transition-all peer-checked:border-[#0f6e56] peer-checked:bg-[#0d2b24] hover:border-[#4a473f]">
-                <div class="w-[70px] h-[70px] rounded-lg bg-[#232220] flex items-center justify-center overflow-hidden">
+            <div class="w-[150px] h-[210px] bg-[#1c1c1c] border-2 border-[#2a2825] rounded-xl p-3 flex flex-col items-center justify-between text-center transition-all peer-checked:border-[#0f6e56] peer-checked:bg-[#0d2b24] hover:border-[#4a473f]">
+                <div class="w-full h-full rounded-lg bg-[#232220] flex items-center justify-center overflow-hidden">
                     ${profissional.icon
                         ? `<img src="${profissional.icon}" alt="${profissional.alt}" class="w-full h-full object-cover">`
                         : `<div class="w-full h-full flex items-center justify-center text-[#f1efe8] font-bold text-xl">${profissional.name.charAt(0)}</div>`
                     }
                 </div>
                 <div>
-                    <h3 class="font-medium text-[13px] text-[#f1efe8] peer-checked:text-[#9fe1cb]">${profissional.name}</h3>
+                    <h3 class="font-medium text-[13px] text-[#f1efe8] peer-checked:text-[#9fe1cb] pt-1">${profissional.name}</h3>
                     <p class="text-[11px] text-[#888780] mt-0.5">${profissional.description}</p>
                 </div>
             </div>
