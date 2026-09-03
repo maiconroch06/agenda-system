@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro Funcionario | Agenda System</title>
-    <link rel="stylesheet" href="../static/assents/css/admin.css">
-    <link rel="stylesheet" href="../static/assents/css/style.css">
+    <link rel="stylesheet" href="../../static/css/admin.css">
+    <link rel="stylesheet" href="../../static/css/style.css">
 </head>
 <body>
-    <div id="tela-profissionais" class="tela">
+    <div id="tela-profissionais" class="tela-ativa">
         <div class="auth-container auth-container--largo">
             <!--
-            <div class="passo-indicador">
+            <div class="passo-indicador">   Etapas antigas
                 <span class="passo concluido">1. Empresa</span>
                 <span class="passo-linha"></span>
                 <span class="passo concluido">2. Serviços</span>
@@ -21,16 +21,12 @@
             -->
 
             <ol class="etapa" id="etapa">
-                <li class="etapa__item ativo">
-                    <span class="etapa__ciclo">1</span>
-                    <span class="etapa__label">Empresa</span>
-                </li>
                 <li class="etapa__item">
-                    <span class="etapa__ciclo">2</span>
+                    <span class="etapa__ciclo">1</span>
                     <span class="etapa__label">Serviços</span>
                 </li>
                 <li class="etapa__item">
-                    <span class="etapa__ciclo">3</span>
+                    <span class="etapa__ciclo">2</span>
                     <span class="etapa__label">Profissionais</span>
                 </li>
             </ol>
@@ -66,7 +62,7 @@
             </div>
         </div>
     </div>
-    <script src="../static/assents/js/cadastroProfissional.js"></script>
+    <script src="../static/js/cadastroProfissional.js"></script>
     <!-- <script src="{{ url_for('static', filename='js/cadastroProfissional.js') }}"></script> -->
 </body>
 </html>
