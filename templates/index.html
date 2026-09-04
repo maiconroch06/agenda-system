@@ -1,513 +1,286 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<<<<<<< HEAD
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-   
-=======
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-
->>>>>>> feature-backend
-    <title>Agenda System | Agendamento de serviços</title>
+    <title>TMS Barbearia - Estilo e Tradição</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-    <!-- =========================================================
-     HEADER
-========================================================= -->
-
-    <header class="topbar">
-
-        <a href="/" class="logo">
-            <div class="logo-icon">A</div>
-            <span>Agenda System</span>
-        </a>
-
-        <nav class="menu ">
-            <a href="#beneficios">Benefícios</a>
-            <a href="#como-funciona">Como funciona</a>
-            <a href="#depoimentos">Depoimentos</a>
-        </nav>
-
-        <div class="topbar__acoes">
-            <a href="/login" class="btn-login">
-                Entrar
+    <header class="header">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <img src="static/assets/img/tms-barbearia-logo-horizontal.png" alt="TMS Barbearia">
             </a>
-
-            <a href="/register" class="btn-principal">
-                cadastrar
-            </a>
+            <nav class="nav-menu">
+                <a href="#home">Home</a>
+                <a href="#servicos">Serviços</a>
+                <a href="#planos">Planos</a>
+                <a href="#sobre">Quem Somos</a>
+            </nav>
+            <a href="#agendar" class="btn btn-primary">Agendar Horário</a>
         </div>
-
     </header>
 
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <h1>O seu estilo em alto nível. A sua melhor versão todos os dias</h1>
+            <p>Um ambiente moderno e acolhedor com profissionais especializados para valorizar a sua imagem.</p>
+            <div class="hero-btns">
+                <a href="#agendar" class="btn btn-primary btn-large">Agendar Agora</a>
+                <a href="#servicos" class="btn btn-outline btn-large">Ver Serviços</a>
+            </div>
+        </div>
+    </section>
 
-    <!-- =========================================================
-     HERO
-========================================================= -->
+    <!-- Coluna 1: Galeria de Fotos Maior / Cardviews (3 Barbeiros) -->
+<section id="equipe" class="team-section">
+        <div class="container">
+            <h2 class="section-title">Nossa Equipe</h2>
+            <p class="section-subtitle">Profissionais altamente qualificados para entregar o seu melhor estilo</p>
 
-    <main>
+            <div class="team-wrapper">
+                
+                <div class="team-cards-grid">
+                    
+                    <div class="barber-card active" onclick="selectBarber(1, this)">
+                        <div class="photo-wrapper">
+                            <img src="barbeiro1.jpg" alt="Foto do Barbeiro Carlos Silva">
+                        </div>
+                        <div class="barber-meta">
+                            <h3>Carlos Silva</h3>
+                            <span>Master Barber</span>
+                        </div>
+                    </div>
 
-        <section class="hero">
+                    <div class="barber-card" onclick="selectBarber(2, this)">
+                        <div class="photo-wrapper">
+                            <img src="barbeiro2.jpg" alt="Foto do Barbeiro Lucas Mendes">
+                        </div>
+                        <div class="barber-meta">
+                            <h3>Lucas Mendes</h3>
+                            <span>Especialista em Visagismo</span>
+                        </div>
+                    </div>
 
-            <div class="hero__conteudo">
+                    <div class="barber-card" onclick="selectBarber(3, this)">
+                        <div class="photo-wrapper">
+                            <img src="barbeiro3.jpg" alt="Foto do Barbeiro Rafael Costa">
+                        </div>
+                        <div class="barber-meta">
+                            <h3>Rafael Costa</h3>
+                            <span>Especialista em Barboterapia</span>
+                        </div>
+                    </div>
 
-                <span class="badge">
-                    Gestão simples para o seu negócio
-                </span>
+                </div>
 
-                <h1>
-                    Seus clientes agendam.
-                    <span>Você cuida do seu negócio.</span>
-                </h1>
+                <div class="team-description-box">
+                    
+                    <div class="details-content active" id="details-1">
+                        <span class="role-badge">Fundador & Master Barber</span>
+                        <h2>Carlos Silva</h2>
+                        <span class="experience-tag">10+ anos de experiência</span>
+                        <p class="bio-text">
+                            Especializado nas principais academias internacionais, Carlos domina técnicas avançadas de corte a tesoura, estruturação de cabelo masculino e atendimento personalizado de alto padrão.
+                        </p>
+                        <div class="skills">
+                            <span>Visagismo</span>
+                            <span>Cortes Clássicos</span>
+                            <span>Modelagem de Barba</span>
+                        </div>
+                    </div>
 
-                <p>
-                    Organize seus horários, serviços e profissionais em um
-                    único sistema. Automatize seus agendamentos e ofereça
-                    uma experiência muito melhor para seus clientes.
-                </p>
+                    <div class="details-content" id="details-2">
+                        <span class="role-badge">Especialista em Estilo</span>
+                        <h2>Lucas Mendes</h2>
+                        <span class="experience-tag">6 anos de experiência</span>
+                        <p class="bio-text">
+                            Com foco em tendências modernas, Lucas é especialista em degradações perfeitas (Fade), alinhamento de contornos e penteados urbanos contemporâneos.
+                        </p>
+                        <div class="skills">
+                            <span>Fade / Degradê</span>
+                            <span>Hair Design</span>
+                            <span>Colorimetria</span>
+                        </div>
+                    </div>
 
-                <div class="hero__botoes">
-
-                    <a href="" class="btn-principal">
-                        Começar gratuitamente →
-                    </a>
-
-                    <a href="#como-funciona" class="btn-secundario">
-                        Conhecer o sistema
-                    </a>
+                    <div class="details-content" id="details-3">
+                        <span class="role-badge">Especialista em Barboterapia</span>
+                        <h2>Rafael Costa</h2>
+                        <span class="experience-tag">8 anos de experiência</span>
+                        <p class="bio-text">
+                            Mestre no tradicional ritual da barba com toalha quente e lâmina afiada. Rafael garante um momento relaxante combinado a cuidados profundos com a pele.
+                        </p>
+                        <div class="skills">
+                            <span>Barboterapia</span>
+                            <span>Tratamento Facial</span>
+                            <span>Navalha Clássica</span>
+                        </div>
+                    </div>
 
                 </div>
 
             </div>
-
-        </section>
-
-
-        <!-- =====================================================
-         BENEFÍCIOS
-    ====================================================== -->
-
-        <section class="beneficios" id="beneficios">
-
-            <div class="section-header">
-
-                <span class="section-header__label">
-                    Por que usar?
-                </span>
-
-                <h2>
-                    Mais organização para você.
-                    Mais facilidade para seus clientes.
-                </h2>
-
-                <p>
-                    O Agenda System foi criado para ajudar empresas de
-                    serviços a perder menos tempo com tarefas manuais
-                    e aproveitar melhor cada horário disponível.
-                </p>
-
-            </div>
-
-
-            <div class="beneficios-grid">
-
-                <article class="beneficio">
-
-                    <div class="beneficio__icon">
-                        ✓
-                    </div>
-
-                    <h3>
-                        Agendamento online
-                    </h3>
-
-                    <p>
-                        Permita que seus clientes encontrem horários
-                        disponíveis e façam seus próprios agendamentos
-                        sem precisar entrar em contato com sua empresa.
-                    </p>
-
-                </article>
-
-
-                <article class="beneficio">
-
-                    <div class="beneficio__icon">
-                        ◷
-                    </div>
-
-                    <h3>
-                        Sua agenda organizada
-                    </h3>
-
-                    <p>
-                        Visualize seus compromissos de forma simples,
-                        organize profissionais e serviços e tenha
-                        controle completo dos seus horários.
-                    </p>
-
-                </article>
-
-
-                <article class="beneficio">
-
-                    <div class="beneficio__icon">
-                        +
-                    </div>
-
-                    <h3>
-                        Mais clientes atendidos
-                    </h3>
-
-                    <p>
-                        Aproveite melhor seus horários disponíveis e
-                        reduza espaços vazios na agenda.
-                    </p>
-
-                </article>
-
-
-                <article class="beneficio">
-
-                    <div class="beneficio__icon">
-                        $
-                    </div>
-
-                    <h3>
-                        Aumente seu faturamento
-                    </h3>
-
-                    <p>
-                        Com uma agenda mais organizada, sua empresa
-                        consegue aproveitar melhor sua capacidade
-                        de atendimento.
-                    </p>
-
-                </article>
-
-
-                <article class="beneficio">
-
-                    <div class="beneficio__icon">
-                        ⚙
-                    </div>
-
-                    <h3>
-                        Menos trabalho manual
-                    </h3>
-
-                    <p>
-                        Pare de depender de planilhas, cadernos ou
-                        mensagens espalhadas para controlar seus
-                        agendamentos.
-                    </p>
-
-                </article>
-
-
-                <article class="beneficio">
-
-                    <div class="beneficio__icon">
-                        ★
-                    </div>
-
-                    <h3>
-                        Experiência profissional
-                    </h3>
-
-                    <p>
-                        Ofereça aos seus clientes uma experiência
-                        moderna, rápida e profissional desde o
-                        primeiro agendamento.
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-         COMO FUNCIONA
-    ====================================================== -->
-
-        <section class="como-funciona" id="como-funciona">
-
-            <div class="section-header">
-
-                <span class="section-header__label">
-                    Simples de usar
-                </span>
-
-                <h2>
-                    Comece a organizar sua agenda em poucos passos
-                </h2>
-
-                <p>
-                    Configure sua empresa e deixe o sistema cuidar
-                    da organização dos seus agendamentos.
-                </p>
-
-            </div>
-
-
-            <div class="passos">
-
-                <article class="passo">
-
-                    <div class="passo__numero">
-                        1
-                    </div>
-
-                    <h3>
-                        Cadastre sua empresa
-                    </h3>
-
-                    <p>
-                        Informe os dados do seu negócio,
-                        horários de funcionamento e serviços.
-                    </p>
-
-                </article>
-
-
-                <article class="passo">
-
-                    <div class="passo__numero">
-                        2
-                    </div>
-
-                    <h3>
-                        Configure sua agenda
-                    </h3>
-
-                    <p>
-                        Cadastre profissionais, serviços,
-                        horários e disponibilidade.
-                    </p>
-
-                </article>
-
-
-                <article class="passo">
-
-                    <div class="passo__numero">
-                        3
-                    </div>
-
-                    <h3>
-                        Receba agendamentos
-                    </h3>
-
-                    <p>
-                        Seus clientes escolhem o serviço,
-                        profissional e horário disponíveis.
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-         DEPOIMENTOS
-    ====================================================== -->
-
-        <section class="depoimentos" id="depoimentos">
-
-            <div class="section-header">
-
-                <span class="section-header__label">
-                    Quem usa recomenda
-                </span>
-
-                <h2>
-                    O que nossos usuários dizem
-                </h2>
-
-                <p>
-                    Empresas que escolheram simplificar sua rotina
-                    e transformar a forma como trabalham.
-                </p>
-
-            </div>
-
-
-            <div class="depoimentos-grid">
-
-                <article class="depoimento">
-
-                    <div class="estrelas">
-                        ★★★★★
-                    </div>
-
-                    <p>
-                        "Antes eu controlava tudo pelo WhatsApp e
-                        acabava me perdendo nos horários. Hoje minha
-                        agenda está muito mais organizada."
-                    </p>
-
-                    <div class="usuario">
-
-                        <div class="avatar">
-                            M
-                        </div>
-
-                        <div>
-                            <strong>
-                                Mariana Costa
-                            </strong>
-
-                            <span>
-                                Salão de beleza
-                            </span>
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="depoimento">
-
-                    <div class="estrelas">
-                        ★★★★★
-                    </div>
-
-                    <p>
-                        "O sistema facilitou muito o atendimento.
-                        Meus clientes conseguem agendar sem precisar
-                        ficar esperando uma resposta."
-                    </p>
-
-                    <div class="usuario">
-
-                        <div class="avatar">
-                            R
-                        </div>
-
-                        <div>
-                            <strong>
-                                Rafael Almeida
-                            </strong>
-
-                            <span>
-                                Barbearia
-                            </span>
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="depoimento">
-
-                    <div class="estrelas">
-                        ★★★★★
-                    </div>
-
-                    <p>
-                        "Consegui organizar os horários de todos os
-                        profissionais em um só lugar. Ficou muito
-                        mais fácil administrar a empresa."
-                    </p>
-
-                    <div class="usuario">
-
-                        <div class="avatar">
-                            C
-                        </div>
-
-                        <div>
-                            <strong>
-                                Camila Santos
-                            </strong>
-
-                            <span>
-                                Clínica de estética
-                            </span>
-                        </div>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-         CTA
-    ====================================================== -->
-
-        <section class="cta">
-
-            <div class="cta__box">
-
-                <h2>
-                    Pronto para deixar sua agenda mais inteligente?
-                </h2>
-
-                <p>
-                    Comece agora a organizar seus serviços,
-                    profissionais e clientes em um único lugar.
-                </p>
-
-                <a href="" class="btn-principal">
-                    Criar minha conta →
-                </a>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- =========================================================
-     FOOTER
-========================================================= -->
-
-    <footer>
-
-        <div class="footer-content">
-
-            <div class="footer-text">
-                © 2026 Agenda System. Todos os direitos reservados.
-            </div>
-
-            <div class="footer-links">
-
-                <a href="#">
-                    Termos de uso
-                </a>
-
-                <a href="#">
-                    Privacidade
-                </a>
-
-                <a href="#">
-                    Contato
-                </a>
-
-            </div>
-
         </div>
+    </section>
 
+    <script>
+        function selectBarber(id, cardElement) {
+            document.querySelectorAll('.barber-card').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.details-content').forEach(d => d.classList.remove('active'));
+
+            cardElement.classList.add('active');
+            document.getElementById(`details-${id}`).classList.add('active');
+        }
+    </script>
+    
+    <section id="servicos" class="services">
+        <div class="container">
+            <h2 class="section-title">Nossos Serviços</h2>
+            <p class="section-subtitle">Desde cortes clássicos a tratamentos completos</p>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Cabelo</h3>
+                    <p>Cortes personalizados para valorizar o seu estilo e formato de rosto.</p>
+                    <span class="price">R$ 50,00</span>
+                </div>
+                <div class="service-card">
+                    <h3>Barboterapia</h3>
+                    <p>Barba alinhada com toalha quente, massagem e produtos de alta qualidade.</p>
+                    <span class="price">R$ 45,00</span>
+                </div>
+                <div class="service-card">
+                    <h3>Combo TMS</h3>
+                    <p>Corte de cabelo e barboterapia completa para um visual impecável.</p>
+                    <span class="price">R$ 85,00</span>
+                </div>
+                <div class="service-card">
+                    <h3>Sobrancelha & Acabamento</h3>
+                    <p>Alinhamento e simetria para realçar o olhar de forma natural.</p>
+                    <span class="price">R$ 25,00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="planos" class="plans">
+        <div class="container">
+            <h2 class="section-title">Planos Mensais</h2>
+            <p class="section-subtitle">Mantenha o visual sempre em dia com descontos exclusivos</p>
+
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <h3>Plano Corte</h3>
+                    <div class="plan-price">R$ 135<span>/mês</span></div>
+                    <ul>
+                        <li>4 Cortes de Cabelo por mês</li>
+                        <li>10% OFF em produtos</li>
+                        <li>Atendimento VIP</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline">Assinar Plano</a>
+                </div>
+
+                <div class="plan-card featured">
+                    <span class="badge">Mais Pedido</span>
+                    <h3>Plano Combo</h3>
+                    <div class="plan-price">R$ 240<span>/mês</span></div>
+                    <ul>
+                        <li>4 Cortes + 4 Barbas por mês</li>
+                        <li>15% OFF em produtos</li>
+                        <li>Desconto em serviços extras</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Garantir Estilo</a>
+                </div>
+
+                <div class="plan-card">
+                    <h3>Plano Barba</h3>
+                    <div class="plan-price">R$ 120<span>/mês</span></div>
+                    <ul>
+                        <li>4 Barboterapias por mês</li>
+                        <li>10% OFF em produtos</li>
+                        <li>Atendimento VIP</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline">Assinar Plano</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Perguntas & Respostas (FAQ) -->
+<section id="faq" class="faq-section">
+    <div class="container">
+        <span class="faq-subtitle">Dúvidas Frequentes</span>
+        <h2 class="faq-title">Perguntas <span>& respostas</span></h2>
+        <p class="faq-caption">Tudo o que você precisa saber antes de vir</p>
+
+        <div class="faq-accordion">
+            <details class="faq-item">
+                <summary class="faq-question">
+                    <span>Preciso agendar ou posso ir sem marcar horário?</span>
+                    <span class="faq-icon">+</span>
+                </summary>
+                <div class="faq-answer">
+                    <p>Recomendamos o agendamento prévio para garantir seu atendimento no horário desejado sem filas. Porém, também atendemos por ordem de chegada conforme a disponibilidade dos barbeiros.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">
+                    <span>Quais formas de pagamento são aceitas?</span>
+                    <span class="faq-icon">+</span>
+                </summary>
+                <div class="faq-answer">
+                    <p>Aceitamos Pix, cartões de crédito e débito (todas as bandeiras), além de dinheiro em espécie.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">
+                    <span>Atendem crianças e mulheres?</span>
+                    <span class="faq-icon">+</span>
+                </summary>
+                <div class="faq-answer">
+                    <p>Atendemos público infantil masculino a partir de 2 anos com paciência e estrutura adequada. Nosso foco é exclusivamente em cortes e barbearia masculina.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">
+                    <span>Os preços da tabela incluem todos os serviços?</span>
+                    <span class="faq-icon">+</span>
+                </summary>
+                <div class="faq-answer">
+                    <p>Cada serviço individual tem seu valor fixo. Combos como Cabelo + Barba possuem valores promocionais dedicados e descritos em nossa tabela.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">
+                    <span>Qual o horário de funcionamento?</span>
+                    <span class="faq-icon">+</span>
+                </summary>
+                <div class="faq-answer">
+                    <p>Atendemos de Segunda a Sábado, das 09h às 20h. Não abrimos aos domingos e feriados nacionais.</p>
+                </div>
+            </details>
+        </div>
+    </div>
+</section>
+    <footer class="footer">
+        <div class="container footer-content">
+            <p>&copy; 2026 TMS Barbearia. Todos os direitos reservados.</p>
+            <div class="socials">
+                <a href="#">Instagram</a>
+                <a href="#">WhatsApp</a>
+            </div>
+        </div>
     </footer>
 
 </body>
-
 </html>
-:::
