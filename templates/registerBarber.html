@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Funcionario | Agenda System</title>
+    <!-- CDN Tailwind CSS para teste/desenvolvimento rápido -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/input.css') }}">
+    <link rel="stylesheet" href="../../static/css/admin.css">
+</head>
+<body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-[#0f6e56] selection:text-white">
+>
+    <div id="tela-profissionais" class="tela-ativa">
+        <div class="auth-container auth-container--largo">
+
+            <!-- STEPPER (PASSO A PASSO) | Ficará temporariamente caso seja necessário -->
+            <ol class="flex mb-8 relative isolate" id="etapa">
+                <!-- Passo 1 -->
+                <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
+                    <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#085041] border border-[#0f6e56] flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">1</span>
+                    <span class="text-[#f1efe8] font-medium etapa__label">Serviços</span>
+                </li>
+
+                <!-- Passo 2 -->
+                <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
+                    <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">2</span>
+                    <span class="etapa__label">Barbeiros</span>
+                </li>
+            </ol>
+
+            <h1 class="tela__titulo">Barbeiros</h1>
+            <p class="tela__subtitulo">Adicione os barbeiros que trabalham na empresa</p>
+
+            <form id="form-profissional" class="form-inline" novalidate>
+                <div class="form-inline__campos">
+                    <div class="campo">
+                        <label for="pro-foto">Foto (3x4)</label>
+                        <input type="file" id="pro-foto" accept="image/*">
+                    </div>
+                    <div class="campo">
+                        <label for="pro-nome">Nome</label>
+                        <input type="text" id="pro-nome" placeholder="Nome do profissional" autocomplete="off">
+                    </div>
+                    <!-- <div class="campo">
+                        <label for="pro-cargo">Cargo / Especialidade</label>
+                        <input type="text" id="pro-cargo" placeholder="Ex: Barbeiro sênior" autocomplete="off">
+                    </div> -->
+                </div>
+                <button type="button" class="btn-secundario" onclick="addBarber()">+ Adicionar barbeiro</button>
+            </form>
+            
+            <div class="cards-lista" id="lista-cards-profissionais">
+                <p class="lista-vazia" id="vazia-profissionais">Nenhum barbeiro adicionado ainda.</p>
+            </div>
+
+            <div class="nav-duplo">
+                <button class="btn-ghost" onclick="back()">← Voltar</button>
+                <button class="btn-primario" onclick="registerBarber()">Concluir cadastro →</button>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/registerBarber.js') }}"></script>
+</body>
+</html>
