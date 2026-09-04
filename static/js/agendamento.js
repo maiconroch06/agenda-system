@@ -110,11 +110,11 @@ const form = {
     // nome:           document.getElementById("inp-nome"),
     // tel:            document.getElementById("inp-tel"),
     //email:           document.getElementById("inp-email"),
-    consentimento:     document.getElementById("inp-consentimento"),
+    //consentimento:     document.getElementById("inp-consentimento"),
     // erroNome:       document.getElementById("erro-nome"),
     // erroTel:        document.getElementById("erro-tel"),
     //erroEmail:       document.getElementById("erro-email"),
-    erroConsentimento: document.getElementById("erro-consentimento"),
+    //erroConsentimento: document.getElementById("erro-consentimento"),
 };
 
 /* ============================================================
@@ -292,11 +292,42 @@ function fecharModalHistorico() {
 
 function atualizarStepper() {
     const itens = els.etapa.querySelectorAll(".etapa__item");
+
     itens.forEach((item, index) => {
         const numero = index + 1;
-        item.classList.remove("ativo", "concluido");
-        if (numero === estado.etapaAtual) item.classList.add("ativo");
-        if (numero < estado.etapaAtual) item.classList.add("concluido");
+        const ciclo = item.querySelector(".etapa__ciclo");
+        const label = item.querySelector(".etapa__label");
+
+        if (numero < estado.etapaAtual) {
+            // ETAPA CONCLUÍDA: Verde preenchido com ícone de check
+            item.classList.remove("before:bg-[#4a473f]");
+            item.classList.add("before:bg-[#0f6e56]");
+
+            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-[#0f6e56] border border-[#0f6e56] flex items-center justify-center text-[13px] font-bold text-white etapa__ciclo";
+            ciclo.textContent = "✓";
+
+            label.className = "text-[#9fe1cb] font-medium etapa__label";
+
+        } else if (numero === estado.etapaAtual) {
+            // ETAPA ATIVA: Verde destacado com borda
+            item.classList.remove("before:bg-[#4a473f]");
+            item.classList.add("before:bg-[#0f6e56]");
+
+            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-[#085041] border border-[#0f6e56] flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo";
+            ciclo.textContent = numero;
+
+            label.className = "text-[#f1efe8] font-medium etapa__label";
+
+        } else {
+            // ETAPA PENDENTE: Cinza escuro desativado
+            item.classList.remove("before:bg-[#0f6e56]");
+            item.classList.add("before:bg-[#4a473f]");
+
+            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo";
+            ciclo.textContent = numero;
+
+            label.className = "text-[#888780] etapa__label";
+        }
     });
 }
 
@@ -590,7 +621,7 @@ function validarFormulario() {
     // limparErro(form.nome, form.erroNome);
     // limparErro(form.tel, form.erroTel);
     //limparErro(form.email, form.erroEmail);
-    form.erroConsentimento.textContent = "";
+    //form.erroConsentimento.textContent = "";
 
     // if (form.nome.value.trim().length < 3) {
     //     definirErro(form.nome, form.erroNome, "Informe seu nome completo");
@@ -609,10 +640,10 @@ function validarFormulario() {
         valido = false;
     }*/
 
-    if (!form.consentimento.checked) {
+    /*if (!form.consentimento.checked) {
         form.erroConsentimento.textContent = "É necessário concordar para continuar";
         valido = false;
-    }
+    }*/
 
     return valido;
 }
@@ -673,15 +704,15 @@ function reiniciar() {
 
     // 3. Recarrega as listas para gerar inputs sem a propriedade 'checked'
     carregarServicos();
-    carregarProfissionais(); // <--- Adicionado: limpa a seleção dos cards de profissionais
+    carregarProfissionais();
 
     // 4. Desmarca o checkbox de consentimento e limpa mensagens de erro
-    if (form.consentimento) {
+    /*if (form.consentimento) {
         form.consentimento.checked = false;
     }
     if (form.erroConsentimento) {
         form.erroConsentimento.textContent = "";
-    }
+    }*/
 
     // 5. Exibe o painel inicial
     mostrarPainel(1);
