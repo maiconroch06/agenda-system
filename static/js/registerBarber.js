@@ -2,26 +2,20 @@
    ESTADO SERVIÇOS
    ============================================================ */
 
-let barber = JSON.parse(localStorage.getItem("barber")) || [];
-console.log(barber)
+let barbers = JSON.parse(localStorage.getItem("barber")) || [];
+console.log(barbers)
+
+/* ============================================================
+   ELEMENTOS
+   ============================================================ */
+
+const els = {
+
+}
 
 /* ============================================================
    UTILITÁRIOS
    ============================================================ */
-
-function limparErro(inputId, erroId) {
-    const input = document.getElementById(inputId);
-    const erro = document.getElementById(erroId);
-    if (input) input.classList.remove("invalido");
-    if (erro) erro.textContent = "";
-}
-
-function definirErro(inputId, erroId, msg) {
-    const input = document.getElementById(inputId);
-    const erro = document.getElementById(erroId);
-    if (input) input.classList.add("invalido");
-    if (erro) erro.textContent = msg;
-}   
 
 function mostrarAviso(msg) {
     const el = document.getElementById("aviso");
@@ -38,10 +32,6 @@ function lerArquivoBase64(input) {
         reader.onload = () => resolve(reader.result);
         reader.readAsDataURL(arquivo);
     });
-}
-
-function gerarIdUnico() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
 
 /* ============================================================
@@ -62,11 +52,78 @@ function aplicarMascaraTelefone(input) {
 aplicarMascaraTelefone(document.getElementById("pro-telefone"));
 
 /* ============================================================
-   TELA 5: PROFISSIONAIS (cadastro)
+   BARBEIROS (adicionar, renderizar, remover, editar, cadastrar)
    ============================================================ */
 
-function voltar() {
-    window.location.href = "tipoUsuario.html";
+async function addBarber() {
+    const nome = document.getElementById("pro-nome").value.trim();
+    const cargo = document.getElementById("pro-cargo").value.trim();
+    const fotoInput = document.getElementById("pro-foto");
+
+    if (!nome) { mostrarAviso("Informe o nome do barbeiro"); return; }
+    if (!cargo) { mostrarAviso("Informe o cargo do barbeiro"); return; }
+
+    const foto = await lerArquivoBase64(fotoInput);
+    const barber = { id: gerarIdUnico(), nome, cargo, foto };
+    barbers.push(barber);
+
+    document.getElementById("pro-nome").value = "";
+    document.getElementById("pro-cargo").value = "";
+    fotoInput.value = "";
+
+    renderizarCardsProfissionais("lista-cards-profissionais", barbers, "vazia-profissionais");
+}
+
+function renderizarCardsProfissionais(containerId, lista, vaziaId) {
+    const container = document.getElementById(containerId);
+    const vaziaEl = vaziaId ? document.getElementById(vaziaId) : null;
+
+    if (lista.length === 0) {
+        container.innerHTML = "";
+        if (vaziaEl) container.appendChild(vaziaEl);
+        if (vaziaEl) vaziaEl.style.display = "block";
+        return;
+    }
+
+    if (vaziaEl) vaziaEl.style.display = "none";
+
+    container.innerHTML = lista.map((p, idx) => `
+        <div class="item-card" data-id="${p.id}">
+            <div class="ordem-btns">
+                <button class="ordem-btn" onclick="moverItem('barber', '${p.id}', -1)" title="Subir">▲</button>
+                <button class="ordem-btn" onclick="moverItem('barber', '${p.id}', 1)" title="Descer">▼</button>
+            </div>
+            ${p.foto
+                ? `<img class="item-card__foto" src="${p.foto}" alt="${p.nome}">`
+                : `<div class="item-card__foto-placeholder">👤</div>`
+            }
+            <div class="item-card__nome">${p.nome}</div>
+            <div class="item-card__meta" style="justify-content:center">
+                <span>${p.cargo}</span>
+            </div>
+            <div class="item-card__acoes">
+                <button onclick="editarProfissional('${p.id}')">Editar</button>
+                <button class="btn-remover" onclick="removerProfissional('${p.id}')">Remover</button>
+            </div>
+        </div>
+    `).join("");
+}
+
+function removeBarber(id) {
+    barbers = barbers.filter(p => p.id !== id);
+    renderizarCardsProfissionais("lista-cards-profissionais", barbers, "vazia-profissionais");
+    sincronizarPainel();
+}
+
+function editBarber(id) {
+    const p = barbers.find(p => p.id === id);
+    if (!p) return;
+    const novoNome = prompt("Nome do barbeiro:", p.nome);
+    if (novoNome !== null && novoNome.trim()) p.nome = novoNome.trim();
+    const novoCargo = prompt("Cargo:", p.cargo);
+    if (novoCargo !== null && novoCargo.trim()) p.cargo = novoCargo.trim();
+    renderizarCardsProfissionais("lista-cards-profissionais", barbers, "vazia-profissionais");
+    sincronizarPainel();
 }
 
 async function registerBarber() {
@@ -106,5 +163,3 @@ async function registerBarber() {
 
     localStorage.setItem("barber", JSON.stringify(barber));
 }
-
-
