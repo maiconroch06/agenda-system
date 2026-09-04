@@ -15,7 +15,7 @@
         
         <div class="w-full max-w-3xl bg-[#232220] border border-[#38362f] rounded-[14px] p-6 sm:p-8">
 
-            <ol class="flex mb-8 relative isolate" id="etapa">
+            <ol class="flex mb-1 relative isolate" id="etapa">
                 <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
                     <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#085041] border border-[#0f6e56] flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">1</span>
                     <span class="text-[#f1efe8] font-medium etapa__label">Serviços</span>
@@ -46,20 +46,28 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div class="flex flex-col gap-1.5">
-                        <label for="pro-cpf" class="text-[13px] font-medium text-[#888780]">CPF</label>
+                        <label for="pro-cpf" class="text-[13px] font-medium text-[#888780]">CPF*</label>
                         <input type="text" id="pro-cpf" placeholder="000.000.000-00" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1.5">
-                        <label for="pro-nome" class="text-[13px] font-medium text-[#888780]">Nome</label>
+                        <label for="pro-nome" class="text-[13px] font-medium text-[#888780]">Nome*</label>
                         <input type="text" id="pro-nome" placeholder="Nome do barbeiro" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1.5">
-                        <label for="pro-email" class="text-[13px] font-medium text-[#888780]">Email</label>
+                        <label for="pro-email" class="text-[13px] font-medium text-[#888780]">Email*</label>
                         <input type="text" id="pro-email" placeholder="barbeiro@gmail.com" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1.5">
-                        <label for="pro-tel" class="text-[13px] font-medium text-[#888780]">Telefone</label>
-                        <input type="text" id="pro-tel" placeholder="(00) 00000-0000" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                        <label for="pro-tel" class="text-[13px] font-medium text-[#888780]">Telefone*</label>
+                        <input type="text" id="pro-telefone" placeholder="(00) 00000-0000" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="pro-endereco" class="text-[13px] font-medium text-[#888780]">Endereco*</label>
+                        <input type="text" id="pro-endereco" placeholder="Lagrouro, Número, Complemento, Bairro, Cidade e UF - CEP" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="pro-descricao" class="text-[13px] font-medium text-[#888780]">Descricao</label>
+                        <input type="text" id="pro-descricao" placeholder="Barbeiro experiente em..." autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
                     </div>
                 </div>
                 <button type="button" class="w-full sm:w-auto h-10 px-4 rounded-[10px] border border-[#4a473f] bg-transparent text-[#f1efe8] text-[14px] font-medium hover:bg-[#2a2825] transition-colors" onclick="addBarber()">+ Adicionar barbeiro</button>
