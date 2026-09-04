@@ -10,7 +10,10 @@ console.log(barbers)
    ============================================================ */
 
 const els = {
-
+    nome:      document.getElementById("pro-nome").value.trim();
+    cargo:     document.getElementById("pro-cargo").value.trim();
+    fotoInput: document.getElementById("pro-foto");
+    el = document.getElementById("aviso");
 }
 
 /* ============================================================
@@ -49,7 +52,7 @@ function aplicarMascaraTelefone(input) {
     });
 }
 
-aplicarMascaraTelefone(document.getElementById("pro-telefone"));
+aplicarMascaraTelefone(document.getElementById("pro-tel"));
 
 /* ============================================================
    BARBEIROS (adicionar, renderizar, remover, editar, cadastrar)
