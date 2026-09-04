@@ -2,8 +2,9 @@
    ESTADO SERVIÇOS
    ============================================================ */
 
-let profissional = JSON.parse(localStorage.getItem("profissional")) || [];
-console.log(profissional)
+let barber = JSON.parse(localStorage.getItem("barber")) || [];
+console.log(barber)
+
 /* ============================================================
    UTILITÁRIOS
    ============================================================ */
@@ -68,7 +69,7 @@ function voltar() {
     window.location.href = "tipoUsuario.html";
 }
 
-async function salvarProfissional() {
+async function registerBarber() {
     //MostrarAviso("Acesso de funcionário será desenvolvido em breve");
     const fotoInput = document.getElementById("pro-foto");
     const tel = document.getElementById("pro-telefone").value.trim();
@@ -96,15 +97,14 @@ async function salvarProfissional() {
 
     const foto = await lerArquivoBase64(fotoInput);
 
-    profissional = { // Isso vai causar algum erro?
+    barber = {
         foto: foto,
         telefone: tel,
         cargo: cargo,
         experiencia: exp
     }
 
-    localStorage.setItem("profissional", JSON.stringify(profissional));
-    window.location.href = "vinculacaoEmpresa.html"
+    localStorage.setItem("barber", JSON.stringify(barber));
 }
 
 
