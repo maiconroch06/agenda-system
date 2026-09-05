@@ -1,0 +1,822 @@
+/* Reset Básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #141414;
+    --bg-card: #1c1c1c;
+    --accent: #d4af37;
+    /* Tom dourado luxo */
+    --accent-hover: #b5932a;
+    --text-color: #f1f1f1;
+    --text-muted: #a0a0a0;
+    --font-title: 'Oswald', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-color);
+    font-family: var(--font-body);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Botões */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--accent);
+    color: #000;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn-outline {
+    border: 2px solid var(--accent);
+    color: var(--accent);
+}
+
+.btn-outline:hover {
+    background-color: var(--accent);
+    color: #000;
+}
+
+.btn-large {
+    padding: 16px 32px;
+    font-size: 1rem;
+}
+
+/* Header */
+.header {
+    background-color: rgba(10, 10, 10, 0.95);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    border-bottom: 1px solid #222;
+    padding: 15px 0;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 45px;
+    display: block;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-menu a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: var(--accent);
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('hero-bg.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-top: 80px;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-family: var(--font-title);
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+.hero-btns {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Títulos das Seções */
+.section-title {
+    font-family: var(--font-title);
+    font-size: 2.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 50px;
+}
+
+/* Seção de Serviços */
+.services {
+    padding: 100px 0;
+    background-color: var(--bg-secondary);
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.service-card {
+    background-color: var(--bg-card);
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #262626;
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+}
+
+.service-card h3 {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.service-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+.service-card .price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+/* Seção de Planos */
+.plans {
+    padding: 100px 0;
+    background-color: var(--bg-primary);
+}
+
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    align-items: center;
+}
+
+.plan-card {
+    background-color: var(--bg-card);
+    padding: 40px 30px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #262626;
+    position: relative;
+}
+
+.plan-card.featured {
+    border: 2px solid var(--accent);
+    transform: scale(1.03);
+}
+
+.badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--accent);
+    color: #000;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+.plan-card h3 {
+    font-family: var(--font-title);
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.plan-price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.plan-price span {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.plan-card ul {
+    list-style: none;
+    margin-bottom: 30px;
+}
+
+.plan-card ul li {
+    padding: 8px 0;
+    color: var(--text-muted);
+    border-bottom: 1px solid #2a2a2a;
+}
+
+/* Footer */
+.footer {
+    background-color: var(--bg-secondary);
+    padding: 30px 0;
+    border-top: 1px solid #222;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.socials a {
+    color: var(--text-color);
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.socials a:hover {
+    color: var(--accent);
+}
+
+/* Responsividade (Mobile) */
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none;
+        /* Em projetos reais, adicione um menu hambúrguer via JS */
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .hero-btns {
+        flex-direction: column;
+    }
+
+    .plan-card.featured {
+        transform: scale(1);
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .socials a {
+        margin: 0 10px;
+    }
+}
+
+/* Seção Nossa Equipe */
+.team {
+    padding: 100px 0;
+    background-color: var(--bg-secondary);
+}
+
+.team-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 40px;
+    align-items: center;
+}
+
+/* Coluna 1: Cards dos Barbeiros */
+.team-cards-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.barber-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: var(--bg-card);
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.barber-card:hover {
+    border-color: rgba(207, 168, 95, 0.4);
+    transform: translateX(4px);
+}
+
+.barber-card.active {
+    border-color: var(--accent);
+    background-color: rgba(207, 168, 95, 0.05);
+}
+
+.barber-photo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #272a30;
+    flex-shrink: 0;
+    border: 2px solid var(--border-color);
+}
+
+.barber-card.active .barber-photo {
+    border-color: var(--accent);
+}
+
+.barber-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.barber-info-short h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 2px;
+}
+
+.barber-info-short span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Coluna 2: Descrição */
+.team-desc-col {
+    background-color: var(--bg-card);
+    padding: 48px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+}
+
+.barber-details {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.barber-details.active {
+    display: block;
+}
+
+.detail-tag {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+}
+
+.barber-details h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 6px 0 2px;
+    color: #ffffff;
+}
+
+.barber-details .experience {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+.barber-details .bio {
+    font-size: 1rem;
+    color: var(--text-main);
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+.specialties {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.specialties li {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+    .team-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .team-desc-col {
+        padding: 32px 24px;
+        min-height: auto;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-primary: #0d0e10;
+    --bg-card: #16181c;
+    --accent: #cfa85f;
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    --border-color: #272a30;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Seção */
+.team-section {
+    padding: 80px 0;
+}
+
+.section-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    text-align: center;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-top: 6px;
+    margin-bottom: 48px;
+}
+
+/* Wrapper Geral */
+.team-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Div 1: Grid de Cards dos Barbeiros */
+.team-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.barber-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.barber-card:hover {
+    border-color: rgba(207, 168, 95, 0.4);
+    transform: translateY(-3px);
+}
+
+.barber-card.active {
+    border-color: var(--accent);
+    background-color: rgba(207, 168, 95, 0.04);
+}
+
+/* Foto Ampliada */
+.photo-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #22252a;
+    border: 3px solid var(--border-color);
+    margin-bottom: 16px;
+    transition: border-color 0.25s ease;
+}
+
+.barber-card.active .photo-wrapper {
+    border-color: var(--accent);
+}
+
+.photo-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Texto abaixo da foto */
+.barber-meta h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.barber-meta span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: block;
+}
+
+/* Div 2: Painel de Descrição */
+.team-description-box {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 36px;
+    min-height: 220px;
+}
+
+.details-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.details-content.active {
+    display: block;
+}
+
+.role-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+}
+
+.details-content h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 4px 0 2px;
+}
+
+.experience-tag {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 16px;
+}
+
+.bio-text {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.skills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.skills span {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsividade móvel */
+@media (max-width: 768px) {
+    .team-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .photo-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+
+    .team-description-box {
+        padding: 24px;
+    }
+}
+
+/* Seção FAQ */
+.faq-section {
+    padding: 90px 0;
+    background-color: #000000;
+    color: #ffffff;
+    text-align: center;
+}
+
+.faq-subtitle {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.faq-title {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.faq-title span {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+}
+
+.faq-caption {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 48px;
+}
+
+/* Acordeão */
+.faq-accordion {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.faq-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.faq-question {
+    list-style: none;
+    padding: 24px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.faq-question::-webkit-details-marker {
+    display: none;
+}
+
+.faq-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1.1rem;
+    color: var(--accent);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.faq-item[open] .faq-icon {
+    transform: rotate(45deg);
+    border-color: var(--accent);
+}
+
+.faq-answer {
+    padding-bottom: 24px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .faq-title {
+        font-size: 2.2rem;
+    }
+
+    .faq-question {
+        font-size: 1rem;
+        gap: 16px;
+    }
+}
