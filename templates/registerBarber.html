@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Funcionario | Agenda System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    <link rel="stylesheet" href="../../static/css/admin.css">
+</head>
+<body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-[#0f6e56] selection:text-white">
+    
+    <div id="tela-profissionais" class="tela-ativa flex min-h-screen items-center justify-center p-4">
+        
+        <div class="w-full max-w-3xl bg-[#232220] border border-[#38362f] rounded-[14px] p-6 sm:p-8">
+
+            <ol class="flex mb-1 relative isolate" id="etapa">
+                <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
+                    <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#085041] border border-[#0f6e56] flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">1</span>
+                    <span class="text-[#f1efe8] font-medium etapa__label">Serviços</span>
+                </li>
+
+                <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
+                    <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">2</span>
+                    <span class="etapa__label">Barbeiros</span>
+                </li>
+            </ol>
+
+            <h1 class="text-center text-2xl font-medium mb-1.5">Cadastrar Barbeiros</h1>
+            <p class="text-center text-[14px] text-[#888780] mb-6">Adicione os barbeiros que trabalham na empresa</p>
+
+            <form id="form-profissional" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-5 mb-5" novalidate>
+                <div class="flex flex-col items-center justify-center gap-2 mb-6 col-span-full">
+                    <span class="text-[13px] font-medium text-[#888780]">Foto do Barbeiro</span>
+                    
+                    <label for="pro-foto" class="relative w-24 h-24 rounded-full border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-[#0f6e56] hover:bg-[#04342c] overflow-hidden group">
+                        
+                        <!-- Ícone ou Texto de Adicionar -->
+                        <span class="text-2xl text-[#888780] group-hover:text-[#9fe1cb] leading-none mb-1">+</span>
+                        <span class="text-[11px] text-[#888780] group-hover:text-[#9fe1cb]">Upload</span>
+                        
+                        <!-- O input real fica oculto (classe 'hidden') -->
+                        <input type="file" id="pro-foto" accept="image/*" class="hidden">
+                    </label>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div class="flex flex-col gap-1.5">
+                        <label for="pro-cpf" class="text-[13px] font-medium text-[#888780]">CPF*</label>
+                        <input type="text" id="pro-cpf" placeholder="000.000.000-00" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="pro-nome" class="text-[13px] font-medium text-[#888780]">Nome*</label>
+                        <input type="text" id="pro-nome" placeholder="Nome do barbeiro" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="pro-email" class="text-[13px] font-medium text-[#888780]">Email*</label>
+                        <input type="text" id="pro-email" placeholder="barbeiro@gmail.com" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="pro-tel" class="text-[13px] font-medium text-[#888780]">Telefone*</label>
+                        <input type="text" id="pro-telefone" placeholder="(00) 00000-0000" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="pro-endereco" class="text-[13px] font-medium text-[#888780]">Endereco*</label>
+                        <input type="text" id="pro-endereco" placeholder="Lagrouro, Número, Complemento, Bairro, Cidade e UF - CEP" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="pro-descricao" class="text-[13px] font-medium text-[#888780]">Descricao</label>
+                        <input type="text" id="pro-descricao" placeholder="Barbeiro experiente em..." autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                    </div>
+                </div>
+                <button type="button" class="w-full sm:w-auto h-10 px-4 rounded-[10px] border border-[#4a473f] bg-transparent text-[#f1efe8] text-[14px] font-medium hover:bg-[#2a2825] transition-colors" onclick="addBarber()">+ Adicionar barbeiro</button>
+            </form>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 mt-2" id="lista-cards-profissionais">
+                <p class="col-span-full text-center text-[14px] text-[#888780] py-6" id="vazia-profissionais">Nenhum barbeiro adicionado ainda.</p>
+            </div>
+
+            <div class="flex flex-col-reverse sm:flex-row justify-between gap-3 mt-6">
+                <button class="h-10 px-4 rounded-[10px] border-none bg-transparent text-[#888780] text-[14px] hover:text-[#f1efe8] transition-colors" onclick="back()">← Voltar</button>
+                <button class="h-11 px-5 rounded-[10px] bg-[#f1efe8] text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all" onclick="registerBarber()">Concluir cadastro →</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/registerBarber.js') }}"></script>
+</body>
+</html>

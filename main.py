@@ -10,15 +10,17 @@ create_database(app,os)
 # 2. IMPORTS DOS BLUEPRINTS (Apenas APÓS criar o banco)
 # ==========================================
 from routers.register import user_register
+from routers.login import user_login
 from routers.public import publics
-from routers.customer_bp import customer_bp
+from routers.client import client
 
 # ==========================================
 # 3. REGISTRO DOS BLUEPRINTS
 # ==========================================
 app.register_blueprint(user_register, url_prefix='/register')
+app.register_blueprint(user_login, url_prefix='/login')
 app.register_blueprint(publics)
-app.register_blueprint(customer_bp, url_prefix='/customer')
+app.register_blueprint(client, url_prefix='/cliente')
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -564,3 +564,157 @@ input[type="radio"]:checked + .card .titulo {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
+
+/* ============================================================
+   HISTÓRICO DE AGENDAMENTOS (NOVOS ESTILOS)
+   ============================================================ */
+
+   .grade-historico {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.card-historico {
+    background: var(--cor-card);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.card-historico:hover {
+    border-color: var(--cor-selecionado-borda);
+    transform: translateY(-2px);
+}
+
+.card-historico__topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.5px solid var(--cor-borda-suave);
+    padding-bottom: 8px;
+}
+
+.card-historico__servico {
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--cor-texto);
+}
+
+.card-historico__status {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
+.status--concluído, .status--concluido {
+    background: rgba(136, 135, 128, 0.2);
+    color: var(--cor-texto-suave);
+}
+
+.status--confirmado, .status--agendado {
+    background: var(--cor-selecionado);
+    color: var(--cor-selecionado-texto);
+    border: 1px solid var(--cor-selecionado-borda);
+}
+
+.card-historico__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--cor-texto-suave);
+}
+
+.card-historico__info strong {
+    color: var(--cor-texto);
+}
+
+.card-historico__rodape {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 0.5px solid var(--cor-borda-suave);
+}
+
+.card-historico__valor {
+    font-weight: bold;
+    color: var(--cor-selecionado-texto);
+    font-size: 14px;
+}
+
+.card-historico__link {
+    font-size: 12px;
+    color: var(--cor-texto-suave);
+}
+
+.card-historico:hover .card-historico__link {
+    color: var(--cor-texto);
+}
+
+/* ============================================================
+   MODAL DE RESUMO / DETALHES
+   ============================================================ */
+
+.modal-historico {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal-historico[hidden] {
+    display: none;
+}
+
+.modal-historico__conteudo {
+    background: var(--cor-fundo);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--radius);
+    width: 450px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-historico__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--cor-borda-suave);
+    padding-bottom: 8px;
+}
+
+.modal-historico__header h2 {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.modal-historico__fechar {
+    background: transparent;
+    border: none;
+    color: var(--cor-texto-suave);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-historico__fechar:hover {
+    color: var(--cor-texto);
+}

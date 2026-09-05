@@ -1,286 +1,411 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia - Estilo e Tradição</title>
-    <link rel="stylesheet" href="static/css/styles.css">
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#cfa85f',
+                            goldHover: '#b5932a',
+                            bgPrimary: '#0d0e10',
+                            bgSecondary: '#141414',
+                            bgCard: '#16181c',
+                            border: '#272a30',
+                            muted: '#9ca3af',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        title: ['Oswald', 'sans-serif'],
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(6px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-in-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-brand-bgPrimary text-gray-100 font-sans antialiased selection:bg-brand-gold selection:text-black">
 
-    <header class="header">
-        <div class="container nav-container">
-            <a href="#" class="logo">
-                <img src="static/assets/img/tms-barbearia-logo-horizontal.png" alt="TMS Barbearia">
+    <!-- Header / Navbar -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-[#222222] py-3.5 transition-all">
+        <div class="max-w-6xl mx-auto px-5 flex items-center justify-between">
+            <a href="#" class="shrink-0">
+                <img src="static/assets/img/logos/tms-barbearia-logo-horizontal.png" alt="TMS Barbearia" class="h-10 w-auto object-contain">
             </a>
-            <nav class="nav-menu">
-                <a href="#home">Home</a>
-                <a href="#servicos">Serviços</a>
-                <a href="#planos">Planos</a>
-                <a href="#sobre">Quem Somos</a>
+            
+            <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-gray-200">
+                <a href="#home" class="hover:text-brand-gold transition-colors">Home</a>
+                <a href="#equipe" class="hover:text-brand-gold transition-colors">Quem Somos</a>
+                <a href="#servicos" class="hover:text-brand-gold transition-colors">Serviços</a>
+                <a href="#planos" class="hover:text-brand-gold transition-colors">Planos</a>
+                <a href="#faq" class="hover:text-brand-gold transition-colors">FAQ</a>
             </nav>
-            <a href="#agendar" class="btn btn-primary">Agendar Horário</a>
+
+            <a href="#agendar" class="px-5 py-2.5 bg-brand-gold hover:bg-brand-goldHover text-black font-semibold text-xs uppercase tracking-wider rounded transition-all duration-300 shadow-md hover:shadow-brand-gold/20">
+                Agendar Horário
+            </a>
         </div>
     </header>
 
-    <section id="home" class="hero">
-        <div class="container hero-content">
-            <h1>O seu estilo em alto nível. A sua melhor versão todos os dias</h1>
-            <p>Um ambiente moderno e acolhedor com profissionais especializados para valorizar a sua imagem.</p>
-            <div class="hero-btns">
-                <a href="#agendar" class="btn btn-primary btn-large">Agendar Agora</a>
-                <a href="#servicos" class="btn btn-outline btn-large">Ver Serviços</a>
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center text-center pt-24 pb-16 px-5 bg-cover bg-center" style="background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('hero-bg.jpg');">
+        <div class="max-w-3xl mx-auto space-y-6">
+            <h1 class="font-title text-4xl sm:text-5xl md:text-6xl font-bold uppercase tracking-wide text-white leading-tight">
+                O seu estilo em alto nível. A sua melhor versão todos os dias
+            </h1>
+            <p class="text-base sm:text-lg text-brand-muted max-w-2xl mx-auto">
+                Um ambiente moderno e acolhedor com profissionais especializados para valorizar a sua imagem.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a href="#agendar" class="w-full sm:w-auto px-8 py-3.5 bg-brand-gold hover:bg-brand-goldHover text-black font-semibold text-sm uppercase tracking-wider rounded transition-all duration-300 shadow-lg hover:scale-105">
+                    Agendar Agora
+                </a>
+                <a href="#servicos" class="w-full sm:w-auto px-8 py-3.5 border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black font-semibold text-sm uppercase tracking-wider rounded transition-all duration-300 hover:scale-105">
+                    Ver Serviços
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Coluna 1: Galeria de Fotos Maior / Cardviews (3 Barbeiros) -->
-<section id="equipe" class="team-section">
-        <div class="container">
-            <h2 class="section-title">Nossa Equipe</h2>
-            <p class="section-subtitle">Profissionais altamente qualificados para entregar o seu melhor estilo</p>
+    <!-- Seção Nossa Equipe -->
+    <section id="equipe" class="py-20 bg-brand-bgSecondary border-t border-brand-border/50">
+        <div class="max-w-5xl mx-auto px-5">
+            <div class="text-center mb-12">
+                <h2 class="font-title text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">Nossa Equipe</h2>
+                <p class="text-brand-muted text-sm sm:text-base mt-2">Profissionais altamente qualificados para entregar o seu melhor estilo</p>
+            </div>
 
-            <div class="team-wrapper">
-                
-                <div class="team-cards-grid">
+            <div class="flex flex-col gap-8">
+                <!-- Cards dos Barbeiros -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                     
-                    <div class="barber-card active" onclick="selectBarber(1, this)">
-                        <div class="photo-wrapper">
-                            <img src="barbeiro1.jpg" alt="Foto do Barbeiro Carlos Silva">
+                    <!-- Barbeiro 1 (Ativo por Padrão) -->
+                    <div class="barber-card border-2 border-brand-gold bg-brand-gold/5 bg-brand-bgCard rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1" onclick="selectBarber(1, this)">
+                        <div class="photo-wrapper w-28 h-28 rounded-full overflow-hidden bg-[#22252a] border-2 border-brand-gold mb-4 transition-colors">
+                             <img src="static/assets/img/funcionarios/barbeiro-master-thiago-silva.png" alt="Foto do Barbeiro Lucas Mendes" class="w-full h-full object-cover">
                         </div>
-                        <div class="barber-meta">
-                            <h3>Carlos Silva</h3>
-                            <span>Master Barber</span>
-                        </div>
-                    </div>
-
-                    <div class="barber-card" onclick="selectBarber(2, this)">
-                        <div class="photo-wrapper">
-                            <img src="barbeiro2.jpg" alt="Foto do Barbeiro Lucas Mendes">
-                        </div>
-                        <div class="barber-meta">
-                            <h3>Lucas Mendes</h3>
-                            <span>Especialista em Visagismo</span>
+                        <div class="space-y-1">
+                            <h3 class="font-bold text-lg text-white">Thiago Silva</h3>
+                            <span class="text-xs text-brand-muted block">Master Barber</span>
                         </div>
                     </div>
 
-                    <div class="barber-card" onclick="selectBarber(3, this)">
-                        <div class="photo-wrapper">
-                            <img src="barbeiro3.jpg" alt="Foto do Barbeiro Rafael Costa">
+                    <!-- Barbeiro 2 -->
+                    <div class="barber-card border border-brand-border bg-brand-bgCard rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/40" onclick="selectBarber(2, this)">
+                        <div class="photo-wrapper w-28 h-28 rounded-full overflow-hidden bg-[#22252a] border-2 border-brand-border mb-4 transition-colors">
+                            <img src="static/assets/img/funcionarios/barbeiro_dois_maik.png" alt="Foto do Barbeiro Lucas Mendes" class="w-full h-full object-cover">
                         </div>
-                        <div class="barber-meta">
-                            <h3>Rafael Costa</h3>
-                            <span>Especialista em Barboterapia</span>
+                        <div class="space-y-1">
+                            <h3 class="font-bold text-lg text-white">Maik Mendes</h3>
+                            <span class="text-xs text-brand-muted block">Especialista em Visagismo</span>
+                        
+                        </div>
+                    </div>
+
+                    <!-- Barbeiro 3 -->
+                    <div class="barber-card border border-brand-border bg-brand-bgCard rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/40" onclick="selectBarber(3, this)">
+                        <div class="photo-wrapper w-28 h-28 rounded-full overflow-hidden bg-[#22252a] border-2 border-brand-border mb-4 transition-colors">
+                            <img src="static/assets/img/funcionarios/barbeiro-tres-samuca.png" alt="Foto do Barbeiro Rafael Costa" class="w-full h-full object-cover">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="font-bold text-lg text-white">Samuca Costa</h3>
+                            <span class="text-xs text-brand-muted block">Especialista em Barboterapia</span>
                         </div>
                     </div>
 
                 </div>
 
-                <div class="team-description-box">
+                <!-- Painel de Detalhes -->
+                <div class="bg-brand-bgCard border border-brand-border rounded-xl p-6 sm:p-9 min-h-[220px] shadow-lg">
                     
-                    <div class="details-content active" id="details-1">
-                        <span class="role-badge">Fundador & Master Barber</span>
-                        <h2>Carlos Silva</h2>
-                        <span class="experience-tag">10+ anos de experiência</span>
-                        <p class="bio-text">
-                            Especializado nas principais academias internacionais, Carlos domina técnicas avançadas de corte a tesoura, estruturação de cabelo masculino e atendimento personalizado de alto padrão.
+                    <!-- Detalhes Barbeiro 1 -->
+                    <div id="details-1" class="details-content block animate-fade-in space-y-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-gold block">Fundador & Master Barber</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Thiago Silva</h2>
+                        <span class="text-xs text-brand-muted block">10+ anos de experiência</span>
+                        <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                            Especializado nas principais academias internacionais, Barbeiro Master domina técnicas avançadas de corte a tesoura, estruturação de cabelo masculino e atendimento personalizado de alto padrão.
                         </p>
-                        <div class="skills">
-                            <span>Visagismo</span>
-                            <span>Cortes Clássicos</span>
-                            <span>Modelagem de Barba</span>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <span class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Visagismo</span>
+                            <span class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Cortes Clássicos</span>
+                            <span class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Modelagem de Barba</span>
                         </div>
                     </div>
 
-                    <div class="details-content" id="details-2">
-                        <span class="role-badge">Especialista em Estilo</span>
-                        <h2>Lucas Mendes</h2>
-                        <span class="experience-tag">6 anos de experiência</span>
-                        <p class="bio-text">
-                            Com foco em tendências modernas, Lucas é especialista em degradações perfeitas (Fade), alinhamento de contornos e penteados urbanos contemporâneos.
+                    <!-- Detalhes Barbeiro 2 -->
+                    <div id="details-2" class="details-content hidden animate-fade-in space-y-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-gold block">Especialista em Estilo</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Maik Mendes</h2>
+                        <span class="text-xs text-brand-muted block">6 anos de experiência</span>
+                        <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                            Com foco em tendências modernas, Maik é especialista em degradações perfeitas (Fade), alinhamento de contornos e penteados urbanos contemporâneos.
                         </p>
-                        <div class="skills">
-                            <span>Fade / Degradê</span>
-                            <span>Hair Design</span>
-                            <span>Colorimetria</span>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <span class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Fade / Degradê</span>
+                            <span class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Hair Design</span>
+                            <span class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Colorimetria</span>
                         </div>
                     </div>
 
-                    <div class="details-content" id="details-3">
-                        <span class="role-badge">Especialista em Barboterapia</span>
-                        <h2>Rafael Costa</h2>
-                        <span class="experience-tag">8 anos de experiência</span>
-                        <p class="bio-text">
-                            Mestre no tradicional ritual da barba com toalha quente e lâmina afiada. Rafael garante um momento relaxante combinado a cuidados profundos com a pele.
+                    <!-- Detalhes Barbeiro 3 -->
+                    <div id="details-3" class="details-content hidden animate-fade-in space-y-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-gold block">Especialista em Barboterapia</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Samuca Costa</h2>
+                        <span class="text-xs text-brand-muted block">8 anos de experiência</span>
+                        <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                            Mestre no tradicional ritual da barba com toalha quente e lâmina afiada. Samuca garante um momento relaxante combinado a cuidados profundos com a pele.
                         </p>
-                        <div class="skills">
-                            <span>Barboterapia</span>
-                            <span>Tratamento Facial</span>
-                            <span>Navalha Clássica</span>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <span class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Barboterapia</span>
+                            <span class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Tratamento Facial</span>
+                            <span class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Navalha Clássica</span>
                         </div>
                     </div>
 
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <script>
-        function selectBarber(id, cardElement) {
-            document.querySelectorAll('.barber-card').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.details-content').forEach(d => d.classList.remove('active'));
-
-            cardElement.classList.add('active');
-            document.getElementById(`details-${id}`).classList.add('active');
-        }
-    </script>
-    
-    <section id="servicos" class="services">
-        <div class="container">
-            <h2 class="section-title">Nossos Serviços</h2>
-            <p class="section-subtitle">Desde cortes clássicos a tratamentos completos</p>
-
-            <div class="services-grid">
-                <div class="service-card">
-                    <h3>Cabelo</h3>
-                    <p>Cortes personalizados para valorizar o seu estilo e formato de rosto.</p>
-                    <span class="price">R$ 50,00</span>
-                </div>
-                <div class="service-card">
-                    <h3>Barboterapia</h3>
-                    <p>Barba alinhada com toalha quente, massagem e produtos de alta qualidade.</p>
-                    <span class="price">R$ 45,00</span>
-                </div>
-                <div class="service-card">
-                    <h3>Combo TMS</h3>
-                    <p>Corte de cabelo e barboterapia completa para um visual impecável.</p>
-                    <span class="price">R$ 85,00</span>
-                </div>
-                <div class="service-card">
-                    <h3>Sobrancelha & Acabamento</h3>
-                    <p>Alinhamento e simetria para realçar o olhar de forma natural.</p>
-                    <span class="price">R$ 25,00</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="planos" class="plans">
-        <div class="container">
-            <h2 class="section-title">Planos Mensais</h2>
-            <p class="section-subtitle">Mantenha o visual sempre em dia com descontos exclusivos</p>
+    <!-- Seção de Serviços -->
+    <section id="servicos" class="py-20 bg-brand-bgPrimary border-t border-brand-border/30">
+        <div class="max-w-6xl mx-auto px-5">
+            <div class="text-center mb-12">
+                <h2 class="font-title text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-brand-gold">Nossos Serviços</h2>
+                <p class="text-brand-muted text-sm sm:text-base mt-2">Desde cortes clássicos a tratamentos completos</p>
+            </div>
 
-            <div class="plans-grid">
-                <div class="plan-card">
-                    <h3>Plano Corte</h3>
-                    <div class="plan-price">R$ 135<span>/mês</span></div>
-                    <ul>
-                        <li>4 Cortes de Cabelo por mês</li>
-                        <li>10% OFF em produtos</li>
-                        <li>Atendimento VIP</li>
-                    </ul>
-                    <a href="#" class="btn btn-outline">Assinar Plano</a>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-brand-bgCard p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-title text-xl text-white mb-2">Cabelo</h3>
+                        <p class="text-brand-muted text-sm mb-6">Cortes personalizados para valorizar o seu estilo e formato de rosto.</p>
+                    </div>
+                    <span class="text-xl font-bold text-brand-gold">R$ 50,00</span>
                 </div>
 
-                <div class="plan-card featured">
-                    <span class="badge">Mais Pedido</span>
-                    <h3>Plano Combo</h3>
-                    <div class="plan-price">R$ 240<span>/mês</span></div>
-                    <ul>
-                        <li>4 Cortes + 4 Barbas por mês</li>
-                        <li>15% OFF em produtos</li>
-                        <li>Desconto em serviços extras</li>
-                    </ul>
-                    <a href="#" class="btn btn-primary">Garantir Estilo</a>
+                <div class="bg-brand-bgCard p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-title text-xl text-white mb-2">Barboterapia</h3>
+                        <p class="text-brand-muted text-sm mb-6">Barba alinhada com toalha quente, massagem e produtos de alta qualidade.</p>
+                    </div>
+                    <span class="text-xl font-bold text-brand-gold">R$ 45,00</span>
                 </div>
 
-                <div class="plan-card">
-                    <h3>Plano Barba</h3>
-                    <div class="plan-price">R$ 120<span>/mês</span></div>
-                    <ul>
-                        <li>4 Barboterapias por mês</li>
-                        <li>10% OFF em produtos</li>
-                        <li>Atendimento VIP</li>
-                    </ul>
-                    <a href="#" class="btn btn-outline">Assinar Plano</a>
+                <div class="bg-brand-bgCard p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-title text-xl text-white mb-2">Combo TMS</h3>
+                        <p class="text-brand-muted text-sm mb-6">Corte de cabelo e barboterapia completa para um visual impecável.</p>
+                    </div>
+                    <span class="text-xl font-bold text-brand-gold">R$ 85,00</span>
+                </div>
+
+                <div class="bg-brand-bgCard p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-title text-xl text-white mb-2">Sobrancelha & Acabamento</h3>
+                        <p class="text-brand-muted text-sm mb-6">Alinhamento e simetria para realçar o olhar de forma natural.</p>
+                    </div>
+                    <span class="text-xl font-bold text-brand-gold">R$ 25,00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Planos -->
+    <section id="planos" class="py-20 bg-brand-bgSecondary border-t border-brand-border/50">
+        <div class="max-w-6xl mx-auto px-5">
+            <div class="text-center mb-12">
+                <h2 class="font-title text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">Planos Mensais</h2>
+                <p class="text-brand-muted text-sm sm:text-base mt-2">Mantenha o visual sempre em dia com descontos exclusivos</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <!-- Plano 1 -->
+                <div class="bg-brand-bgCard p-8 rounded-xl border border-brand-border text-center flex flex-col justify-between h-full">
+                    <div>
+                        <h3 class="font-title text-2xl text-white mb-3">Plano Corte</h3>
+                        <div class="text-4xl font-bold text-white mb-6">R$ 135<span class="text-sm font-normal text-brand-muted">/mês</span></div>
+                        <ul class="text-sm text-brand-muted divide-y divide-brand-border/60 mb-8">
+                            <li class="py-2.5">4 Cortes de Cabelo por mês</li>
+                            <li class="py-2.5">10% OFF em produtos</li>
+                            <li class="py-2.5">Atendimento VIP</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block w-full py-3 border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black font-semibold text-xs uppercase tracking-wider rounded transition-all">Assinar Plano</a>
+                </div>
+
+                <!-- Plano 2 (Destaque) -->
+                <div class="bg-brand-bgCard p-8 rounded-xl border-2 border-brand-gold text-center relative md:-translate-y-2 shadow-xl shadow-brand-gold/10 flex flex-col justify-between h-full">
+                    <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-gold text-black px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">Mais Pedido</span>
+                    <div>
+                        <h3 class="font-title text-2xl text-white mb-3">Plano Combo</h3>
+                        <div class="text-4xl font-bold text-white mb-6">R$ 240<span class="text-sm font-normal text-brand-muted">/mês</span></div>
+                        <ul class="text-sm text-brand-muted divide-y divide-brand-border/60 mb-8">
+                            <li class="py-2.5">4 Cortes + 4 Barbas por mês</li>
+                            <li class="py-2.5">15% OFF em produtos</li>
+                            <li class="py-2.5">Desconto em serviços extras</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block w-full py-3.5 bg-brand-gold hover:bg-brand-goldHover text-black font-semibold text-xs uppercase tracking-wider rounded transition-all shadow-md">Garantir Estilo</a>
+                </div>
+
+                <!-- Plano 3 -->
+                <div class="bg-brand-bgCard p-8 rounded-xl border border-brand-border text-center flex flex-col justify-between h-full">
+                    <div>
+                        <h3 class="font-title text-2xl text-white mb-3">Plano Barba</h3>
+                        <div class="text-4xl font-bold text-white mb-6">R$ 120<span class="text-sm font-normal text-brand-muted">/mês</span></div>
+                        <ul class="text-sm text-brand-muted divide-y divide-brand-border/60 mb-8">
+                            <li class="py-2.5">4 Barboterapias por mês</li>
+                            <li class="py-2.5">10% OFF em produtos</li>
+                            <li class="py-2.5">Atendimento VIP</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block w-full py-3 border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black font-semibold text-xs uppercase tracking-wider rounded transition-all">Assinar Plano</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Seção Perguntas & Respostas (FAQ) -->
-<section id="faq" class="faq-section">
-    <div class="container">
-        <span class="faq-subtitle">Dúvidas Frequentes</span>
-        <h2 class="faq-title">Perguntas <span>& respostas</span></h2>
-        <p class="faq-caption">Tudo o que você precisa saber antes de vir</p>
+    <section id="faq" class="py-20 bg-black text-white border-t border-brand-border/30">
+        <div class="max-w-4xl mx-auto px-5">
+            <div class="text-center mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-brand-gold block mb-2">Dúvidas Frequentes</span>
+                <h2 class="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-2">
+                    Perguntas <span class="italic font-normal text-brand-gold">& respostas</span>
+                </h2>
+                <p class="text-brand-muted text-sm sm:text-base">Tudo o que você precisa saber antes de vir</p>
+            </div>
 
-        <div class="faq-accordion">
-            <details class="faq-item">
-                <summary class="faq-question">
-                    <span>Preciso agendar ou posso ir sem marcar horário?</span>
-                    <span class="faq-icon">+</span>
-                </summary>
-                <div class="faq-answer">
-                    <p>Recomendamos o agendamento prévio para garantir seu atendimento no horário desejado sem filas. Porém, também atendemos por ordem de chegada conforme a disponibilidade dos barbeiros.</p>
-                </div>
-            </details>
+            <!-- Acordeão FAQ -->
+            <div class="divide-y divide-white/10 border-y border-white/10">
+                
+                <details class="group py-2 transition-colors">
+                    <summary class="flex justify-between items-center py-4 text-base sm:text-lg font-medium text-white cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+                        <span>Preciso agendar ou posso ir sem marcar horário?</span>
+                        <span class="w-7 h-7 rounded-full border border-white/20 text-brand-gold flex items-center justify-center text-lg transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold shrink-0 ml-4">+</span>
+                    </summary>
+                    <div class="pb-4 text-brand-muted text-sm sm:text-base leading-relaxed animate-fade-in">
+                        Recomendamos o agendamento prévio para garantir seu atendimento no horário desejado sem filas. Porém, também atendemos por ordem de chegada conforme a disponibilidade dos barbeiros.
+                    </div>
+                </details>
 
-            <details class="faq-item">
-                <summary class="faq-question">
-                    <span>Quais formas de pagamento são aceitas?</span>
-                    <span class="faq-icon">+</span>
-                </summary>
-                <div class="faq-answer">
-                    <p>Aceitamos Pix, cartões de crédito e débito (todas as bandeiras), além de dinheiro em espécie.</p>
-                </div>
-            </details>
+                <details class="group py-2 transition-colors">
+                    <summary class="flex justify-between items-center py-4 text-base sm:text-lg font-medium text-white cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+                        <span>Quais formas de pagamento são aceitas?</span>
+                        <span class="w-7 h-7 rounded-full border border-white/20 text-brand-gold flex items-center justify-center text-lg transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold shrink-0 ml-4">+</span>
+                    </summary>
+                    <div class="pb-4 text-brand-muted text-sm sm:text-base leading-relaxed animate-fade-in">
+                        Aceitamos Pix, cartões de crédito e débito (todas as bandeiras), além de dinheiro em espécie.
+                    </div>
+                </details>
 
-            <details class="faq-item">
-                <summary class="faq-question">
-                    <span>Atendem crianças e mulheres?</span>
-                    <span class="faq-icon">+</span>
-                </summary>
-                <div class="faq-answer">
-                    <p>Atendemos público infantil masculino a partir de 2 anos com paciência e estrutura adequada. Nosso foco é exclusivamente em cortes e barbearia masculina.</p>
-                </div>
-            </details>
+                <details class="group py-2 transition-colors">
+                    <summary class="flex justify-between items-center py-4 text-base sm:text-lg font-medium text-white cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+                        <span>Atendem crianças e mulheres?</span>
+                        <span class="w-7 h-7 rounded-full border border-white/20 text-brand-gold flex items-center justify-center text-lg transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold shrink-0 ml-4">+</span>
+                    </summary>
+                    <div class="pb-4 text-brand-muted text-sm sm:text-base leading-relaxed animate-fade-in">
+                        Atendemos público infantil masculino a partir de 2 anos com paciência e estrutura adequada. Nosso foco é exclusivamente em cortes e barbearia masculina.
+                    </div>
+                </details>
 
-            <details class="faq-item">
-                <summary class="faq-question">
-                    <span>Os preços da tabela incluem todos os serviços?</span>
-                    <span class="faq-icon">+</span>
-                </summary>
-                <div class="faq-answer">
-                    <p>Cada serviço individual tem seu valor fixo. Combos como Cabelo + Barba possuem valores promocionais dedicados e descritos em nossa tabela.</p>
-                </div>
-            </details>
+                <details class="group py-2 transition-colors">
+                    <summary class="flex justify-between items-center py-4 text-base sm:text-lg font-medium text-white cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+                        <span>Os preços da tabela incluem todos os serviços?</span>
+                        <span class="w-7 h-7 rounded-full border border-white/20 text-brand-gold flex items-center justify-center text-lg transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold shrink-0 ml-4">+</span>
+                    </summary>
+                    <div class="pb-4 text-brand-muted text-sm sm:text-base leading-relaxed animate-fade-in">
+                        Cada serviço individual tem seu valor fixo. Combos como Cabelo + Barba possuem valores promocionais dedicados e descritos em nossa tabela.
+                    </div>
+                </details>
 
-            <details class="faq-item">
-                <summary class="faq-question">
-                    <span>Qual o horário de funcionamento?</span>
-                    <span class="faq-icon">+</span>
-                </summary>
-                <div class="faq-answer">
-                    <p>Atendemos de Segunda a Sábado, das 09h às 20h. Não abrimos aos domingos e feriados nacionais.</p>
-                </div>
-            </details>
+                <details class="group py-2 transition-colors">
+                    <summary class="flex justify-between items-center py-4 text-base sm:text-lg font-medium text-white cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+                        <span>Qual o horário de funcionamento?</span>
+                        <span class="w-7 h-7 rounded-full border border-white/20 text-brand-gold flex items-center justify-center text-lg transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold shrink-0 ml-4">+</span>
+                    </summary>
+                    <div class="pb-4 text-brand-muted text-sm sm:text-base leading-relaxed animate-fade-in">
+                        Atendemos de Segunda a Sábado, das 09h às 20h. Não abrimos aos domingos e feriados nacionais.
+                    </div>
+                </details>
+
+            </div>
         </div>
-    </div>
-</section>
-    <footer class="footer">
-        <div class="container footer-content">
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-bgSecondary py-8 border-t border-brand-border/60">
+        <div class="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-brand-muted">
             <p>&copy; 2026 TMS Barbearia. Todos os direitos reservados.</p>
-            <div class="socials">
-                <a href="#">Instagram</a>
-                <a href="#">WhatsApp</a>
+            <div class="flex items-center gap-6">
+                <a href="#" class="hover:text-brand-gold transition-colors">Instagram</a>
+                <a href="#" class="hover:text-brand-gold transition-colors">WhatsApp</a>
             </div>
         </div>
     </footer>
 
+    <!-- Script Interatividade Barbeiros -->
+    <script>
+        function selectBarber(id, cardElement) {
+            // Remove o estado ativo de todos os cards
+            document.querySelectorAll('.barber-card').forEach(card => {
+                card.classList.remove('border-2', 'border-brand-gold', 'bg-brand-gold/5');
+                card.classList.add('border', 'border-brand-border');
+                
+                const photo = card.querySelector('.photo-wrapper');
+                if (photo) {
+                    photo.classList.remove('border-brand-gold');
+                    photo.classList.add('border-brand-border');
+                }
+            });
+
+            // Esconde todas as descrições
+            document.querySelectorAll('.details-content').forEach(detail => {
+                detail.classList.add('hidden');
+                detail.classList.remove('block');
+            });
+
+            // Aplica o estado ativo ao card clicado
+            cardElement.classList.remove('border', 'border-brand-border');
+            cardElement.classList.add('border-2', 'border-brand-gold', 'bg-brand-gold/5');
+
+            const photoWrapper = cardElement.querySelector('.photo-wrapper');
+            if (photoWrapper) {
+                photoWrapper.classList.remove('border-brand-border');
+                photoWrapper.classList.add('border-brand-gold');
+            }
+
+            // Exibe a descrição do barbeiro selecionado
+            const targetDetail = document.getElementById(`details-${id}`);
+            if (targetDetail) {
+                targetDetail.classList.remove('hidden');
+                targetDetail.classList.add('block');
+            }
+        }
+    </script>
 </body>
 </html>
