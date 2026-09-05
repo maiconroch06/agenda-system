@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TMS Barbearia</title>
+    <!-- Importação obrigatória do CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+
+<body class="min-h-screen w-full bg-brand-bg-primary text-gray-100 font-sans antialiased flex items-center justify-center p-4 sm:p-6 md:p-10">
+
+    <div id="tela-auth" class="w-full max-w-md lg:max-w-xl lg:w-1/2 bg-brand-bg-card border border-brand-border rounded-2xl p-6 sm:p-10 shadow-2xl flex flex-col gap-6">
+        
+        <!-- Logo horizontal da barbearia -->
+        <div class="w-full flex items-center justify-center">
+             {% include "componetization/logo/logo-top-horizontal.html" %}
+        </div> 
+      
+        <!-- Formulário com controle centralizado de fluxo via gap -->
+        <form id="form-login" class="flex flex-col gap-5" novalidate>
+            <div class="flex flex-col">
+                <label for="login-usuario" class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+                    Usuário ou e-mail
+                </label>
+                <input 
+                    type="text" 
+                    id="login-usuario" 
+                    placeholder="Digite seu usuário ou e-mail" 
+                    autocomplete="off"
+                    class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm"
+                >
+                <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-login-usuario"></span>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="login-senha" class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+                    Senha
+                </label>
+                <input 
+                    type="password" 
+                    id="login-senha" 
+                    placeholder="Digite sua senha"
+                    class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm"
+                >
+                <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-login-senha"></span>
+            </div>
+
+            <button 
+                type="button" 
+                class="w-full py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer mt-2" 
+                onclick="fazerLogin()"
+            >
+                Entrar
+            </button>
+        </form>
+
+        <p class="text-center text-sm text-brand-muted">
+            Novo por aqui? <a href="/cadastro" class="text-brand-gold font-semibold hover:underline transition-colors">Faça seu cadastro</a>
+        </p>
+    </div>
+
+    <!-- Script com rota estática Flask -->
+    <script src="{{ url_for('static', filename='js/autenticacao.js') }}"></script>
+</body>
+
+</html>

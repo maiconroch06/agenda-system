@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Agenda System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+
+<body>
+    <div id="tela-auth" class="tela ativa">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <div class="auth-logo__icone">B</div>
+                <span class="auth-logo__nome">BarberSystem</span>
+            </div>
+
+            <form id="form-login" class="form-auth" novalidate>
+                <div class="campo">
+                    <label for="login-usuario">Usuário ou e-mail</label>
+                    <input type="text" id="login-usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off">
+                    <span class="campo__erro" id="erro-login-usuario"></span>
+                </div>
+                <div class="campo">
+                    <label for="login-senha">Senha</label>
+                    <input type="password" id="login-senha" placeholder="Digite sua senha">
+                    <span class="campo__erro" id="erro-login-senha"></span>
+                </div>
+                <button type="button" class="btn-primario" onclick="fazerLogin()">Entrar</button>
+            </form>
+            <p class="registro-caption">
+                Novo por aqui? <a href="/cadastro" class="register-link">Faça seu cadastro</a>
+            </p>
+        </div>
+    </div>
+    <script src="../static/js/autenticacao.js"></script>
+</body>
+
+</html>

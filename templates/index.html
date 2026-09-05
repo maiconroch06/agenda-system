@@ -11,63 +11,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            gold: '#cfa85f',
-                            goldHover: '#b5932a',
-                            bgPrimary: '#0d0e10',
-                            bgSecondary: '#141414',
-                            bgCard: '#16181c',
-                            border: '#272a30',
-                            muted: '#9ca3af',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Montserrat', 'sans-serif'],
-                        title: ['Oswald', 'sans-serif'],
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(6px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.3s ease-in-out forwards',
-                    }
-                }
-            }
-        }
-    </script>
 </head>
-<body class="bg-brand-bgPrimary text-gray-100 font-sans antialiased selection:bg-brand-gold selection:text-black">
-
+<body class="bg-brand-bg-primary text-gray-100 font-sans antialiased selection:bg-brand-gold selection:text-black">
+   
     <!-- Header / Navbar -->
-    <header class="fixed top-0 left-0 w-full z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-[#222222] py-3.5 transition-all">
-        <div class="max-w-6xl mx-auto px-5 flex items-center justify-between">
-            <a href="#" class="shrink-0">
-                <img src="static/assets/img/logos/tms-barbearia-logo-horizontal.png" alt="TMS Barbearia" class="h-10 w-auto object-contain">
-            </a>
-            
-            <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-gray-200">
-                <a href="#home" class="hover:text-brand-gold transition-colors">Home</a>
-                <a href="#equipe" class="hover:text-brand-gold transition-colors">Quem Somos</a>
-                <a href="#servicos" class="hover:text-brand-gold transition-colors">Serviços</a>
-                <a href="#planos" class="hover:text-brand-gold transition-colors">Planos</a>
-                <a href="#faq" class="hover:text-brand-gold transition-colors">FAQ</a>
-            </nav>
-
-            <a href="#agendar" class="px-5 py-2.5 bg-brand-gold hover:bg-brand-goldHover text-black font-semibold text-xs uppercase tracking-wider rounded transition-all duration-300 shadow-md hover:shadow-brand-gold/20">
-                Agendar Horário
-            </a>
-        </div>
-    </header>
+    {% include "componetization/Header/header.html" %}
 
     <!-- Hero Section -->
     <section id="home" class="relative min-h-screen flex items-center justify-center text-center pt-24 pb-16 px-5 bg-cover bg-center" style="background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('hero-bg.jpg');">
@@ -79,7 +27,7 @@
                 Um ambiente moderno e acolhedor com profissionais especializados para valorizar a sua imagem.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                <a href="#agendar" class="w-full sm:w-auto px-8 py-3.5 bg-brand-gold hover:bg-brand-goldHover text-black font-semibold text-sm uppercase tracking-wider rounded transition-all duration-300 shadow-lg hover:scale-105">
+                <a href="#agendar" class="w-full sm:w-auto px-8 py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-semibold text-sm uppercase tracking-wider rounded transition-all duration-300 shadow-lg hover:scale-105">
                     Agendar Agora
                 </a>
                 <a href="#servicos" class="w-full sm:w-auto px-8 py-3.5 border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black font-semibold text-sm uppercase tracking-wider rounded transition-all duration-300 hover:scale-105">
@@ -90,11 +38,11 @@
     </section>
 
     <!-- Seção Nossa Equipe -->
-    <section id="equipe" class="py-20 bg-brand-bgSecondary border-t border-brand-border/50">
+    <section id="equipe" class="py-20 bg-brand-bg-secondary border-t border-brand-border/50">
         <div class="max-w-5xl mx-auto px-5">
             <div class="text-center mb-12">
                 <h2 class="font-title text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">Nossa Equipe</h2>
-                <p class="text-brand-muted text-sm sm:text-base mt-2">Profissionais altamente qualificados para entregar o seu melhor estilo</p>
+                <p class="text-brand-muted text-sm sm:text-base mt-2">Profissionais highly qualificados para entregar o seu melhor estilo</p>
             </div>
 
             <div class="flex flex-col gap-8">
@@ -102,7 +50,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                     
                     <!-- Barbeiro 1 (Ativo por Padrão) -->
-                    <div class="barber-card border-2 border-brand-gold bg-brand-gold/5 bg-brand-bgCard rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1" onclick="selectBarber(1, this)">
+                    <div class="barber-card border-2 border-brand-gold bg-brand-gold/5 bg-brand-bg-card rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1" onclick="selectBarber(1, this)">
                         <div class="photo-wrapper w-28 h-28 rounded-full overflow-hidden bg-[#22252a] border-2 border-brand-gold mb-4 transition-colors">
                              <img src="static/assets/img/funcionarios/barbeiro-master-thiago-silva.png" alt="Foto do Barbeiro Lucas Mendes" class="w-full h-full object-cover">
                         </div>
@@ -113,19 +61,18 @@
                     </div>
 
                     <!-- Barbeiro 2 -->
-                    <div class="barber-card border border-brand-border bg-brand-bgCard rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/40" onclick="selectBarber(2, this)">
+                    <div class="barber-card border border-brand-border bg-brand-bg-card rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/40" onclick="selectBarber(2, this)">
                         <div class="photo-wrapper w-28 h-28 rounded-full overflow-hidden bg-[#22252a] border-2 border-brand-border mb-4 transition-colors">
                             <img src="static/assets/img/funcionarios/barbeiro_dois_maik.png" alt="Foto do Barbeiro Lucas Mendes" class="w-full h-full object-cover">
                         </div>
                         <div class="space-y-1">
                             <h3 class="font-bold text-lg text-white">Maik Mendes</h3>
                             <span class="text-xs text-brand-muted block">Especialista em Visagismo</span>
-                        
                         </div>
                     </div>
 
                     <!-- Barbeiro 3 -->
-                    <div class="barber-card border border-brand-border bg-brand-bgCard rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/40" onclick="selectBarber(3, this)">
+                    <div class="barber-card border border-brand-border bg-brand-bg-card rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/40" onclick="selectBarber(3, this)">
                         <div class="photo-wrapper w-28 h-28 rounded-full overflow-hidden bg-[#22252a] border-2 border-brand-border mb-4 transition-colors">
                             <img src="static/assets/img/funcionarios/barbeiro-tres-samuca.png" alt="Foto do Barbeiro Rafael Costa" class="w-full h-full object-cover">
                         </div>
@@ -138,7 +85,7 @@
                 </div>
 
                 <!-- Painel de Detalhes -->
-                <div class="bg-brand-bgCard border border-brand-border rounded-xl p-6 sm:p-9 min-h-[220px] shadow-lg">
+                <div class="bg-brand-bg-card border border-brand-border rounded-xl p-6 sm:p-9 min-h-[220px] shadow-lg">
                     
                     <!-- Detalhes Barbeiro 1 -->
                     <div id="details-1" class="details-content block animate-fade-in space-y-4">
@@ -191,7 +138,7 @@
     </section>
 
     <!-- Seção de Serviços -->
-    <section id="servicos" class="py-20 bg-brand-bgPrimary border-t border-brand-border/30">
+    <section id="servicos" class="py-20 bg-brand-bg-primary border-t border-brand-border/30">
         <div class="max-w-6xl mx-auto px-5">
             <div class="text-center mb-12">
                 <h2 class="font-title text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-brand-gold">Nossos Serviços</h2>
@@ -199,7 +146,7 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-brand-bgCard p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                <div class="bg-brand-bg-card p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
                     <div>
                         <h3 class="font-title text-xl text-white mb-2">Cabelo</h3>
                         <p class="text-brand-muted text-sm mb-6">Cortes personalizados para valorizar o seu estilo e formato de rosto.</p>
@@ -207,7 +154,7 @@
                     <span class="text-xl font-bold text-brand-gold">R$ 50,00</span>
                 </div>
 
-                <div class="bg-brand-bgCard p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                <div class="bg-brand-bg-card p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
                     <div>
                         <h3 class="font-title text-xl text-white mb-2">Barboterapia</h3>
                         <p class="text-brand-muted text-sm mb-6">Barba alinhada com toalha quente, massagem e produtos de alta qualidade.</p>
@@ -215,7 +162,7 @@
                     <span class="text-xl font-bold text-brand-gold">R$ 45,00</span>
                 </div>
 
-                <div class="bg-brand-bgCard p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                <div class="bg-brand-bg-card p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
                     <div>
                         <h3 class="font-title text-xl text-white mb-2">Combo TMS</h3>
                         <p class="text-brand-muted text-sm mb-6">Corte de cabelo e barboterapia completa para um visual impecável.</p>
@@ -223,7 +170,7 @@
                     <span class="text-xl font-bold text-brand-gold">R$ 85,00</span>
                 </div>
 
-                <div class="bg-brand-bgCard p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                <div class="bg-brand-bg-card p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
                     <div>
                         <h3 class="font-title text-xl text-white mb-2">Sobrancelha & Acabamento</h3>
                         <p class="text-brand-muted text-sm mb-6">Alinhamento e simetria para realçar o olhar de forma natural.</p>
@@ -235,7 +182,7 @@
     </section>
 
     <!-- Seção de Planos -->
-    <section id="planos" class="py-20 bg-brand-bgSecondary border-t border-brand-border/50">
+    <section id="planos" class="py-20 bg-brand-bg-secondary border-t border-brand-border/50">
         <div class="max-w-6xl mx-auto px-5">
             <div class="text-center mb-12">
                 <h2 class="font-title text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">Planos Mensais</h2>
@@ -244,7 +191,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                 <!-- Plano 1 -->
-                <div class="bg-brand-bgCard p-8 rounded-xl border border-brand-border text-center flex flex-col justify-between h-full">
+                <div class="bg-brand-bg-card p-8 rounded-xl border border-brand-border text-center flex flex-col justify-between h-full">
                     <div>
                         <h3 class="font-title text-2xl text-white mb-3">Plano Corte</h3>
                         <div class="text-4xl font-bold text-white mb-6">R$ 135<span class="text-sm font-normal text-brand-muted">/mês</span></div>
@@ -258,7 +205,7 @@
                 </div>
 
                 <!-- Plano 2 (Destaque) -->
-                <div class="bg-brand-bgCard p-8 rounded-xl border-2 border-brand-gold text-center relative md:-translate-y-2 shadow-xl shadow-brand-gold/10 flex flex-col justify-between h-full">
+                <div class="bg-brand-bg-card p-8 rounded-xl border-2 border-brand-gold text-center relative md:-translate-y-2 shadow-xl shadow-brand-gold/10 flex flex-col justify-between h-full">
                     <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-gold text-black px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">Mais Pedido</span>
                     <div>
                         <h3 class="font-title text-2xl text-white mb-3">Plano Combo</h3>
@@ -269,11 +216,11 @@
                             <li class="py-2.5">Desconto em serviços extras</li>
                         </ul>
                     </div>
-                    <a href="#" class="block w-full py-3.5 bg-brand-gold hover:bg-brand-goldHover text-black font-semibold text-xs uppercase tracking-wider rounded transition-all shadow-md">Garantir Estilo</a>
+                    <a href="#" class="block w-full py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-semibold text-xs uppercase tracking-wider rounded transition-all shadow-md">Garantir Estilo</a>
                 </div>
 
                 <!-- Plano 3 -->
-                <div class="bg-brand-bgCard p-8 rounded-xl border border-brand-border text-center flex flex-col justify-between h-full">
+                <div class="bg-brand-bg-card p-8 rounded-xl border border-brand-border text-center flex flex-col justify-between h-full">
                     <div>
                         <h3 class="font-title text-2xl text-white mb-3">Plano Barba</h3>
                         <div class="text-4xl font-bold text-white mb-6">R$ 120<span class="text-sm font-normal text-brand-muted">/mês</span></div>
@@ -358,15 +305,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-brand-bgSecondary py-8 border-t border-brand-border/60">
-        <div class="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-brand-muted">
-            <p>&copy; 2026 TMS Barbearia. Todos os direitos reservados.</p>
-            <div class="flex items-center gap-6">
-                <a href="#" class="hover:text-brand-gold transition-colors">Instagram</a>
-                <a href="#" class="hover:text-brand-gold transition-colors">WhatsApp</a>
-            </div>
-        </div>
-    </footer>
+    {%include "componetization/Footer/footer.html"%}
 
     <!-- Script Interatividade Barbeiros -->
     <script>

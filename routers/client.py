@@ -4,8 +4,7 @@ client = Blueprint('client', __name__, template_folder='templates')
 
 @client.route('/')
 def clientSignUpLogin():
-    return "página inexistente ainda, deve ser colocado por exemplo uma pagina login e/ou cadastro"
-   #return render_template('pages/client/scheduling.html')
+    return render_template('pages/registers/user-login.html')
    
 
 @client.route('/cadastro')
