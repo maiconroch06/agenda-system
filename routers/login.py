@@ -9,3 +9,4 @@ user_login = Blueprint('login', __name__, template_folder='templates')
 @user_login.route('/', methods=['GET'])
 def login():
     return render_template('/login.html')
+

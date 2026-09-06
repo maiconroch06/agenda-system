@@ -13,12 +13,15 @@ from routers.register import user_register
 from routers.login import user_login
 from routers.public import publics
 from routers.client import client
+from routers.manager import manager
+
 
 # ==========================================
 # 3. REGISTRO DOS BLUEPRINTS
 # ==========================================
 app.register_blueprint(user_register, url_prefix='/register')
 app.register_blueprint(user_login, url_prefix='/login')
+app.register_blueprint(manager, url_prefix='/gestor')
 app.register_blueprint(publics)
 app.register_blueprint(client, url_prefix='/cliente')
 

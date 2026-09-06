@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Importação obrigatória do CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+
+   <title>TMS Barbearia - Finalizar cadastro</title>
+</head>
+
+<body
+    class="min-h-screen w-full bg-brand-bg-primary text-gray-100 font-sans antialiased flex items-center justify-center p-4 sm:p-6 md:p-10">
+
+    <!-- ============================================================
+         TELA 3: FINALIZAÇÃO DO CADASTRO
+         ============================================================ -->
+
+    <div id="tela-empresa" class="tela ativa w-full">
+
+        <div
+            class="w-full max-w-5xl mx-auto bg-brand-bg-card border border-brand-border rounded-2xl p-5 sm:p-8 md:p-10 shadow-2xl">
+    <div class="w-full flex items-center justify-center mb-8 ">
+                        {%set logo_class="h-16 md:h-20 lg:h-24"%}
+                        {% include "componetization/logo/logo-top-horizontal.html" %}
+                    </div>
+            <!-- Indicador das etapas -->
+            <div class="w-full flex items-center justify-center mb-10 overflow-x-auto">
+
+            
+                <div class="flex items-center min-w-max">
+
+                    <!-- Etapa 1 -->
+                    <div class="flex items-center gap-2">
+
+                        <span
+                            class="flex items-center justify-center w-8 h-8 rounded-full border border-brand-border text-brand-muted text-sm font-semibold shrink-0">
+                            1
+                        </span>
+
+                        <span
+                            class="text-xs sm:text-sm font-medium text-brand-muted whitespace-nowrap">
+                            Dados do Usuário
+                        </span>
+
+                    </div>
+
+
+                    <!-- Linha -->
+                    <span class="w-8 sm:w-12 md:w-16 h-px bg-brand-border mx-2 sm:mx-3"></span>
+
+
+                    
+
+                    <!-- Linha -->
+                    <span class="w-8 sm:w-12 md:w-16 h-px bg-brand-border mx-2 sm:mx-3"></span>
+
+
+                    <!-- Etapa 3 - Ativa -->
+                    <div class="flex items-center gap-2">
+
+                        <span
+                            class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-gold text-black text-sm font-bold shrink-0">
+                            2
+                        </span>
+
+                        <span
+                            class="text-xs sm:text-sm font-semibold text-brand-gold whitespace-nowrap">
+                            Finalizar cadastro
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Título -->
+            <div class="mb-10">
+
+                <h1 class="text-2xl sm:text-3xl font-bold text-white">
+                    Finalizar o cadastro do usuário
+                </h1>
+
+                <p class="text-sm sm:text-base text-brand-muted mt-2">
+                    Verifique e confirme as informações referentes ao usuário.
+                </p>
+
+            </div>
+
+
+            <!-- Navegação -->
+            <div
+                class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-6 border-t border-brand-border">
+
+                <!-- Voltar -->
+                <a
+                    href="/cliente/cadastro"
+                    class="w-full sm:w-auto px-6 py-3 border border-brand-border rounded-lg text-gray-300 font-semibold text-sm text-center hover:bg-[#111215] hover:text-white transition-colors cursor-pointer">
+
+                    Voltar e corrigir informações
+
+                </a>
+
+
+                <!-- Finalizar -->
+                <a
+                    href="/cliente/agendamentos"
+                    class="w-full sm:w-auto px-6 py-3 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-sm uppercase tracking-wider text-center rounded-lg transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
+
+                    Finalizar Cadastro →
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Aviso -->
+    <div
+        id="aviso"
+        class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50">
+    </div>
+
+
+    <script src="{{ url_for('static', filename='js/cadastroEmpresa.js') }}"></script>
+
+</body>
+
+</html>
+
