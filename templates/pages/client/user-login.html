@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login - TMS Barbearia</title>
+        <title>TMS Barbearia - Login</title>
         <!-- Importação obrigatória do CSS -->
         <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     </head>
@@ -21,12 +21,13 @@
                 {% include "componetization/logo/logo-top-horizontal.html" %}
             </div>
 
+            <h1 class="text-center font-bold text-2xl w-full my-6"> Login do cliente</h1>
             <!-- Formulário com controle centralizado de fluxo via gap -->
-            <form id="form-login" class="flex flex-col gap-5" action="/gestor/painel-administrativo" novalidate>
+            <form id="form-login" class="flex flex-col gap-5" action="/cliente/agendamentos" method="post" novalidate>
                 <div class="flex flex-col">
                     <label for="login-usuario"
-                        class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
-                        Usuário ou e-mail
+                        class="text-xs sm:text-sm font-semibold text-gray-300 mb-2  tracking-wider">
+                        E-mail
                     </label>
                     <input type="text" id="login-usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off"
                         class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
@@ -35,7 +36,7 @@
 
                 <div class="flex flex-col">
                     <label for="login-senha"
-                        class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+                        class="text-xs sm:text-sm font-semibold text-gray-300 mb-2  tracking-wider">
                         Senha
                     </label>
                     <input type="password" id="login-senha" placeholder="Digite sua senha"
@@ -44,18 +45,23 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer mt-2">
+                    class="w-full py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer mt-2"
+                    >
                     Entrar
                 </button>
             </form>
-            <div class="text-center text-sm text-brand-muted mt-10">
-                <a href="/" class=" text-brand-gold font-semibold hover:underline transition-colors">
-                    Voltar a página inicial</a>
+            <div
+                class=" flex  flex-wrap  md:flex-nowrap items-center  justify-center text-center text-sm text-brand-muted mt-10 ">
+                <p class="registro-caption md:mr-4">
+                    Novo por aqui? </p>
+                <a href="/cliente/cadastro" class="text-brand-gold font-semibold hover:underline transition-colors">
+                    Faça seu
+                    cadastro</a>
             </div>
         </div>
 
         <!-- Script com rota estática Flask -->
-        <script src="{{ url_for('static', filename='js/autenticacao.js') }}"></script>
+        <script src="../static/js/autenticacao.js"></script>
     </body>
 
 </html>

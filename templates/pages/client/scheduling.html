@@ -3,30 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamento de Cortes</title>
+     <title>TMS Barbearia - Agendamentos</title>
     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
 </head>
 <body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-[#0f6e56] selection:text-white">
 
-    <!-- TOPBAR -->
-    <header class="sticky top-0 z-30 flex items-center justify-between px-5 py-3 bg-[#232220] border-b border-[#38362f]">
-        <div class="flex items-center gap-3">
-            <img 
-                src="{{ url_for('static', filename='assets/img/logos/barbearia-dark.png') }}" 
-                alt="logo-barbearia"
-                class="w-[50px] h-[50px] object-contain"
-            >
-            <div class="font-medium text-[16px] text-[#f1efe8]">Barbearia do Zé</div>
-        </div>
-        <button 
-            class="h-10 px-4 rounded-[10px] border border-[#4a473f] bg-transparent text-[#f1efe8] text-[14px] font-medium cursor-pointer transition-colors hover:bg-[#38362f] flex items-center gap-2" 
-            id="btn-historico"
-        >
-            <i class="botao historico"></i>
-            Meus Agendamentos
-        </button>
-    </header>
+     <!-- logo componente reutilização-->
+    {% include "componetization/Header/header-clients.html" %}
 
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="max-w-[800px] mx-auto px-4 pt-6 pb-24">
@@ -103,7 +87,7 @@
             </form> -->
         </section>
 
-        <!-- PAINEL HISTÓRICO -->
+        <!-- PAINEL AGENDAMENTOS - TODOS OS HISTORICOS -->
         <section id="painel-historico" hidden>
             <h1 class="text-[1.3rem] font-medium text-[#f1efe8] mb-1">Meus Agendamentos</h1>
             <p class="text-[14px] text-[#888780] mb-4">Consulte o histórico dos seus agendamentos anteriores</p>
@@ -150,23 +134,51 @@
         </div>
     </div>
 
+  
     <!-- NAVEGAÇÃO FIXA INFERIOR -->
-    <nav class="fixed bottom-0 left-0 right-0 flex justify-between gap-3 p-3 px-4 bg-[#232220] border-t border-[#38362f] z-20" id="nav-etapa">
-        <button 
-            onclick="voltarEtapa()" 
-            id="btn-voltar" 
-            class="flex-1 h-[44px] rounded-[10px] border border-[#4a473f] bg-transparent text-[#f1efe8] text-[14px] font-medium cursor-pointer transition-all hover:bg-[#464441] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-            Voltar
-        </button>
-        <button 
-            onclick="avancarEtapa()" 
-            id="btn-continuar" 
-            class="flex-1 h-[44px] rounded-[10px] border border-[#f1efe8] bg-[#f1efe8] text-[#161513] text-[14px] font-medium cursor-pointer transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-            Continuar
-        </button>
-    </nav>
+<!-- NAVEGAÇÃO -->
+<!-- NAVEGAÇÃO -->
+<nav
+    id="nav-etapa"
+    class="flex flex-col-reverse sm:flex-row gap-3 mt-8 pt-6 border-t border-brand-border">
+
+    <button
+        onclick="voltarEtapa()"
+        id="btn-voltar"
+        class="w-full sm:flex-1 h-11 rounded-lg
+               border border-brand-border
+               bg-transparent
+               text-gray-300
+               text-sm font-semibold
+               cursor-pointer
+               transition-all duration-300
+               hover:bg-[#111215]
+               hover:text-white
+               active:scale-[0.98]
+               disabled:opacity-40
+               disabled:cursor-not-allowed">
+        Voltar
+    </button>
+
+    <button
+        onclick="avancarEtapa()"
+        id="btn-continuar"
+        class="w-full sm:flex-1 h-11 rounded-lg
+               bg-brand-gold
+               hover:bg-brand-gold-hover
+               text-black
+               text-sm font-bold
+               cursor-pointer
+               transition-all duration-300
+               shadow-md
+               hover:scale-[1.02]
+               active:scale-[0.98]
+               disabled:opacity-40
+               disabled:cursor-not-allowed">
+        Continuar
+    </button>
+
+</nav>
 
     <!-- TOAST NOTIFICAÇÃO -->
     <div 
