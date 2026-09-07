@@ -211,12 +211,13 @@ function abrirHistorico() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function voltarParaAgendamento() {
+
+    function voltarParaAgendamento() {
     els.painelHistorico.hidden = true;
     els.etapa.hidden = false;
     els.navEtapa.hidden = false;
     mostrarPainel(estado.etapaAtual);
-}
+    }
 
 function carregarHistorico() {
     const historico = historicoCortes;

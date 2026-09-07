@@ -9,7 +9,7 @@ user_register = Blueprint('register', __name__, template_folder='templates')
 
 @user_register.route('/', methods=['GET'])
 def register_User_get():
-    return render_template('pages/register/user-register.html')
+    return render_template('pages/register/client-register.html')
 
 @user_register.route('/', methods=['POST'])
 def register_User_post():
