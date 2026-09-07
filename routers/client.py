@@ -9,15 +9,15 @@ def clientSource():
  
 @client.route('/login')
 def clientLogin():
-    return render_template('pages/client/user-login.html')
+    return render_template('pages/client/client-login.html')
    
 @client.route('/cadastro')
 def clientRegister():
-    return render_template('pages/client/user-register.html')
+    return render_template('pages/client/client-register.html')
 
 @client.route('/cadastro/finalizacao', methods=['GET','POST'])
 def clientRegisterFinish():
-    return render_template('pages/client/user-finish-register.html')
+    return render_template('pages/client/finish-register.html')
    
 @client.route('/agendamento/servicos', methods=['GET','POST'])
 def clientAgendamentoServicos():
