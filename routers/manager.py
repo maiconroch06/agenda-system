@@ -14,6 +14,6 @@ def managerEmployee():
 def managerLogin():
     return render_template('pages/manager/manager-login.html')
 
-@manager.route('/painel-administrativo')
+@manager.route('/painel')
 def managerDashBoard():
     return render_template('pages/manager/manager-panel.html')
