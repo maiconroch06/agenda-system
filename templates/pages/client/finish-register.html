@@ -93,27 +93,22 @@
 
 
             <!-- Navegação -->
-            <div
-                class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-6 border-t border-brand-border">
+            <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-6 border-t border-brand-border">
 
-                <!-- Voltar -->
-                <a
-                    href="/cliente/cadastro"
+                <!-- Voltar (Fica na esquerda) -->
+                <a href="/cliente/cadastro"
                     class="w-full sm:w-auto px-6 py-3 border border-brand-border rounded-lg text-gray-300 font-semibold text-sm text-center hover:bg-[#111215] hover:text-white transition-colors cursor-pointer">
-
                     Voltar e corrigir informações
-
                 </a>
 
-
-                <!-- Finalizar -->
-                <a
-                    href="/cliente/agendamentos"
-                    class="w-full sm:w-auto px-6 py-3 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-sm uppercase tracking-wider text-center rounded-lg transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
-
-                    Finalizar Cadastro →
-
-                </a>
+                <!-- Finalizar (Fica na direita) -->
+                <!-- 🔥 Removido w-full e justify-end, adicionado w-full sm:w-auto para respeitar a div pai -->
+                <form action="{{ url_for('cliente.clientRegisterFinish') }}" method="POST" class="w-full sm:w-auto">
+                    <button type="submit"
+                        class="w-full sm:w-auto px-6 py-3 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-sm uppercase tracking-wider text-center rounded-lg transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
+                        Finalizar Cadastro →
+                    </button>
+                </form>
 
             </div>
 

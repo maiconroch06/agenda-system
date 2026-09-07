@@ -23,13 +23,23 @@
 
             <h1 class="text-center font-bold text-2xl w-full my-6"> Login do cliente</h1>
             <!-- Formulário com controle centralizado de fluxo via gap -->
-            <form id="form-login" class="flex flex-col gap-5" action="/cliente/agendamentos" method="post" novalidate>
+            <form id="form-login" class="flex flex-col gap-5" action="/cliente/login" method="post" novalidate>
+                <!-- Mensagem de Erro -->
+                {% if erro %}
+                    <div class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
+                        {{ erro }}
+                    </div>
+                {% endif %}
+
                 <div class="flex flex-col">
                     <label for="login-usuario"
                         class="text-xs sm:text-sm font-semibold text-gray-300 mb-2  tracking-wider">
                         E-mail
                     </label>
-                    <input type="text" id="login-usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off"
+
+                    <!-- Valor do input em produção -->
+                    <!-- value="{{ email_antigo if email_antigo }} -->
+                    <input type="text" id="login-usuario" name="email" placeholder="Digite seu usuário ou e-mail" autocomplete="off" value="{{ email_antigo | default('emaildoproprietario@gmail.com') }}"
                         class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
                     <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-login-usuario"></span>
                 </div>
@@ -39,7 +49,7 @@
                         class="text-xs sm:text-sm font-semibold text-gray-300 mb-2  tracking-wider">
                         Senha
                     </label>
-                    <input type="password" id="login-senha" placeholder="Digite sua senha"
+                    <input type="password" id="login-senha" name="senha" placeholder="Digite sua senha" value="*************"
                         class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
                     <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-login-senha"></span>
                 </div>

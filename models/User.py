@@ -1,178 +1,74 @@
-import sqlite3
-from contextlib import contextmanager
-from flask import current_app
+from database import db
 
+class User(db.Model):
+    __tablename__ = 'usuarios'
+    
+    # 1. Mapeamento das Colunas no MySQL (Sem CPF)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nome = db.Column(db.String(50), nullable=False)
+    telefone = db.Column(db.String(15))
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    senha_hash = db.Column(db.String(255), nullable=False)
+    foto_path = db.Column(db.String(255))
 
-class User:
-    # CONSTRUTOR FLEXÍVEL: CPF no final e opcional
-    def __init__(self, nome, sobrenome, telefone, email, senha, foto, cpf=None):
-        self.cpf = cpf
+    # Relacionamento virtual apontando para a classe Address
+    enderecos = db.relationship('Address', backref='usuario', lazy=True, cascade="all, delete-orphan")
+
+    # 2. Construtor Ajustado para os dados do formulário (Sem CPF)
+    def __init__(self, nome, telefone, email, senha, foto):
         self.nome = nome
-        self.sobrenome = sobrenome
         self.telefone = telefone
         self.email = email
-        self.senha = senha
-        self.foto = foto
+        self.senha_hash = senha  
+        self.foto_path = foto    
 
+    # 3. Serialização para a Sessão / Respostas JSON
     def to_dict(self):
         return {
-            'cpf': self.cpf,
+            'id': self.id, 
             'nome': self.nome,
-            'sobrenome': self.sobrenome,
             'telefone': self.telefone,
             'email': self.email,
-            'senha': self.senha,
-            'foto': self.foto
+            'senha': self.senha_hash,  
+            'foto_path': self.foto_path,
         }
 
     # ============================================================
-    # GERENCIADOR DE CONEXÃO CENTRALIZADO
+    # MÉTODOS CRUD OFICIAIS (APENAS POR ID E E-MAIL)
     # ============================================================
 
-    @classmethod
-    @contextmanager
-    def abrir_banco(cls):
-        db_path = current_app.config['DATABASE']
-        conexao = sqlite3.connect(db_path, check_same_thread=False)
-        conexao.row_factory = sqlite3.Row
-        cursor = conexao.cursor()
-        try:
-            yield cursor  
-            conexao.commit()  
-        except sqlite3.IntegrityError:
-            conexao.rollback()  
-            raise
-        finally:
-            conexao.close()  
-
-    # ============================================================
-    # CREATE
-    # ============================================================
-
+    # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
     def salvar(self):
-        with self.abrir_banco() as cursor:
-            cursor.execute(
-                '''
-                INSERT INTO usuarios (
-                    cpf, nome, sobrenome, telefone, email, senha_hash, foto_path
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                ''',
-                (self.cpf, self.nome, self.sobrenome, self.telefone, self.email, self.senha, self.foto)
-            )
-            return self.cpf
+        db.session.add(self)
+        db.session.commit()
+        return self.id 
 
-    # ============================================================
-    # READ - BUSCAR POR CPF
-    # ============================================================
-
+    # READ - Busca o usuário diretamente pela Chave Primária (id)
     @classmethod
-    def buscar_por_cpf(cls, cpf):
-        with cls.abrir_banco() as cursor:
-            cursor.execute(
-                '''
-                SELECT cpf, nome, sobrenome, telefone, email, senha_hash, foto_path
-                FROM usuarios WHERE cpf = ?
-                ''',
-                (cpf,)
-            )
-            usuario = cursor.fetchone()
-            if usuario is None:
-                return None
-                
-            # CORREÇÃO: Usando argumentos explicitamente nomeados para evitar desalinhamento
-            return cls(
-                nome=usuario['nome'],
-                sobrenome=usuario['sobrenome'],
-                telefone=usuario['telefone'],
-                email=usuario['email'],
-                senha=usuario['senha_hash'],
-                foto=usuario['foto_path'],
-                cpf=usuario['cpf']
-            )
+    def buscar_por_id(cls, id):
+        return db.session.get(cls, id)
 
-    # ============================================================
-    # READ - BUSCAR POR E-MAIL
-    # ============================================================
-
+    # READ - Busca por E-mail (Essencial para a rota de Login posterior)
     @classmethod
     def buscar_por_email(cls, email):
-        with cls.abrir_banco() as cursor:
-            cursor.execute(
-                '''
-                SELECT cpf, nome, sobrenome, telefone, email, senha_hash, foto_path
-                FROM usuarios WHERE email = ?
-                ''',
-                (email,)
-            )
-            usuario = cursor.fetchone()
-            if usuario is None:
-                return None
+        return cls.query.filter_by(email=email).first()
 
-            # CORREÇÃO: Usando argumentos explicitamente nomeados
-            return cls(
-                nome=usuario['nome'],
-                sobrenome=usuario['sobrenome'],
-                telefone=usuario['telefone'],
-                email=usuario['email'],
-                senha=usuario['senha_hash'],
-                foto=usuario['foto_path'],
-                cpf=usuario['cpf']
-            )
-
-    # ============================================================
-    # READ - LISTAR TODOS
-    # ============================================================
-
+    # READ - Lista todos os usuários por ordem alfabética
     @classmethod
     def listar_todos(cls):
-        with cls.abrir_banco() as cursor:
-            cursor.execute(
-                '''
-                SELECT cpf, nome, sobrenome, telefone, email, senha_hash, foto_path
-                FROM usuarios ORDER BY nome ASC
-                '''
-            )
-            usuarios = cursor.fetchall()
-            
-            # CORREÇÃO: Alinhando os parâmetros nomeados na listagem por list comprehension
-            return [
-                cls(
-                    nome=u['nome'],
-                    sobrenome=u['sobrenome'],
-                    telefone=u['telefone'],
-                    email=u['email'],
-                    senha=u['senha_hash'],
-                    foto=u['foto_path'],
-                    cpf=u['cpf']
-                ) for u in usuarios
-            ]
+        return cls.query.order_by(cls.nome.asc()).all()
 
-    # ============================================================
-    # UPDATE
-    # ============================================================
-
+    # UPDATE - Confirma as alterações feitas no objeto
     def atualizar(self):
-        if not self.cpf:
-            return False
+        db.session.commit()
+        return True
 
-        with self.abrir_banco() as cursor:
-            cursor.execute(
-                '''
-                UPDATE usuarios
-                SET nome = ?, sobrenome = ?, telefone = ?, email = ?, senha_hash = ?, foto_path = ?
-                WHERE cpf = ?
-                ''',
-                (self.nome, self.sobrenome, self.telefone, self.email, self.senha, self.foto, self.cpf)
-            )
-            return cursor.rowcount > 0
-
-    # ============================================================
-    # DELETE
-    # ============================================================
-
+    # DELETE - Remove o usuário do banco usando o ID
     @classmethod
-    def excluir_por_cpf(cls, cpf):
-        with cls.abrir_banco() as cursor:
-            cursor.execute('DELETE FROM usuarios WHERE cpf = ?', (cpf,))
-            return cursor.rowcount > 0
+    def excluir_por_id(cls, id):
+        usuario = cls.buscar_por_id(id)
+        if usuario:
+            db.session.delete(usuario)
+            db.session.commit()
+            return True
+        return False
