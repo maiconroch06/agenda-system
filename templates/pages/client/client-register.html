@@ -79,9 +79,13 @@
                         </p>
                     </div>
 
-
+                        {% if erro %}
+                            <div class="w-full my-12 rounded-lg bg-red-600 border border-red-600 px-4 py-3 text-sm text-white">
+                                {{ erro }}
+                            </div>
+                        {% endif %}
                     <!-- Formulário -->
-                    <form id="form-empresa" action="/cliente/cadastro/finalizacao" method="post" enctype="multipart/form-data" novalidate
+                    <form id="form-empresa" action="/cliente/cadastro/realizar" method="post" enctype="multipart/form-data" novalidate
                         class="flex flex-col gap-5">
 
                         <!-- Campos principais -->
