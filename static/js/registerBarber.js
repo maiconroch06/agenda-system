@@ -144,7 +144,7 @@ async function addBarber() {
     const nome = els.nome?.value.trim();
     const email = els.email?.value.trim();
     const telefone = els.telefone?.value.trim();
-    const descricao = els.descricao?.value.trim() || ""; // Agora é opcional
+    const descricao = els.descricao?.value.trim() || "";
     
     // Campos de endereço
     const cep = els.cep?.value.trim() || "";
@@ -193,7 +193,7 @@ function renderizarCardsProfissionais(lista = barbers) {
     if (!els.container) return;
 
     if (lista.length === 0) {
-        els.container.innerHTML = <p class="col-span-full text-center text-[14px] text-[#888780] py-6" id="vazia-profissionais">Nenhum barbeiro adicionado ainda.</p>;
+        els.container.innerHTML = `<p class="col-span-full text-center text-[14px] text-[#888780] py-6" id="vazia-profissionais">Nenhum barbeiro adicionado ainda.</p>`;
         if (els.vazia) els.vazia.classList.remove("hidden");
         return;
     }
@@ -229,7 +229,6 @@ function renderizarCardsProfissionais(lista = barbers) {
     `).join("");
 }
 
-// Já estava no seu código, acionada pelo botão de "Remover" no card gerado acima
 function removeBarber(id) {
     barbers = barbers.filter(p => p.id !== id);
     salvarEstado();
