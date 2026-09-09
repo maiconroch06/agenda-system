@@ -134,51 +134,48 @@
         </div>
     </div>
 
-  
     <!-- NAVEGAÇÃO FIXA INFERIOR -->
-<!-- NAVEGAÇÃO -->
-<!-- NAVEGAÇÃO -->
-<nav
-    id="nav-etapa"
-    class="flex flex-col-reverse sm:flex-row gap-3 mt-8 pt-6 border-t border-brand-border">
+    <nav
+        id="nav-etapa"
+        class="fixed bottom-0 left-0 right-0 flex justify-between gap-3 p-3 px-4 bg-[#232220] border-t border-[#38362f] z-20">
 
-    <button
-        onclick="voltarEtapa()"
-        id="btn-voltar"
-        class="w-full sm:flex-1 h-11 rounded-lg
-               border border-brand-border
-               bg-transparent
-               text-gray-300
-               text-sm font-semibold
-               cursor-pointer
-               transition-all duration-300
-               hover:bg-[#111215]
-               hover:text-white
-               active:scale-[0.98]
-               disabled:opacity-40
-               disabled:cursor-not-allowed">
-        Voltar
-    </button>
+        <button
+            onclick="voltarEtapa()"
+            id="btn-voltar"
+            class="w-full sm:flex-1 h-11 rounded-lg
+                border border-brand-border
+                bg-transparent
+                text-gray-300
+                text-sm font-semibold
+                cursor-pointer
+                transition-all duration-300
+                hover:bg-[#111215]
+                hover:text-white
+                active:scale-[0.98]
+                disabled:opacity-40
+                disabled:cursor-not-allowed">
+            Voltar
+        </button>
 
-    <button
-        onclick="avancarEtapa()"
-        id="btn-continuar"
-        class="w-full sm:flex-1 h-11 rounded-lg
-               bg-brand-gold
-               hover:bg-brand-gold-hover
-               text-black
-               text-sm font-bold
-               cursor-pointer
-               transition-all duration-300
-               shadow-md
-               hover:scale-[1.02]
-               active:scale-[0.98]
-               disabled:opacity-40
-               disabled:cursor-not-allowed">
-        Continuar
-    </button>
+        <button
+            onclick="avancarEtapa()"
+            id="btn-continuar"
+            class="w-full sm:flex-1 h-11 rounded-lg
+                bg-brand-gold
+                hover:bg-brand-gold-hover
+                text-black
+                text-sm font-bold
+                cursor-pointer
+                transition-all duration-300
+                shadow-md
+                hover:scale-[1.02]
+                active:scale-[0.98]
+                disabled:opacity-40
+                disabled:cursor-not-allowed">
+            Continuar
+        </button>
 
-</nav>
+    </nav>
 
     <!-- TOAST NOTIFICAÇÃO -->
     <div 

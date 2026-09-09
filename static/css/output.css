@@ -276,11 +276,17 @@
   .top-3 {
     top: calc(var(--spacing) * 3);
   }
+  .right-0 {
+    right: 0px;
+  }
   .right-3 {
     right: calc(var(--spacing) * 3);
   }
   .right-4 {
     right: calc(var(--spacing) * 4);
+  }
+  .bottom-0 {
+    bottom: 0px;
   }
   .bottom-4 {
     bottom: calc(var(--spacing) * 4);
@@ -1600,6 +1606,9 @@
     }
     .hover\:bg-\[\#232220\]:hover {
       background-color: #232220;
+    }
+    .hover\:bg-\[\#464441\]:hover {
+      background-color: #464441;
     }
     .hover\:bg-brand-gold:hover {
       background-color: var(--color-brand-gold);
