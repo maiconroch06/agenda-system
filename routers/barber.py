@@ -12,4 +12,4 @@ def barberLogin():
 
 @barber.route('/painel')
 def barberPanel():
-    return render_template('pages/barber/barber-panel.html')
+    return render_template('pages/barber/barber-panel-restrict.html')

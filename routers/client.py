@@ -17,7 +17,7 @@ def clientRegister():
 
 @client.route('/cadastro/finalizacao', methods=['GET','POST'])
 def clientRegisterFinish():
-    return render_template('pages/client/finish-register.html')
+    return render_template('pages/client/finish-register-restrict.html')
    
 @client.route('/agendamento/servicos', methods=['GET','POST'])
 def clientAgendamentoServicos():
@@ -25,5 +25,5 @@ def clientAgendamentoServicos():
 
 @client.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():
-   return render_template('pages/client/scheduling.html')
+   return render_template('pages/client/scheduling-restrict.html')
 
