@@ -3,39 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>TMS Barbearia - Agendamentos</title>
+    <title>TMS Barbearia - Agendamentos</title>
     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
 </head>
 <body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-[#0f6e56] selection:text-white">
 
-     <!-- logo componente reutilização-->
-    {% include "componetization/Header/header-clients.html" %}
+    <!-- Header Componente -->
+    <header class="sticky top-0 z-30 flex items-center justify-between px-5 py-3 bg-[#232220] border-b border-[#38362f]">
+            <!-- logo componente reutilização-->
+            {% include "componetization/logo/logo-top-horizontal.html" %}
+        <div class="flex justify-end mb-4">
+            <button 
+                id="btn-toggle-historico"
+                onclick="alternarHistorico()"
+                class="h-9 px-3.5 rounded-lg border border-brand-border bg-[#1c1c1c] text-[#f1efe8] text-xs sm:text-sm font-medium cursor-pointer transition-all hover:bg-[#282724] hover:border-brand-gold/50 flex items-center gap-2 shadow-sm"
+            >
+                <span id="texto-btn-historico">Meus Agendamentos</span>
+            </button>
+        </div>
+    </header>
 
     <!-- CONTEÚDO PRINCIPAL -->
-    <main class="max-w-[800px] mx-auto px-2 pt-6 pb-24">
+    <main class="max-w-[800px] mx-auto px-4 pt-4 pb-24">
 
         <!-- STEPPER (PASSO A PASSO) -->
         <ol class="flex mb-8 relative isolate" id="etapa">
-            <!-- Passo 1 -->
             <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
                 <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#085041] border border-[#0f6e56] flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">1</span>
                 <span class="text-[#f1efe8] font-medium etapa__label">Serviço</span>
             </li>
-
-            <!-- Passo 2 -->
             <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
                 <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">2</span>
                 <span class="etapa__label">Barbeiro</span>
             </li>
-
-            <!-- Passo 3 -->
             <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
                 <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">3</span>
                 <span class="etapa__label">Horário</span>
             </li>
-
-            <!-- Passo 4 -->
             <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
                 <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">4</span>
                 <span class="etapa__label">Confirmação</span>
@@ -60,48 +65,22 @@
         <section id="painel-3" hidden>
             <h1 class="text-[1.3rem] font-medium text-[#f1efe8] mb-1">Escolha um horário</h1>
             <p class="text-[14px] text-[#888780] mb-4">Selecione um dia e depois escolha um horário disponível</p>
-            
-            <!-- Abas dos Dias -->
-            <div class="flex gap-2.5 overflow-x-auto mb-6 pb-2" id="abas-dias"></div>
-            
-            <!-- Grade de Horários -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5" id="grade-horarios"></div>
+            <div class="flex gap-2.5 overflow-x-auto mb-6 pt-1.5 pb-2" id="abas-dias"></div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5 p-1" id="grade-horarios"></div>
         </section>
 
-        <!-- PAINEL 4: CONFIRMAÇÃO & FORMULÁRIO -->
+        <!-- PAINEL 4: CONFIRMAÇÃO -->
         <section id="painel-4" hidden>
             <h1 class="text-[1.3rem] font-medium text-[#f1efe8] mb-1">Confirme seu agendamento:</h1>
-            <!-- <p class="text-[14px] text-[#888780] mb-4">Revise os dados e informe seus dados de contato</p> -->
-
-            <!-- Card de Resumo Estilizado estilo Tabela/Linhas -->
             <div class="bg-[#1c1c1c] border border-[#38362f] rounded-xl p-5 mb-6 shadow-md" id="resumo"></div>
-
-            <!-- <form class="flex flex-col gap-4 relative z-20" id="formulario" novalidate>
-                <div class="flex flex-col gap-1.5">
-                    <label class="flex items-start gap-3 text-[14px] text-[#888780] cursor-pointer select-none">
-                        <input type="checkbox" id="inp-consentimento" class="w-4 h-4 mt-0.5 rounded border-[#4a473f] bg-[#232220] accent-[#0f6e56] shrink-0">
-                        <span>Concordo com o uso dos meus dados para realizar este agendamento</span>
-                    </label>
-                    <span class="text-[12px] text-[#f0997b] min-h-[14px]" id="erro-consentimento"></span>
-                </div>
-            </form> -->
         </section>
 
-        <!-- PAINEL AGENDAMENTOS - TODOS OS HISTORICOS -->
+        <!-- PAINEL AGENDAMENTOS - HISTÓRICO -->
         <section id="painel-historico" hidden>
             <h1 class="text-[1.3rem] font-medium text-[#f1efe8] mb-1">Meus Agendamentos</h1>
             <p class="text-[14px] text-[#888780] mb-4">Consulte o histórico dos seus agendamentos anteriores</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5" id="lista-historico"></div>
-            
-            <div class="mt-6">
-                <button 
-                    class="h-10 px-4 rounded-[10px] border border-[#4a473f] bg-transparent text-[#f1efe8] text-[14px] font-medium cursor-pointer transition-colors hover:bg-[#38362f]" 
-                    onclick="voltarParaAgendamento()"
-                >
-                    &larr; Voltar ao Agendamento
-                </button>
-            </div>
         </section>
 
         <!-- PAINEL SUCESSO -->
@@ -142,36 +121,14 @@
         <button
             onclick="voltarEtapa()"
             id="btn-voltar"
-            class="w-full sm:flex-1 h-11 rounded-lg
-                border border-brand-border
-                bg-transparent
-                text-gray-300
-                text-sm font-semibold
-                cursor-pointer
-                transition-all duration-300
-                hover:bg-[#111215]
-                hover:text-white
-                active:scale-[0.98]
-                disabled:opacity-40
-                disabled:cursor-not-allowed">
+            class="w-full sm:flex-1 h-11 rounded-lg border border-brand-border bg-transparent text-gray-300 text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-[#111215] hover:text-white active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed">
             Voltar
         </button>
 
         <button
             onclick="avancarEtapa()"
             id="btn-continuar"
-            class="w-full sm:flex-1 h-11 rounded-lg
-                bg-brand-gold
-                hover:bg-brand-gold-hover
-                text-black
-                text-sm font-bold
-                cursor-pointer
-                transition-all duration-300
-                shadow-md
-                hover:scale-[1.02]
-                active:scale-[0.98]
-                disabled:opacity-40
-                disabled:cursor-not-allowed">
+            class="w-full sm:flex-1 h-11 rounded-lg bg-brand-gold hover:bg-brand-gold-hover text-black text-sm font-bold cursor-pointer transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed">
             Continuar
         </button>
 
@@ -186,6 +143,3 @@
     <script src="{{ url_for('static', filename='js/scheduling.js') }}"></script>
 </body>
 </html>
-
-
-

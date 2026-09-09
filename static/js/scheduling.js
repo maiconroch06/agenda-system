@@ -2,7 +2,7 @@
    DADOS
    ============================================================ */
 
-   const SERVICOS = [
+const SERVICOS = [
     { id: "infantil",       name: "Corte Infantil",      duration: 30, price: 20, icon: "../static/assets/img/cortes/corte-infantil.jpeg",        alt: "corte-infantil" },
     { id: "social",         name: "Corte Social",        duration: 30, price: 18, icon: "../static/assets/img/cortes/corte-social.jpeg",           alt: "corte-social" },
     { id: "social-barba",   name: "Social & Barba",    duration: 50, price: 30, icon: "../static/assets/img/cortes/corte-social&barba.jpeg",     alt: "corte-social-barba" },
@@ -13,10 +13,10 @@
 ];
 
 const PROFISSIONAIS = [
-    { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "" },
-    { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../static/assets/img/funcionarios/thiago.jpg", alt: "thiago" },
-    { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../static/assets/img/funcionarios/samuel.jpg", alt: "samuel" },
-    { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../static/assets/img/funcionarios/maik.png",   alt: "maik" },
+    { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "⇄" },
+    { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../static/assets/img/funcionarios/barbeiro-master-thiago-silva.png", alt: "thiago" },
+    { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../static/assets/img/funcionarios/barbeiro-tres-samuca.png", alt: "samuel" },
+    { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../static/assets/img/funcionarios/barbeiro_dois_maik.png",   alt: "maik" },
 ];
 
 const NOMES_DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -219,16 +219,63 @@ function abrirHistorico() {
     mostrarPainel(estado.etapaAtual);
     }
 
+/* ============================================================
+   HISTÓRICO DE AGENDAMENTOS (Alternância Dinâmica)
+   ============================================================ */
+
+function alternarHistorico() {
+    const painelHistorico = document.getElementById("painel-historico");
+    const btnToggle = document.getElementById("btn-toggle-historico");
+    const textoBtn = document.getElementById("texto-btn-historico");
+    const stepper = document.getElementById("etapa");
+    const navEtapa = document.getElementById("nav-etapa");
+
+    // Verifica se o histórico já está visível
+    const estaNoHistorico = !painelHistorico.hasAttribute("hidden");
+
+    if (estaNoHistorico) {
+        // --- SAIR DO HISTÓRICO (VOLTAR AO FLUXO) ---
+        painelHistorico.setAttribute("hidden", "true");
+        
+        // Exibe o painel da etapa em que o usuário estava (ex: estado.etapaAtual)
+        document.getElementById(`painel-${estado.etapaAtual || 1}`).removeAttribute("hidden");
+        
+        if (stepper) stepper.removeAttribute("hidden");
+        if (navEtapa) navEtapa.removeAttribute("hidden");
+
+        // Restaura o botão original
+        textoBtn.textContent = "Meus Agendamentos";
+        btnToggle.classList.remove("border-brand-gold", "text-brand-gold");
+    } else {
+        // --- ABRIR HISTÓRICO ---
+        // Oculta todos os painéis de etapa
+        [1, 2, 3, 4].forEach(i => {
+            const p = document.getElementById(`painel-${i}`);
+            if (p) p.setAttribute("hidden", "true");
+        });
+
+        carregarHistorico();
+
+        painelHistorico.removeAttribute("hidden");
+        if (stepper) stepper.setAttribute("hidden", "true");
+        if (navEtapa) navEtapa.setAttribute("hidden", "true");
+
+        // Altera o botão para o modo "Voltar"
+        textoBtn.textContent = "← Voltar ao Agendamento";
+        btnToggle.classList.add("border-brand-gold", "text-brand-gold");
+    }
+}
+
 function carregarHistorico() {
     const historico = historicoCortes;
 
-    if (historico.length === 0) {
-        els.listaHistorico.innerHTML = `<p class="text-[#888780] text-sm text-center">Nenhum agendamento encontrado.</p>`;
+    if (!historico || historico.length === 0) {
+        els.listaHistorico.innerHTML = `<p class="text-[#888780] text-sm text-center col-span-full py-8">Nenhum agendamento encontrado.</p>`;
         return;
     }
 
     els.listaHistorico.innerHTML = historico.map(item => `
-        <div class="bg-[#1c1c1c] border border-[#38362f] rounded-xl p-4 flex flex-col gap-3 hover:border-[#4a473f] cursor-pointer transition-all" onclick="exibirDetalhesHistorico('${item.id}')">
+        <div class="bg-[#1c1c1c] border border-[#38362f] rounded-xl p-4 flex flex-col gap-3 hover:border-brand-gold/50 cursor-pointer transition-all" onclick="exibirDetalhesHistorico('${item.id}')">
             <div class="flex justify-between items-center border-b border-[#2e2d29] pb-2">
                 <span class="font-medium text-[#f1efe8] text-[15px]">${item.servico}</span>
                 <span class="text-[12px] px-2 py-0.5 rounded-full font-medium ${item.status === 'Concluído' ? 'bg-green-900/40 text-green-400 border border-green-800' : 'bg-amber-900/40 text-amber-400 border border-amber-800'}">${item.status}</span>
@@ -240,12 +287,11 @@ function carregarHistorico() {
             </div>
             <div class="flex justify-between items-center pt-2 border-t border-[#2e2d29]">
                 <span class="font-bold text-[#f1efe8] text-[14px]">${item.valor}</span>
-                <span class="text-[12px] text-[#f1efe8] hover:underline">Ver resumo &rarr;</span>
+                <span class="text-[12px] text-brand-gold hover:underline">Ver resumo &rarr;</span>
             </div>
         </div>
     `).join("");
 }
-
 function exibirDetalhesHistorico(id) {
     const historico = historicoCortes;
     const item = historico.find(h => h.id === id);
@@ -498,12 +544,12 @@ function renderizarDias() {
         const ativo = estado.diaSelecionado === indice;
 
         const classeEstado = ativo
-            ? "bg-[#f1efe8] text-[#161513] border-[#f1efe8]"
-            : "bg-[#1c1c1c] border-[#38362f] text-[#f1efe8] hover:border-[#888780]";
+            ? "bg-[#f1efe8] text-[#161513] border-2 border-[#f1efe8] scale-[1.02] shadow-sm"
+            : "bg-[#1c1c1c] border-2 border-[#38362f] text-[#f1efe8] hover:border-[#888780] hover:-translate-y-0.5 active:scale-95";
 
         return `
             <button
-                class="flex flex-col items-center justify-center min-w-[60px] py-2 px-3 rounded-xl border transition-all ${classeEstado} ${fechado ? "opacity-35 cursor-not-allowed" : ""}"
+                class="flex flex-col items-center justify-center min-w-[60px] py-2 px-3 rounded-xl transition-all duration-300 ease-in-out ${classeEstado} ${fechado ? "opacity-35 cursor-not-allowed transform-none hover:border-[#38362f]" : ""}"
                 data-dia="${indice}"
                 ${fechado ? "disabled" : ""}
             >
@@ -536,19 +582,19 @@ function renderizarHorarios() {
         const ocupado = ocupados.includes(horario);
         const ativo = estado.horarioSelecionado === horario;
 
-        let classeEstado = "bg-[#1c1c1c] border border-brand-border text-white hover:border-brand-gold/50 cursor-pointer";
+        // Suporte a transição suave de cor, sombra e posição no hover/unselect
+        let classeEstado = "bg-[#1c1c1c] border-2 border-brand-border text-white hover:border-brand-gold/60 hover:-translate-y-0.5 active:scale-95 hover:shadow-md hover:shadow-brand-gold/10 cursor-pointer";
         
         if (ativo) {
-            // HORÁRIO SELECIONADO: Borda e texto dourados com suave brilho
-            classeEstado = "bg-brand-gold/10 border-2 border-brand-gold text-brand-gold font-bold shadow-sm shadow-brand-gold/20";
+            // Efeito selecionado: escala suave e brilho com transição
+            classeEstado = "bg-brand-gold/10 border-2 border-brand-gold text-brand-gold font-bold shadow-md shadow-brand-gold/20 scale-[1.02]";
         } else if (ocupado) {
-            // HORÁRIO OCUPADO: Fundo original apagado com risco
-            classeEstado = "bg-[#1c1c1c] border border-brand-border/30 text-brand-muted/40 opacity-40 line-through cursor-not-allowed";
+            classeEstado = "bg-[#1c1c1c] border-2 border-brand-border/30 text-brand-muted/40 opacity-40 line-through cursor-not-allowed";
         }
 
         return `
             <button
-                class="py-2.5 px-3 rounded-xl text-[14px] text-center transition-all ${classeEstado}"
+                class="py-2.5 px-3 rounded-xl text-[14px] text-center transition-all duration-300 ease-in-out ${classeEstado}"
                 data-horario="${horario}"
                 ${ocupado ? "disabled" : ""}
             >
@@ -708,9 +754,9 @@ function confirmarAgendamento() {
 
 /* ============================================================
    REINICIAR
-   ============================================================ */
+   ============================================================ /
 
-function reiniciar() {
+/*function reiniciar() {
     // 1. Reseta o estado na memória JS
     estado.etapaAtual = 1;
     estado.servicoSelecionado = null;
@@ -733,18 +779,43 @@ function reiniciar() {
     }
     if (form.erroConsentimento) {
         form.erroConsentimento.textContent = "";
-    }*/
+    }/
 
     // 5. Exibe o painel inicial
     mostrarPainel(1);
-}
+}*/
 
 /* ============================================================
-   INICIALIZAÇÃO & LISTENERS
+   REINICIAR E INICIALIZAÇÃO
    ============================================================ */
 
-els.btnHistorico.addEventListener("click", abrirHistorico);
-//inicializarLocalStorage();
-carregarServicos();
-carregarProfissionais();
-mostrarPainel(1);
+function reiniciar() {
+    // 1. Reseta o estado na memória JS
+    estado.etapaAtual = 1;
+    estado.servicoSelecionado = null;
+    estado.profissionalSelecionado = null;
+    estado.diaSelecionado = null;
+    estado.horarioSelecionado = null;
+
+    // 2. Restaura a visibilidade dos elementos da tela
+    if (els.navEtapa) els.navEtapa.hidden = false;
+    if (els.etapa) els.etapa.hidden = false;
+    if (els.sucesso) els.sucesso.hidden = true;
+
+    // 3. Recarrega as listas e limpa os inputs selecionados
+    carregarServicos();
+    carregarProfissionais();
+    mostrarPainel(1);
+}
+
+// Inicializa o fluxo quando o documento estiver pronto
+document.addEventListener("DOMContentLoaded", () => {
+    carregarServicos();
+    carregarProfissionais();
+    mostrarPainel(1);
+
+    // Event listeners dos botões de navegação
+    if (els.btnVoltar) els.btnVoltar.addEventListener("click", voltarEtapa);
+    if (els.btnContinuar) els.btnContinuar.addEventListener("click", avancarEtapa);
+    if (els.btnHistorico) els.btnHistorico.addEventListener("click", alternarHistorico);
+});

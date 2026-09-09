@@ -81,6 +81,7 @@
     --radius-xl: 0.75rem;
     --radius-2xl: 1rem;
     --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --animate-spin: spin 1s linear infinite;
     --blur-sm: 8px;
     --blur-md: 12px;
@@ -455,9 +456,6 @@
   .aspect-square {
     aspect-ratio: 1 / 1;
   }
-  .h-4 {
-    height: calc(var(--spacing) * 4);
-  }
   .h-6 {
     height: calc(var(--spacing) * 6);
   }
@@ -515,9 +513,6 @@
   .min-h-\[2\.5rem\] {
     min-height: 2.5rem;
   }
-  .min-h-\[14px\] {
-    min-height: 14px;
-  }
   .min-h-\[220px\] {
     min-height: 220px;
   }
@@ -526,9 +521,6 @@
   }
   .min-h-screen {
     min-height: 100vh;
-  }
-  .w-4 {
-    width: calc(var(--spacing) * 4);
   }
   .w-6 {
     width: calc(var(--spacing) * 6);
@@ -625,6 +617,12 @@
     --tw-translate-y: 10px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
+  .scale-\[1\.02\] {
+    scale: 1.02;
+  }
+  .transform-none {
+    transform: none;
+  }
   .animate-fade-in {
     animation: var(--animate-fade-in);
   }
@@ -661,14 +659,14 @@
   .items-center {
     align-items: center;
   }
-  .items-start {
-    align-items: flex-start;
-  }
   .justify-between {
     justify-content: space-between;
   }
   .justify-center {
     justify-content: center;
+  }
+  .justify-end {
+    justify-content: flex-end;
   }
   .gap-1 {
     gap: var(--spacing);
@@ -1014,6 +1012,9 @@
   .object-center {
     object-position: center;
   }
+  .p-1 {
+    padding: var(--spacing);
+  }
   .p-2\.5 {
     padding: calc(var(--spacing) * 2.5);
   }
@@ -1104,6 +1105,9 @@
   .pt-1 {
     padding-top: var(--spacing);
   }
+  .pt-1\.5 {
+    padding-top: calc(var(--spacing) * 1.5);
+  }
   .pt-2 {
     padding-top: calc(var(--spacing) * 2);
   }
@@ -1118,9 +1122,6 @@
   }
   .pt-4 {
     padding-top: calc(var(--spacing) * 4);
-  }
-  .pt-6 {
-    padding-top: calc(var(--spacing) * 6);
   }
   .pt-24 {
     padding-top: calc(var(--spacing) * 24);
@@ -1303,9 +1304,6 @@
   .text-\[\#f1efe8\] {
     color: #f1efe8;
   }
-  .text-\[\#f0997b\] {
-    color: #f0997b;
-  }
   .text-amber-100 {
     color: var(--color-amber-100);
   }
@@ -1384,9 +1382,6 @@
     @supports (color: color-mix(in lab, red, red)) {
       color: color-mix(in oklab, var(--color-brand-muted) 50%, transparent);
     }
-  }
-  .accent-\[\#0f6e56\] {
-    accent-color: #0f6e56;
   }
   .opacity-0 {
     opacity: 0%;
@@ -1467,6 +1462,10 @@
   .duration-300 {
     --tw-duration: 300ms;
     transition-duration: 300ms;
+  }
+  .ease-in-out {
+    --tw-ease: var(--ease-in-out);
+    transition-timing-function: var(--ease-in-out);
   }
   .ease-out {
     --tw-ease: var(--ease-out);
@@ -1593,6 +1592,10 @@
     content: none;
   }
   @media (hover: hover) {
+    .hover\:-translate-y-0\.5:hover {
+      --tw-translate-y: calc(var(--spacing) * -0.5);
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
     .hover\:-translate-y-1:hover {
       --tw-translate-y: calc(var(--spacing) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -1612,8 +1615,8 @@
     .hover\:border-\[\#0f6e56\]:hover {
       border-color: #0f6e56;
     }
-    .hover\:border-\[\#4a473f\]:hover {
-      border-color: #4a473f;
+    .hover\:border-\[\#38362f\]:hover {
+      border-color: #38362f;
     }
     .hover\:border-\[\#888780\]:hover {
       border-color: #888780;
@@ -1637,6 +1640,14 @@
         border-color: color-mix(in oklab, var(--color-brand-gold) 50%, transparent);
       }
     }
+    .hover\:border-brand-gold\/60:hover {
+      border-color: color-mix(in srgb, #cfa85f 60%, transparent);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:border-brand-gold\/60:hover {
+        border-color: color-mix(in oklab, var(--color-brand-gold) 60%, transparent);
+      }
+    }
     .hover\:bg-\[\#2a2825\]:hover {
       background-color: #2a2825;
     }
@@ -1654,6 +1665,9 @@
     }
     .hover\:bg-\[\#232220\]:hover {
       background-color: #232220;
+    }
+    .hover\:bg-\[\#282724\]:hover {
+      background-color: #282724;
     }
     .hover\:bg-brand-gold:hover {
       background-color: var(--color-brand-gold);
@@ -1732,6 +1746,12 @@
   .focus\:outline-none:focus {
     --tw-outline-style: none;
     outline-style: none;
+  }
+  .active\:scale-95:active {
+    --tw-scale-x: 95%;
+    --tw-scale-y: 95%;
+    --tw-scale-z: 95%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
   }
   .active\:scale-\[0\.98\]:active {
     scale: 0.98;

@@ -1,11 +1,14 @@
   <header class="sticky top-0 z-30 flex items-center justify-between px-5 py-3 bg-[#232220] border-b border-[#38362f]">
                <!-- logo componente reutilização-->
              {% include "componetization/logo/logo-top-horizontal.html" %}
-        <button 
-            class="h-10 px-4 rounded-[10px] border border-[#4a473f] bg-transparent text-[#f1efe8] text-[14px] font-medium cursor-pointer transition-colors hover:bg-[#38362f] flex items-center gap-2" 
-            id="btn-historico"
-        >
-            <i class="botao historico"></i>
-            Meus Agendamentos
-        </button>
+        <div class="flex justify-end mb-4">
+            <button 
+                id="btn-toggle-historico"
+                onclick="alternarHistorico()"
+                class="h-9 px-3.5 rounded-lg border border-brand-border bg-[#1c1c1c] text-[#f1efe8] text-xs sm:text-sm font-medium cursor-pointer transition-all hover:bg-[#282724] hover:border-brand-gold/50 flex items-center gap-2 shadow-sm"
+            >
+                <span id="texto-btn-historico">Meus Agendamentos</span>
+            </button>
+        </div>
     </header>
+    

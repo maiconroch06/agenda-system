@@ -38,7 +38,6 @@ function mostrarAviso(msg) {
     setTimeout(() => els.aviso.classList.remove("visivel"), 2500);
 }
 
-// CORREÇÃO: Função atualizada para comprimir a imagem e evitar QuotaExceededError
 function lerArquivoBase64(input) {
     return new Promise((resolve) => {
         if (!input || !input.files || !input.files[0]) { resolve(null); return; }
@@ -49,7 +48,7 @@ function lerArquivoBase64(input) {
             const img = new Image();
             img.onload = () => {
                 const canvas = document.createElement("canvas");
-                const MAX_WIDTH = 200; // Reduz a resolução para economizar espaço
+                const MAX_WIDTH = 200;
                 const scaleSize = MAX_WIDTH / img.width;
                 canvas.width = MAX_WIDTH;
                 canvas.height = img.height * scaleSize;
