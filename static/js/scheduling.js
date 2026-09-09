@@ -38,33 +38,33 @@ const HORARIOS_OCUPADOS = {
 };
 
 const historicoCortes = [ // dadosIniciais <- Nome antigo
-    {
-        id: "101",
-        servico: "Social & Barba",
-        profissional: "Thiago Tomaz",
-        data: "Sábado, 15 de Agosto",
-        horario: "14:00",
-        valor: "R$ 30,00",
-        status: "Concluído"
-    },
-    {
-        id: "102",
-        servico: "Degradê",
-        profissional: "Samuel",
-        data: "Quinta-feira, 20 de Agosto",
-        horario: "10:30",
-        valor: "R$ 22,00",
-        status: "Concluído"
-    },
-    {
-        id: "103",
-        servico: "Corte Militar",
-        profissional: "Maik",
-        data: "Sexta-feira, 28 de Agosto",
-        horario: "16:00",
-        valor: "R$ 15,00",
-        status: "Confirmado"
-    }
+    // {
+    //     id: "101",
+    //     servico: "Social & Barba",
+    //     profissional: "Thiago Tomaz",
+    //     data: "Sábado, 15 de Agosto",
+    //     horario: "14:00",
+    //     valor: "R$ 30,00",
+    //     status: "Concluído"
+    // },
+    // {
+    //     id: "102",
+    //     servico: "Degradê",
+    //     profissional: "Samuel",
+    //     data: "Quinta-feira, 20 de Agosto",
+    //     horario: "10:30",
+    //     valor: "R$ 22,00",
+    //     status: "Concluído"
+    // },
+    // {
+    //     id: "103",
+    //     servico: "Corte Militar",
+    //     profissional: "Maik",
+    //     data: "Sexta-feira, 28 de Agosto",
+    //     horario: "16:00",
+    //     valor: "R$ 15,00",
+    //     status: "Confirmado"
+    // }
 ];
 
 // 
