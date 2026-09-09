@@ -7,7 +7,7 @@
     { id: "social",         name: "Corte Social",        duration: 30, price: 18, icon: "../static/assets/img/cortes/corte-social.jpeg",           alt: "corte-social" },
     { id: "social-barba",   name: "Social & Barba",    duration: 50, price: 30, icon: "../static/assets/img/cortes/corte-social&barba.jpeg",     alt: "corte-social-barba" },
     { id: "degrade",        name: "Degradê",           duration: 40, price: 22, icon: "../static/assets/img/cortes/corte-degrade.jpeg",          alt: "corte-degrade" },
-    { id: "degrade-barba",  name: "Degradê & Barba",   duration: 60, price: 30, icon: "../static/assets/img/cortes/corte-degradê&barba.jpeg",   alt: "corte-degrade-barba" },
+    { id: "degrade-barba",  name: "Degradê & Barba",   duration: 60, price: 30, icon: "../static/assets/img/cortes/corte-degrade-barba.jpeg",   alt: "corte-degrade-barba" },
     { id: "militar",        name: "Corte Militar",     duration: 20, price: 15, icon: "../static/assets/img/cortes/corte-militar.jpeg",          alt: "corte-militar" },
     { id: "barba",          name: "Barba",             duration: 25, price: 15, icon: "../static/assets/img/cortes/corte-barba.jpeg",            alt: "corte-barba" },
 ];
