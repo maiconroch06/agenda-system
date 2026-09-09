@@ -8,15 +8,15 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     </head>
 
-    <body class="min-h-dvh w-screen overflow-y-auto sm:overflow-hidden bg-brand-bg-primary text-gray-100 font-sans antialiased flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <body class="min-h-dvh w-screen overflow-y-auto sm:overflow-hidden bg-[#161513] text-gray-100 font-sans antialiased flex items-center justify-center p-4 sm:p-6 md:p-8">
 
-        <div class="tela ativa w-full h-full flex items-center justify-center">
+        <div class="w-full h-full flex items-center justify-center">
 
-            <!-- Aumentado para max-w-lg no mobile/tablet e max-w-xl no desktop -->
+            <!--  -->
             <div class="w-full max-w-lg lg:max-w-xl max-h-full flex flex-col justify-center my-auto">
 
-                <!-- Padding aumentado para md:p-8 lg:p-10 -->
-                <div id="tela-auth" class="w-full max-h-full bg-brand-bg-card border border-brand-border rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl flex flex-col overflow-y-auto">
+                <!-- Card Principal -->
+                <div id="tela-auth" class="w-full max-h-full bg-[#1c1c1c] border border-brand-border rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl flex flex-col overflow-y-auto">
 
                     <!-- Logo proporcional -->
                     <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
@@ -52,9 +52,17 @@
                             <label for="login-senha" class="text-xs sm:text-sm font-semibold text-gray-300 mb-1 tracking-wider">
                                 Senha
                             </label>
+
                             <input type="password" id="login-senha" placeholder="Digite sua senha"
                                 class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm">
+
+                            <!-- Mensagem de erro de validação -->
                             <span class="campo__erro text-[11px] sm:text-xs text-red-500 mt-1 block" id="erro-login-senha"></span>
+
+                            <!-- Link de recuperação alinhado à direita -->
+                            <a href="/cliente/esqueceu-senha" class="text-brand-muted hover:text-brand-gold text-[11px] sm:text-xs font-medium transition-colors hover:underline mt-1 self-end">
+                                Esqueceu a senha?
+                            </a>
                         </div>
 
                         <!-- Botão -->
@@ -64,14 +72,6 @@
                         </button>
                     </form>
                     
-                    <!-- Rodapé Semântico -->
-                    <!-- <footer class="flex flex-col items-center justify-center gap-2 text-xs sm:text-sm mt-4 sm:mt-6 pt-3.5 sm:pt-4 border-t border-brand-border/40 shrink-0">
-
-                        <a href="/gestor/esqueceu-senha" class="text-brand-muted/80 hover:text-brand-gold text-[11px] sm:text-xs font-medium transition-colors hover:underline">
-                            Esqueceu a senha?
-                        </a>
-                        
-                    </footer> -->
                 </div>
             </div>
         </div>
