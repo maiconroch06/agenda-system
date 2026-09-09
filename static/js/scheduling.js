@@ -240,7 +240,7 @@ function carregarHistorico() {
             </div>
             <div class="flex justify-between items-center pt-2 border-t border-[#2e2d29]">
                 <span class="font-bold text-[#f1efe8] text-[14px]">${item.valor}</span>
-                <span class="text-[12px] text-[#9fe1cb] hover:underline">Ver resumo &rarr;</span>
+                <span class="text-[12px] text-[#f1efe8] hover:underline">Ver resumo &rarr;</span>
             </div>
         </div>
     `).join("");
@@ -300,34 +300,34 @@ function atualizarStepper() {
         const label = item.querySelector(".etapa__label");
 
         if (numero < estado.etapaAtual) {
-            // ETAPA CONCLUÍDA: Verde preenchido com ícone de check
-            item.classList.remove("before:bg-[#4a473f]");
-            item.classList.add("before:bg-[#0f6e56]");
+            // ETAPA CONCLUÍDA: Fundo dourado com check preto
+            item.classList.remove("before:bg-brand-border");
+            item.classList.add("before:bg-brand-gold");
 
-            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-[#0f6e56] border border-[#0f6e56] flex items-center justify-center text-[13px] font-bold text-white etapa__ciclo";
+            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-brand-gold border border-brand-gold flex items-center justify-center text-[13px] font-bold text-black etapa__ciclo";
             ciclo.textContent = "✓";
 
-            label.className = "text-[#9fe1cb] font-medium etapa__label";
+            label.className = "text-brand-gold font-medium etapa__label";
 
         } else if (numero === estado.etapaAtual) {
-            // ETAPA ATIVA: Verde destacado com borda
-            item.classList.remove("before:bg-[#4a473f]");
-            item.classList.add("before:bg-[#0f6e56]");
+            // ETAPA ATIVA: Fundo dourado com número preto e texto destacado
+            item.classList.remove("before:bg-brand-border");
+            item.classList.add("before:bg-brand-gold");
 
-            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-[#085041] border border-[#0f6e56] flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo";
+            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-brand-gold border border-brand-gold flex items-center justify-center text-[13px] font-bold text-black etapa__ciclo shadow-md shadow-brand-gold/30";
             ciclo.textContent = numero;
 
-            label.className = "text-[#f1efe8] font-medium etapa__label";
+            label.className = "text-white font-bold etapa__label";
 
         } else {
-            // ETAPA PENDENTE: Cinza escuro desativado
-            item.classList.remove("before:bg-[#0f6e56]");
-            item.classList.add("before:bg-[#4a473f]");
+            // ETAPA PENDENTE: Fundo escuro com número apagado
+            item.classList.remove("before:bg-brand-gold");
+            item.classList.add("before:bg-brand-border");
 
-            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo";
+            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-medium text-brand-muted etapa__ciclo";
             ciclo.textContent = numero;
 
-            label.className = "text-[#888780] etapa__label";
+            label.className = "text-brand-muted etapa__label";
         }
     });
 }
@@ -409,12 +409,12 @@ function carregarServicos() {
     els.listaServico.innerHTML = SERVICOS.map(servico => `
         <label class="cursor-pointer shrink-0">
             <input type="radio" name="inputCorte" id="${servico.id}" class="peer hidden" value="${servico.id}">
-            <div class="w-[150px] bg-[#1c1c1c] border-2 border-[#2a2825] rounded-xl p-3 flex flex-col items-center gap-2 transition-all peer-checked:border-[#0f6e56] peer-checked:bg-[#0d2b24] hover:border-[#4a473f]">
+            <div class="w-[150px] bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-3 flex flex-col items-center gap-2 transition-all peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50">
                 <img src="${servico.icon}" alt="${servico.alt}" class="w-full h-full object-cover rounded-lg">
-                <span class="font-medium text-[13px] text-[#f1efe8] text-center peer-checked:text-[#9fe1cb]">${servico.name}</span>
-                <div class="flex justify-between w-full text-[12px] text-[#888780] pt-1 border-t border-[#2e2d29]">
+                <span class="font-medium text-[13px] text-white text-center peer-checked:text-brand-gold">${servico.name}</span>
+                <div class="flex justify-between w-full text-[12px] text-brand-muted pt-1 border-t border-brand-border/50">
                     <span>${servico.duration} min</span>
-                    <span class="font-medium text-[#f1efe8]">R$ ${servico.price.toFixed(2).replace(".", ",")}</span>
+                    <span class="font-medium text-white">R$ ${servico.price.toFixed(2).replace(".", ",")}</span>
                 </div>
             </div>
         </label>
@@ -436,16 +436,16 @@ function carregarProfissionais() {
     els.listaProfissionais.innerHTML = PROFISSIONAIS.map(profissional => `
         <label class="cursor-pointer shrink-0">
             <input type="radio" name="inputFuncionario" id="${profissional.id}" class="peer hidden" value="${profissional.id}">
-            <div class="w-[150px] h-[210px] bg-[#1c1c1c] border-2 border-[#2a2825] rounded-xl p-3 flex flex-col items-center justify-between text-center transition-all peer-checked:border-[#0f6e56] peer-checked:bg-[#0d2b24] hover:border-[#4a473f]">
-                <div class="w-full h-full rounded-lg bg-[#232220] flex items-center justify-center overflow-hidden">
+            <div class="w-[150px] h-[210px] bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-3 flex flex-col items-center justify-between text-center transition-all peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50">
+                <div class="w-full h-32 rounded-lg bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40">
                     ${profissional.icon
                         ? `<img src="${profissional.icon}" alt="${profissional.alt}" class="w-full h-full object-cover">`
-                        : `<div class="w-full h-full flex items-center justify-center text-[#f1efe8] font-bold text-xl">${profissional.name.charAt(0)}</div>`
+                        : `<div class="w-full h-full flex items-center justify-center text-white font-bold text-xl">${profissional.name.charAt(0)}</div>`
                     }
                 </div>
-                <div>
-                    <h3 class="font-medium text-[13px] text-[#f1efe8] peer-checked:text-[#9fe1cb] pt-1">${profissional.name}</h3>
-                    <p class="text-[11px] text-[#888780] mt-0.5">${profissional.description}</p>
+                <div class="w-full">
+                    <h3 class="font-medium text-[13px] text-white peer-checked:text-brand-gold pt-1 truncate">${profissional.name}</h3>
+                    <p class="text-[11px] text-brand-muted mt-0.5 truncate">${profissional.description}</p>
                 </div>
             </div>
         </label>
@@ -509,7 +509,7 @@ function renderizarDias() {
 
 function renderizarHorarios() {
     if (estado.diaSelecionado === null) {
-        els.gradeHorarios.innerHTML = `<p class="text-[#888780] text-sm text-center col-span-full">Escolha um dia para visualizar os horários.</p>`;
+        els.gradeHorarios.innerHTML = `<p class="text-brand-muted text-sm text-center col-span-full">Escolha um dia para visualizar os horários.</p>`;
         return;
     }
 
@@ -519,16 +519,19 @@ function renderizarHorarios() {
         const ocupado = ocupados.includes(horario);
         const ativo = estado.horarioSelecionado === horario;
 
-        let classeEstado = "bg-[#1c1c1c] border-[#38362f] text-[#f1efe8] hover:border-[#888780]";
+        let classeEstado = "bg-[#1c1c1c] border border-brand-border text-white hover:border-brand-gold/50 cursor-pointer";
+        
         if (ativo) {
-            classeEstado = "bg-[#085041] border-[#0f6e56] text-[#9fe1cb] font-medium";
+            // HORÁRIO SELECIONADO: Borda e texto dourados com suave brilho
+            classeEstado = "bg-brand-gold/10 border-2 border-brand-gold text-brand-gold font-bold shadow-sm shadow-brand-gold/20";
         } else if (ocupado) {
-            classeEstado = "bg-[#1c1c1c] border-[#38362f] text-[#f1efe8] opacity-35 line-through cursor-not-allowed";
+            // HORÁRIO OCUPADO: Fundo original apagado com risco
+            classeEstado = "bg-[#1c1c1c] border border-brand-border/30 text-brand-muted/40 opacity-40 line-through cursor-not-allowed";
         }
 
         return `
             <button
-                class="py-2.5 px-3 border rounded-xl text-[14px] text-center transition-all ${classeEstado}"
+                class="py-2.5 px-3 rounded-xl text-[14px] text-center transition-all ${classeEstado}"
                 data-horario="${horario}"
                 ${ocupado ? "disabled" : ""}
             >
