@@ -3,7 +3,7 @@
 ## Public
 * index.html
     * /
-* category-user.html   <- direciona para cadastro gestor e barbeiro
+* category-user.html
     * /tipo-usuario
 
 ## Client
