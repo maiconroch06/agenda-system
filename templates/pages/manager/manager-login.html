@@ -1,60 +1,81 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" class="h-full">
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login - TMS Barbearia</title>
-        <!-- Importação obrigatória do CSS -->
+        <title>TMS Barbearia - Login</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     </head>
 
-    <body
-        class="min-h-screen w-full bg-brand-bg-primary text-gray-100 font-sans antialiased flex items-center justify-center p-4 sm:p-6 md:p-10">
+    <body class="min-h-dvh w-screen overflow-y-auto sm:overflow-hidden bg-brand-bg-primary text-gray-100 font-sans antialiased flex items-center justify-center p-4 sm:p-6 md:p-8">
 
-        <div id="tela-auth"
-            class="w-full max-w-md lg:max-w-none lg:w-1/2 bg-brand-bg-card border border-brand-border rounded-2xl p-6 sm:p-8 shadow-2xl">
+        <div class="tela ativa w-full h-full flex items-center justify-center">
 
-            <!-- Logo horizontal da barbearia -->
-            <div class="w-full flex items-center justify-center mb-8 ">
-                {%set logo_class="h-16 md:h-20 lg:h-24"%}
-                {% include "componetization/logo/logo-top-horizontal.html" %}
-            </div>
+            <!-- Aumentado para max-w-lg no mobile/tablet e max-w-xl no desktop -->
+            <div class="w-full max-w-lg lg:max-w-xl max-h-full flex flex-col justify-center my-auto">
 
-            <!-- Formulário com controle centralizado de fluxo via gap -->
-            <form id="form-login" class="flex flex-col gap-5" action="/gestor/painel-administrativo" novalidate>
-                <div class="flex flex-col">
-                    <label for="login-usuario"
-                        class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
-                        Usuário ou e-mail
-                    </label>
-                    <input type="text" id="login-usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off"
-                        class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
-                    <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-login-usuario"></span>
+                <!-- Padding aumentado para md:p-8 lg:p-10 -->
+                <div id="tela-auth" class="w-full max-h-full bg-brand-bg-card border border-brand-border rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl flex flex-col overflow-y-auto">
+
+                    <!-- Logo proporcional -->
+                    <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
+                        {% set logo_class="h-10 sm:h-12 md:h-14" %}
+                        {% include "componetization/logo/logo-top-horizontal.html" %}
+                    </div>
+
+                    <!-- Título e Subtítulo Maiores no Desktop -->
+                    <div class="mb-5 md:mb-6 shrink-0 text-center">
+                        <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-white leading-snug">
+                            Login do Gestor
+                        </h1>
+                        <p class="text-xs sm:text-sm text-brand-muted mt-1">
+                            Informe suas credenciais para acessar sua conta.
+                        </p>
+                    </div>
+
+                    <!-- Formulário com Inputs e Labels Maiores -->
+                    <form id="form-login" action="/gestor/painel" method="post" novalidate class="flex flex-col gap-4 md:gap-5 shrink-0">
+                        
+                        <!-- E-mail -->
+                        <div class="flex flex-col">
+                            <label for="login-usuario" class="text-xs sm:text-sm font-semibold text-gray-300 mb-1 tracking-wider">
+                                E-mail
+                            </label>
+                            <input type="text" id="login-usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off"
+                                class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm">
+                            <span class="campo__erro text-[11px] sm:text-xs text-red-500 mt-1 block" id="erro-login-usuario"></span>
+                        </div>
+
+                        <!-- Senha -->
+                        <div class="flex flex-col">
+                            <label for="login-senha" class="text-xs sm:text-sm font-semibold text-gray-300 mb-1 tracking-wider">
+                                Senha
+                            </label>
+                            <input type="password" id="login-senha" placeholder="Digite sua senha"
+                                class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm">
+                            <span class="campo__erro text-[11px] sm:text-xs text-red-500 mt-1 block" id="erro-login-senha"></span>
+                        </div>
+
+                        <!-- Botão -->
+                        <button type="submit"
+                            class="w-full py-3 md:py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-xs sm:text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer mt-2">
+                            Entrar
+                        </button>
+                    </form>
+                    
+                    <!-- Rodapé Semântico -->
+                    <!-- <footer class="flex flex-col items-center justify-center gap-2 text-xs sm:text-sm mt-4 sm:mt-6 pt-3.5 sm:pt-4 border-t border-brand-border/40 shrink-0">
+
+                        <a href="/gestor/esqueceu-senha" class="text-brand-muted/80 hover:text-brand-gold text-[11px] sm:text-xs font-medium transition-colors hover:underline">
+                            Esqueceu a senha?
+                        </a>
+                        
+                    </footer> -->
                 </div>
-
-                <div class="flex flex-col">
-                    <label for="login-senha"
-                        class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
-                        Senha
-                    </label>
-                    <input type="password" id="login-senha" placeholder="Digite sua senha"
-                        class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
-                    <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-login-senha"></span>
-                </div>
-
-                <button type="submit"
-                    class="w-full py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer mt-2">
-                    Entrar
-                </button>
-            </form>
-            <div class="text-center text-sm text-brand-muted mt-10">
-                <a href="/" class=" text-brand-gold font-semibold hover:underline transition-colors">
-                    Voltar a página inicial</a>
             </div>
         </div>
 
-        <!-- Script com rota estática Flask -->
         <script src="{{ url_for('static', filename='js/autenticacao.js') }}"></script>
     </body>
 

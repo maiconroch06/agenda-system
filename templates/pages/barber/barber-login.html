@@ -27,7 +27,7 @@
                     <!-- Título e Subtítulo Maiores no Desktop -->
                     <div class="mb-5 md:mb-6 shrink-0 text-center">
                         <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-white leading-snug">
-                            Login do Cliente
+                            Login do Barbeiro
                         </h1>
                         <p class="text-xs sm:text-sm text-brand-muted mt-1">
                             Informe suas credenciais para acessar sua conta.
@@ -35,8 +35,8 @@
                     </div>
 
                     <!-- Formulário com Inputs e Labels Maiores -->
-                    <form id="form-login" action="/cliente/agendamentos" method="post" novalidate class="flex flex-col gap-4 md:gap-5 shrink-0">
-
+                    <form id="form-login" action="/barbeiro/painel" method="post" novalidate class="flex flex-col gap-4 md:gap-5 shrink-0">
+                        
                         <!-- E-mail -->
                         <div class="flex flex-col">
                             <label for="login-usuario" class="text-xs sm:text-sm font-semibold text-gray-300 mb-1 tracking-wider">
@@ -63,22 +63,14 @@
                             Entrar
                         </button>
                     </form>
-
+                    
                     <!-- Rodapé Semântico -->
                     <footer class="flex flex-col items-center justify-center gap-2 text-xs sm:text-sm mt-4 sm:mt-6 pt-3.5 sm:pt-4 border-t border-brand-border/40 shrink-0">
-
-                        <!-- Chamada para Cadastro -->
-                        <div class="flex items-center gap-1.5 text-brand-muted">
-                            <span class="registro-caption">Novo por aqui?</span>
-                            <a href="/cliente/cadastro" class="text-brand-gold font-semibold hover:underline hover:text-brand-gold-hover transition-colors">
-                                Faça seu cadastro
-                            </a>
-                        </div>
-
-                        <!-- <a href="/cliente/esqueceu-senha" class="text-brand-muted/80 hover:text-brand-gold text-[11px] sm:text-xs font-medium transition-colors hover:underline">
+                        
+                        <!-- <a href="/barber/esqueceu-senha" class="text-brand-muted/80 hover:text-brand-gold text-[11px] sm:text-xs font-medium transition-colors hover:underline">
                             Esqueceu a senha?
                         </a> -->
-
+                        
                     </footer>
                 </div>
             </div>

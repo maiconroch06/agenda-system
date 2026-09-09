@@ -8,7 +8,7 @@ def managerSource():
 
 @manager.route('/funcionario/cadastro')
 def managerEmployee():
-    return render_template('registerBarber.html')
+    return render_template('pages/barber/registerBarber.html')
 
 @manager.route('/login')
 def managerLogin():
