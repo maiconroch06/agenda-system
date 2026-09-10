@@ -1,1257 +1,308 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-
     <title>TMS Barbearia - Painel Administrativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
-<body class="min-h-screen
-           bg-[#161513]
-           text-[#f1efe8]
-           font-sans
-           antialiased">
+<div class="flex flex-col min-h-screen">
 
-    <!-- ============================================================
-         TELA 6: PAINEL DO ADMINISTRADOR
-         ============================================================ -->
+    <!-- CONTAINER PRINCIPAL -->
+    <div class="flex flex-1 pb-20 md:pb-0">
 
-    <div id="tela-painel" class="min-h-screen flex flex-col lg:flex-row">
-
-        <!-- ========================================================
-             SIDEBAR
-             ======================================================== -->
-
-        <aside id="sidebar" class="w-full
-                   lg:w-64
-                   lg:min-h-screen
-                   shrink-0
-                   bg-[#232220]
-                   border-b
-                   lg:border-b-0
-                   lg:border-r
-                   border-[#38362f]
-                   flex
-                   flex-col">
+        <!-- SIDEBAR (Exibida no Desktop - md+) -->
+        <aside id="sidebar" class="hidden md:flex md:flex-col md:w-64 md:h-screen md:sticky md:top-0 shrink-0 bg-[#232220] border-r border-[#38362f]">
 
             <!-- Logo -->
-            <div class="
-                block
-                       items-center
-                       px-5
-                       py-5
-                       border-b
-                       border-[#38362f]">
-
-                <!-- logo componente reutilização-->
-                {%set logo_class="h-16 md:h-20 lg:h-24"%}
+            <div class="block items-center px-5 py-5 border-b border-[#38362f]">
+                {% set logo_class="h-16 md:h-20 lg:h-24" %}
                 {% include "componetization/logo/logo-top-horizontal.html" %}
-                <h1 class=" mt-4 text-2xl font-bold">Painel Administrativo</h1>
+                <h1 class="mt-4 text-2xl font-bold">Manager Dash</h1>
             </div>
-
-
-            <!-- Navegação -->
-            <nav class="flex
-                       lg:flex-col
-                       overflow-x-auto
-                       lg:overflow-visible
-                       p-3
-                       gap-1">
-
-                <button class="sidebar__item ativo
-                           shrink-0
-                           flex
-                           items-center
-                           gap-3
-                           w-auto
-                           lg:w-full
-                           px-4
-                           py-3
-                           rounded-lg
-                           bg-[#38362f]
-                           text-[#f1efe8]
-                           text-sm
-                           font-medium
-                           transition-colors
-                           hover:bg-[#4a473f]" onclick="mudarAba(event, 'perfil')">
-                    <span>🏢</span>
-                    <span>Perfil da empresa</span>
+        
+            <!-- Navegação Desktop -->
+            <nav class="flex flex-col p-3 gap-1">
+                <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-[#2a2825] text-[#f1efe8] font-medium text-sm cursor-pointer text-left w-full transition-colors" data-aba="perfil" onclick="irParaAba('perfil')">
+                    <span class="text-lg w-5.5 text-center">🏠</span> Início
                 </button>
-
-
-                <button class="sidebar__item
-                           shrink-0
-                           flex
-                           items-center
-                           gap-3
-                           w-auto
-                           lg:w-full
-                           px-4
-                           py-3
-                           rounded-lg
-                           bg-transparent
-                           text-[#888780]
-                           text-sm
-                           font-medium
-                           transition-colors
-                           hover:bg-[#38362f]
-                           hover:text-[#f1efe8]" onclick="mudarAba(event, 'servicos')">
-                    <span>✂️</span>
-                    <span>Serviços</span>
+            
+                <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]" data-aba="servicos" onclick="irParaAba('servicos')">
+                    <span class="text-lg w-5.5 text-center">✂️</span> Serviços
                 </button>
-
-
-                <button class="sidebar__item
-                           shrink-0
-                           flex
-                           items-center
-                           gap-3
-                           w-auto
-                           lg:w-full
-                           px-4
-                           py-3
-                           rounded-lg
-                           bg-transparent
-                           text-[#888780]
-                           text-sm
-                           font-medium
-                           transition-colors
-                           hover:bg-[#38362f]
-                           hover:text-[#f1efe8]" onclick="mudarAba(event, 'profissionais')">
-                    <span>👤</span>
-                    <span>Profissionais</span>
+            
+                <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]" data-aba="profissionais" onclick="irParaAba('profissionais')">
+                    <span class="text-lg w-5.5 text-center">👤</span> Profissionais
                 </button>
-
-
-                <button class="sidebar__item
-                           shrink-0
-                           flex
-                           items-center
-                           gap-3
-                           w-auto
-                           lg:w-full
-                           px-4
-                           py-3
-                           rounded-lg
-                           bg-transparent
-                           text-[#888780]
-                           text-sm
-                           font-medium
-                           transition-colors
-                           hover:bg-[#38362f]
-                           hover:text-[#f1efe8]" onclick="mudarAba(event, 'financeiro')">
-                    <span>💰</span>
-                    <span>Financeiro</span>
+                
+                <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]" data-aba="financeiro" onclick="irParaAba('financeiro')">
+                    <span class="text-lg w-5.5 text-center">💰</span> Financeiro
                 </button>
-
             </nav>
-
-
+        
             <!-- Sair -->
-            <a class="hidden
-                       lg:block
-                       mt-auto
-                       mx-3
-                       mb-5
-                       px-4
-                       py-3
-                       text-center
-                       rounded-lg
-                       border
-                       border-[#38362f]
-                       bg-transparent
-                       text-[#888780]
-                       text-sm
-                       font-medium
-                       transition-colors
-                       hover:bg-[#38362f]
-                       hover:text-[#f1efe8]" href="/">
+            <a class="mt-auto mx-3 mb-5 px-4 py-3 text-center rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-sm font-medium transition-colors hover:bg-[#38362f] hover:text-[#f1efe8]" href="/" onclick="sairDaConta()"> 
                 Sair
             </a>
-
+        
         </aside>
 
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
-        <!-- ========================================================
-             CONTEÚDO PRINCIPAL
-             ======================================================== -->
+            <!-- ABA PERFIL DA EMPRESA -->
+            <section class="aba-func block" id="aba-perfil">
+                <div class="flex items-center justify-between mb-5 gap-3">
+                    <h1 class="text-lg lg:text-xl font-medium">Perfil da empresa</h1>
+                    <!-- <button class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer" onclick="abrirModalEmpresa()">
+                        Editar dados
+                    </button> -->
+                </div>
 
-        <main class="flex-1
-                   min-w-0
-                   px-4
-                   sm:px-6
-                   lg:px-8
-                   py-6
-                   lg:py-8">
+                <!-- CARDS PERFIL (PADRONIZADOS EM bg-[#232220]) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
+                        <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Nome</div>
+                        <div class="text-base font-semibold text-[#f1efe8]" id="perfil-nome">—</div>
+                    </div>
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
+                        <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Categoria</div>
+                        <div class="text-base font-semibold text-[#f1efe8]" id="perfil-categoria">—</div>
+                    </div>
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
+                        <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">CNPJ</div>
+                        <div class="text-base font-semibold text-[#f1efe8]" id="perfil-cnpj">—</div>
+                    </div>
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
+                        <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Expediente</div>
+                        <div class="text-base font-semibold text-[#f1efe8]" id="perfil-expediente">—</div>
+                    </div>
+                    <div class="sm:col-span-2 bg-[#232220] border border-[#38362f] rounded-2xl p-4">
+                        <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Dias de funcionamento</div>
+                        <div class="text-base font-semibold text-[#f1efe8]" id="perfil-dias">—</div>
+                    </div>
+                </div>
 
-            <div class="w-full
-                       max-w-6xl
-                       mx-auto">
-
-
-                <!-- ==================================================
-                     ABA: PERFIL
-                     ================================================== -->
-
-                <section id="aba-perfil" class="aba ativa">
-
-                    <div class="flex
-                               flex-col
-                               sm:flex-row
-                               sm:items-center
-                               sm:justify-between
-                               gap-4
-                               mb-6">
-
+                <!-- CARD CÓDIGO DE ACESSO -->
+                <!-- <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 sm:p-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                         <div>
-                            <h1 class="text-2xl
-                                       sm:text-3xl
-                                       font-bold">
-                                Perfil da empresa
-                            </h1>
+                            <h2 class="text-sm sm:text-base font-medium">Código de acesso para funcionários</h2>
+                            <p class="text-xs text-[#888780] mt-0.5">Compartilhe este código para que sua equipe entre no painel.</p>
                         </div>
-
-                        <button class="btn-secundario
-                                   w-full
-                                   sm:w-auto
-                                   h-11
-                                   px-5
-                                   rounded-lg
-                                   bg-brand-gold
-                                   hover:bg-brand-gold-hover
-                                   text-black
-                                   text-sm
-                                   font-bold
-                                   transition-all
-                                   duration-300
-                                   hover:scale-[1.02]
-                                   active:scale-[0.98]" onclick="editarEmpresa()">
-                            Editar dados
+                        <button class="px-3 py-1.5 rounded-lg border border-[#38362f] bg-[#2a2825] text-[#f1efe8] text-xs font-medium hover:bg-[#38362f] transition-colors self-start sm:self-auto cursor-pointer" onclick="gerarCodigo()">
+                            🔄 Gerar novo
                         </button>
-
                     </div>
 
-
-                    <!-- Cards do perfil -->
-                    <div class="grid
-                               grid-cols-1
-                               sm:grid-cols-2
-                               gap-4">
-
-                        <div class="info-card
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5">
-                            <div class="text-xs
-                                       uppercase
-                                       tracking-wide
-                                       text-brand-muted">
-                                Nome
-                            </div>
-
-                            <div id="perfil-nome" class="mt-2
-                                       text-base
-                                       font-semibold
-                                       break-words">
-                                —
-                            </div>
-                        </div>
-
-
-                        <div class="info-card
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5">
-                            <div class="text-xs
-                                       uppercase
-                                       tracking-wide
-                                       text-brand-muted">
-                                Categoria
-                            </div>
-
-                            <div id="perfil-categoria" class="mt-2
-                                       text-base
-                                       font-semibold">
-                                —
-                            </div>
-                        </div>
-
-
-                        <div class="info-card
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5">
-                            <div class="text-xs
-                                       uppercase
-                                       tracking-wide
-                                       text-brand-muted">
-                                CNPJ
-                            </div>
-
-                            <div id="perfil-cnpj" class="mt-2
-                                       text-base
-                                       font-semibold">
-                                —
-                            </div>
-                        </div>
-
-
-                        <div class="info-card
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5">
-                            <div class="text-xs
-                                       uppercase
-                                       tracking-wide
-                                       text-brand-muted">
-                                Expediente
-                            </div>
-
-                            <div id="perfil-expediente" class="mt-2
-                                       text-base
-                                       font-semibold">
-                                —
-                            </div>
-                        </div>
-
-
-                        <div class="info-card
-                                   sm:col-span-2
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5">
-                            <div class="text-xs
-                                       uppercase
-                                       tracking-wide
-                                       text-brand-muted">
-                                Dias de funcionamento
-                            </div>
-
-                            <div id="perfil-dias" class="mt-2
-                                       text-base
-                                       font-semibold">
-                                —
-                            </div>
-                        </div>
-
+                    <div id="codigo-acesso" class="bg-[#161513] border border-[#38362f] rounded-xl py-3 px-4 text-center text-xl sm:text-2xl font-mono font-bold tracking-widest text-[#f1efe8] mb-3">
+                        —
                     </div>
 
+                    <button class="w-full py-2.5 rounded-xl border border-[#38362f] bg-[#2a2825] text-[#f1efe8] text-xs font-medium hover:bg-[#38362f] transition-colors cursor-pointer" onclick="copiarCodigo()">
+                        Copiar código
+                    </button>
+                </div> -->
+            </section>
 
-                    <!-- Código de acesso -->
-                    <div class="mt-6
-                               rounded-xl
-                               bg-brand-bg-card
-                               border border-brand-border
-                               p-5 sm:p-6">
+            <!-- ABA SERVIÇOS -->
+            <section class="aba-func hidden" id="aba-servicos">
+                <div class="flex items-center justify-between mb-5 gap-3">
+                    <h1 class="text-lg lg:text-xl font-medium">Serviços</h1>
+                    <button class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer" onclick="abrirFormServico()">
+                        + Novo serviço
+                    </button>
+                </div>
 
-                        <div class="flex
-                                   flex-col
-                                   sm:flex-row
-                                   sm:items-start
-                                   sm:justify-between
-                                   gap-4">
-
-                            <div>
-
-                                <h2 class="text-lg
-                                           font-bold">
-                                    Código de acesso para funcionários
-                                </h2>
-
-                                <p class="mt-1
-                                           text-sm
-                                           text-brand-muted">
-                                    Compartilhe este código com seus
-                                    funcionários para que entrem no sistema.
-                                </p>
-
+                <!-- FORMULÁRIO DE SERVIÇO -->
+                <div id="form-servico-painel" class="hidden bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-5">
+                    <h3 class="text-sm font-medium mb-3">Cadastrar serviço</h3>
+                    <form class="flex flex-col gap-3" novalidate>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-[#888780]" for="psrv-nome">Nome</label>
+                                <input type="text" id="psrv-nome" placeholder="Ex: Corte degradê" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none focus:border-[#888780]">
                             </div>
-
-
-                            <button class="btn-ghost
-                                       w-full
-                                       sm:w-auto
-                                       h-10
-                                       px-4
-                                       rounded-lg
-                                       border border-brand-border
-                                       bg-transparent
-                                       text-gray-300
-                                       text-sm
-                                       font-semibold
-                                       transition-colors
-                                       hover:bg-[#38362f]
-                                       hover:text-white" onclick="gerarCodigo()">
-                                🔄 Gerar novo
-                            </button>
-
-                        </div>
-
-
-                        <div id="codigo-acesso" class="mt-5
-                                   rounded-lg
-                                   bg-[#161513]
-                                   border border-brand-border
-                                   px-5
-                                   py-4
-                                   text-center
-                                   text-2xl
-                                   sm:text-3xl
-                                   font-bold
-                                   tracking-[0.2em]
-                                   break-all">
-                            —
-                        </div>
-
-
-                        <button class="btn-copiar
-                                   mt-4
-                                   w-full
-                                   h-11
-                                   rounded-lg
-                                   border border-brand-border
-                                   bg-transparent
-                                   text-gray-300
-                                   text-sm
-                                   font-semibold
-                                   transition-colors
-                                   hover:bg-[#38362f]
-                                   hover:text-white" onclick="copiarCodigo()">
-                            Copiar código
-                        </button>
-
-                    </div>
-
-                </section>
-
-
-                <!-- ==================================================
-                     ABA: SERVIÇOS
-                     ================================================== -->
-
-                <section id="aba-servicos" class="aba hidden">
-
-                    <div class="flex
-                               flex-col
-                               sm:flex-row
-                               sm:items-center
-                               sm:justify-between
-                               gap-4
-                               mb-6">
-
-                        <h1 class="text-2xl
-                                   sm:text-3xl
-                                   font-bold">
-                            Serviços
-                        </h1>
-
-                        <button class="btn-secundario
-                                   w-full
-                                   sm:w-auto
-                                   h-11
-                                   px-5
-                                   rounded-lg
-                                   bg-brand-gold
-                                   hover:bg-brand-gold-hover
-                                   text-black
-                                   text-sm
-                                   font-bold
-                                   transition-all
-                                   hover:scale-[1.02]
-                                   active:scale-[0.98]" onclick="abrirFormServico()">
-                            + Novo serviço
-                        </button>
-
-                    </div>
-
-
-                    <!-- Formulário -->
-                    <div id="form-servico-painel" hidden class="mb-6">
-
-                        <form class="form-inline form-inline--painel
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5 sm:p-6" novalidate>
-
-                            <div class="grid
-                                       grid-cols-1
-                                       sm:grid-cols-2
-                                       lg:grid-cols-4
-                                       gap-4">
-
-                                <div class="campo">
-                                    <label for="psrv-nome" class="block
-                                               mb-2
-                                               text-sm
-                                               font-medium
-                                               text-gray-300">
-                                        Nome do serviço
-                                    </label>
-
-                                    <input type="text" id="psrv-nome" placeholder="Ex: Corte degradê" autocomplete="off"
-                                        class="w-full
-                                               h-11
-                                               px-3
-                                               rounded-lg
-                                               bg-[#161513]
-                                               border border-brand-border
-                                               text-[#f1efe8]
-                                               placeholder:text-[#66645e]
-                                               outline-none
-                                               focus:border-brand-gold">
-                                </div>
-
-
-                                <div class="campo">
-                                    <label for="psrv-preco" class="block
-                                               mb-2
-                                               text-sm
-                                               font-medium
-                                               text-gray-300">
-                                        Preço (R$)
-                                    </label>
-
-                                    <input type="number" id="psrv-preco" placeholder="0,00" min="0" step="0.01" class="w-full
-                                               h-11
-                                               px-3
-                                               rounded-lg
-                                               bg-[#161513]
-                                               border border-brand-border
-                                               text-[#f1efe8]
-                                               placeholder:text-[#66645e]
-                                               outline-none
-                                               focus:border-brand-gold">
-                                </div>
-
-
-                                <div class="campo">
-                                    <label for="psrv-tempo" class="block
-                                               mb-2
-                                               text-sm
-                                               font-medium
-                                               text-gray-300">
-                                        Duração (min)
-                                    </label>
-
-                                    <input type="number" id="psrv-tempo" placeholder="30" min="5" step="5" class="w-full
-                                               h-11
-                                               px-3
-                                               rounded-lg
-                                               bg-[#161513]
-                                               border border-brand-border
-                                               text-[#f1efe8]
-                                               placeholder:text-[#66645e]
-                                               outline-none
-                                               focus:border-brand-gold">
-                                </div>
-
-
-                                <div class="campo">
-                                    <label for="psrv-foto" class="block
-                                               mb-2
-                                               text-sm
-                                               font-medium
-                                               text-gray-300">
-                                        Imagem
-                                    </label>
-
-                                    <input type="file" id="psrv-foto" accept="image/*" class="w-full
-                                               h-11
-                                               px-3
-                                               py-2
-                                               rounded-lg
-                                               bg-[#161513]
-                                               border border-brand-border
-                                               text-gray-300
-                                               text-sm">
-                                </div>
-
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-[#888780]" for="psrv-preco">Preço (R$)</label>
+                                <input type="number" id="psrv-preco" placeholder="0,00" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none focus:border-[#888780]">
                             </div>
-
-
-                            <div class="flex
-                                       flex-col-reverse
-                                       sm:flex-row
-                                       sm:justify-end
-                                       gap-3
-                                       mt-5">
-
-                                <button type="button" class="btn-ghost
-                                           w-full
-                                           sm:w-auto
-                                           h-11
-                                           px-5
-                                           rounded-lg
-                                           border border-brand-border
-                                           bg-transparent
-                                           text-gray-300
-                                           text-sm
-                                           font-semibold
-                                           hover:bg-[#111215]
-                                           hover:text-white
-                                           transition-colors" onclick="fecharFormServico()">
-                                    Cancelar
-                                </button>
-
-                                <button type="button" class="btn-secundario
-                                           w-full
-                                           sm:w-auto
-                                           h-11
-                                           px-5
-                                           rounded-lg
-                                           bg-brand-gold
-                                           hover:bg-brand-gold-hover
-                                           text-black
-                                           text-sm
-                                           font-bold
-                                           transition-all" onclick="adicionarServicoPainel()">
-                                    Salvar serviço
-                                </button>
-
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-[#888780]" for="psrv-tempo">Duração (min)</label>
+                                <input type="number" id="psrv-tempo" placeholder="30" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none focus:border-[#888780]">
                             </div>
-
-                        </form>
-
-                    </div>
-
-
-                    <div class="cards-lista
-                               space-y-3" id="lista-servicos-painel">
-                        <p class="lista-vazia
-                                   rounded-xl
-                                   border border-brand-border
-                                   bg-brand-bg-card
-                                   p-8
-                                   text-center
-                                   text-sm
-                                   text-brand-muted">
-                            Nenhum serviço cadastrado.
-                        </p>
-                    </div>
-
-                </section>
-
-
-                <!-- ==================================================
-                     ABA: PROFISSIONAIS
-                     ================================================== -->
-
-                <section id="aba-profissionais" class="aba hidden">
-
-                    <div class="flex
-                               flex-col
-                               sm:flex-row
-                               sm:items-center
-                               sm:justify-between
-                               gap-4
-                               mb-6">
-
-                        <h1 class="text-2xl
-                                   sm:text-3xl
-                                   font-bold">
-                            Profissionais
-                        </h1>
-
-                    </div>
-
-
-                    <div id="form-profissional-painel" hidden class="mb-6">
-
-                        <form class="form-inline form-inline--painel
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5 sm:p-6" novalidate>
-
-                            <div class="grid
-                                       grid-cols-1
-                                       sm:grid-cols-2
-                                       lg:grid-cols-3
-                                       gap-4">
-
-                                <div class="campo">
-                                    <label for="ppro-nome" class="block
-                                               mb-2
-                                               text-sm
-                                               font-medium
-                                               text-gray-300">
-                                        Nome completo
-                                    </label>
-
-                                    <input type="text" id="ppro-nome" placeholder="Nome do profissional"
-                                        autocomplete="off" class="w-full
-                                               h-11
-                                               px-3
-                                               rounded-lg
-                                               bg-[#161513]
-                                               border border-brand-border
-                                               text-[#f1efe8]
-                                               placeholder:text-[#66645e]
-                                               outline-none
-                                               focus:border-brand-gold">
-                                </div>
-
-
-                                <div class="campo">
-                                    <label for="ppro-cargo" class="block
-                                               mb-2
-                                               text-sm
-                                               font-medium
-                                               text-gray-300">
-                                        Cargo
-                                    </label>
-
-                                    <input type="text" id="ppro-cargo" placeholder="Ex: Barbeiro" autocomplete="off"
-                                        class="w-full
-                                               h-11
-                                               px-3
-                                               rounded-lg
-                                               bg-[#161513]
-                                               border border-brand-border
-                                               text-[#f1efe8]
-                                               placeholder:text-[#66645e]
-                                               outline-none
-                                               focus:border-brand-gold">
-                                </div>
-
-
-                                <div class="campo">
-                                    <label for="ppro-foto" class="block
-                                               mb-2
-                                               text-sm
-                                               font-medium
-                                               text-gray-300">
-                                        Foto
-                                    </label>
-
-                                    <input type="file" id="ppro-foto" accept="image/*" class="w-full
-                                               h-11
-                                               px-3
-                                               py-2
-                                               rounded-lg
-                                               bg-[#161513]
-                                               border border-brand-border
-                                               text-gray-300
-                                               text-sm">
-                                </div>
-
-                            </div>
-
-
-                            <div class="flex
-                                       flex-col-reverse
-                                       sm:flex-row
-                                       sm:justify-end
-                                       gap-3
-                                       mt-5">
-
-                                <button type="button" class="btn-ghost
-                                           w-full
-                                           sm:w-auto
-                                           h-11
-                                           px-5
-                                           rounded-lg
-                                           border border-brand-border
-                                           bg-transparent
-                                           text-gray-300
-                                           font-semibold
-                                           hover:bg-[#111215]
-                                           hover:text-white" onclick="fecharFormProfissional()">
-                                    Cancelar
-                                </button>
-
-                                <button type="button" class="btn-secundario
-                                           w-full
-                                           sm:w-auto
-                                           h-11
-                                           px-5
-                                           rounded-lg
-                                           bg-brand-gold
-                                           hover:bg-brand-gold-hover
-                                           text-black
-                                           font-bold" onclick="adicionarProfissionalPainel()">
-                                    Salvar profissional
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
-
-                    <div class="cards-lista
-                               space-y-3" id="lista-profissionais-painel">
-                        <p class="lista-vazia
-                                   rounded-xl
-                                   border border-brand-border
-                                   bg-brand-bg-card
-                                   p-8
-                                   text-center
-                                   text-sm
-                                   text-brand-muted">
-                            Nenhum profissional cadastrado.
-                        </p>
-                    </div>
-
-                </section>
-
-
-                <!-- ==================================================
-                     ABA: FINANCEIRO
-                     ================================================== -->
-
-                <section id="aba-financeiro" class="aba hidden">
-
-                    <div class="mb-6">
-
-                        <h1 class="text-2xl
-                                   sm:text-3xl
-                                   font-bold">
-                            Dashboard financeiro
-                        </h1>
-
-                    </div>
-
-
-                    <!-- Resumo -->
-                    <div class="grid
-                               grid-cols-1
-                               sm:grid-cols-2
-                               xl:grid-cols-4
-                               gap-4
-                               mb-6">
-
-                        <div class="financeiro-card
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5">
-                            <div class="text-xs
-                                       uppercase
-                                       tracking-wide
-                                       text-brand-muted">
-                                Receita do mês
-                            </div>
-
-                            <div id="fin-receita-mes" class="mt-2
-                                       text-2xl
-                                       font-bold">
-                                R$ 0,00
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-[#888780]" for="psrv-foto">Imagem</label>
+                                <input type="file" id="psrv-foto" accept="image/*" class="h-10 px-3 py-1.5 rounded-lg border border-[#38362f] bg-[#161513] text-[#888780] text-xs">
                             </div>
                         </div>
+                        <div class="flex justify-end gap-2 mt-2">
+                            <button type="button" class="px-4 py-2 rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-xs font-medium hover:bg-[#2a2825]" onclick="fecharFormServico()">Cancelar</button>
+                            <button type="button" class="px-4 py-2 rounded-lg bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7]" onclick="adicionarServicoPainel()">Salvar</button>
+                        </div>
+                    </form>
+                </div>
 
+                <!-- LISTA DE SERVIÇOS -->
+                <div class="flex flex-col gap-2" id="lista-servicos-painel"></div>
+            </section>
 
-                        <div class="financeiro-card
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5">
-                            <div class="text-xs
-                                       uppercase
-                                       tracking-wide
-                                       text-brand-muted">
-                                Total de cortes
+            <!-- ABA PROFISSIONAIS -->
+            <section class="aba-func hidden" id="aba-profissionais">
+                <div class="flex items-center justify-between mb-5 gap-3">
+                    <h1 class="text-lg lg:text-xl font-medium">Profissionais</h1>
+                    <button class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer" onclick="abrirFormProfissional()">
+                        + Novo profissional
+                    </button>
+                </div>
+
+                <!-- FORMULÁRIO DE PROFISSIONAL -->
+                <div id="form-profissional-painel" class="hidden bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-5">
+                    <h3 class="text-sm font-medium mb-3">Cadastrar profissional</h3>
+                    <form class="flex flex-col gap-3" novalidate>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-[#888780]" for="ppro-nome">Nome completo</label>
+                                <input type="text" id="ppro-nome" placeholder="Nome do barbeiro" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none focus:border-[#888780]">
                             </div>
-
-                            <div id="fin-total-cortes" class="mt-2
-                                       text-2xl
-                                       font-bold">
-                                0
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-[#888780]" for="ppro-cargo">Cargo</label>
+                                <input type="text" id="ppro-cargo" placeholder="Ex: Barbeiro Master" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none focus:border-[#888780]">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-[#888780]" for="ppro-foto">Foto</label>
+                                <input type="file" id="ppro-foto" accept="image/*" class="h-10 px-3 py-1.5 rounded-lg border border-[#38362f] bg-[#161513] text-[#888780] text-xs">
                             </div>
                         </div>
-
-
-                        <div class="financeiro-card
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5">
-                            <div class="text-xs
-                                       uppercase
-                                       tracking-wide
-                                       text-brand-muted">
-                                Ticket médio
-                            </div>
-
-                            <div id="fin-ticket-medio" class="mt-2
-                                       text-2xl
-                                       font-bold">
-                                R$ 0,00
-                            </div>
+                        <div class="flex justify-end gap-2 mt-2">
+                            <button type="button" class="px-4 py-2 rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-xs font-medium hover:bg-[#2a2825]" onclick="fecharFormProfissional()">Cancelar</button>
+                            <button type="button" class="px-4 py-2 rounded-lg bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7]" onclick="adicionarProfissionalPainel()">Salvar</button>
                         </div>
+                    </form>
+                </div>
 
+                <!-- LISTA DE PROFISSIONAIS -->
+                <div class="flex flex-col gap-2" id="lista-profissionais-painel"></div>
+            </section>
 
-                        <div class="financeiro-card
-                                   rounded-xl
-                                   bg-brand-bg-card
-                                   border border-brand-border
-                                   p-5">
-                            <div class="text-xs
-                                       uppercase
-                                       tracking-wide
-                                       text-brand-muted">
-                                Serviço mais realizado
-                            </div>
+            <!-- ABA FINANCEIRO -->
+            <section class="aba-func hidden" id="aba-financeiro">
+                <div class="flex items-center justify-between mb-5 gap-3">
+                    <h1 class="text-lg lg:text-xl font-medium">Dashboard financeiro</h1>
+                </div>
 
-                            <div id="fin-mais-realizado" class="mt-2
-                                       text-xl
-                                       font-bold
-                                       break-words">
-                                —
-                            </div>
-                        </div>
-
+                <!-- KPIS FINANCEIROS (bg-[#232220]) -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-6">
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
+                        <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Receita do mês</div>
+                        <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8]" id="fin-receita-mes">R$ 0,00</div>
                     </div>
-
-
-                    <!-- Tabela -->
-                    <div class="rounded-xl
-                               bg-brand-bg-card
-                               border border-brand-border
-                               overflow-hidden">
-
-                        <div class="px-5
-                                   py-4
-                                   border-b border-brand-border">
-                            <h2 class="text-lg
-                                       font-bold">
-                                Histórico de atendimentos
-                            </h2>
-                        </div>
-
-
-                        <div class="overflow-x-auto">
-
-                            <table class="financeiro-tabela
-                                       w-full
-                                       min-w-[700px]
-                                       text-left">
-
-                                <thead>
-                                    <tr class="border-b
-                                               border-brand-border
-                                               text-xs
-                                               uppercase
-                                               tracking-wide
-                                               text-brand-muted">
-
-                                        <th class="px-5 py-4">
-                                            Data
-                                        </th>
-
-                                        <th class="px-5 py-4">
-                                            Cliente
-                                        </th>
-
-                                        <th class="px-5 py-4">
-                                            Serviço
-                                        </th>
-
-                                        <th class="px-5 py-4">
-                                            Profissional
-                                        </th>
-
-                                        <th class="px-5 py-4">
-                                            Valor
-                                        </th>
-
-                                    </tr>
-                                </thead>
-
-
-                                <tbody id="fin-tabela-corpo">
-
-                                    <tr>
-                                        <td colspan="5" class="px-5
-                                                   py-10
-                                                   text-center
-                                                   text-sm
-                                                   text-brand-muted">
-                                            Nenhum atendimento registrado ainda.
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
+                        <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Total de cortes</div>
+                        <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8]" id="fin-total-cortes">0</div>
                     </div>
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
+                        <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Ticket médio</div>
+                        <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8]" id="fin-ticket-medio">R$ 0,00</div>
+                    </div>
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
+                        <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Mais realizado</div>
+                        <div class="text-base sm:text-lg font-semibold leading-tight text-[#f1efe8] truncate" id="fin-mais-realizado">—</div>
+                    </div>
+                </div>
 
-                </section>
-
-            </div>
+                <!-- TABELA HISTÓRICO -->
+                <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden">
+                    <div class="p-3 px-4 border-b border-[#38362f] text-xs font-medium text-[#888780] uppercase tracking-wider">Histórico de atendimentos</div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
+                                    <th class="p-3 px-4">Data</th>
+                                    <th class="p-3 px-4">Cliente</th>
+                                    <th class="p-3 px-4">Serviço</th>
+                                    <th class="p-3 px-4">Profissional</th>
+                                    <th class="p-3 px-4">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fin-tabela-corpo" class="text-xs text-[#f1efe8]">
+                                <tr>
+                                    <td colspan="5" class="p-6 text-center text-[#888780]">Nenhum atendimento registrado ainda.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
         </main>
-
     </div>
 
+    <!-- NAVEGAÇÃO INFERIOR FIXA (MOBILE EXCLUSIVO) -->
+    <nav class="bottom-nav md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#232220] border-t border-[#38362f] flex z-40">
+        <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#9fe1cb] text-[10px] cursor-pointer relative" data-aba="perfil" onclick="irParaAba('perfil')">
+            <span class="text-lg">🏢</span> Perfil
+        </button>
+        <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="servicos" onclick="irParaAba('servicos')">
+            <span class="text-lg">✂️</span> Serviços
+        </button>
+        <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="profissionais" onclick="irParaAba('profissionais')">
+            <span class="text-lg">👤</span> Equip
+        </button>
+        <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="financeiro" onclick="irParaAba('financeiro')">
+            <span class="text-lg">💰</span> Caixa
+        </button>
+    </nav>
 
-    <!-- ============================================================
-         MODAL DE EDIÇÃO DA EMPRESA
-         ============================================================ -->
+</div>
 
-    <div id="modal-empresa" class="fixed
-               inset-0
-               z-50
-               flex
-               items-center
-               justify-center
-               p-4
-               bg-black/70
-               backdrop-blur-sm" hidden>
-
-        <div class="w-full
-                   max-w-lg
-                   max-h-[90vh]
-                   overflow-y-auto
-                   rounded-xl
-                   bg-brand-bg-card
-                   border border-brand-border
-                   shadow-2xl">
-
-            <!-- Cabeçalho -->
-            <div class="flex
-                       items-center
-                       justify-between
-                       px-5
-                       py-4
-                       border-b border-brand-border">
-
-                <h2 class="text-lg
-                           font-bold">
-                    Editar dados da empresa
-                </h2>
-
-                <button class="modal__fechar
-                           w-9
-                           h-9
-                           flex
-                           items-center
-                           justify-center
-                           rounded-lg
-                           text-gray-400
-                           hover:text-white
-                           hover:bg-[#38362f]
-                           transition-colors" onclick="fecharModalEmpresa()">
-                    ✕
-                </button>
-
-            </div>
-
-
-            <!-- Formulário -->
-            <form class="form-auth
-                       p-5
-                       space-y-4" novalidate>
-
-                <div class="campo">
-
-                    <label for="edit-emp-nome" class="block
-                               mb-2
-                               text-sm
-                               font-medium
-                               text-gray-300">
-                        Nome da empresa
-                    </label>
-
-                    <input type="text" id="edit-emp-nome" autocomplete="off" class="w-full
-                               h-11
-                               px-3
-                               rounded-lg
-                               bg-[#161513]
-                               border border-brand-border
-                               text-[#f1efe8]
-                               outline-none
-                               focus:border-brand-gold">
-
-                </div>
-
-
-                <div class="campo">
-
-                    <label for="edit-emp-categoria" class="block
-                               mb-2
-                               text-sm
-                               font-medium
-                               text-gray-300">
-                        Categoria
-                    </label>
-
-                    <select id="edit-emp-categoria" class="w-full
-                               h-11
-                               px-3
-                               rounded-lg
-                               bg-[#161513]
-                               border border-brand-border
-                               text-[#f1efe8]
-                               outline-none
-                               focus:border-brand-gold">
-
-                        <option value="barbearia">
-                            Barbearia
-                        </option>
-
-                        <option value="salao">
-                            Salão de beleza
-                        </option>
-
-                        <option value="estetica">
-                            Estética
-                        </option>
-
-                        <option value="clinica">
-                            Clínica
-                        </option>
-
-                        <option value="outro">
-                            Outro
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="campo">
-
-                    <label for="edit-emp-cnpj" class="block
-                               mb-2
-                               text-sm
-                               font-medium
-                               text-gray-300">
-                        CNPJ
-                    </label>
-
-                    <input type="text" id="edit-emp-cnpj" maxlength="18" autocomplete="off" class="w-full
-                               h-11
-                               px-3
-                               rounded-lg
-                               bg-[#161513]
-                               border border-brand-border
-                               text-[#f1efe8]
-                               outline-none
-                               focus:border-brand-gold">
-
-                </div>
-
-
-                <div class="grid
-                           grid-cols-1
-                           sm:grid-cols-2
-                           gap-4">
-
-                    <div class="campo">
-
-                        <label for="edit-emp-abertura" class="block
-                                   mb-2
-                                   text-sm
-                                   font-medium
-                                   text-gray-300">
-                            Abertura
-                        </label>
-
-                        <input type="time" id="edit-emp-abertura" class="w-full
-                                   h-11
-                                   px-3
-                                   rounded-lg
-                                   bg-[#161513]
-                                   border border-brand-border
-                                   text-[#f1efe8]
-                                   outline-none
-                                   focus:border-brand-gold">
-
-                    </div>
-
-
-                    <div class="campo">
-
-                        <label for="edit-emp-fechamento" class="block
-                                   mb-2
-                                   text-sm
-                                   font-medium
-                                   text-gray-300">
-                            Fechamento
-                        </label>
-
-                        <input type="time" id="edit-emp-fechamento" class="w-full
-                                   h-11
-                                   px-3
-                                   rounded-lg
-                                   bg-[#161513]
-                                   border border-brand-border
-                                   text-[#f1efe8]
-                                   outline-none
-                                   focus:border-brand-gold">
-
-                    </div>
-
-                </div>
-
-
-                <button type="button" class="btn-primario
-                           w-full
-                           h-11
-                           rounded-lg
-                           bg-brand-gold
-                           hover:bg-brand-gold-hover
-                           text-black
-                           text-sm
-                           font-bold
-                           transition-all
-                           duration-300
-                           hover:scale-[1.01]
-                           active:scale-[0.98]" onclick="salvarEdicaoEmpresa()">
-                    Salvar alterações
-                </button>
-
-            </form>
-
+<!-- MODAL: EDIÇÃO DA EMPRESA -->
+<div class="hidden fixed inset-0 bg-black/65 z-[300]" id="modal-overlay" onclick="fecharModalEmpresa()"></div>
+<div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-empresa" onclick="if(event.target===this) fecharModalEmpresa()">
+    <div class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-base font-medium">Editar dados da empresa</h2>
+            <button class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center" onclick="fecharModalEmpresa()">✕</button>
         </div>
-
+        <form class="flex flex-col gap-3" novalidate>
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="edit-emp-nome">Nome da empresa</label>
+                <input type="text" id="edit-emp-nome" class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="edit-emp-categoria">Categoria</label>
+                <select id="edit-emp-categoria" class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                    <option value="barbearia">Barbearia</option>
+                    <option value="salao">Salão de beleza</option>
+                    <option value="estetica">Estética</option>
+                    <option value="clinica">Clínica</option>
+                    <option value="outro">Outro</option>
+                </select>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="edit-emp-cnpj">CNPJ</label>
+                <input type="text" id="edit-emp-cnpj" maxlength="18" class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-[#888780]" for="edit-emp-abertura">Abertura</label>
+                    <input type="time" id="edit-emp-abertura" class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-[#888780]" for="edit-emp-fechamento">Fechamento</label>
+                    <input type="time" id="edit-emp-fechamento" class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                </div>
+            </div>
+            <button type="button" class="w-full h-10 px-4 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm cursor-pointer mt-2 hover:bg-[#e2dfd7]" onclick="salvarEdicaoEmpresa()">Salvar alterações</button>
+        </form>
     </div>
+</div>
 
+<div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap" id="aviso"></div>
 
-    <!-- Overlay -->
-    <div id="modal-overlay" class="fixed
-               inset-0
-               z-40
-               bg-black/70" hidden onclick="fecharModalEmpresa()"></div>
-
-
-    <!-- Aviso -->
-    <div class="aviso
-               fixed
-               left-1/2
-               bottom-5
-               z-[60]
-               w-[calc(100%-2rem)]
-               max-w-md
-               -translate-x-1/2
-               rounded-lg
-               bg-[#232220]
-               border border-brand-border
-               px-4
-               py-3
-               text-sm
-               text-[#f1efe8]
-               shadow-xl" id="aviso"></div>
-
-
-    <script src="{{ url_for('static', filename='js/manager-panel.js') }}"></script>
+<script src="{{ url_for('static', filename='js/manager-panel.js') }}"></script>
 
 </body>
-
 </html>

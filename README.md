@@ -48,19 +48,7 @@
 # 4 Comandos de Execução
 
     Backend Python: ```phyton run dev```
-    Frontend Tailwind: ```npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch```
-
-
-
-## 4. COMANDOS FUTUROS
-
-> Se quiser que outros dispositivos da sua rede possam acessar a API
-
-```flask --app main run --host=0.0.0.0 --port=5000```
-
-
----
-
+    Frontend Tailwind: ```npm run tailwind```
 
 ## 5. COMANDOS PARA ACESSAR ARQUIVOS
 
@@ -69,8 +57,6 @@
 > link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">;
 >
 > script src="{{ url_for('static', filename='js/script.js') }}"
->
-> As fontes são englobadas aqui!
 
 ## 6. Diagramas
 ## 7. Casos de uso

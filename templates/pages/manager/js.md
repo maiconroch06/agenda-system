@@ -1,373 +1,254 @@
-/* ============================================================
-   ESTADO SERVIÇOS
-   ============================================================ */
+// ESTADO GLOBAL
+let estadoAbaAtual = 'inicio';
+let visaoAgendaAtual = 'dia';
+let dataAgendaSelecionada = new Date();
 
-let usuario = JSON.parse(localStorage.getItem("usuario")) || {
-    nome: "",
-    senha: "",
-    email: ""
-};
+// INICIALIZAÇÃO
+document.addEventListener('DOMContentLoaded', () => {
+    carregarDadosUsuario();
+    carregarKPIs();
+    renderizarInicio();
+    renderizarAgenda();
+    renderizarServicos();
+    mudarMes(0);
+});
 
-console.log(usuario)
-console.log(usuario.tipo)
+// NAVEGAÇÃO DE ABAS (Sidebar Desktop & Bottom-Nav Mobile)
+function irParaAba(nomeAba) {
+    if (nomeAba === 'mais') {
+        abrirMenuMais();
+        return;
+    }
 
-let servicos = JSON.parse(localStorage.getItem("servicos")) || [];
-let profissionais = JSON.parse(localStorage.getItem("profissionais")) || [];
+    estadoAbaAtual = nomeAba;
 
-gerarCodigo();
+    // Alterna visibilidade das seções
+    document.querySelectorAll('.aba-func').forEach(sec => sec.classList.add('hidden'));
+    const abaAlvo = document.getElementById(`aba-${nomeAba}`);
+    if (abaAlvo) abaAlvo.classList.remove('hidden');
 
-sincronizarPainel();
+    // Atualiza estados na Sidebar (Desktop)
+    document.querySelectorAll('.sidebar-func__item').forEach(btn => {
+        const ativo = btn.dataset.aba === nomeAba;
+        btn.className = `sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none text-sm font-medium cursor-pointer text-left w-full transition-colors ${
+            ativo ? 'bg-[#2a2825] text-[#f1efe8]' : 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]'
+        }`;
+    });
 
-window.onload = preencherPainel; 
-//preencherPainel();
-
-/* ============================================================
-   UTILITÁRIOS
-   ============================================================ */
-
-function mostrarAviso(msg) {
-    const el = document.getElementById("aviso");
-    el.textContent = msg;
-    el.classList.add("visivel");
-    setTimeout(() => el.classList.remove("visivel"), 2500);
-}
-
-function limparErro(inputId, erroId) {
-    const input = document.getElementById(inputId);
-    const erro = document.getElementById(erroId);
-    if (input) input.classList.remove("invalido");
-    if (erro) erro.textContent = "";
-}
-
-function definirErro(inputId, erroId, msg) {
-    const input = document.getElementById(inputId);
-    const erro = document.getElementById(erroId);
-    if (input) input.classList.add("invalido");
-    if (erro) erro.textContent = msg;
-}
-
-function lerArquivoBase64(input) {
-    return new Promise((resolve) => {
-        const arquivo = input.files[0];
-        if (!arquivo) { resolve(null); return; }
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.readAsDataURL(arquivo);
+    // Atualiza estados na Barra Inferior (Mobile)
+    document.querySelectorAll('.bottom-nav__item').forEach(btn => {
+        const ativo = btn.dataset.aba === nomeAba;
+        btn.classList.toggle('text-[#9fe1cb]', ativo);
+        btn.classList.toggle('text-[#888780]', !ativo);
     });
 }
 
-function gerarIdUnico() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+// DADOS E KPIS DO PERFIL
+function carregarDadosUsuario() {
+    const usuario = JSON.parse(localStorage.getItem('usuario')) || { nome: 'Barbeiro' };
+    const primeiroNome = usuario.nome.split(' ')[0];
+    const elNome = document.getElementById('inicio-primeiro-nome');
+    if (elNome) elNome.textContent = primeiroNome;
 }
 
-/* ============================================================
-   TELA 6: PAINEL
-   ============================================================ */
+function carregarKPIs() {
+    const elTotal = document.getElementById('kpi-total-hoje');
+    const elProximo = document.getElementById('kpi-proximo');
+    const elGanhos = document.getElementById('kpi-ganhos-hoje');
+    const elAvaliacao = document.getElementById('kpi-avaliacao');
 
-function gerarCodigoAcesso() {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-    let codigo = "";
-    for (let i = 0; i < 8; i++) {
-        if (i === 4) codigo += "-";
-        codigo += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return codigo;
+    if (elTotal) elTotal.textContent = '5';
+    if (elProximo) elProximo.textContent = '14:30';
+    if (elGanhos) elGanhos.textContent = 'R$ 180,00';
+    if (elAvaliacao) elAvaliacao.textContent = '4.9 ★';
 }
 
-function gerarCodigo() {
-    codigoAcesso = gerarCodigoAcesso();
-    localStorage.setItem("codigoAcesso", codigoAcesso);
-    document.getElementById("codigo-acesso").textContent = codigoAcesso;
-    mostrarAviso("Novo código gerado!");
-}
+// RENDERIZAÇÃO DA ABA INÍCIO (CARDS PADRONIZADOS EM bg-[#232220])
+function renderizarInicio() {
+    const container = document.getElementById('lista-inicio-hoje');
+    if (!container) return;
 
-function copiarCodigo() {
-    if (!codigoAcesso) return;
-    navigator.clipboard.writeText(codigoAcesso)
-        .then(() => mostrarAviso("Código copiado!"))
-        .catch(() => mostrarAviso("Não foi possível copiar automaticamente"));
-}
+    const atendimentos = [
+        { id: 1, cliente: 'Carlos Silva', servico: 'Corte + Barba', horario: '09:00', valor: 'R$ 60,00', status: 'concluido' },
+        { id: 2, cliente: 'Marcos Souza', servico: 'Corte Degradê', horario: '10:30', valor: 'R$ 40,00', status: 'concluido' },
+        { id: 3, cliente: 'Lucas Andrade', servico: 'Barba Terapia', horario: '14:30', valor: 'R$ 35,00', status: 'pendente' },
+        { id: 4, cliente: 'João Pedro', servico: 'Corte Infantil', horario: '16:00', valor: 'R$ 45,00', status: 'pendente' }
+    ];
 
-function preencherPainel() {
-    let emp = JSON.parse(localStorage.getItem("empresa"))
-    
-    if (!emp) return;
-
-    document.getElementById("sidebar-nome-empresa").textContent = emp.nome;
-    document.getElementById("perfil-nome").textContent = emp.nome;
-    document.getElementById("perfil-categoria").textContent = emp.categoria;
-    document.getElementById("perfil-cnpj").textContent = emp.cnpj;
-    document.getElementById("perfil-expediente").textContent = `${emp.abertura} – ${emp.fechamento}`;
-    document.getElementById("perfil-dias").textContent =
-    emp.dias.length > 0 ? emp.dias.map(d => d.charAt(0).toUpperCase() + d.slice(1)).join(", ") : "Nenhum";
-    document.getElementById("codigo-acesso").textContent = codigoAcesso;
-
-    sincronizarPainel();
-}
-
-function sincronizarPainel() {
-    // Serviços no painel
-    const containerS = document.getElementById("lista-servicos-painel");
-    if (servicos.length === 0) {
-        containerS.innerHTML = `<p class="lista-vazia">Nenhum serviço cadastrado.</p>`;
-    } else {
-        containerS.innerHTML = servicos.map(s => `
-            <div class="item-card" data-id="${s.id}">
-                <div class="ordem-btns">
-                    <button class="ordem-btn" onclick="moverItemPainel('servico', '${s.id}', -1)">▲</button>
-                    <button class="ordem-btn" onclick="moverItemPainel('servico', '${s.id}', 1)">▼</button>
+    container.innerHTML = atendimentos.map(item => `
+        <div onclick="abrirModalDetalhe(${item.id})" class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex items-center justify-between cursor-pointer hover:border-[#4a473f] transition-colors">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-[#2a2825] flex items-center justify-center text-sm font-semibold text-[#f1efe8]">
+                    ${item.cliente.charAt(0)}
                 </div>
-                ${s.foto
-                    ? `<img class="item-card__foto" src="${s.foto}" alt="${s.nome}">`
-                    : `<div class="item-card__foto-placeholder">✂️</div>`
-                }
-                <div class="item-card__nome">${s.nome}</div>
-                <div class="item-card__meta">
-                    <span>${s.tempo} min</span>
-                    <span>R$ ${s.preco.toFixed(2).replace(".", ",")}</span>
-                </div>
-                <div class="item-card__acoes">
-                    <button onclick="editarServico('${s.id}')">Editar</button>
-                    <button class="btn-remover" onclick="removerServico('${s.id}')">Remover</button>
+                <div>
+                    <div class="text-sm font-medium text-[#f1efe8]">${item.cliente}</div>
+                    <div class="text-xs text-[#888780]">${item.servico} • ${item.horario}</div>
                 </div>
             </div>
-        `).join("");
-    }
-
-    // Profissionais no painel
-    const containerP = document.getElementById("lista-profissionais-painel");
-    if (profissionais.length === 0) {
-        containerP.innerHTML = `<p class="lista-vazia">Nenhum profissional cadastrado.</p>`;
-    } else {
-        containerP.innerHTML = profissionais.map(p => `
-            <div class="item-card" data-id="${p.id}">
-                <div class="ordem-btns">
-                    <button class="ordem-btn" onclick="moverItemPainel('profissional', '${p.id}', -1)">▲</button>
-                    <button class="ordem-btn" onclick="moverItemPainel('profissional', '${p.id}', 1)">▼</button>
-                </div>
-                ${p.foto
-                    ? `<img class="item-card__foto" src="${p.foto}" alt="${p.nome}">`
-                    : `<div class="item-card__foto-placeholder">👤</div>`
-                }
-                <div class="item-card__nome">${p.nome}</div>
-                <div class="item-card__meta" style="justify-content:center">
-                    <span>${p.cargo}</span>
-                </div>
-                <div class="item-card__acoes">
-                    <button onclick="editarProfissional('${p.id}')">Editar</button>
-                    <button class="btn-remover" onclick="removerProfissional('${p.id}')">Remover</button>
-                </div>
+            <div class="text-right">
+                <div class="text-xs font-semibold text-[#9fe1cb]">${item.valor}</div>
+                <span class="text-[10px] px-2 py-0.5 rounded-full ${
+                    item.status === 'concluido' ? 'bg-[#0f6e56]/20 text-[#9fe1cb]' : 'bg-[#f0c05a]/20 text-[#f0c05a]'
+                }">${item.status === 'concluido' ? 'Concluído' : 'Pendente'}</span>
             </div>
-        `).join("");
+        </div>
+    `).join('');
+}
+
+// CONTROLE DA AGENDA
+function mudarVisaoAgenda(visao) {
+    visaoAgendaAtual = visao;
+    document.querySelectorAll('.filtro-btn').forEach(btn => {
+        const ativo = btn.dataset.filtro === visao;
+        btn.className = `filtro-btn px-3.5 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all ${
+            ativo ? 'border-[#f1efe8] bg-[#f1efe8] text-[#161513]' : 'border-[#4a473f] bg-transparent text-[#888780]'
+        }`;
+    });
+
+    document.getElementById('agenda-visao-dia').classList.toggle('hidden', visao !== 'dia');
+    document.getElementById('agenda-visao-semana').classList.toggle('hidden', visao !== 'semana');
+    document.getElementById('agenda-visao-mes').classList.toggle('hidden', visao !== 'mes');
+
+    renderizarAgenda();
+}
+
+function renderizarAgenda() {
+    const containerDia = document.getElementById('lista-agenda-dia');
+    if (!containerDia) return;
+
+    const agendamentos = [
+        { id: 101, cliente: 'Gabriel Lima', servico: 'Corte Social', horario: '11:00 - 11:40', valor: 'R$ 40,00' },
+        { id: 102, cliente: 'Rafael Costa', servico: 'Barba Completa', horario: '13:00 - 13:30', valor: 'R$ 35,00' }
+    ];
+
+    containerDia.innerHTML = agendamentos.map(item => `
+        <div onclick="abrirModalDetalhe(${item.id})" class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex items-center justify-between cursor-pointer hover:border-[#4a473f] transition-colors">
+            <div>
+                <div class="text-sm font-medium text-[#f1efe8]">${item.cliente}</div>
+                <div class="text-xs text-[#888780]">${item.servico}</div>
+                <div class="text-xs text-[#9fe1cb] mt-1">🕒 ${item.horario}</div>
+            </div>
+            <div class="text-right font-medium text-sm text-[#f1efe8]">
+                ${item.valor}
+            </div>
+        </div>
+    `).join('');
+}
+
+function mudarMes(delta) {
+    dataAgendaSelecionada.setMonth(dataAgendaSelecionada.getMonth() + delta);
+    const titulo = document.getElementById('mes-titulo');
+    if (titulo) {
+        const mesExtenso = dataAgendaSelecionada.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+        titulo.textContent = mesExtenso.charAt(0).toUpperCase() + mesExtenso.slice(1);
     }
 }
 
-function moverItemPainel(tipo, id, direcao) {
-    moverItem(tipo, id, direcao);
+// ABA SERVIÇOS (CARDS PADRONIZADOS EM bg-[#232220])
+function renderizarServicos() {
+    const container = document.getElementById('lista-servicos-func');
+    if (!container) return;
+
+    const servicos = JSON.parse(localStorage.getItem('servicos')) || [
+        { id: '1', nome: 'Corte Masculino', duracao: '30 min', preco: 'R$ 40,00', ativo: true },
+        { id: '2', nome: 'Barba Terapia', duracao: '25 min', preco: 'R$ 35,00', ativo: true },
+        { id: '3', nome: 'Combo Corte + Barba', duracao: '50 min', preco: 'R$ 65,00', ativo: false }
+    ];
+
+    container.innerHTML = servicos.map(servico => `
+        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex items-center justify-between">
+            <div>
+                <div class="text-sm font-medium text-[#f1efe8]">${servico.nome}</div>
+                <div class="text-xs text-[#888780]">${servico.duracao} • ${servico.preco}</div>
+            </div>
+            <label class="relative inline-block w-11 h-6 flex-shrink-0 cursor-pointer">
+                <input type="checkbox" ${servico.ativo ? 'checked' : ''} class="sr-only peer" onchange="mostrarAviso('Status do serviço atualizado!')">
+                <span class="absolute inset-0 bg-[#4a473f] rounded-full transition-colors peer-checked:bg-[#0f6e56] peer-checked:after:translate-x-[20px] peer-checked:after:bg-white after:content-[''] after:absolute after:w-[18px] after:h-[18px] after:rounded-full after:left-[3px] after:bottom-[3px] after:bg-[#888780] after:transition-all"></span>
+            </label>
+        </div>
+    `).join('');
 }
 
-/* ============================================================
-   SIDEBAR: TROCA DE ABA
-   ============================================================ */
+// GERENCIAMENTO DE MODAIS (DETALHES, BLOQUEIO, CONFIGS E MAIS)
+function abrirModalDetalhe(id) {
+    document.getElementById('detalhe-cliente').textContent = 'Cliente Exemplo';
+    document.getElementById('detalhe-servico').textContent = 'Corte + Barba';
+    document.getElementById('detalhe-horario').textContent = '14:30';
+    document.getElementById('detalhe-valor').textContent = 'R$ 60,00';
+    document.getElementById('detalhe-telefone').textContent = '(11) 98765-4321';
+    document.getElementById('detalhe-obs').textContent = 'Sem barba no pescoço.';
 
-function mudarAba(event, qual) {
-    document.querySelectorAll(".aba").forEach(a => a.classList.remove("ativa"));
-    document.querySelectorAll(".sidebar__item").forEach(i => i.classList.remove("ativo"));
-    document.getElementById(`aba-${qual}`).classList.add("ativa");
-    event.currentTarget.classList.add("ativo");
+    exibirModal('modal-detalhe', 'overlay-detalhe');
+}
+function fecharModalDetalhe() { ocultarModal('modal-detalhe', 'overlay-detalhe'); }
+
+function abrirModalBloquear() { exibirModal('modal-bloquear', 'overlay-bloquear'); }
+function fecharModalBloquear() { ocultarModal('modal-bloquear', 'overlay-bloquear'); }
+function confirmarBloqueio() {
+    fecharModalBloquear();
+    mostrarAviso('Horário bloqueado com sucesso!');
 }
 
-/* ============================================================
-   EDIÇÃO DA EMPRESA (modal)
-   ============================================================ */
+function abrirModalConfig(tipo) {
+    const titulo = document.getElementById('config-modal-titulo');
+    const campoTexto = document.getElementById('config-campo-texto');
+    const campoTextarea = document.getElementById('config-campo-textarea');
+    const campoSenha = document.getElementById('config-campo-senha');
 
-function editarEmpresa() {
-    let emp = JSON.parse(localStorage.getItem("empresa"))
-    document.getElementById("edit-emp-nome").value = emp.nome;
-    document.getElementById("edit-emp-categoria").value = emp.categoria;
-    document.getElementById("edit-emp-cnpj").value = emp.cnpj;
-    document.getElementById("edit-emp-abertura").value = emp.abertura;
-    document.getElementById("edit-emp-fechamento").value = emp.fechamento;
-    document.getElementById("edit-emp-fechamento").value = emp.dias;
+    campoTexto.classList.add('hidden');
+    campoTextarea.classList.add('hidden');
+    campoSenha.classList.add('hidden');
 
-    document.getElementById("modal-empresa").hidden = false;
-    document.getElementById("modal-overlay").hidden = false;
-}
-
-function fecharModalEmpresa() {
-    document.getElementById("modal-empresa").hidden = true;
-    document.getElementById("modal-overlay").hidden = true;
-}
-
-function salvarEdicaoEmpresa() {
-    const nome = document.getElementById("edit-emp-nome").value.trim();
-    const categoria = document.getElementById("edit-emp-categoria").value;
-    const cnpj = document.getElementById("edit-emp-cnpj").value.trim();
-    const abertura = document.getElementById("edit-emp-abertura").value;
-    const fechamento = document.getElementById("edit-emp-fechamento").value;
-
-    if (!nome) { mostrarAviso("Informe o nome da empresa"); return; }
-
-    const empresa = {
-        nome,
-        categoria,
-        cnpj,
-        abertura,
-        fechamento
+    if (tipo === 'telefone') {
+        titulo.textContent = 'Alterar Telefone';
+        campoTexto.classList.remove('hidden');
+    } else if (tipo === 'descricao') {
+        titulo.textContent = 'Editar Descrição Profissional';
+        campoTextarea.classList.remove('hidden');
+    } else if (tipo === 'senha') {
+        titulo.textContent = 'Alterar Senha';
+        campoSenha.classList.remove('hidden');
     }
 
-    localStorage.setItem("empresa", JSON.stringify(empresa));
-    preencherPainel();
-    fecharModalEmpresa();
-    mostrarAviso("Dados da empresa atualizados!");
+    exibirModal('modal-config', 'overlay-config');
+}
+function fecharModalConfig() { ocultarModal('modal-config', 'overlay-config'); }
+function salvarConfig() {
+    fecharModalConfig();
+    mostrarAviso('Configurações salvas!');
 }
 
-/* ============================================================
-   SERVIÇOS NO PAINEL (formulário)
-   ============================================================ */
+function abrirMenuMais() { exibirModal('modal-mais', 'overlay-mais'); }
+function fecharMenuMais() { ocultarModal('modal-mais', 'overlay-mais'); }
 
-function abrirFormServico() {
-    document.getElementById("form-servico-painel").hidden = false;
+// FUNÇÕES AUXILIARES
+function exibirModal(modalId, overlayId) {
+    document.getElementById(modalId)?.classList.remove('hidden');
+    document.getElementById(overlayId)?.classList.remove('hidden');
 }
 
-function fecharFormServico() {
-    document.getElementById("form-servico-painel").hidden = true;
-    document.getElementById("psrv-nome").value = "";
-    document.getElementById("psrv-preco").value = "";
-    document.getElementById("psrv-tempo").value = "";
-    document.getElementById("psrv-foto").value = "";
+function ocultarModal(modalId, overlayId) {
+    document.getElementById(modalId)?.classList.add('hidden');
+    document.getElementById(overlayId)?.classList.add('hidden');
 }
 
-async function adicionarServicoPainel() {
-    const nome = document.getElementById("psrv-nome").value.trim();
-    const preco = parseFloat(document.getElementById("psrv-preco").value);
-    const tempo = parseInt(document.getElementById("psrv-tempo").value);
-    const fotoInput = document.getElementById("psrv-foto");
-
-    if (!nome) { mostrarAviso("Informe o nome do serviço"); return; }
-    if (isNaN(preco)) { mostrarAviso("Informe o preço"); return; }
-    if (isNaN(tempo)) { mostrarAviso("Informe a duração"); return; }
-
-    const foto = await lerArquivoBase64(fotoInput);
-    
-    const servico = {
-        id: gerarIdUnico(),
-        nome: nome,
-        preco: preco,
-        tempo: tempo,
-        foto: foto
-    }
-
-    servicos.push(servico);
-
-    localStorage.setItem("servicos", JSON.stringify(servicos));
-
-    fecharFormServico();
-    sincronizarPainel();
-    mostrarAviso("Serviço adicionado!");
-}
-
-/* ============================================================
-   PROFISSIONAIS NO PAINEL (formulário)
-   ============================================================ */
-
-function abrirFormProfissional() {
-    document.getElementById("form-profissional-painel").hidden = false;
-}
-
-function fecharFormProfissional() {
-    document.getElementById("form-profissional-painel").hidden = true;
-    document.getElementById("ppro-nome").value = "";
-    document.getElementById("ppro-cargo").value = "";
-    document.getElementById("ppro-foto").value = "";
-}
-
-async function adicionarProfissionalPainel() {
-    const nome = document.getElementById("ppro-nome").value.trim();
-    const cargo = document.getElementById("ppro-cargo").value.trim();
-    const fotoInput = document.getElementById("ppro-foto");
-
-    if (!nome) { mostrarAviso("Informe o nome do profissional"); return; }
-    if (!cargo) { mostrarAviso("Informe o cargo"); return; }
-
-    const foto = await lerArquivoBase64(fotoInput);
-    
-    const profissional = {
-        id: gerarIdUnico(),
-        nome: nome,
-        cargo: cargo,
-        foto: foto
-    }
-
-    profissionais.push(profissional);
-
-    localStorage.setItem("profissionais", JSON.stringify(profissionais));
-
-    fecharFormProfissional();
-    sincronizarPainel();
-    mostrarAviso("Profissional adicionado!");
-}
-
-function moverItem(tipo, id, direcao) {
-    const lista = tipo === "servico" ? servicos : profissionais;
-    const idx = lista.findIndex(i => i.id === id);
-    const novoIdx = idx + direcao;
-    if (novoIdx < 0 || novoIdx >= lista.length) return;
-    [lista[idx], lista[novoIdx]] = [lista[novoIdx], lista[idx]];
-    if (tipo === "servico") {
-        sincronizarPainel();
-    } else {
-        sincronizarPainel();
+function alternarNotificacoes() { mostrarAviso('Preferência de notificação salva.'); }
+function alternarTema() { mostrarAviso('Tema atualizado.'); }
+function sairDaConta() {
+    if (confirm('Deseja realmente sair da conta?')) {
+        window.location.href = '/';
     }
 }
 
-
-function removerServico(id) {
-    servicos = servicos.filter(s => s.id !== id);
-    localStorage.setItem("servicos", JSON.stringify(servicos));
-    sincronizarPainel();
-}
-
-function editarServico(id) {
-    const s = servicos.find(s => s.id === id);
-    if (!s) return;
-    const novoNome = prompt("Nome do serviço:", s.nome);
-    if (novoNome !== null && novoNome.trim()) s.nome = novoNome.trim();
-    const novoPreco = prompt("Preço (R$):", s.preco);
-    if (novoPreco !== null && !isNaN(parseFloat(novoPreco))) s.preco = parseFloat(novoPreco);
-    const novoTempo = prompt("Duração (min):", s.tempo);
-    if (novoTempo !== null && !isNaN(parseInt(novoTempo))) s.tempo = parseInt(novoTempo);
-    localStorage.setItem("servicos", JSON.stringify(servicos));
-    sincronizarPainel();
-}
-
-function removerProfissional(id) {
-    profissionais = profissionais.filter(p => p.id !== id);
-    localStorage.setItem("profissionais", JSON.stringify(profissionais));
-    sincronizarPainel();
-}
-
-function editarProfissional(id) {
-    const p = profissionais.find(p => p.id === id);
-    if (!p) return;
-    const novoNome = prompt("Nome do profissional:", p.nome);
-    if (novoNome !== null && novoNome.trim()) p.nome = novoNome.trim();
-    const novoCargo = prompt("Cargo:", p.cargo);
-    if (novoCargo !== null && novoCargo.trim()) p.cargo = novoCargo.trim();
-    localStorage.setItem("profissionais", JSON.stringify(profissionais));
-    sincronizarPainel();
-}
-
-/* ============================================================
-   SAIR
-   ============================================================ */
-
-function sair() {
-    if (!confirm("Deseja sair do sistema?")) return;
-    /*localStorage.removeItem("usuario");
-    localStorage.removeItem("empresa");
-    localStorage.removeItem("servicos");
-    localStorage.removeItem("profissionais");
-    localStorage.removeItem("codigoAcesso");*/
-    window.location.href = "autenticacao.html"
+function mostrarAviso(msg) {
+    const el = document.getElementById('aviso');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.remove('opacity-0', 'pointer-events-none');
+    el.classList.add('opacity-100');
+    setTimeout(() => {
+        el.classList.remove('opacity-100');
+        el.classList.add('opacity-0', 'pointer-events-none');
+    }, 2500);
 }

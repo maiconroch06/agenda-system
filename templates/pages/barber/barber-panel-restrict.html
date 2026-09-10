@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Funcionário</title>
+    <title>TMS Barbearia | BarberDash</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
@@ -14,7 +14,7 @@
     <div class="flex flex-1 pb-20 lg:pb-0">
 
         <!-- SIDEBAR (Oculta no mobile, visível em telas lg+) -->
-        <aside id="sidebar" class="hidden lg:flex lg:flex-col lg:w-64 lg:min-h-screen shrink-0 bg-[#232220] border-r border-[#38362f]">
+        <aside id="sidebar" class="hidden md:flex md:flex-col md:w-64 md:h-screen md:sticky md:top-0 shrink-0 bg-[#232220] border-r border-[#38362f]">
 
             <!-- Logo -->
             <div class="block items-center px-5 py-5 border-b border-[#38362f]">
@@ -22,10 +22,10 @@
                 {% include "componetization/logo/logo-top-horizontal.html" %}
                 <h1 class="mt-4 text-2xl font-bold">Barber Dash</h1>
             </div>
-        
+
             <!-- Navegação Desktop -->
             <nav class="flex flex-col p-3 gap-1">
-                <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-[#2a2825] text-[#f1efe8] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]" data-aba="inicio" onclick="irParaAba('inicio')">
+                <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-[#2a2825] text-[#f1efe8] font-medium text-sm cursor-pointer text-left w-full transition-colors" data-aba="inicio" onclick="irParaAba('inicio')">
                     <span class="text-lg w-5.5 text-center">🏠</span> Início
                 </button>
             
@@ -41,12 +41,12 @@
                     <span class="text-lg w-5.5 text-center">⚙️</span> Configurações
                 </button>
             </nav>
-        
-            <!-- Sair -->
+
+            <!-- Sair (Sempre visível no rodapé da sidebar fixa) -->
             <a class="mt-auto mx-3 mb-5 px-4 py-3 text-center rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-sm font-medium transition-colors hover:bg-[#38362f] hover:text-[#f1efe8]" href="/"> 
                 Sair
             </a>
-        
+
         </aside>
 
         <!-- CONTEÚDO PRINCIPAL ADAPTADO -->
