@@ -15,5 +15,5 @@ def managerLogin():
     return render_template('pages/manager/manager-login.html')
 
 @manager.route('/painel')
-def managerDashBoard():
+def managerPanel():
     return render_template('pages/manager/manager-panel-restrict.html')
