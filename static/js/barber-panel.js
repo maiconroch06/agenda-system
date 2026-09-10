@@ -1,67 +1,8 @@
 /* ============================================================
-   PERSISTÊNCIA (localStorage)
-   ============================================================ */
-
-function carregarDoStorage(chave, valorPadrao) {
-    try {
-        const bruto = localStorage.getItem(chave);
-        if (!bruto) return valorPadrao;
-
-        const valor = JSON.parse(bruto);
-
-        // Padrão é array (agendamentos, serviços...): se o salvo não for array, descarta e usa o padrão
-        if (Array.isArray(valorPadrao)) {
-            return Array.isArray(valor) ? valor : valorPadrao;
-        }
-
-        // Padrão é objeto (funcionario...): mescla por cima do padrão,
-        // assim campos que faltarem no valor salvo (ex: "nome") vêm do padrão em vez de quebrar
-        if (valorPadrao && typeof valorPadrao === "object") {
-            return (valor && typeof valor === "object") ? { ...valorPadrao, ...valor } : valorPadrao;
-        }
-
-        return valor;
-    } catch (erro) {
-        console.warn(`Não foi possível ler "${chave}" do localStorage, usando dados padrão.`, erro);
-        return valorPadrao;
-    }
-}
-
-function salvarNoStorage(chave, valor) {
-    try {
-        localStorage.setItem(chave, JSON.stringify(valor));
-    } catch (erro) {
-        console.warn(`Não foi possível salvar "${chave}" no localStorage.`, erro);
-    }
-}
-
-function salvarFuncionario()   { salvarNoStorage("profissional", funcionario); }
-function salvarAgendamentos()  { salvarNoStorage("agendamentos", agendamentos); }
-function salvarServicos()      { salvarNoStorage("servicosFunc", servicosFunc); }
-function salvarAvaliacoes()    { salvarNoStorage("avaliacoes", avaliacoes); }
-function salvarNotificacoes()  { salvarNoStorage("notificacoes", notificacoes); }
-function salvarBloqueios()     { salvarNoStorage("bloqueios", bloqueios); }
-
-/* ============================================================
-   DADOS DO FUNCIONÁRIO LOGADO (padrão / seed)
-   ============================================================ */
-
-const FUNCIONARIO_PADRAO = {
-    nome: "Maicon",
-    foto: null,
-    empresa: "Barbearia do Zé",
-    telefone: "(11) 98888-7777",
-    descricao: "Barbeiro especializado em degradê e barboterapia, com foco em atendimento personalizado.",
-    comissaoPercentual: 50,
-};
-
-let funcionario = carregarDoStorage("profissional", FUNCIONARIO_PADRAO);
-
-/* ============================================================
    UTILITÁRIOS DE DATA
    ============================================================ */
 
-function formatarISO(data) {
+   function formatarISO(data) {
     const y = data.getFullYear();
     const m = String(data.getMonth() + 1).padStart(2, "0");
     const d = String(data.getDate()).padStart(2, "0");
@@ -88,99 +29,167 @@ function formatarDataExtenso(iso) {
     return d.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
 }
 
-function formatarDataCurta(iso) {
-    const d = new Date(iso + "T00:00:00");
-    return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
-}
-
 function formatarMoeda(v) {
     return "R$ " + v.toFixed(2).replace(".", ",");
 }
 
-function gerarEstrelas(nota) {
-    return "★".repeat(nota) + "☆".repeat(5 - nota);
-}
-
 /* ============================================================
-   DADOS MOCK — AGENDAMENTOS (padrão / seed)
+   DADOS MOCK — AGENDAMENTOS
    ============================================================ */
 
 const AGENDAMENTOS_PADRAO = [
     { id: "a1",  data: diasAPartirDeHoje(0), hora: "09:00", cliente: "Carlos Eduardo",  telefone: "(11) 98765-4321", servico: "Corte Social",       valor: 18, status: "concluido",  observacoes: "" },
     { id: "a2",  data: diasAPartirDeHoje(0), hora: "10:00", cliente: "Bruno Alves",      telefone: "(11) 91234-5678", servico: "Degradê & Barba",    valor: 30, status: "concluido",  observacoes: "Cliente prefere degradê baixo" },
-    { id: "a3",  data: diasAPartirDeHoje(0), hora: "11:30", cliente: "Rafael Souza",     telefone: "(11) 99887-6655", servico: "Barba",               valor: 15, status: "confirmado", observacoes: "" },
+    { id: "a3",  data: diasAPartirDeHoje(0), hora: "11:30", cliente: "Rafael Souza",     telefone: "(11) 99887-6655", servico: "Barba",              valor: 15, status: "confirmado", observacoes: "" },
     { id: "a4",  data: diasAPartirDeHoje(0), hora: "14:00", cliente: "Diego Martins",    telefone: "(11) 98111-2233", servico: "Corte Infantil",      valor: 20, status: "aguardando", observacoes: "Primeira vez, criança de 6 anos" },
     { id: "a5",  data: diasAPartirDeHoje(0), hora: "15:30", cliente: "Felipe Costa",     telefone: "(11) 97222-3344", servico: "Corte Militar",       valor: 15, status: "aguardando", observacoes: "" },
     { id: "a6",  data: diasAPartirDeHoje(0), hora: "16:30", cliente: "Gustavo Lima",     telefone: "(11) 96333-4455", servico: "Social & Barba",      valor: 30, status: "cancelado",  observacoes: "Cliente cancelou por telefone" },
-
     { id: "a7",  data: diasAPartirDeHoje(1), hora: "09:30", cliente: "Henrique Dias",    telefone: "(11) 95444-5566", servico: "Degradê",              valor: 22, status: "aguardando", observacoes: "" },
-    { id: "a8",  data: diasAPartirDeHoje(1), hora: "13:00", cliente: "Igor Pereira",     telefone: "(11) 94555-6677", servico: "Corte Social",         valor: 18, status: "aguardando", observacoes: "" },
-    { id: "a9",  data: diasAPartirDeHoje(2), hora: "10:00", cliente: "João Vitor",       telefone: "(11) 93666-7788", servico: "Barba",                valor: 15, status: "aguardando", observacoes: "" },
-    { id: "a10", data: diasAPartirDeHoje(3), hora: "11:00", cliente: "Lucas Fernandes",  telefone: "(11) 92777-8899", servico: "Degradê & Barba",      valor: 30, status: "aguardando", observacoes: "" },
-    { id: "a11", data: diasAPartirDeHoje(3), hora: "15:00", cliente: "Marcelo Rocha",    telefone: "(11) 91888-9900", servico: "Sobrancelha",          valor: 15, status: "aguardando", observacoes: "" },
-
-    { id: "a12", data: diasAPartirDeHoje(-1), hora: "09:00", cliente: "Nathan Oliveira", telefone: "(11) 90999-0011", servico: "Corte Social",        valor: 18, status: "concluido", observacoes: "" },
-    { id: "a13", data: diasAPartirDeHoje(-1), hora: "14:00", cliente: "Otávio Santos",   telefone: "(11) 90111-2233", servico: "Degradê",              valor: 22, status: "concluido", observacoes: "" },
-    { id: "a14", data: diasAPartirDeHoje(-2), hora: "10:00", cliente: "Paulo Ricardo",   telefone: "(11) 90222-3344", servico: "Barba",                valor: 15, status: "concluido", observacoes: "" },
-    { id: "a15", data: diasAPartirDeHoje(-2), hora: "16:00", cliente: "Renato Alves",    telefone: "(11) 90333-4455", servico: "Corte Militar",        valor: 15, status: "concluido", observacoes: "" },
-    { id: "a16", data: diasAPartirDeHoje(-3), hora: "11:00", cliente: "Sérgio Nunes",    telefone: "(11) 90444-5566", servico: "Social & Barba",       valor: 30, status: "concluido", observacoes: "" },
-    { id: "a17", data: diasAPartirDeHoje(-4), hora: "09:30", cliente: "Thiago Melo",     telefone: "(11) 90555-6677", servico: "Corte Social",         valor: 18, status: "concluido", observacoes: "" },
-    { id: "a18", data: diasAPartirDeHoje(-5), hora: "15:00", cliente: "Vinícius Barros", telefone: "(11) 90666-7788", servico: "Degradê & Barba",      valor: 30, status: "concluido", observacoes: "" },
-    { id: "a19", data: diasAPartirDeHoje(-6), hora: "10:30", cliente: "William Cardoso", telefone: "(11) 90777-8899", servico: "Barba",                valor: 15, status: "concluido", observacoes: "" },
+    { id: "a8",  data: diasAPartirDeHoje(1), hora: "13:00", cliente: "Igor Pereira",     telefone: "(11) 94555-6677", servico: "Corte Social",         valor: 18, status: "aguardando", observacoes: "" }
 ];
 
 const agendamentos = carregarDoStorage("agendamentos", AGENDAMENTOS_PADRAO);
 
 /* ============================================================
-   DADOS MOCK — SERVIÇOS AUTORIZADOS (padrão / seed)
+   DADOS DO FUNCIONÁRIO LOGADO
+   ============================================================ */
+
+const FUNCIONARIO_PADRAO = {
+    nome: "Maicon",
+    foto: null,
+    empresa: "Barbearia do Zé",
+    telefone: "(11) 98888-7777",
+    descricao: "Barbeiro especializado em degradê e barboterapia.",
+    comissaoPercentual: 50,
+};
+
+let funcionario = carregarDoStorage("profissional", FUNCIONARIO_PADRAO);
+
+/* ============================================================
+   SERVIÇOS
    ============================================================ */
 
 const SERVICOS_PADRAO = [
-    { id: "s1", nome: "Corte Social",      duracao: 30, preco: 18, ativo: true },
-    { id: "s2", nome: "Degradê",           duracao: 40, preco: 22, ativo: true },
-    { id: "s3", nome: "Degradê & Barba",   duracao: 60, preco: 30, ativo: true },
-    { id: "s4", nome: "Social & Barba",    duracao: 50, preco: 30, ativo: true },
-    { id: "s5", nome: "Barba",             duracao: 25, preco: 15, ativo: true },
-    { id: "s6", nome: "Corte Militar",     duracao: 20, preco: 15, ativo: true },
-    { id: "s7", nome: "Corte Infantil",    duracao: 30, preco: 20, ativo: false },
-    { id: "s8", nome: "Sobrancelha",       duracao: 5,  preco: 15, ativo: true },
+    { id: "s1", nome: "Corte Social",       duracao: 30, preco: 18, ativo: true },
+    { id: "s2", nome: "Degradê",            duracao: 40, preco: 22, ativo: true },
+    { id: "s3", nome: "Degradê & Barba",    duracao: 60, preco: 30, ativo: true },
+    { id: "s4", nome: "Social & Barba",     duracao: 50, preco: 30, ativo: true }
 ];
 
 const servicosFunc = carregarDoStorage("servicosFunc", SERVICOS_PADRAO);
-
-/* ============================================================
-   DADOS MOCK — AVALIAÇÕES (padrão / seed)
-   ============================================================ */
-
-const AVALIACOES_PADRAO = [
-    { cliente: "Carlos Eduardo", nota: 5, comentario: "Excelente profissional, corte impecável!",           data: "15/07/2026" },
-    { cliente: "Bruno Alves",    nota: 5, comentario: "Sempre pontual e caprichoso.",                        data: "12/07/2026" },
-    { cliente: "Nathan Oliveira",nota: 4, comentario: "Muito bom, mas demorou um pouco além do horário.",    data: "10/07/2026" },
-    { cliente: "Otávio Santos",  nota: 5, comentario: "Melhor barbeiro da região!",                           data: "08/07/2026" },
-    { cliente: "Paulo Ricardo",  nota: 4, comentario: "Gostei do resultado, recomendo.",                      data: "05/07/2026" },
-];
-
-const avaliacoes = carregarDoStorage("avaliacoes", AVALIACOES_PADRAO);
-
-/* ============================================================
-   DADOS MOCK — NOTIFICAÇÕES (padrão / seed)
-   ============================================================ */
-
-const NOTIFICACOES_PADRAO = [
-    { id: "n1", icone: "📅", mensagem: "Novo agendamento de Diego Martins às 14:00 de hoje.",              data: "Há 2 horas", lida: false },
-    { id: "n2", icone: "❌", mensagem: "Gustavo Lima cancelou o horário das 16:30.",                        data: "Há 3 horas", lida: false },
-    //{ id: "n3", icone: "⭐", mensagem: "Você recebeu uma nova avaliação de 5 estrelas de Bruno Alves.",     data: "Ontem",       lida: false },
-    { id: "n4", icone: "📢", mensagem: "A administração alterou o horário de funcionamento de sábado.",    data: "Há 2 dias",   lida: true },
-    { id: "n5", icone: "📅", mensagem: "Lembrete: você tem 6 atendimentos agendados para amanhã.",         data: "Há 2 dias",   lida: true },
-];
-
-const notificacoes = carregarDoStorage("notificacoes", NOTIFICACOES_PADRAO);
-
-/* Bloqueios de horário criados pelo funcionário */
 const bloqueios = carregarDoStorage("bloqueios", []);
 
 /* ============================================================
-   ESTADO DA TELA (não persiste — reinicia a cada acesso)
+   PERSISTÊNCIA (localStorage)
+   ============================================================ */
+
+function carregarDoStorage(chave, valorPadrao) {
+    try {
+        const bruto = localStorage.getItem(chave);
+        if (!bruto) return valorPadrao;
+        return JSON.parse(bruto);
+    } catch (erro) {
+        return valorPadrao;
+    }
+}
+
+function salvarNoStorage(chave, valor) {
+    try {
+        localStorage.setItem(chave, JSON.stringify(valor));
+    } catch (erro) {
+        console.warn(`Não foi possível salvar "${chave}".`, erro);
+    }
+}
+
+function salvarFuncionario()   { salvarNoStorage("profissional", funcionario); }
+function salvarAgendamentos()  { salvarNoStorage("agendamentos", agendamentos); }
+function salvarServicos()      { salvarNoStorage("servicosFunc", servicosFunc); }
+function salvarBloqueios()     { salvarNoStorage("bloqueios", bloqueios); }
+
+/* ============================================================
+   ELEMENTOS CENTRALIZADOS (DOM)
+   ============================================================ */
+
+const els = {
+    aviso: document.getElementById("aviso"),
+
+    // KPI's & Aba Início
+    inicioNome: document.getElementById("inicio-primeiro-nome"),
+    kpiTotalHoje: document.getElementById("kpi-total-hoje"),
+    kpiTotalHojeSub: document.getElementById("kpi-total-hoje-sub"),
+    kpiProximo: document.getElementById("kpi-proximo"),
+    kpiProximoSub: document.getElementById("kpi-proximo-sub"),
+    progressoFill: document.getElementById("progresso-fill"),
+    progressoTexto: document.getElementById("progresso-texto"),
+    listaInicioHoje: document.getElementById("lista-inicio-hoje"),
+
+    // Visões e Conteúdos da Agenda
+    agendaVisaoDia: document.getElementById("agenda-visao-dia"),
+    agendaVisaoSemana: document.getElementById("agenda-visao-semana"),
+    agendaVisaoMes: document.getElementById("agenda-visao-mes"),
+    listaAgendaDia: document.getElementById("lista-agenda-dia"),
+    semanaScroll: document.getElementById("semana-scroll"),
+    mesTitulo: document.getElementById("mes-titulo"),
+    mesGrid: document.getElementById("mes-grid"),
+    mesDiaSelecionadoTitulo: document.getElementById("mes-dia-selecionado-titulo"),
+    listaMesDia: document.getElementById("lista-mes-dia"),
+
+    // Modal: Detalhes do Atendimento
+    detalheStatusBadge: document.getElementById("detalhe-status-badge"),
+    detalheCliente: document.getElementById("detalhe-cliente"),
+    detalheServico: document.getElementById("detalhe-servico"),
+    detalheHorario: document.getElementById("detalhe-horario"),
+    detalheValor: document.getElementById("detalhe-valor"),
+    detalheTelefone: document.getElementById("detalhe-telefone"),
+    detalheObs: document.getElementById("detalhe-obs"),
+    detalheAcoes: document.getElementById("detalhe-acoes"),
+    overlayDetalhe: document.getElementById("overlay-detalhe"),
+    modalDetalhe: document.getElementById("modal-detalhe"),
+
+    // Modal: Bloqueio de Horários
+    overlayBloquear: document.getElementById("overlay-bloquear"),
+    modalBloquear: document.getElementById("modal-bloquear"),
+    bloqData: document.getElementById("bloq-data"),
+    bloqInicio: document.getElementById("bloq-inicio"),
+    bloqFim: document.getElementById("bloq-fim"),
+    bloqMotivo: document.getElementById("bloq-motivo"),
+
+    // Serviços
+    listaServicosFunc: document.getElementById("lista-servicos-func"),
+
+    // Modal: Configurações
+    overlayConfig: document.getElementById("overlay-config"),
+    modalConfig: document.getElementById("modal-config"),
+    configModalTitulo: document.getElementById("config-modal-titulo"),
+    configCampoLabel: document.getElementById("config-campo-label"),
+    configCampoTexto: document.getElementById("config-campo-texto"),
+    configCampoTextarea: document.getElementById("config-campo-textarea"),
+    configCampoSenha: document.getElementById("config-campo-senha"),
+    configInput: document.getElementById("config-input"),
+    configTextarea: document.getElementById("config-textarea"),
+    configSenhaAtual: document.getElementById("config-senha-atual"),
+    configSenhaNova: document.getElementById("config-senha-nova"),
+    configTelefoneAtual: document.getElementById("config-telefone-atual"),
+    toggleNotif: document.getElementById("toggle-notif"),
+    toggleTema: document.getElementById("toggle-tema"),
+
+    // Modal: Menu Mais
+    overlayMais: document.getElementById("overlay-mais"),
+    modalMais: document.getElementById("modal-mais"),
+
+    abasFunc: () => document.querySelectorAll(".aba-func"),
+    sidebarItems: () => document.querySelectorAll(".sidebar-func__item"),
+    bottomNavItems: () => document.querySelectorAll(".bottom-nav__item"),
+    filtroBtns: () => document.querySelectorAll(".filtro-btn"),
+
+    getAba: (aba) => document.getElementById(`aba-${aba}`),
+    getSidebarItem: (aba) => document.querySelector(`.sidebar-func__item[data-aba="${aba}"]`),
+    getBottomNavItem: (aba) => document.querySelector(`.bottom-nav__item[data-aba="${aba}"]`),
+    getFiltroBtn: (visao) => document.querySelector(`.filtro-btn[data-filtro="${visao}"]`)
+};
+
+/* ============================================================
+   ESTADO DA TELA
    ============================================================ */
 
 const estado = {
@@ -192,74 +201,48 @@ const estado = {
 };
 
 /* ============================================================
-   TOAST
+   TOAST AVISOS
    ============================================================ */
 
 function mostrarAviso(msg) {
-    const el = document.getElementById("aviso");
-    el.textContent = msg;
-    el.classList.add("visivel");
-    setTimeout(() => el.classList.remove("visivel"), 2500);
+    if (!els.aviso) return;
+    els.aviso.textContent = msg;
+    els.aviso.classList.remove("opacity-0", "translate-y-2.5", "pointer-events-none");
+    els.aviso.classList.add("opacity-100", "translate-y-0");
+    setTimeout(() => {
+        els.aviso.classList.remove("opacity-100", "translate-y-0");
+        els.aviso.classList.add("opacity-0", "translate-y-2.5", "pointer-events-none");
+    }, 2500);
 }
-
-/* ============================================================
-   CABEÇALHO (topbar + sidebar)
-   ============================================================ */
-
-function preencherCabecalho() {
-    document.getElementById("topbar-nome").textContent = funcionario.nome;
-    document.getElementById("topbar-empresa").textContent = funcionario.empresa;
-    document.getElementById("sidebar-nome").textContent = funcionario.nome;
-    document.getElementById("sidebar-empresa").textContent = funcionario.empresa;
-    document.getElementById("inicio-primeiro-nome").textContent = funcionario.nome.split(" ")[0];
-    document.getElementById("config-telefone-atual").textContent = funcionario.telefone;
-    atualizarAvatar();
-}
-
-function atualizarAvatar() {
-    const inicial = funcionario.nome.charAt(0).toUpperCase();
-    const topbarAv = document.getElementById("topbar-avatar");
-    const sidebarAv = document.getElementById("sidebar-avatar");
-    if (funcionario.foto) {
-        const imgHtml = `<img src="${funcionario.foto}" alt="${funcionario.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-        topbarAv.innerHTML = imgHtml;
-        sidebarAv.innerHTML = imgHtml;
-    } else {
-        topbarAv.textContent = inicial;
-        sidebarAv.textContent = inicial;
-    }
-}
-
-document.getElementById("inp-nova-foto").addEventListener("change", async function () {
-    const arquivo = this.files[0];
-    if (!arquivo) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-        funcionario.foto = reader.result;
-        atualizarAvatar();
-        salvarFuncionario();
-        mostrarAviso("Foto atualizada com sucesso!");
-    };
-    reader.readAsDataURL(arquivo);
-});
 
 /* ============================================================
    NAVEGAÇÃO ENTRE ABAS
    ============================================================ */
 
 function irParaAba(aba) {
-    document.querySelectorAll(".aba-func").forEach(el => el.classList.remove("ativa"));
-    document.getElementById(`aba-${aba}`).classList.add("ativa");
+    els.abasFunc().forEach(el => el.classList.add("hidden"));
+    const abaEl = els.getAba(aba);
+    if (abaEl) abaEl.classList.remove("hidden");
 
-    document.querySelectorAll(".sidebar-func__item").forEach(el => el.classList.remove("ativo"));
-    document.querySelector(`.sidebar-func__item[data-aba="${aba}"]`)?.classList.add("ativo");
+    els.sidebarItems().forEach(el => {
+        el.classList.remove("bg-[#2a2825]", "text-[#f1efe8]");
+        el.classList.add("text-[#888780]", "bg-transparent");
+    });
+    const sidebarEl = els.getSidebarItem(aba);
+    if (sidebarEl) {
+        sidebarEl.classList.add("bg-[#2a2825]", "text-[#f1efe8]");
+        sidebarEl.classList.remove("text-[#888780]", "bg-transparent");
+    }
 
-    const abasSecundarias = ["avaliacoes", "notificacoes", "configuracoes"];
-    document.querySelectorAll(".bottom-nav__item").forEach(el => el.classList.remove("ativo"));
-    if (abasSecundarias.includes(aba)) {
-        document.querySelector('.bottom-nav__item[data-aba="mais"]')?.classList.add("ativo");
-    } else {
-        document.querySelector(`.bottom-nav__item[data-aba="${aba}"]`)?.classList.add("ativo");
+    els.bottomNavItems().forEach(el => {
+        el.classList.remove("text-[#9fe1cb]");
+        el.classList.add("text-[#888780]");
+    });
+    const targetNav = ["avaliacoes", "notificacoes", "configuracoes"].includes(aba) ? "mais" : aba;
+    const bottomNavEl = els.getBottomNavItem(targetNav);
+    if (bottomNavEl) {
+        bottomNavEl.classList.add("text-[#9fe1cb]");
+        bottomNavEl.classList.remove("text-[#888780]");
     }
 
     estado.abaAtual = aba;
@@ -267,26 +250,32 @@ function irParaAba(aba) {
 }
 
 /* ============================================================
-   CARD DE AGENDAMENTO (reutilizado em várias abas)
+   CARD DE AGENDAMENTO
    ============================================================ */
 
 function badgeStatusHTML(status) {
     const mapa = { aguardando: "Aguardando", confirmado: "Confirmado", concluido: "Concluído", cancelado: "Cancelado" };
-    return `<span class="badge badge--${status}">${mapa[status]}</span>`;
+    const classes = {
+        aguardando: "bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]",
+        confirmado: "bg-[#0a2940] text-[#5ab4f0] border-[#1a5a8a]",
+        concluido: "bg-[#085041] text-[#9fe1cb] border-[#0f6e56]",
+        cancelado: "bg-[#3a1510] text-[#f0997b] border-[#993c1d]"
+    };
+    return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${classes[status] || ''}">${mapa[status]}</span>`;
 }
 
 function cardAgendamentoHTML(a) {
-    const concluidoClasse = a.status === "concluido" ? " agend-card--concluido" : "";
+    const concluidoClasse = a.status === "concluido" ? " opacity-65" : "";
     return `
-        <div class="agend-card${concluidoClasse}" onclick="abrirModalDetalhe('${a.id}')">
-            <div class="agend-card__hora">${a.hora}</div>
-            <div class="agend-card__info">
-                <div class="agend-card__cliente">${a.cliente}</div>
-                <div class="agend-card__servico">${a.servico}</div>
+        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${a.id}')">
+            <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${a.hora}</div>
+            <div class="flex-1">
+                <div class="text-sm font-medium">${a.cliente}</div>
+                <div class="text-xs text-[#888780] mt-0.5">${a.servico}</div>
             </div>
-            <div class="agend-card__direita">
+            <div class="flex flex-col items-end gap-1 flex-shrink-0">
                 ${badgeStatusHTML(a.status)}
-                <div class="agend-card__valor">${formatarMoeda(a.valor)}</div>
+                <div class="text-xs font-medium">${formatarMoeda(a.valor)}</div>
             </div>
         </div>
     `;
@@ -297,37 +286,27 @@ function cardAgendamentoHTML(a) {
    ============================================================ */
 
 function renderizarInicio() {
+    if (els.inicioNome) els.inicioNome.textContent = funcionario.nome;
     const hoje = hojeISO();
     const doDia = agendamentos.filter(a => a.data === hoje).sort((a, b) => a.hora.localeCompare(b.hora));
 
     const concluidos = doDia.filter(a => a.status === "concluido");
     const pendentes = doDia.filter(a => a.status === "aguardando" || a.status === "confirmado");
 
-    document.getElementById("kpi-total-hoje").textContent = doDia.length;
-    document.getElementById("kpi-total-hoje-sub").textContent =
-        doDia.length === 0 ? "Nenhum agendamento" : `${concluidos.length} concluídos, ${pendentes.length} restantes`;
+    els.kpiTotalHoje.textContent = doDia.length;
+    els.kpiTotalHojeSub.textContent = doDia.length === 0 ? "Nenhum agendamento" : `${concluidos.length} concluídos, ${pendentes.length} restantes`;
 
     const proximo = pendentes.find(a => a.hora >= horaAtual()) || pendentes[0];
-    document.getElementById("kpi-proximo").textContent = proximo ? proximo.hora : "—";
-    document.getElementById("kpi-proximo-sub").textContent = proximo ? proximo.cliente : "Nenhum pendente";
-
-    const ganhoHoje = concluidos.reduce((soma, a) => soma + a.valor, 0);
-    document.getElementById("kpi-ganhos-hoje").textContent = formatarMoeda(ganhoHoje);
-
-    const mediaAval = avaliacoes.length
-        ? (avaliacoes.reduce((s, a) => s + a.nota, 0) / avaliacoes.length).toFixed(1)
-        : "—";
-    document.getElementById("kpi-avaliacao").textContent = mediaAval;
-    document.getElementById("kpi-avaliacao-sub").textContent = `${avaliacoes.length} avaliações`;
+    els.kpiProximo.textContent = proximo ? proximo.hora : "—";
+    els.kpiProximoSub.textContent = proximo ? proximo.cliente : "Nenhum pendente";
 
     const total = doDia.length;
     const pct = total ? Math.round((concluidos.length / total) * 100) : 0;
-    document.getElementById("progresso-fill").style.width = pct + "%";
-    document.getElementById("progresso-texto").textContent = `${concluidos.length} de ${total} concluídos`;
+    els.progressoFill.style.width = pct + "%";
+    els.progressoTexto.textContent = `${concluidos.length} de ${total} concluídos`;
 
-    const lista = document.getElementById("lista-inicio-hoje");
-    lista.innerHTML = doDia.length === 0
-        ? `<p class="lista-vazia">Nenhum atendimento agendado para hoje.</p>`
+    els.listaInicioHoje.innerHTML = doDia.length === 0
+        ? `<p class="text-center text-[#888780] text-sm py-8 italic">Nenhum atendimento agendado para hoje.</p>`
         : doDia.map(cardAgendamentoHTML).join("");
 }
 
@@ -337,12 +316,19 @@ function renderizarInicio() {
 
 function mudarVisaoAgenda(visao) {
     estado.visaoAgenda = visao;
-    document.querySelectorAll(".filtro-btn").forEach(b => b.classList.remove("ativo"));
-    document.querySelector(`.filtro-btn[data-filtro="${visao}"]`).classList.add("ativo");
+    els.filtroBtns().forEach(b => {
+        b.classList.remove("bg-[#f1efe8]", "text-[#161513]", "border-[#f1efe8]");
+        b.classList.add("bg-transparent", "text-[#888780]", "border-[#4a473f]");
+    });
+    const activeBtn = els.getFiltroBtn(visao);
+    if (activeBtn) {
+        activeBtn.classList.add("bg-[#f1efe8]", "text-[#161513]", "border-[#f1efe8]");
+        activeBtn.classList.remove("bg-transparent", "text-[#888780]", "border-[#4a473f]");
+    }
 
-    document.getElementById("agenda-visao-dia").hidden = visao !== "dia";
-    document.getElementById("agenda-visao-semana").hidden = visao !== "semana";
-    document.getElementById("agenda-visao-mes").hidden = visao !== "mes";
+    els.agendaVisaoDia.classList.toggle("hidden", visao !== "dia");
+    els.agendaVisaoSemana.classList.toggle("hidden", visao !== "semana");
+    els.agendaVisaoMes.classList.toggle("hidden", visao !== "mes");
 
     if (visao === "dia") renderizarAgendaDia();
     if (visao === "semana") renderizarAgendaSemana();
@@ -352,15 +338,13 @@ function mudarVisaoAgenda(visao) {
 function renderizarAgendaDia() {
     const hoje = hojeISO();
     const doDia = agendamentos.filter(a => a.data === hoje).sort((a, b) => a.hora.localeCompare(b.hora));
-    const lista = document.getElementById("lista-agenda-dia");
-    lista.innerHTML = doDia.length === 0
-        ? `<p class="lista-vazia">Nenhum agendamento para hoje.</p>`
+    els.listaAgendaDia.innerHTML = doDia.length === 0
+        ? `<p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento para hoje.</p>`
         : doDia.map(cardAgendamentoHTML).join("");
 }
 
 function renderizarAgendaSemana() {
     const nomesDias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-    const container = document.getElementById("semana-scroll");
     let html = "";
 
     for (let i = 0; i < 7; i++) {
@@ -370,19 +354,22 @@ function renderizarAgendaSemana() {
         const ehHoje = iso === hojeISO();
         const doDia = agendamentos.filter(a => a.data === iso).sort((a, b) => a.hora.localeCompare(b.hora));
 
+        const borderCol = ehHoje ? "border-[#0f6e56]" : "border-[#38362f]";
+        const bgHead = ehHoje ? "bg-[#04342c]" : "bg-[#2a2825]";
+
         html += `
-            <div class="semana-col${ehHoje ? " semana-col--hoje" : ""}">
-                <div class="semana-col__head">
-                    <div class="semana-col__dia">${nomesDias[d.getDay()]}</div>
-                    <div class="semana-col__num">${d.getDate()}</div>
+            <div class="flex-none w-[130px] bg-[#232220] border ${borderCol} rounded-lg overflow-hidden">
+                <div class="p-2 text-center border-b border-[#38362f] ${bgHead}">
+                    <div class="text-[11px] uppercase ${ehHoje ? 'text-[#9fe1cb]' : 'text-[#888780]'}">${nomesDias[d.getDay()]}</div>
+                    <div class="text-lg font-semibold ${ehHoje ? 'text-[#9fe1cb]' : ''}">${d.getDate()}</div>
                 </div>
-                <div class="semana-col__corpo">
+                <div class="p-2 flex flex-col gap-1 min-h-[80px]">
                     ${doDia.length === 0
-                        ? `<span style="font-size:11px;color:var(--cor-texto-muted);text-align:center;padding-top:8px">Livre</span>`
+                        ? `<span class="text-[11px] text-[#6b6963] text-center pt-2">Livre</span>`
                         : doDia.map(a => `
-                            <div class="semana-mini semana-mini--${a.status}" onclick="abrirModalDetalhe('${a.id}')">
-                                <div class="semana-mini__hora">${a.hora}</div>
-                                <div class="semana-mini__cliente">${a.cliente}</div>
+                            <div class="bg-[#2a2825] rounded p-1.5 text-[11px] cursor-pointer border-l-2 border-l-[#0f6e56]" onclick="abrirModalDetalhe('${a.id}')">
+                                <div class="text-[#888780] text-[10px]">${a.hora}</div>
+                                <div class="font-medium truncate">${a.cliente}</div>
                             </div>
                         `).join("")
                     }
@@ -390,7 +377,7 @@ function renderizarAgendaSemana() {
             </div>
         `;
     }
-    container.innerHTML = html;
+    els.semanaScroll.innerHTML = html;
 }
 
 function renderizarAgendaMes() {
@@ -398,17 +385,17 @@ function renderizarAgendaMes() {
     const ano = estado.mesAtual.getFullYear();
     const mes = estado.mesAtual.getMonth();
 
-    document.getElementById("mes-titulo").textContent = `${nomesMeses[mes]} ${ano}`;
+    els.mesTitulo.textContent = `${nomesMeses[mes]} ${ano}`;
 
     const primeiroDiaSemana = new Date(ano, mes, 1).getDay();
     const totalDiasMes = new Date(ano, mes + 1, 0).getDate();
     const totalDiasMesAnterior = new Date(ano, mes, 0).getDate();
 
     const labels = ["D", "S", "T", "Q", "Q", "S", "S"];
-    let html = labels.map(l => `<div class="mes-label">${l}</div>`).join("");
+    let html = labels.map(l => `<div class="text-center text-[10px] text-[#888780] py-1 uppercase">${l}</div>`).join("");
 
     for (let i = primeiroDiaSemana - 1; i >= 0; i--) {
-        html += `<button class="mes-dia mes-dia--outro" disabled>${totalDiasMesAnterior - i}</button>`;
+        html += `<button class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm cursor-pointer border-none bg-transparent text-[#6b6963]" disabled>${totalDiasMesAnterior - i}</button>`;
     }
 
     for (let dia = 1; dia <= totalDiasMes; dia++) {
@@ -416,22 +403,17 @@ function renderizarAgendaMes() {
         const iso = formatarISO(dataObj);
         const ehHoje = iso === hojeISO();
         const temAgendamento = agendamentos.some(a => a.data === iso);
+        const classeHoje = ehHoje ? "bg-[#04342c] text-[#9fe1cb] font-semibold" : "text-[#f1efe8] hover:bg-[#232220]";
+
         html += `
-            <button class="mes-dia${ehHoje ? " mes-dia--hoje" : ""}" onclick="selecionarDiaMes('${iso}')">
+            <button class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm cursor-pointer relative border-none bg-transparent ${classeHoje}" onclick="selecionarDiaMes('${iso}')">
                 ${dia}
-                ${temAgendamento ? `<span class="mes-dia__dot"></span>` : ""}
+                ${temAgendamento ? `<span class="absolute bottom-[3px] w-1.5 h-1.5 rounded-full bg-[#9fe1cb]"></span>` : ""}
             </button>
         `;
     }
 
-    const totalCelulas = primeiroDiaSemana + totalDiasMes;
-    const restante = (7 - (totalCelulas % 7)) % 7;
-    for (let i = 1; i <= restante; i++) {
-        html += `<button class="mes-dia mes-dia--outro" disabled>${i}</button>`;
-    }
-
-    document.getElementById("mes-grid").innerHTML = html;
-
+    els.mesGrid.innerHTML = html;
     if (!estado.diaSelecionadoMes) estado.diaSelecionadoMes = hojeISO();
     selecionarDiaMes(estado.diaSelecionadoMes);
 }
@@ -444,13 +426,9 @@ function mudarMes(delta) {
 function selecionarDiaMes(iso) {
     estado.diaSelecionadoMes = iso;
     const doDia = agendamentos.filter(a => a.data === iso).sort((a, b) => a.hora.localeCompare(b.hora));
-
-    document.getElementById("mes-dia-selecionado-titulo").textContent =
-        `Agendamentos — ${formatarDataExtenso(iso)}`;
-
-    const lista = document.getElementById("lista-mes-dia");
-    lista.innerHTML = doDia.length === 0
-        ? `<p class="lista-vazia">Nenhum agendamento neste dia.</p>`
+    els.mesDiaSelecionadoTitulo.textContent = `Agendamentos — ${formatarDataExtenso(iso)}`;
+    els.listaMesDia.innerHTML = doDia.length === 0
+        ? `<p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento neste dia.</p>`
         : doDia.map(cardAgendamentoHTML).join("");
 }
 
@@ -462,41 +440,40 @@ function abrirModalDetalhe(id) {
     const a = agendamentos.find(a => a.id === id);
     if (!a) return;
 
-    document.getElementById("detalhe-status-badge").innerHTML = badgeStatusHTML(a.status);
-    document.getElementById("detalhe-cliente").textContent = a.cliente;
-    document.getElementById("detalhe-servico").textContent = a.servico;
-    document.getElementById("detalhe-horario").textContent = `${formatarDataExtenso(a.data)} às ${a.hora}`;
-    document.getElementById("detalhe-valor").textContent = formatarMoeda(a.valor);
-    document.getElementById("detalhe-telefone").textContent = a.telefone;
-    document.getElementById("detalhe-obs").textContent = a.observacoes || "Nenhuma observação";
+    els.detalheStatusBadge.innerHTML = badgeStatusHTML(a.status);
+    els.detalheCliente.textContent = a.cliente;
+    els.detalheServico.textContent = a.servico;
+    els.detalheHorario.textContent = `${formatarDataExtenso(a.data)} às ${a.hora}`;
+    els.detalheValor.textContent = formatarMoeda(a.valor);
+    els.detalheTelefone.textContent = a.telefone;
+    els.detalheObs.textContent = a.observacoes || "Nenhuma observação";
 
-    const acoes = document.getElementById("detalhe-acoes");
     let html = "";
     if (a.status === "aguardando") {
-        html += `<button class="btn-acento" onclick="confirmarPresenca('${a.id}')">Confirmar presença</button>`;
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="confirmarPresenca('${a.id}')">Confirmar presença</button>`;
     }
     if (a.status === "confirmado") {
-        html += `<button class="btn-acento" onclick="iniciarAtendimento('${a.id}')">Iniciar atendimento</button>`;
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="iniciarAtendimento('${a.id}')">Iniciar atendimento</button>`;
     }
     if (a.status === "aguardando" || a.status === "confirmado") {
-        html += `<button class="btn-prim" onclick="concluirAtendimento('${a.id}')">Concluir atendimento</button>`;
-        html += `<button class="btn-perigo" onclick="cancelarAtendimento('${a.id}')">Cancelar</button>`;
+        html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="concluirAtendimento('${a.id}')">Concluir atendimento</button>`;
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors" onclick="cancelarAtendimento('${a.id}')">Cancelar</button>`;
     }
     if (a.status === "concluido") {
-        html = `<p style="text-align:center;color:var(--cor-texto-suave);font-size:13px">Atendimento já concluído</p>`;
+        html = `<p class="text-center text-[#888780] text-xs">Atendimento já concluído</p>`;
     }
     if (a.status === "cancelado") {
-        html = `<p style="text-align:center;color:var(--cor-texto-suave);font-size:13px">Este atendimento foi cancelado</p>`;
+        html = `<p class="text-center text-[#888780] text-xs">Este atendimento foi cancelado</p>`;
     }
-    acoes.innerHTML = html;
+    els.detalheAcoes.innerHTML = html;
 
-    document.getElementById("overlay-detalhe").hidden = false;
-    document.getElementById("modal-detalhe").hidden = false;
+    els.overlayDetalhe.classList.remove("hidden");
+    els.modalDetalhe.classList.remove("hidden");
 }
 
 function fecharModalDetalhe() {
-    document.getElementById("overlay-detalhe").hidden = true;
-    document.getElementById("modal-detalhe").hidden = true;
+    els.overlayDetalhe.classList.add("hidden");
+    els.modalDetalhe.classList.add("hidden");
 }
 
 function confirmarPresenca(id) {
@@ -533,7 +510,6 @@ function atualizarTudo() {
     if (estado.visaoAgenda === "dia") renderizarAgendaDia();
     if (estado.visaoAgenda === "semana") renderizarAgendaSemana();
     if (estado.visaoAgenda === "mes") renderizarAgendaMes();
-    renderizarGanhos();
 }
 
 /* ============================================================
@@ -541,20 +517,20 @@ function atualizarTudo() {
    ============================================================ */
 
 function abrirModalBloquear() {
-    document.getElementById("overlay-bloquear").hidden = false;
-    document.getElementById("modal-bloquear").hidden = false;
+    els.overlayBloquear.classList.remove("hidden");
+    els.modalBloquear.classList.remove("hidden");
 }
 
 function fecharModalBloquear() {
-    document.getElementById("overlay-bloquear").hidden = true;
-    document.getElementById("modal-bloquear").hidden = true;
+    els.overlayBloquear.classList.add("hidden");
+    els.modalBloquear.classList.add("hidden");
 }
 
 function confirmarBloqueio() {
-    const data = document.getElementById("bloq-data").value;
-    const inicio = document.getElementById("bloq-inicio").value;
-    const fim = document.getElementById("bloq-fim").value;
-    const motivo = document.getElementById("bloq-motivo").value.trim();
+    const data = els.bloqData.value;
+    const inicio = els.bloqInicio.value;
+    const fim = els.bloqFim.value;
+    const motivo = els.bloqMotivo.value.trim();
 
     if (!data || !inicio || !fim) { mostrarAviso("Preencha data, início e fim"); return; }
     if (fim <= inicio) { mostrarAviso("O horário final deve ser depois do inicial"); return; }
@@ -570,17 +546,16 @@ function confirmarBloqueio() {
    ============================================================ */
 
 function renderizarServicos() {
-    const lista = document.getElementById("lista-servicos-func");
-    lista.innerHTML = servicosFunc.map(s => `
-        <div class="servico-item${s.ativo ? "" : " servico-item--inativo"}">
-            <div class="servico-item__info">
-                <div class="servico-item__nome">${s.nome}</div>
-                <div class="servico-item__meta">${s.duracao} min</div>
+    els.listaServicosFunc.innerHTML = servicosFunc.map(s => `
+        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 px-4 flex items-center gap-3.5 ${s.ativo ? "" : "opacity-50"}">
+            <div class="flex-1">
+                <div class="text-sm font-medium">${s.nome}</div>
+                <div class="text-xs text-[#888780] mt-0.5">${s.duracao} min</div>
             </div>
-            <div class="servico-item__preco">${formatarMoeda(s.preco)}</div>
-            <label class="toggle">
-                <input type="checkbox" ${s.ativo ? "checked" : ""} onchange="alternarServico('${s.id}')">
-                <span class="toggle__slider"></span>
+            <div class="text-sm font-medium flex-shrink-0">${formatarMoeda(s.preco)}</div>
+            <label class="relative inline-block w-11 h-6 flex-shrink-0 cursor-pointer">
+                <input type="checkbox" class="sr-only peer" ${s.ativo ? "checked" : ""} onchange="alternarServico('${s.id}')">
+                <span class="absolute inset-0 bg-[#4a473f] rounded-full transition-colors peer-checked:bg-[#0f6e56] peer-checked:after:translate-x-[20px] peer-checked:after:bg-white after:content-[''] after:absolute after:w-[18px] after:h-[18px] after:rounded-full after:left-[3px] after:bottom-[3px] after:bg-[#888780] after:transition-all"></span>
             </label>
         </div>
     `).join("");
@@ -596,178 +571,54 @@ function alternarServico(id) {
 }
 
 /* ============================================================
-   ABA GANHOS
-   ============================================================ */
-
-function renderizarGanhos() {
-    const hoje = hojeISO();
-    const concluidos = agendamentos.filter(a => a.status === "concluido");
-
-    const ganhoHoje = concluidos.filter(a => a.data === hoje).reduce((s, a) => s + a.valor, 0);
-
-    const inicioSemana = new Date();
-    inicioSemana.setDate(inicioSemana.getDate() - inicioSemana.getDay());
-    const isoInicioSemana = formatarISO(inicioSemana);
-    const ganhoSemana = concluidos.filter(a => a.data >= isoInicioSemana).reduce((s, a) => s + a.valor, 0);
-
-    const hojeObj = new Date();
-    const isoInicioMes = formatarISO(new Date(hojeObj.getFullYear(), hojeObj.getMonth(), 1));
-    const ganhoMes = concluidos.filter(a => a.data >= isoInicioMes).reduce((s, a) => s + a.valor, 0);
-
-    document.getElementById("ganhos-hoje").textContent = formatarMoeda(ganhoHoje);
-    document.getElementById("ganhos-semana").textContent = formatarMoeda(ganhoSemana);
-    document.getElementById("ganhos-mes").textContent = formatarMoeda(ganhoMes);
-
-    document.getElementById("comissao-aviso").innerHTML =
-        `Sua comissão atual é de <strong>${funcionario.comissaoPercentual}%</strong> sobre cada atendimento.`;
-
-    const grafico = document.getElementById("grafico-ganhos");
-    const dadosGrafico = [];
-    for (let i = 6; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        const iso = formatarISO(d);
-        const total = concluidos.filter(a => a.data === iso).reduce((s, a) => s + a.valor, 0);
-        dadosGrafico.push({ dia: d.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", ""), total });
-    }
-    const maxValor = Math.max(...dadosGrafico.map(d => d.total), 1);
-
-    grafico.innerHTML = dadosGrafico.map(d => `
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end">
-            <span style="font-size:10px;color:var(--cor-texto-suave)">${d.total > 0 ? formatarMoeda(d.total) : ""}</span>
-            <div style="width:100%;max-width:28px;background:var(--cor-acento);border-radius:4px 4px 0 0;height:${(d.total / maxValor * 80) || 2}px;min-height:2px"></div>
-            <span style="font-size:10px;color:var(--cor-texto-suave);text-transform:capitalize">${d.dia}</span>
-        </div>
-    `).join("");
-
-    const corpo = document.getElementById("tabela-ganhos-corpo");
-    const historico = [...concluidos].sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora)).slice(0, 15);
-    corpo.innerHTML = historico.length === 0
-        ? `<tr><td colspan="5" class="lista-vazia">Nenhum atendimento concluído ainda.</td></tr>`
-        : historico.map(a => `
-            <tr>
-                <td>${formatarDataCurta(a.data)}</td>
-                <td>${a.cliente}</td>
-                <td>${a.servico}</td>
-                <td>${formatarMoeda(a.valor)}</td>
-                <td>${formatarMoeda(a.valor * funcionario.comissaoPercentual / 100)}</td>
-            </tr>
-        `).join("");
-}
-
-/* ============================================================
-   ABA AVALIAÇÕES
-   ============================================================ */
-
-function renderizarAvaliacoes() {
-    const media = avaliacoes.length
-        ? avaliacoes.reduce((s, a) => s + a.nota, 0) / avaliacoes.length
-        : 0;
-
-    document.getElementById("media-avaliacao").textContent = media.toFixed(1);
-    document.querySelector(".media-card .estrelas").textContent = gerarEstrelas(Math.round(media));
-    document.getElementById("total-avaliacoes").textContent = `Baseado em ${avaliacoes.length} avaliações`;
-
-    const lista = document.getElementById("lista-avaliacoes");
-    lista.innerHTML = avaliacoes.map(a => `
-        <div class="aval-item">
-            <div class="aval-item__head">
-                <span class="aval-item__cliente">${a.cliente}</span>
-                <span class="aval-item__data">${a.data}</span>
-            </div>
-            <div class="estrelas" style="margin-bottom:6px">${gerarEstrelas(a.nota)}</div>
-            <div class="aval-item__comentario">${a.comentario}</div>
-        </div>
-    `).join("");
-}
-
-/* ============================================================
-   ABA NOTIFICAÇÕES
-   ============================================================ */
-
-function renderizarNotificacoes() {
-    const naoLidas = notificacoes.filter(n => !n.lida).length;
-
-    document.getElementById("sino-badge").hidden = naoLidas === 0;
-    document.getElementById("sino-badge").textContent = naoLidas;
-    document.getElementById("sidebar-notif-dot").hidden = naoLidas === 0;
-    document.getElementById("bottomnav-notif-dot").hidden = naoLidas === 0;
-
-    const lista = document.getElementById("lista-notificacoes");
-    lista.innerHTML = notificacoes.map(n => `
-        <div class="notif-item${n.lida ? "" : " notif-item--nova"}" onclick="marcarNotificacaoLida('${n.id}')">
-            <div class="notif-item__icone">${n.icone}</div>
-            <div>
-                <div class="notif-item__msg">${n.mensagem}</div>
-                <div class="notif-item__data">${n.data}</div>
-            </div>
-        </div>
-    `).join("");
-}
-
-function marcarNotificacaoLida(id) {
-    const n = notificacoes.find(n => n.id === id);
-    if (n) n.lida = true;
-    salvarNotificacoes();
-    renderizarNotificacoes();
-}
-
-function marcarTodasLidas() {
-    notificacoes.forEach(n => n.lida = true);
-    salvarNotificacoes();
-    renderizarNotificacoes();
-    mostrarAviso("Todas as notificações foram marcadas como lidas");
-}
-
-/* ============================================================
    ABA CONFIGURAÇÕES
    ============================================================ */
 
 function abrirModalConfig(tipo) {
     estado.configTipo = tipo;
-    document.getElementById("config-campo-texto").hidden = true;
-    document.getElementById("config-campo-textarea").hidden = true;
-    document.getElementById("config-campo-senha").hidden = true;
+    els.configCampoTexto.classList.add("hidden");
+    els.configCampoTextarea.classList.add("hidden");
+    els.configCampoSenha.classList.add("hidden");
 
     if (tipo === "telefone") {
-        document.getElementById("config-modal-titulo").textContent = "Alterar telefone";
-        document.getElementById("config-campo-label").textContent = "Telefone / WhatsApp";
-        document.getElementById("config-input").type = "tel";
-        document.getElementById("config-input").value = funcionario.telefone;
-        document.getElementById("config-campo-texto").hidden = false;
+        els.configModalTitulo.textContent = "Alterar telefone";
+        els.configCampoLabel.textContent = "Telefone / WhatsApp";
+        els.configInput.type = "tel";
+        els.configInput.value = funcionario.telefone;
+        els.configCampoTexto.classList.remove("hidden");
     } else if (tipo === "descricao") {
-        document.getElementById("config-modal-titulo").textContent = "Editar descrição profissional";
-        document.getElementById("config-textarea").value = funcionario.descricao;
-        document.getElementById("config-campo-textarea").hidden = false;
+        els.configModalTitulo.textContent = "Editar descrição profissional";
+        els.configTextarea.value = funcionario.descricao;
+        els.configCampoTextarea.classList.remove("hidden");
     } else if (tipo === "senha") {
-        document.getElementById("config-modal-titulo").textContent = "Alterar senha";
-        document.getElementById("config-senha-atual").value = "";
-        document.getElementById("config-senha-nova").value = "";
-        document.getElementById("config-campo-senha").hidden = false;
+        els.configModalTitulo.textContent = "Alterar senha";
+        els.configSenhaAtual.value = "";
+        els.configSenhaNova.value = "";
+        els.configCampoSenha.classList.remove("hidden");
     }
 
-    document.getElementById("overlay-config").hidden = false;
-    document.getElementById("modal-config").hidden = false;
+    els.overlayConfig.classList.remove("hidden");
+    els.modalConfig.classList.remove("hidden");
 }
 
 function fecharModalConfig() {
-    document.getElementById("overlay-config").hidden = true;
-    document.getElementById("modal-config").hidden = true;
+    els.overlayConfig.classList.add("hidden");
+    els.modalConfig.classList.add("hidden");
 }
 
 function salvarConfig() {
     const tipo = estado.configTipo;
 
     if (tipo === "telefone") {
-        const valor = document.getElementById("config-input").value.trim();
+        const valor = els.configInput.value.trim();
         if (!valor) { mostrarAviso("Informe um telefone válido"); return; }
         funcionario.telefone = valor;
-        document.getElementById("config-telefone-atual").textContent = valor;
+        if (els.configTelefoneAtual) els.configTelefoneAtual.textContent = valor;
     } else if (tipo === "descricao") {
-        funcionario.descricao = document.getElementById("config-textarea").value.trim();
+        funcionario.descricao = els.configTextarea.value.trim();
     } else if (tipo === "senha") {
-        const atual = document.getElementById("config-senha-atual").value;
-        const nova = document.getElementById("config-senha-nova").value;
+        const atual = els.configSenhaAtual.value;
+        const nova = els.configSenhaNova.value;
         if (!atual || !nova) { mostrarAviso("Preencha os dois campos de senha"); return; }
         if (nova.length < 6) { mostrarAviso("A nova senha deve ter ao menos 6 caracteres"); return; }
     }
@@ -778,13 +629,12 @@ function salvarConfig() {
 }
 
 function alternarNotificacoes() {
-    const ativado = document.getElementById("toggle-notif").checked;
-    mostrarAviso(ativado ? "Notificações ativadas" : "Notificações desativadas");
+    mostrarAviso(els.toggleNotif.checked ? "Notificações ativadas" : "Notificações desativadas");
 }
 
 function alternarTema() {
     mostrarAviso("Em breve: tema claro disponível");
-    document.getElementById("toggle-tema").checked = true;
+    els.toggleTema.checked = true;
 }
 
 /* ============================================================
@@ -792,23 +642,18 @@ function alternarTema() {
    ============================================================ */
 
 function abrirMenuMais() {
-    document.getElementById("overlay-mais").hidden = false;
-    document.getElementById("modal-mais").hidden = false;
+    els.overlayMais.classList.remove("hidden");
+    els.modalMais.classList.remove("hidden");
 }
 
 function fecharMenuMais() {
-    document.getElementById("overlay-mais").hidden = true;
-    document.getElementById("modal-mais").hidden = true;
+    els.overlayMais.classList.add("hidden");
+    els.modalMais.classList.add("hidden");
 }
-
-/* ============================================================
-   SAIR
-   ============================================================ */
 
 function sairDaConta() {
     if (confirm("Deseja realmente sair da sua conta?")) {
         mostrarAviso("Saindo...");
-        window.location.href = "autenticacao.html";
     }
 }
 
@@ -817,14 +662,11 @@ function sairDaConta() {
    ============================================================ */
 
 function iniciar() {
-    preencherCabecalho();
     renderizarInicio();
     renderizarAgendaDia();
     renderizarServicos();
-    renderizarGanhos();
-    renderizarAvaliacoes();
-    renderizarNotificacoes();
-    document.getElementById("bloq-data").value = hojeISO();
+    if (els.configTelefoneAtual) els.configTelefoneAtual.textContent = funcionario.telefone;
+    if (els.bloqData) els.bloqData.value = hojeISO();
 }
 
 iniciar();

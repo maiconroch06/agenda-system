@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" class="h-full">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TMS Barbearia - Login</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    </head>
+
+    <body class="min-h-dvh w-screen overflow-y-auto sm:overflow-hidden bg-[#161513] text-gray-100 font-sans antialiased flex items-center justify-center p-4 sm:p-6 md:p-8">
+
+        <div class="w-full h-full flex items-center justify-center">
+
+            <!--  -->
+            <div class="w-full max-w-lg lg:max-w-xl max-h-full flex flex-col justify-center my-auto">
+
+                <!-- Card Principal -->
+                <div id="tela-auth" class="w-full max-h-full bg-[#1c1c1c] border border-brand-border rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl flex flex-col overflow-y-auto">
+
+                    <!-- Logo proporcional -->
+                    <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
+                        {% set logo_class="h-10 sm:h-12 md:h-14" %}
+                        {% include "componetization/logo/logo-top-horizontal.html" %}
+                    </div>
+
+                    <!-- Título e Subtítulo Maiores no Desktop -->
+                    <div class="mb-5 md:mb-6 shrink-0 text-center">
+                        <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-white leading-snug">
+                            Login do Gestor
+                        </h1>
+                        <p class="text-xs sm:text-sm text-brand-muted mt-1">
+                            Informe suas credenciais para acessar sua conta.
+                        </p>
+                    </div>
+
+                    <!-- Formulário com Inputs e Labels Maiores -->
+                    <form id="form-login" action="/gestor/painel" method="get" novalidate class="flex flex-col gap-4 md:gap-5 shrink-0">
+    
+                    <!-- E-mail / Usuário -->
+                    <div class="flex flex-col">
+                        <label for="login-usuario" class="text-xs sm:text-sm font-semibold text-gray-300 mb-1 tracking-wider">
+                            E-mail
+                        </label>
+                        <input type="text" id="login-usuario" name="usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off"
+                            class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm">
+                        <span class="campo__erro text-[11px] sm:text-xs text-red-500 mt-1 block" id="erro-login-usuario"></span>
+                    </div>
+
+                    <!-- Senha -->
+                    <div class="flex flex-col">
+                        <label for="login-senha" class="text-xs sm:text-sm font-semibold text-gray-300 mb-1 tracking-wider">
+                            Senha
+                        </label>
+                        <input type="password" id="login-senha" name="senha" placeholder="Digite sua senha"
+                            class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm">
+
+                        <span class="campo__erro text-[11px] sm:text-xs text-red-500 mt-1 block" id="erro-login-senha"></span>
+
+                        <a href="/cliente/esqueceu-senha" class="text-brand-muted hover:text-brand-gold text-[11px] sm:text-xs font-medium transition-colors hover:underline mt-1 self-end">
+                            Esqueceu a senha?
+                        </a>
+                    </div>
+
+                    <!-- Botão -->
+                    <button type="submit"
+                        class="w-full py-3 md:py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-xs sm:text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer mt-2">
+                        Entrar
+                    </button>
+                </form>
+                    
+                </div>
+            </div>
+        </div>
+
+        <script src="{{ url_for('static', filename='js/autenticacao.js') }}"></script>
+    </body>
+
+</html>
