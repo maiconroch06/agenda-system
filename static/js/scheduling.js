@@ -452,32 +452,36 @@ function voltarEtapa() {
    ============================================================ */
 
 function carregarServicos() {
-    els.listaServico.innerHTML = SERVICOS.map(servico => `
-        <label class="cursor-pointer w-full group">
-            <input type="radio" name="inputCorte" id="${servico.id}" class="peer hidden" value="${servico.id}">
-            <div class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col justify-between items-center gap-3 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
-                
-                <!-- Imagem Quadrada com Bordas Arredondadas -->
-                <div class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
-                    ${servico.icon
-                        ? `<img src="${servico.icon}" alt="${servico.alt}" class="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105">`
-                        : `<div class="w-full h-full flex items-center justify-center text-white font-bold text-2xl sm:text-xl md:text-2xl">${servico.name.charAt(0)}</div>`
-                    }
+    if (!els.listaServico) return;
+
+    els.listaServico.innerHTML = SERVICOS.map(servico => {
+        const checked = estado.servicoSelecionado === servico.id ? "checked" : "";
+        const letraInicial = servico.name ? servico.name.charAt(0) : "";
+
+        return `
+            <label class="cursor-pointer w-full group">
+                <input type="radio" name="inputCorte" id="${servico.id}" class="peer hidden" value="${servico.id}" ${checked}>
+                <div class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col justify-between items-center gap-3 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
+                    
+                    <div class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
+                        ${servico.icon
+                            ? `<img src="${servico.icon}" alt="${servico.alt}" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-white font-bold text-2xl sm:text-xl md:text-2xl\\'>${letraInicial}</span>';" class="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105">`
+                            : `<span class="text-white font-bold text-2xl sm:text-xl md:text-2xl">${letraInicial}</span>`
+                        }
+                    </div>
+                    
+                    <span class="font-semibold text-base sm:text-sm md:text-base lg:lg-text-base text-white text-center peer-checked:text-brand-gold line-clamp-2 leading-tight w-full min-h-[2.5rem] flex items-center justify-center">
+                        ${servico.name}
+                    </span>
+                    
+                    <div class="flex justify-between items-center w-full text-sm sm:text-xs md:text-sm lg-text-base text-brand-muted pt-2 border-t border-brand-border/50 mt-auto">
+                        <span>${servico.duration} min</span>
+                        <span class="font-semibold text-white">R$ ${servico.price.toFixed(2).replace(".", ",")}</span>
+                    </div>
                 </div>
-                
-                <!-- Título -->
-                <span class="font-semibold text-base sm:text-sm md:text-base lg:lg-text-base text-white text-center peer-checked:text-brand-gold line-clamp-2 leading-tight w-full min-h-[2.5rem] flex items-center justify-center">
-                    ${servico.name}
-                </span>
-                
-                <!-- Rodapé -->
-                <div class="flex justify-between items-center w-full text-sm sm:text-xs md:text-sm lg-text-base text-brand-muted pt-2 border-t border-brand-border/50 mt-auto">
-                    <span>${servico.duration} min</span>
-                    <span class="font-semibold text-white">R$ ${servico.price.toFixed(2).replace(".", ",")}</span>
-                </div>
-            </div>
-        </label>
-    `).join("");
+            </label>
+        `;
+    }).join("");
 
     els.listaServico.querySelectorAll("input[type='radio']").forEach(input => {
         input.addEventListener("change", () => {
@@ -492,27 +496,33 @@ function carregarServicos() {
    ============================================================ */
 
 function carregarProfissionais() {
-    els.listaProfissionais.innerHTML = PROFISSIONAIS.map(profissional => `
-        <label class="cursor-pointer w-full group">
-            <input type="radio" name="inputFuncionario" id="${profissional.id}" class="peer hidden" value="${profissional.id}">
-            <div class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col items-center justify-between text-center transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
-                
-                <!-- Imagem Quadrada com Bordas Arredondadas -->
-                <div class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
-                    ${profissional.icon
-                        ? `<img src="${profissional.icon}" alt="${profissional.alt}" class="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105">`
-                        : `<div class="w-full h-full flex items-center justify-center text-white font-bold text-2xl sm:text-xl md:text-2xl">${profissional.name.charAt(0)}</div>`
-                    }
-                </div>
+    if (!els.listaProfissionais) return;
 
-                <!-- Nome e Descrição -->
-                <div class="w-full pt-2.5">
-                    <h3 class="font-semibold text-base sm:text-sm md:text-base text-white peer-checked:text-brand-gold line-clamp-1 leading-tight">${profissional.name}</h3>
-                    <p class="text-sm sm:text-xs md:text-sm text-brand-muted mt-1 line-clamp-2 leading-snug">${profissional.description}</p>
+    els.listaProfissionais.innerHTML = PROFISSIONAIS.map(profissional => {
+        const checked = estado.profissionalSelecionado === profissional.id ? "checked" : "";
+        const isSemPreferencia = profissional.id === "any" || profissional.name.toLowerCase().includes("sem preferência");
+        const simboloSubstituto = isSemPreferencia ? "⇄" : profissional.name.charAt(0);
+
+        return `
+            <label class="cursor-pointer w-full group">
+                <input type="radio" name="inputFuncionario" id="${profissional.id}" class="peer hidden" value="${profissional.id}" ${checked}>
+                <div class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col items-center justify-between text-center transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
+                    
+                    <div class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
+                        ${profissional.icon
+                            ? `<img src="${profissional.icon}" alt="${profissional.alt}" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-white font-bold text-2xl sm:text-xl md:text-2xl\\'>${simboloSubstituto}</span>';" class="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105">`
+                            : `<span class="text-white font-bold text-2xl sm:text-xl md:text-2xl">${simboloSubstituto}</span>`
+                        }
+                    </div>
+
+                    <div class="w-full pt-2.5">
+                        <h3 class="font-semibold text-base sm:text-sm md:text-base text-white peer-checked:text-brand-gold line-clamp-1 leading-tight">${profissional.name}</h3>
+                        <p class="text-sm sm:text-xs md:text-sm text-brand-muted mt-1 line-clamp-2 leading-snug">${profissional.description}</p>
+                    </div>
                 </div>
-            </div>
-        </label>
-    `).join("");
+            </label>
+        `;
+    }).join("");
 
     els.listaProfissionais.querySelectorAll("input[type='radio']").forEach(input => {
         input.addEventListener("change", () => {
@@ -623,6 +633,7 @@ function formatarData() {
 }
 
 function renderizarResumo() {
+    if (!els.resumo) return;
     const servico = SERVICOS.find(s => s.id === estado.servicoSelecionado);
     const profissional = PROFISSIONAIS.find(p => p.id === estado.profissionalSelecionado);
 
@@ -630,11 +641,11 @@ function renderizarResumo() {
         <div class="divide-y divide-[#38362f] text-[14px]">
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Serviço</span>
-                <span class="font-medium text-[#f1efe8]">${servico.name}</span>
+                <span class="font-medium text-[#f1efe8]">${servico?.name || '-'}</span>
             </div>
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Profissional</span>
-                <span class="font-medium text-[#f1efe8]">${profissional.name}</span>
+                <span class="font-medium text-[#f1efe8]">${profissional?.name || '-'}</span>
             </div>
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Data</span>
@@ -642,11 +653,11 @@ function renderizarResumo() {
             </div>
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Horário</span>
-                <span class="font-medium text-[#f1efe8]">${estado.horarioSelecionado}</span>
+                <span class="font-medium text-[#f1efe8]">${estado.horarioSelecionado || '-'}</span>
             </div>
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Valor</span>
-                <span class="font-medium text-[#f1efe8]">R$ ${servico.price.toFixed(2).replace(".", ",")}</span>
+                <span class="font-medium text-[#f1efe8]">R$ ${servico ? servico.price.toFixed(2).replace(".", ",") : "0,00"}</span>
             </div>
         </div>
     `;
@@ -819,3 +830,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (els.btnContinuar) els.btnContinuar.addEventListener("click", avancarEtapa);
     if (els.btnHistorico) els.btnHistorico.addEventListener("click", alternarHistorico);
 });
+
+function inicializarApp() {
+    carregarServicos();
+    carregarProfissionais();
+
+    if (els.btnVoltar) els.btnVoltar.addEventListener("click", voltarEtapa);
+    if (els.btnContinuar) els.btnContinuar.addEventListener("click", avancarEtapa);
+    if (els.btnHistorico) els.btnHistorico.addEventListener("click", alternarHistorico);
+
+    mostrarPainel(estado.etapaAtual);
+}
+
+document.addEventListener("DOMContentLoaded", inicializarApp);
