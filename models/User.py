@@ -1,40 +1,46 @@
 from database import db
+from datetime import datetime, timezone
 
 class User(db.Model):
     __tablename__ = 'usuarios'
     
     # 1. Mapeamento das Colunas no MySQL (Sem CPF)
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nome = db.Column(db.String(50), nullable=False)
+    nome_completo = db.Column(db.String(50), nullable=False)
     telefone = db.Column(db.String(15))
     email = db.Column(db.String(255), unique=True, nullable=False)
     senha_hash = db.Column(db.String(255), nullable=False)
     foto_path = db.Column(db.String(255))
+    ativo = db.Column(db.Boolean, default=True, nullable=False)
+    data_cadastro = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    data_atualizacao = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
+
+    # Correto: apontando para id_endereco
+    endereco_id = db.Column(db.Integer, db.ForeignKey('enderecos.id_endereco'), nullable=True)
+
 
     # Relacionamento virtual apontando para a classe Address
     enderecos = db.relationship('Address', backref='usuario', lazy=True, cascade="all, delete-orphan")
 
     # 2. Construtor Ajustado para os dados do formulário (Sem CPF)
-    def __init__(self, nome, telefone, email, senha, foto):
-        self.nome = nome
+    def __init__(self, nome_completo, telefone, email, senha, foto):
+        self.nome_completo = nome_completo
         self.telefone = telefone
         self.email = email
-        self.senha_hash = senha  
-        self.foto_path = foto    
+        self.senha_hash = senha   
 
     # 3. Serialização para a Sessão / Respostas JSON
     def to_dict(self):
         return {
             'id': self.id, 
-            'nome': self.nome,
+            'nome_completo': self.nome_completo,
             'telefone': self.telefone,
             'email': self.email,
             'senha': self.senha_hash,  
-            'foto_path': self.foto_path,
         }
 
     # ============================================================
-    # MÉTODOS CRUD OFICIAIS (APENAS POR ID E E-MAIL)
+    # MÉTODOS CRUD OFICIAIS (CORRIGIDOS)
     # ============================================================
 
     # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
@@ -48,22 +54,23 @@ class User(db.Model):
     def buscar_por_id(cls, id):
         return db.session.get(cls, id)
 
-    # READ - Busca por E-mail (Essencial para a rota de Login posterior)
+    # READ - 🔥 CORRIGIDO: Atualizado para a sintaxe moderna db.select
     @classmethod
     def buscar_por_email(cls, email):
-        return cls.query.filter_by(email=email).first()
+        return db.session.scalar(db.select(cls).filter_by(email=email))
 
-    # READ - Lista todos os usuários por ordem alfabética
+    # READ - 🔥 CORRIGIDO: Atualizado para a sintaxe moderna db.select e scalars().all()
     @classmethod
     def listar_todos(cls):
-        return cls.query.order_by(cls.nome.asc()).all()
+        stmt = db.select(cls).order_by(cls.nome_completo.asc())
+        return db.session.scalars(stmt).all()
 
     # UPDATE - Confirma as alterações feitas no objeto
     def atualizar(self):
         db.session.commit()
         return True
 
-    # DELETE - Remove o usuário do banco usando o ID
+    # DELETE - 🔥 CORRIGIDO: Mantém a segurança do cascade deletando o objeto da sessão
     @classmethod
     def excluir_por_id(cls, id):
         usuario = cls.buscar_por_id(id)

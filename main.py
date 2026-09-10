@@ -9,7 +9,7 @@ create_database(app)
 
 # IMPORTANTE: Importe os seus modelos aqui ANTES do create_all.
 # Se você não importá-los, o SQLAlchemy não saberá que as tabelas existem e criará um banco vazio!
-from models import User, Address
+from models import *
 
 # ==========================================
 # 1. CRIAÇÃO AUTOMÁTICA DAS TABELAS NO MYSQL

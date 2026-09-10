@@ -7,7 +7,7 @@ class Database_create:
     SENHA = '' 
     SERVIDOR = 'localhost'
     PORTA = '3306'
-    BANCO = 'db_barbearia'
+    BANCO = 'databasetmsbarbearia'
 
     SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{USUARIO}:{SENHA}@{SERVIDOR}:{PORTA}/{BANCO}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
