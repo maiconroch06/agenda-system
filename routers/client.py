@@ -13,17 +13,17 @@ def clientLogin():
    
 @client.route('/cadastro')
 def clientRegister():
-    return render_template('pages/client/client-register.html')
+    return render_template('pages/client/client-rp.html')
 
 @client.route('/cadastro/finalizacao', methods=['GET','POST'])
 def clientRegisterFinish():
-    return render_template('pages/client/finish-register-restrict.html')
+    return render_template('pages/client/finish-register-rp.html')
    
 @client.route('/agendamento/servicos', methods=['GET','POST'])
 def clientAgendamentoServicos():
-   return render_template('pages/client/scheduling.html')
+   return render_template('pages/client/scheduling-rp.html')
 
 @client.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():
-   return render_template('pages/client/scheduling-restrict.html')
+   return render_template('pages/client/scheduling-rp.html')
 

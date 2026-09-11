@@ -7,8 +7,12 @@ def managerSource():
     return redirect('/')
 
 @manager.route('/cadastro/barbeiro')
+def registerEmployee():
+    return render_template('pages/manager/manage-barber-rp.html')
+
+@manager.route('/editar/barbeiro')
 def managerEmployee():
-    return render_template('pages/manager/register-barber.html')
+    return render_template('pages/manager/manage-barber-rp.html')
 
 @manager.route('/login')
 def managerLogin():
@@ -16,4 +20,4 @@ def managerLogin():
 
 @manager.route('/painel')
 def managerPanel():
-    return render_template('pages/manager/manager-panel-restrict.html')
+    return render_template('pages/manager/manager-panel-rp.html')

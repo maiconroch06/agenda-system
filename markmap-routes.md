@@ -19,11 +19,13 @@
 ## Manager
 * manager-login.html
     * /gestor/login
-* manager-panel.html
+* manager-panel-rp.html
     * /gestor/painel
+* manage-barber-rp.html
+    * gestor/cadastro/barbeiro
 
 ## Barber
 * barber-login.html
     * /barbeiro/login
-* barber-panel.html
+* barber-panel-rp.html
     * /barbeiro/painel

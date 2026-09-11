@@ -9,5 +9,3 @@ def homePage():
 @publics.route('/tipo-usuario')
 def category():
     return render_template('category-user.html')
-
-# ROTAS APENAS DE DESENVOLVIMENTO (FRONT) #
