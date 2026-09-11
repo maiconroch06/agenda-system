@@ -1064,6 +1064,9 @@
   .border-green-800 {
     border-color: var(--color-green-800);
   }
+  .border-transparent {
+    border-color: transparent;
+  }
   .border-white {
     border-color: var(--color-white);
   }
@@ -1980,6 +1983,10 @@
     .hover\:scale-\[1\.02\]:hover {
       scale: 1.02;
     }
+    .hover\:border:hover {
+      border-style: var(--tw-border-style);
+      border-width: 1px;
+    }
     .hover\:border-\[\#0f6e56\]:hover {
       border-color: #0f6e56;
     }
@@ -1991,6 +1998,9 @@
     }
     .hover\:border-\[\#888780\]:hover {
       border-color: #888780;
+    }
+    .hover\:border-black:hover {
+      border-color: var(--color-black);
     }
     .hover\:border-brand-gold:hover {
       border-color: var(--color-brand-gold);
@@ -2018,6 +2028,9 @@
       .hover\:border-brand-gold\/60:hover {
         border-color: color-mix(in oklab, var(--color-brand-gold) 60%, transparent);
       }
+    }
+    .hover\:border-white:hover {
+      border-color: var(--color-white);
     }
     .hover\:bg-\[\#2a2825\]:hover {
       background-color: #2a2825;
@@ -2049,9 +2062,6 @@
     .hover\:bg-\[\#e2dfd7\]:hover {
       background-color: #e2dfd7;
     }
-    .hover\:bg-black:hover {
-      background-color: var(--color-black);
-    }
     .hover\:bg-brand-gold:hover {
       background-color: var(--color-brand-gold);
     }
@@ -2060,9 +2070,6 @@
     }
     .hover\:bg-red-100:hover {
       background-color: var(--color-red-100);
-    }
-    .hover\:bg-white:hover {
-      background-color: var(--color-white);
     }
     .hover\:bg-zinc-200:hover {
       background-color: var(--color-zinc-200);
@@ -2376,9 +2383,6 @@
     }
     .md\:p-8 {
       padding: calc(var(--spacing) * 8);
-    }
-    .md\:py-1\.5 {
-      padding-block: calc(var(--spacing) * 1.5);
     }
     .md\:py-3 {
       padding-block: calc(var(--spacing) * 3);
