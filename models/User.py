@@ -6,11 +6,11 @@ class User(db.Model):
     
     # 1. Mapeamento das Colunas no MySQL (Sem CPF)
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nome_completo = db.Column(db.String(50), nullable=False)
-    telefone = db.Column(db.String(15))
+    nome_completo = db.Column(db.String(100), nullable=False)
+    telefone = db.Column(db.String(11))
     email = db.Column(db.String(255), unique=True, nullable=False)
     senha_hash = db.Column(db.String(255), nullable=False)
-    foto_path = db.Column(db.String(255))
+    foto_path = db.Column(db.String(255), nullable=True)
     ativo = db.Column(db.Boolean, default=True, nullable=False)
     data_cadastro = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     data_atualizacao = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
@@ -18,16 +18,17 @@ class User(db.Model):
     # Correto: apontando para id_endereco
     endereco_id = db.Column(db.Integer, db.ForeignKey('enderecos.id_endereco'), nullable=True)
 
-
     # Relacionamento virtual apontando para a classe Address
     enderecos = db.relationship('Address', backref='usuarios', lazy=True)
 
     # 2. Construtor Ajustado para os dados do formulário (Sem CPF)
-    def __init__(self, nome_completo, telefone, email, senha, foto):
+    def __init__(self, nome_completo, telefone, email, senha, foto, id_endereco):
         self.nome_completo = nome_completo
         self.telefone = telefone
         self.email = email
-        self.senha_hash = senha   
+        self.senha_hash = senha
+        self.endereco_id = id_endereco 
+        self.foto_path = foto
 
     # 3. Serialização para a Sessão / Respostas JSON
     def to_dict(self):
@@ -79,3 +80,26 @@ class User(db.Model):
             db.session.commit()
             return True
         return False
+    
+    # chamar o método pela própria classe
+    # cls é uma convenção do Python que representa a própria classe
+    @classmethod
+    def insertUserGestor(cls, id_endereco_gestor:int):
+        if cls.query.first() is None:
+
+            user_gestor = cls(
+                nome_completo = "Samuel maicon da silva",
+                telefone = "84999999999",
+                email = "samuelmaicongestor@gmail.com",
+                senha = "teste",
+                id_endereco = id_endereco_gestor,
+                foto = None
+                
+                )
+
+            db.session.add(user_gestor)
+            db.session.commit()
+                
+            return user_gestor.id
+
+        return cls.query.first().id;

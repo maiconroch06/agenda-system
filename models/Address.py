@@ -36,3 +36,23 @@ class Address(db.Model):
             'sequencia': self.sequencia,
             'complemento': self.complemento
         }
+
+    @classmethod
+    def insertDefaultAdress(cls):
+        if cls.query.first() is None:
+
+            adress_default = cls(
+                cep = "59215-000",
+                cidade = "Nova Cruz",
+                numero = 55,
+                bairro = "Centro",
+                estado = "RN",
+                sequencia = None,
+                complemento = None
+                    )
+
+            db.session.add(adress_default)
+            db.session.commit()
+                
+            return adress_default.id_endereco
+        return cls.query.first().id_endereco;

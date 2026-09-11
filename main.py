@@ -1,6 +1,8 @@
-import os
-from flask import Flask 
+from flask import Flask, session
+from datetime import timedelta
 from database import create_database, db
+from database.seed import initialize
+
 
 app = Flask(__name__)
 
@@ -18,6 +20,9 @@ with app.app_context():
     # Esse comando lê as classes e as cria no banco
     db.create_all()
 
+    initialize()
+    
+
 
 # ==========================================
 # 2. IMPORTS DOS BLUEPRINTS (Apenas APÓS criar o banco)
@@ -33,9 +38,14 @@ from routers.client import client
 # ==========================================
 app.register_blueprint(publics)
 app.register_blueprint(client, url_prefix='/cliente')
+
+
 # app.register_blueprint(user_login, url_prefix='/login')
 # app.register_blueprint(manager, url_prefix='/gestor')
 # app.register_blueprint(client, url_prefix='/cliente')
+
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

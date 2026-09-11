@@ -1,13 +1,13 @@
-from models import User
+from models.User import User
 from flask import Blueprint, render_template, session, request, redirect, url_for
 from sqlalchemy.exc import IntegrityError
+from models.Client import Client
 
 
 class AuthenticationUser():
     
     def login(email:str, senha:str):
         # Validação inicial simples
-                
                 if not email or not senha:
                     session['erro'] = "Por favor, preencha todos os campos."
                     return redirect(url_for('cliente.clientLoginPage'))
@@ -21,8 +21,7 @@ class AuthenticationUser():
                     
                     # 5. Salva o ID e os dados completos na sessão (Agora incluindo o ID gerado pelo banco!)
                     session['dados_usuario'] = usuario.to_dict()
-                    session['logado'] = True
-                    
+                                      
                     # Redireciona o cliente logado diretamente para a página de agendamentos
                     return redirect(url_for('cliente.clientAgendamentoServicos'))
                 
@@ -35,7 +34,19 @@ class AuthenticationUser():
                         
     def registerUser(user:User):
         # Salvando os dados na sessão do Flask
-        user.salvar();
-        session['dados_usuario'] = user.to_dict()
-        print(session.get('dados_usuario'))
+        user.salvar()
+
+        # salvar o usuario como cliente
+        client = Client(
+            user.to_dict().get('id')
+        )
+
+        id_cliente = client.salvar()
+
+        if not client:
+            session['erro'] = 'Erro ao criar o usuario'
+            return redirect(url_for('cliente.clientRegisterPage'))
+
+        session.permanent = True
+        session['dados_usuario'] = id_cliente
         return redirect(url_for('cliente.clientAgendamentoServicos'))

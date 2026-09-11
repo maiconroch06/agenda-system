@@ -35,14 +35,15 @@ def clientRegister():
     if  request.method == "POST":
         # Instancia o objeto User com os dados do formulário
         usuario = User(
-            nome=request.form.get('nome'),
+            nome_completo=request.form.get('nome'),
             telefone=request.form.get('telefone'),
             email=request.form.get('email'),
             senha=request.form.get('senha'),
-            foto=request.files.get('foto').filename if request.files.get('foto') else None
+            foto=request.files.get('foto').filename if request.files.get('foto') else None,
+            id_endereco = None
         )
-        print('PASSOU AQUI, NO CADASTRO')
         return AuthenticationUser.registerUser(usuario)
+    
     
 
 @client.route('/cadastro/finalizacao', methods=["GET", "POST"])

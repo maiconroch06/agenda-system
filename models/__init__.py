@@ -10,6 +10,7 @@ from .BarberShop_Days_Week import BarberShopDaysWeek
 from .Agenda_Barber_Time import AgendaBarberTime
 from .Scheduling import Scheduling
 
+
 __all__ = [
     'Address',
     'DaysWeek',

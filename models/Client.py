@@ -1,4 +1,5 @@
 from database import db
+from .BarberShop import BarberShop
 
 class Client(db.Model):
     __tablename__ = 'clientes'
@@ -17,3 +18,15 @@ class Client(db.Model):
         primary_key=True, 
         nullable=False
     )
+
+    # 2. Construtor para salvar na tabela clientes
+    def __init__(self, cliente_id:int):
+            self.barbearia_cnpj = BarberShop.getCNPJ()
+            self.cliente_id = cliente_id 
+
+
+    # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
+    def salvar(self):
+        db.session.add(self)
+        db.session.commit()
+        return self.cliente_id
