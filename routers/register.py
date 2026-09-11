@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 
 from models import User
 from models import Address
-from repository import obter_todos_estados
+from repository import get_all_states
 
 user_register = Blueprint('register', __name__, template_folder='templates')
 
@@ -52,7 +52,7 @@ def register_User_post():
 
 @user_register.route('/endereco', methods=['GET'])
 def register_Address_get():
-    estado_siglas = obter_todos_estados()
+    estado_siglas = get_all_states()
     return render_template('pages/register/address-register.html', estado_siglas=estado_siglas)
 
 @user_register.route('/endereco', methods=['POST'])

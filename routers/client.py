@@ -11,9 +11,11 @@ def clientSource():
  
 @client.route('/login', methods=["GET", "POST"])
 def clientLogin():
-    # Verificando o tipo de request
+    # Verificando o tipo de request GET
     if request.method == "GET":
         return render_template('pages/client/client-login.html')
+    
+    # Verificando o tipo de request POST
     elif request.method == "POST":
         email_digitado = request.form.get('email')
         senha_digitada = request.form.get('senha')

@@ -1,1 +1,1 @@
-from .repository_address import obter_todos_estados
+from .repository_address import get_all_states
