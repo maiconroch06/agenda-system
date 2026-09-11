@@ -20,7 +20,7 @@ class User(db.Model):
 
 
     # Relacionamento virtual apontando para a classe Address
-    enderecos = db.relationship('Address', backref='usuario', lazy=True, cascade="all, delete-orphan")
+    enderecos = db.relationship('Address', backref='usuarios', lazy=True)
 
     # 2. Construtor Ajustado para os dados do formulário (Sem CPF)
     def __init__(self, nome_completo, telefone, email, senha, foto):

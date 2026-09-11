@@ -25,9 +25,10 @@
             <!-- Formulário com controle centralizado de fluxo via gap -->
             <form id="form-login" class="flex flex-col gap-5" action="/cliente/login" method="post" novalidate>
                 <!-- Mensagem de Erro -->
-                {% if erro %}
+                {% if session.get('erro') %}
                     <div class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
-                        {{ erro }}
+                        <!-- Aqui eu pego a mensagem de erro e apago a sessão-->
+                        {{ session.pop('erro')  }}
                     </div>
                 {% endif %}
 

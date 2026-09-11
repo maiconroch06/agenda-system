@@ -1,16 +1,8 @@
-<<<<<<< HEAD
-from flask import Blueprint, render_template, session, request,  redirect, url_for
-from sqlalchemy.exc import IntegrityError
-import requests
-from models import User
-from datetime import datetime
-
-=======
 from flask import Blueprint, render_template, session, request, redirect, url_for
 from sqlalchemy.exc import IntegrityError
-
+from controllers.authentication_controller import AuthenticationUser
 from models import User
->>>>>>> feature-backend
+
 client = Blueprint('cliente', __name__, template_folder='templates')
 
 @client.route('/')
@@ -18,104 +10,29 @@ def clientSource():
     #redireciona para a raiz do site novamente
     return redirect('/')
  
-<<<<<<< HEAD
-   
-@client.route('/cadastro')
-def clientRegister():
-    return render_template('pages/client/client-register.html')
-
-
-@client.route('/cadastro/realizar', methods=["POST"])
-def clientRegisterUp():
-
-    nome = request.form.get('nome')
-    telefone = request.form.get('telefone')
-    email = request.form.get('email')
-    senha = request.form.get('senha')
-    tipo_end = request.form.get('tipo_end')
-
-    if not nome or not telefone or not email or not senha:
-        return render_template(
-            'pages/client/client-register.html',
-            erro="Por favor, preencha todos os campos obrigatórios."
-        )
-
-    resposta = requests.post(
-        'http://localhost:8000/auth/criarContaCliente',
-        json={
-            "nome_completo": nome,
-            "telefone": telefone,
-            "email": email,
-            "senha": senha,
-            "foto": "teste",
-            "ativo": 1,
-            "data_cadastro": datetime.now().isoformat(),
-            "data_atualizacao": datetime.now().isoformat(),
-            "endereco_id": 1,
-            "cpf": None
-        }
-    )
-
-    if resposta.status_code == 201:
-        return clientAgendamentoServicos()
-
-    dados = resposta.json()
-
-    return render_template(
-        'pages/client/client-register.html',
-        erro=dados.get(
-            'detail',
-            'Erro ao realizar cadastro.' # Pegue detail de dados. Se detail não existir, use "Erro ao realizar cadastro." como valor padrão.
-        )
-    )
-=======
-@client.route('/login', methods=["GET", "POST"])
-def clientLogin():
+@client.route('/login', methods=["GET"])
+def clientLoginPage():
     # Verificando o tipo de request GET
-    if request.method == "GET":
         return render_template('pages/client/client-login.html')
-    
+
+
+@client.route('/login/', methods=["POST"])
+def clientLogin():   
     # Verificando o tipo de request POST
-    elif request.method == "POST":
+   if request.method == "POST":
         email_digitado = request.form.get('email')
         senha_digitada = request.form.get('senha')
-
-        # Validação inicial simples
-        if not email_digitado or not senha_digitada:
-            return render_template('pages/client/client-login.html', erro="Por favor, preencha todos os campos.")
-
-        # 3. Busca o usuário no MySQL através do método que você já criou na sua classe User
-        usuario = User.buscar_por_email(email_digitado)
-
-        # 4. Verifica se o usuário existe e se a senha confere
-        # (Nota: Se futuramente usar criptografia com werkzeug, use check_password_hash aqui)
-        if usuario and usuario.senha_hash == senha_digitada:
-            
-            # 5. Salva o ID e os dados completos na sessão (Agora incluindo o ID gerado pelo banco!)
-            session['dados_usuario'] = usuario.to_dict()
-            session['logado'] = True
-            
-            # Redireciona o cliente logado diretamente para a página de agendamentos
-            return clientAgendamentoServicos()
+        return AuthenticationUser.login(email_digitado,senha_digitada)
         
-        else:
-            # Se a senha estiver errada, recarrega mantendo o e-mail na tela
-            return render_template(
-                'pages/client/client-login.html', 
-                erro="E-mail ou senha incorretos.",
-                email_antigo=email_digitado
-            )
-   
-@client.route('/cadastro', methods=["GET", "POST"])
-def clientRegister():
 
-    # Verificando o tipo de request
-    if request.method == "GET":
-        # Buscando dados do cliente para alteração
-        usuario = session.get("dados_usuario", None)
-        return render_template('pages/client/client-register.html')
-    
-    elif  request.method == "POST":
+@client.route('/cadastro', methods=["GET"])
+def clientRegisterPage():  
+    usuario = session.get("dados_usuario", None)
+    return render_template('pages/client/client-register.html')
+   
+@client.route('/cadastro', methods=["POST"])
+def clientRegister():
+    if  request.method == "POST":
         # Instancia o objeto User com os dados do formulário
         usuario = User(
             nome=request.form.get('nome'),
@@ -124,9 +41,9 @@ def clientRegister():
             senha=request.form.get('senha'),
             foto=request.files.get('foto').filename if request.files.get('foto') else None
         )
-        # Salvando os dados na sessão do Flask
-        session['dados_usuario'] = usuario.to_dict()
-        return redirect(url_for('cliente.clientRegisterFinish'))
+        print('PASSOU AQUI, NO CADASTRO')
+        return AuthenticationUser.registerUser(usuario)
+    
 
 @client.route('/cadastro/finalizacao', methods=["GET", "POST"])
 def clientRegisterFinish():
@@ -170,55 +87,30 @@ def clientRegisterFinish():
         except Exception as e:
             return f"Erro ao salvar no banco de dados: {str(e)}", 400
         
->>>>>>> feature-backend
    
 @client.route('/agendamento/servicos', methods=['GET','POST'])
 def clientAgendamentoServicos():
-   return render_template('pages/client/scheduling.html')
+   return render_template('pages/client/scheduling-rp.html')
 
 @client.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():
-   return render_template('pages/client/scheduling.html')
+   return render_template('pages/client/scheduling-rp.html')
 
+@client.before_request
+def authentication():
+    #Criando as minhas rotas publicas
+    routers_publics = ['cliente.clientLoginPage','cliente.clientLogin','cliente.clientRegisterPage','cliente.clientRegister']
+    
+    # se a rota for publica ele retorna aqui e envia para a rota desejada;
+    if request.endpoint  in routers_publics:
+        return 
+    
+    # Se a rota não estiver nas rotas publicas ele verifica o token
+    if 'dados_usuario' not in session:
+        return redirect(url_for('cliente.clientLoginPage'))
+    
+    
+    
 
-@client.route('/login', methods=["GET", "POST"])
-def clientLogin():
-    if request.method == "GET":
-        return render_template('pages/client/client-login.html')
+    
 
-    email_digitado = request.form.get('email')
-    senha_digitada = request.form.get('senha')
-
-    if not email_digitado or not senha_digitada:
-        return render_template(
-            'pages/client/client-login.html',
-            erro="Por favor, preencha todos os campos."
-        )
-
-    # Envia login para a API FastAPI
-    resposta = requests.post(
-        'http://localhost:8000/auth/login',
-        json={
-            "email": email_digitado,
-            "senha": senha_digitada
-        }
-    )
-
-    # Login realizado com sucesso
-    if resposta.status_code == 200:
-
-        dados = resposta.json()
-
-        session['access_token'] = dados['access_token']
-        session['dados_usuario'] = dados['usuario']
-        session['logado'] = True
-
-        return clientAgendamentoServicos()
-
-    # Erro de autenticação
-    return render_template(
-        'pages/client/client-login.html',
-        erro="E-mail ou senha incorretos.",
-        email_antigo=email_digitado
-    )
-   

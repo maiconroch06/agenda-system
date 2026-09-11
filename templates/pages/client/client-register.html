@@ -85,17 +85,13 @@
                             </div>
                         {% endif %}
                     <!-- Formulário -->
-<<<<<<< HEAD
-                    <form id="form-empresa" action="/cliente/cadastro/realizar" method="post" enctype="multipart/form-data" novalidate
-=======
                     <form id="form-empresa" action="/cliente/cadastro" method="post" enctype="multipart/form-data" novalidate
->>>>>>> feature-backend
                         class="flex flex-col gap-5">
 
                         <!-- Mensagem de Erro -->
-                        {% if erro %}
+                        {% if session.get('erro') %}
                             <div class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
-                                {{ erro }}
+                                {{ session.pop('erro') }}
                             </div>
                         {% endif %}
 
