@@ -1,126 +1,223 @@
 /* ============================================================
-   ESTADO GLOBAL DA APLICAÇÃO
+   UTILITÁRIOS DE DATA E FORMATAÇÃO
    ============================================================ */
-const estadoApp = {
-    empresa: {
-        nome: "TMS Barbearia",
-        categoria: "barbearia",
-        cnpj: "12.345.678/0001-90",
-        abertura: "08:00",
-        fechamento: "20:00",
-        dias: "Segunda a Sábado",
-        codigoAcesso: "TMS-8942"
-    },
-    servicos: [
-        { id: 1, nome: "Corte", preco: 45.00, tempo: 40, imagem: null },
-        { id: 2, nome: "Barba Completa", preco: 35.00, tempo: 30, imagem: null },
-        { id: 3, nome: "Combo (Corte + Barba)", preco: 70.00, tempo: 60, imagem: null }
-    ],
-    profissionais: [
-        { id: 1, nome: "Carlos Silva", cargo: "Barbeiro Master", imagem: null },
-        { id: 2, nome: "Lucas Mendes", cargo: "Especialista em Barba", imagem: null }
-    ],
-    agendamentosHoje: [
-        { id: "1", horario: "09:00", cliente: "Lucas Andrade", servico: "Corte Degradê", profissional: "Carlos Silva", valor: 45.00, status: "Concluído" },
-        { id: "2", horario: "10:00", cliente: "Gabriel Santos", servico: "Barba Completa", profissional: "Lucas Mendes", valor: 35.00, status: "Em Atendimento" },
-        { id: "3", horario: "11:30", cliente: "Rafael Lima", servico: "Combo (Corte + Barba)", profissional: "Carlos Silva", valor: 70.00, status: "Aguardando" },
-        { id: "4", horario: "14:00", cliente: "Felipe Silva", servico: "Corte Degradê", profissional: "Lucas Mendes", valor: 45.00, status: "Aguardando" }
-    ],
-    clientes: [
-        { id: 1, nome: "Lucas Andrade", telefone: "(11) 98888-1111", ultimaVisita: "Hoje", visitas: 5, totalGasto: "R$ 225,00" },
-        { id: 2, nome: "Gabriel Santos", telefone: "(11) 97777-2222", ultimaVisita: "Hoje", visitas: 3, totalGasto: "R$ 105,00" },
-        { id: 3, nome: "Rafael Lima", telefone: "(11) 96666-3333", ultimaVisita: "15/02/2026", visitas: 8, totalGasto: "R$ 560,00" }
-    ],
-    historicoFinanceiro: [
-        { data: "10/09/2026 14:30", cliente: "João Pedro", servico: "Corte", profissional: "Carlos Silva", valor: 45.00 },
-        { data: "10/09/2026 15:15", cliente: "Mateus Souza", servico: "Barba Completa", profissional: "Lucas Mendes", valor: 35.00 },
-        { data: "10/09/2026 16:00", cliente: "Rafael Lima", servico: "Combo (Corte + Barba)", profissional: "Carlos Silva", valor: 70.00 }
-    ]
+
+function formatarISO(data) {
+    const y = data.getFullYear();
+    const m = String(data.getMonth() + 1).padStart(2, "0");
+    const d = String(data.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+}
+
+function diasAPartirDeHoje(offset) {
+    const d = new Date();
+    d.setDate(d.getDate() + offset);
+    return formatarISO(d);
+}
+
+function hojeISO() {
+    return formatarISO(new Date());
+}
+
+function formatarDataExtenso(iso) {
+    if (!iso) return "—";
+    const d = new Date(iso + "T00:00:00");
+    return d.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
+}
+
+function formatarMoeda(v) {
+    return "R$ " + Number(v || 0).toFixed(2).replace(".", ",");
+}
+
+/* ============================================================
+   PERSISTÊNCIA (localStorage)
+   ============================================================ */
+
+function carregarDoStorage(chave, valorPadrao) {
+    try {
+        const bruto = localStorage.getItem(chave);
+        if (!bruto) return valorPadrao;
+        return JSON.parse(bruto);
+    } catch (erro) {
+        return valorPadrao;
+    }
+}
+
+function salvarNoStorage(chave, valor) {
+    try {
+        localStorage.setItem(chave, JSON.stringify(valor));
+    } catch (erro) {
+        console.warn(`Não foi possível salvar "${chave}".`, erro);
+    }
+}
+
+/* ============================================================
+   DADOS INICIAIS DA BARBEARIA
+   ============================================================ */
+
+const PROFISSIONAIS_PADRAO = [
+    { id: "p1", nome: "Carlos Silva", cargo: "Barbeiro Master" },
+    { id: "p2", nome: "Lucas Mendes", cargo: "Especialista em Barba" }
+];
+
+const AGENDAMENTOS_PADRAO = [
+    { id: "a1", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(0), hora: "09:00", cliente: "Carlos Eduardo",  telefone: "(11) 98765-4321", servico: "Corte Social",       valor: 45, status: "concluido",  observacoes: "" },
+    { id: "a2", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(0), hora: "10:00", cliente: "Bruno Alves",      telefone: "(11) 91234-5678", servico: "Degradê & Barba",    valor: 70, status: "concluido",  observacoes: "Cliente prefere degradê baixo" },
+    { id: "a3", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(0), hora: "11:30", cliente: "Rafael Souza",     telefone: "(11) 99887-6655", servico: "Barba",              valor: 35, status: "confirmado", observacoes: "" },
+    { id: "a4", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(0), hora: "14:00", cliente: "Diego Martins",    telefone: "(11) 98111-2233", servico: "Corte Infantil",      valor: 40, status: "aguardando", observacoes: "Primeira vez" },
+    { id: "a5", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(0), hora: "15:30", cliente: "Felipe Costa",     telefone: "(11) 97222-3344", servico: "Corte Militar",       valor: 45, status: "aguardando", observacoes: "" },
+    { id: "a6", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(0), hora: "16:30", cliente: "Gustavo Lima",     telefone: "(11) 96333-4455", servico: "Social & Barba",      valor: 70, status: "cancelado",  observacoes: "Cliente cancelou" },
+    { id: "a7", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(1), hora: "09:30", cliente: "Henrique Dias",    telefone: "(11) 95444-5566", servico: "Degradê",              valor: 50, status: "aguardando", observacoes: "" },
+    { id: "a8", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(1), hora: "13:00", cliente: "Igor Pereira",     telefone: "(11) 94555-6677", servico: "Corte Social",         valor: 45, status: "aguardando", observacoes: "" }
+];
+
+const SERVICOS_PADRAO = [
+    { id: "s1", nome: "Corte Social", duracao: 30, preco: 45, ativo: true },
+    { id: "s2", nome: "Degradê", duracao: 40, preco: 50, ativo: true },
+    { id: "s3", nome: "Degradê & Barba", duracao: 60, preco: 70, ativo: true }
+];
+
+let profissionais = carregarDoStorage("profissionais_manager", PROFISSIONAIS_PADRAO);
+let agendamentos = carregarDoStorage("agendamentos_manager", AGENDAMENTOS_PADRAO);
+let servicosManager = carregarDoStorage("servicos_manager", SERVICOS_PADRAO);
+let bloqueios = carregarDoStorage("bloqueios_manager", []);
+
+let servicoEmEdicaoId = null;
+let profissionalEmEdicaoId = null;
+
+function salvarAgendamentos() { salvarNoStorage("agendamentos_manager", agendamentos); }
+function salvarProfissionais() { salvarNoStorage("profissionais_manager", profissionais); }
+function salvarServicos() { salvarNoStorage("servicos_manager", servicosManager); }
+function salvarBloqueios() { salvarNoStorage("bloqueios_manager", bloqueios); }
+
+/* ============================================================
+   ESTADO GLOBAL DA TELA DO GESTOR
+   ============================================================ */
+
+const estado = {
+    abaAtual: "inicio",
+    visaoAgenda: "dia",
+    barbeiroFiltro: "todos",
+    mesAtual: new Date(),
+    diaSelecionadoMes: null
 };
 
-// Mapeamento dinâmico de elementos do DOM
-const els = {};
+/* ============================================================
+   MAPPING DOM
+   ============================================================ */
 
-function mapearElementos() {
-    // Perfil / Configurações
-    els.perfilNome = document.getElementById("perfil-nome");
-    els.perfilCategoria = document.getElementById("perfil-categoria");
-    els.perfilCnpj = document.getElementById("perfil-cnpj");
-    els.perfilExpediente = document.getElementById("perfil-expediente");
-    els.perfilDias = document.getElementById("perfil-dias");
-    els.codigoAcesso = document.getElementById("codigo-acesso");
+const els = {
+    aviso: document.getElementById("aviso"),
+    
+    // KPIs & Cards Início
+    kpiFaturamentoHoje: document.getElementById("kpi-faturamento-hoje"),
+    kpiAtendimentosHoje: document.getElementById("kpi-atendimentos-hoje"),
+    kpiOcupacaoHoje: document.getElementById("kpi-ocupacao-hoje"),
+    kpiFaltasHoje: document.getElementById("kpi-faltas-hoje"),
+    totalAgendamentosHoje: document.getElementById("total-agendamentos-hoje"),
+    listaHojeCards: document.getElementById("lista-hoje-cards"),
 
-    // Modal Empresa
-    els.editEmpNome = document.getElementById("edit-emp-nome");
-    els.editEmpCategoria = document.getElementById("edit-emp-categoria");
-    els.editEmpCnpj = document.getElementById("edit-emp-cnpj");
-    els.editEmpAbertura = document.getElementById("edit-emp-abertura");
-    els.editEmpFechamento = document.getElementById("edit-emp-fechamento");
-    els.modalOverlay = document.getElementById("modal-overlay");
-    els.modalEmpresa = document.getElementById("modal-empresa");
+    // Agenda
+    filtroBarbeiroAgenda: document.getElementById("filtro-barbeiro-agenda"),
+    agendaVisaoDia: document.getElementById("agenda-visao-dia"),
+    agendaVisaoSemana: document.getElementById("agenda-visao-semana"),
+    agendaVisaoMes: document.getElementById("agenda-visao-mes"),
+    listaAgendaDia: document.getElementById("lista-agenda-dia"),
+    semanaScroll: document.getElementById("semana-scroll"),
+    mesTitulo: document.getElementById("mes-titulo"),
+    mesGrid: document.getElementById("mes-grid"),
+    mesDiaSelecionadoTitulo: document.getElementById("mes-dia-selecionado-titulo"),
+    listaMesDia: document.getElementById("lista-mes-dia"),
 
     // Serviços
-    els.formServicoPainel = document.getElementById("form-servico-painel");
-    els.psrvNome = document.getElementById("psrv-nome");
-    els.psrvPreco = document.getElementById("psrv-preco");
-    els.psrvTempo = document.getElementById("psrv-tempo");
-    els.psrvFoto = document.getElementById("psrv-foto");
-    els.listaServicosPainel = document.getElementById("lista-servicos-painel");
+    formServicoPainel: document.getElementById("form-servico-painel"),
+    listaServicosPainel: document.getElementById("lista-servicos-painel"),
+    psrvNome: document.getElementById("psrv-nome"),
+    psrvPreco: document.getElementById("psrv-preco"),
+    psrvTempo: document.getElementById("psrv-tempo"),
 
     // Profissionais
-    els.formProfissionalPainel = document.getElementById("form-profissional-painel");
-    els.pproNome = document.getElementById("ppro-nome");
-    els.pproCargo = document.getElementById("ppro-cargo");
-    els.pproFoto = document.getElementById("ppro-foto");
-    els.listaProfissionaisPainel = document.getElementById("lista-profissionais-painel");
+    formProfissionalPainel: document.getElementById("form-profissional-painel"),
+    listaProfissionaisPainel: document.getElementById("lista-profissionais-painel"),
+    pproNome: document.getElementById("ppro-nome"),
+    pproCargo: document.getElementById("ppro-cargo"),
 
     // Clientes
-    els.tabelaClientesCorpo = document.getElementById("tabela-clientes-corpo");
-    els.buscaCliente = document.getElementById("busca-cliente");
+    buscaCliente: document.getElementById("busca-cliente"),
+    tabelaClientesCorpo: document.getElementById("tabela-clientes-corpo"),
 
     // Financeiro
-    els.finReceitaMes = document.getElementById("fin-receita-mes");
-    els.finTotalCortes = document.getElementById("fin-total-cortes");
-    els.finTicketMedio = document.getElementById("fin-ticket-medio");
-    els.finMaisRealizado = document.getElementById("fin-mais-realizado");
-    els.finTabelaCorpo = document.getElementById("fin-tabela-corpo");
+    finReceitaMes: document.getElementById("fin-receita-mes"),
+    finTotalCortes: document.getElementById("fin-total-cortes"),
+    finTicketMedio: document.getElementById("fin-ticket-medio"),
+    finMaisRealizado: document.getElementById("fin-mais-realizado"),
+    finTabelaCorpo: document.getElementById("fin-tabela-corpo"),
 
-    // Feedbacks & NAVEGAÇÃO
-    els.aviso = document.getElementById("aviso");
-    els.abasFunc = document.querySelectorAll(".aba-func");
-    els.sidebarItems = document.querySelectorAll(".sidebar-func__item");
-    els.bottomNavItems = document.querySelectorAll(".bottom-nav__item");
+    // Modal Detalhes
+    overlayDetalhe: document.getElementById("overlay-detalhe"),
+    modalDetalhe: document.getElementById("modal-detalhe"),
+    detalheStatusBadge: document.getElementById("detalhe-status-badge"),
+    detalheBarbeiro: document.getElementById("detalhe-barbeiro"),
+    detalheCliente: document.getElementById("detalhe-cliente"),
+    detalheServico: document.getElementById("detalhe-servico"),
+    detalheHorario: document.getElementById("detalhe-horario"),
+    detalheValor: document.getElementById("detalhe-valor"),
+    detalheTelefone: document.getElementById("detalhe-telefone"),
+    detalheObs: document.getElementById("detalhe-obs"),
+    detalheAcoes: document.getElementById("detalhe-acoes"),
+
+    // Modal Bloquear
+    overlayBloquear: document.getElementById("overlay-bloquear"),
+    modalBloquear: document.getElementById("modal-bloquear"),
+    bloqBarbeiro: document.getElementById("bloq-barbeiro"),
+    bloqData: document.getElementById("bloq-data"),
+    bloqInicio: document.getElementById("bloq-inicio"),
+    bloqFim: document.getElementById("bloq-fim"),
+    bloqMotivo: document.getElementById("bloq-motivo"),
+
+    abasFunc: () => document.querySelectorAll(".aba-func"),
+    sidebarItems: () => document.querySelectorAll(".sidebar-func__item"),
+    bottomNavItems: () => document.querySelectorAll(".bottom-nav__item"),
+    filtroBtns: () => document.querySelectorAll(".filtro-btn"),
+
+    getAba: (aba) => document.getElementById(`aba-${aba}`),
+    getFiltroBtn: (visao) => document.querySelector(`.filtro-btn[data-filtro="${visao}"]`)
+};
+
+/* ============================================================
+   FEEDBACK & TOAST
+   ============================================================ */
+
+function mostrarAviso(msg) {
+    if (!els.aviso) return;
+    els.aviso.textContent = msg;
+    els.aviso.classList.remove("opacity-0", "translate-y-2.5", "pointer-events-none");
+    els.aviso.classList.add("opacity-100", "translate-y-0");
+    setTimeout(() => {
+        els.aviso.classList.remove("opacity-100", "translate-y-0");
+        els.aviso.classList.add("opacity-0", "translate-y-2.5", "pointer-events-none");
+    }, 2500);
 }
 
 /* ============================================================
    NAVEGAÇÃO ENTRE ABAS
    ============================================================ */
-function irParaAba(nomeAba) {
-    // Esconde todas as seções
-    document.querySelectorAll(".aba-func").forEach(sec => {
-        sec.classList.add("hidden");
-        sec.classList.remove("block");
-    });
 
-    // Exibe a aba ativa
-    const abaAtiva = document.getElementById(`aba-${nomeAba}`);
-    if (abaAtiva) {
-        abaAtiva.classList.remove("hidden");
-        abaAtiva.classList.add("block");
-    }
+function irParaAba(aba) {
+    els.abasFunc().forEach(el => el.classList.add("hidden"));
+    const abaEl = els.getAba(aba);
+    if (abaEl) abaEl.classList.remove("hidden");
 
-    // Estilização Sidebar Desktop
-    document.querySelectorAll(".sidebar-func__item").forEach(btn => {
-        if (btn.getAttribute("data-aba") === nomeAba) {
+    els.sidebarItems().forEach(btn => {
+        if (btn.getAttribute("data-aba") === aba) {
             btn.className = "sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-[#2a2825] text-[#f1efe8] font-medium text-sm cursor-pointer text-left w-full transition-colors";
         } else {
             btn.className = "sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]";
         }
     });
 
-    // Estilização Navegação Mobile
-    document.querySelectorAll(".bottom-nav__item").forEach(btn => {
-        if (btn.getAttribute("data-aba") === nomeAba) {
+    els.bottomNavItems().forEach(btn => {
+        if (btn.getAttribute("data-aba") === aba) {
             btn.classList.remove("text-[#888780]");
             btn.classList.add("text-[#f1efe8]");
         } else {
@@ -129,457 +226,699 @@ function irParaAba(nomeAba) {
         }
     });
 
-    // Roteamento de dados da aba
-    switch (nomeAba) {
-        case "inicio": carregarDashboardInicio(); break;
-        case "servicos": renderizarServicos(); break;
-        case "profissionais": renderizarProfissionais(); break;
-        case "clientes": carregarClientes(); break;
-        case "financeiro": renderizarFinanceiro(); break;
-        case "config": carregarPerfil(); break;
-    }
+    estado.abaAtual = aba;
+
+    if (aba === "inicio") carregarDashboardInicio();
+    else if (aba === "agenda") atualizarAgendaGeral();
+    else if (aba === "servicos") renderizarServicos();
+    else if (aba === "profissionais") renderizarProfissionais();
+    else if (aba === "clientes") renderizarClientes();
+    else if (aba === "financeiro") renderizarFinanceiro();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 /* ============================================================
-   ABA 1: INÍCIO (DASHBOARD OPERACIONAL DO DIA)
+   BADGES DE STATUS DEDICADOS
    ============================================================ */
+
+function badgeStatusHTML(status) {
+    const mapa = { aguardando: "Aguardando", confirmado: "Confirmado", concluido: "Concluido", cancelado: "Cancelado" };
+    const classes = {
+        aguardando: "bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]",
+        confirmado: "bg-[#0a2940] text-[#5ab4f0] border-[#1a5a8a]",
+        concluido: "bg-[#085041] text-[#9fe1cb] border-[#0f6e56]",
+        cancelado: "bg-[#3a1510] text-[#f0997b] border-[#993c1d]"
+    };
+    return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${classes[status] || ''}">${mapa[status] || status}</span>`;
+}
+
+/* ============================================================
+   ABA INÍCIO — CARDS DE HOJE (CLICÁVEIS PARA DETALHES)
+   ============================================================ */
+
+function cardAtendimentoHojeHTML(item) {
+    const concluidoClasse = item.status === "concluido" ? " opacity-65" : "";
+    return `
+        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 flex flex-col justify-between cursor-pointer hover:border-[#4a473f] transition-all hover:scale-[1.01] active:scale-[0.99]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-xs font-mono font-bold text-[#9fe1cb] bg-[#04342c] px-2 py-0.5 rounded-md border border-[#0f6e56]">${item.hora}</span>
+                    <span class="text-xs text-[#888780] ml-2">Barbeiro: <strong class="text-[#f1efe8]">${item.barbeiro || "N/A"}</strong></span>
+                </div>
+                ${badgeStatusHTML(item.status)}
+            </div>
+            
+            <div class="mb-3">
+                <h3 class="text-sm font-semibold text-[#f1efe8]">${item.cliente}</h3>
+                <p class="text-xs text-[#888780]">${item.servico}</p>
+            </div>
+
+            <div class="flex justify-between items-center border-t border-[#38362f] pt-2.5 mt-1">
+                <span class="text-xs font-semibold text-[#f1efe8]">${formatarMoeda(item.valor)}</span>
+                <span class="text-[11px] text-[#888780] flex items-center gap-1">Ver detalhes →</span>
+            </div>
+        </div>
+    `;
+}
+
 function carregarDashboardInicio() {
-    const hoje = new Date();
-    const dataFormatted = hoje.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
+    const hoje = hojeISO();
+    const dataFormatted = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
     const elData = document.getElementById("data-atual-str");
     if (elData) elData.textContent = dataFormatted.charAt(0).toUpperCase() + dataFormatted.slice(1);
 
-    const agendamentos = estadoApp.agendamentosHoje;
+    const doDia = agendamentos.filter(a => a.data === hoje).sort((a, b) => a.hora.localeCompare(b.hora));
 
-    // Métricas operacionais em tempo real
-    const faturamento = agendamentos
-        .filter(a => a.status === "Concluído" || a.status === "Em Atendimento")
-        .reduce((acc, a) => acc + a.valor, 0);
+    const faturamento = doDia
+        .filter(a => a.status === "concluido" || a.status === "confirmado")
+        .reduce((acc, a) => acc + Number(a.valor), 0);
 
-    const concluidos = agendamentos.filter(a => a.status === "Concluído" || a.status === "Em Atendimento").length;
-    const total = agendamentos.length;
+    const concluidos = doDia.filter(a => a.status === "concluido").length;
+    const total = doDia.length;
     const ocupacao = total > 0 ? Math.round((concluidos / total) * 100) : 0;
-    const faltas = agendamentos.filter(a => a.status === "Cancelado").length;
+    const faltas = doDia.filter(a => a.status === "cancelado").length;
 
-    const elFat = document.getElementById("kpi-faturamento-hoje");
-    if (elFat) elFat.textContent = `R$ ${faturamento.toFixed(2).replace(".", ",")}`;
+    if (els.kpiFaturamentoHoje) els.kpiFaturamentoHoje.textContent = formatarMoeda(faturamento);
+    if (els.kpiAtendimentosHoje) els.kpiAtendimentosHoje.textContent = `${concluidos} / ${total}`;
+    if (els.kpiOcupacaoHoje) els.kpiOcupacaoHoje.textContent = `${ocupacao}%`;
+    if (els.kpiFaltasHoje) els.kpiFaltasHoje.textContent = faltas;
+    if (els.totalAgendamentosHoje) els.totalAgendamentosHoje.textContent = `${total} agendamentos`;
 
-    const elAtend = document.getElementById("kpi-atendimentos-hoje");
-    if (elAtend) elAtend.textContent = `${concluidos} / ${total}`;
+    if (!els.listaHojeCards) return;
 
-    const elOcup = document.getElementById("kpi-ocupacao-hoje");
-    if (elOcup) elOcup.textContent = `${ocupacao}%`;
-
-    const elFaltas = document.getElementById("kpi-faltas-hoje");
-    if (elFaltas) elFaltas.textContent = faltas;
-
-    const elTotal = document.getElementById("total-agendamentos-hoje");
-    if (elTotal) elTotal.textContent = `${total} agendamentos`;
-
-    // Renderização da tabela diária
-    const tbody = document.getElementById("tabela-hoje-corpo");
-    if (!tbody) return;
-
-    if (agendamentos.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-[#888780]">Nenhum agendamento para hoje.</td></tr>`;
+    if (doDia.length === 0) {
+        els.listaHojeCards.innerHTML = `<div class="col-span-full p-8 text-center text-[#888780] bg-[#232220] border border-[#38362f] rounded-2xl">Nenhum agendamento para hoje.</div>`;
         return;
     }
 
-    tbody.innerHTML = agendamentos.map(item => `
-        <tr class="border-b border-[#38362f]/50 hover:bg-[#2a2825]/50 transition-colors">
-            <td class="p-3.5 px-4 font-mono font-medium">${item.horario}</td>
-            <td class="p-3.5 px-4 font-medium">${item.cliente}</td>
-            <td class="p-3.5 px-4 text-[#888780]">${item.servico}</td>
-            <td class="p-3.5 px-4 text-[#888780]">${item.profissional}</td>
-            <td class="p-3.5 px-4">${obterBadgeStatus(item.status)}</td>
-        </tr>
-    `).join("");
-            // <td class="p-3.5 px-4 text-right">
-            //     ${item.status === "Aguardando" ? `<button onclick="alterarStatus('${item.id}', 'Em Atendimento')" class="text-xs text-amber-400 hover:underline mr-2">Iniciar</button>` : ""}
-            //     ${item.status === "Em Atendimento" ? `<button onclick="alterarStatus('${item.id}', 'Concluído')" class="text-xs text-emerald-400 hover:underline">Concluir</button>` : ""}
-            // </td>
+    els.listaHojeCards.innerHTML = doDia.map(cardAtendimentoHojeHTML).join("");
 }
-
-function obterBadgeStatus(status) {
-    const estilos = {
-        "Concluído": "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-        "Em Atendimento": "bg-amber-500/10 text-amber-400 border-amber-500/20",
-        "Aguardando": "bg-blue-500/10 text-blue-400 border-blue-500/20",
-        "Cancelado": "bg-red-500/10 text-red-400 border-red-500/20"
-    };
-    return `<span class="px-2 py-1 rounded-full text-[10px] font-medium border ${estilos[status] || ""}">${status}</span>`;
-}
-
-function alterarStatus(id, novoStatus) {
-    const item = estadoApp.agendamentosHoje.find(a => a.id === id);
-    if (item) {
-        item.status = novoStatus;
-        carregarDashboardInicio();
-        mostrarAviso(`Status alterado para: ${novoStatus}`);
-    }
-}
-
-function abrirModalEncaixe() { mostrarAviso("Módulo de Novo Encaixe"); }
-function abrirModalBloqueio() { mostrarAviso("Módulo de Bloqueio de Horário"); }
 
 /* ============================================================
-   ABA 3: GESTÃO DE SERVIÇOS
+   ABA AGENDA — VISÃO COMPLETA DE TODOS OS BARBEIROS
    ============================================================ */
+
+function popularFiltroBarbeiros() {
+    if (!els.filtroBarbeiroAgenda) return;
+    let html = `<option value="todos">Todos os Barbeiros</option>`;
+    let htmlModal = ``;
+    
+    profissionais.forEach(p => {
+        html += `<option value="${p.nome}">${p.nome}</option>`;
+        htmlModal += `<option value="${p.nome}">${p.nome}</option>`;
+    });
+
+    els.filtroBarbeiroAgenda.innerHTML = html;
+    if (els.bloqBarbeiro) els.bloqBarbeiro.innerHTML = htmlModal;
+}
+
+function filtrarPorBarbeiro(nome) {
+    estado.barbeiroFiltro = nome;
+    atualizarAgendaGeral();
+}
+
+function mudarVisaoAgenda(visao) {
+    estado.visaoAgenda = visao;
+    els.filtroBtns().forEach(b => {
+        b.classList.remove("bg-[#f1efe8]", "text-[#161513]", "border-[#f1efe8]");
+        b.classList.add("bg-transparent", "text-[#888780]", "border-[#4a473f]");
+    });
+    const activeBtn = els.getFiltroBtn(visao);
+    if (activeBtn) {
+        activeBtn.classList.add("bg-[#f1efe8]", "text-[#161513]", "border-[#f1efe8]");
+        activeBtn.classList.remove("bg-transparent", "text-[#888780]", "border-[#4a473f]");
+    }
+
+    els.agendaVisaoDia.classList.toggle("hidden", visao !== "dia");
+    els.agendaVisaoSemana.classList.toggle("hidden", visao !== "semana");
+    els.agendaVisaoMes.classList.toggle("hidden", visao !== "mes");
+
+    atualizarAgendaGeral();
+}
+
+function atualizarAgendaGeral() {
+    if (estado.visaoAgenda === "dia") renderizarAgendaDia();
+    if (estado.visaoAgenda === "semana") renderizarAgendaSemana();
+    if (estado.visaoAgenda === "mes") renderizarAgendaMes();
+}
+
+function obterAgendamentosFiltrados() {
+    if (estado.barbeiroFiltro === "todos") return agendamentos;
+    return agendamentos.filter(a => a.barbeiro === estado.barbeiroFiltro);
+}
+
+function cardAgendamentoHTML(a) {
+    const concluidoClasse = a.status === "concluido" ? " opacity-65" : "";
+    return `
+        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${a.id}')">
+            <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${a.hora}</div>
+            <div class="flex-1">
+                <div class="text-sm font-medium">${a.cliente}</div>
+                <div class="text-xs text-[#888780] mt-0.5">${a.servico} • <span class="text-[#9fe1cb]">${a.barbeiro}</span></div>
+            </div>
+            <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                ${badgeStatusHTML(a.status)}
+                <div class="text-xs font-medium">${formatarMoeda(a.valor)}</div>
+            </div>
+        </div>
+    `;
+}
+
+function renderizarAgendaDia() {
+    const hoje = hojeISO();
+    const lista = obterAgendamentosFiltrados();
+    const doDia = lista.filter(a => a.data === hoje).sort((a, b) => a.hora.localeCompare(b.hora));
+    
+    els.listaAgendaDia.innerHTML = doDia.length === 0
+        ? `<p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento para hoje.</p>`
+        : doDia.map(cardAgendamentoHTML).join("");
+}
+
+function renderizarAgendaSemana() {
+    const nomesDias = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+    const lista = obterAgendamentosFiltrados();
+    let html = "";
+
+    for (let i = 0; i < 7; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        const iso = formatarISO(d);
+        const ehHoje = iso === hojeISO();
+        const doDia = lista.filter(a => a.data === iso).sort((a, b) => a.hora.localeCompare(b.hora));
+
+        const borderCol = ehHoje ? "border-[#0f6e56]" : "border-[#38362f]";
+        const bgHead = ehHoje ? "bg-[#04342c]" : "bg-[#2a2825]";
+
+        html += `
+            <div class="flex-none w-[140px] bg-[#232220] border ${borderCol} rounded-lg overflow-hidden">
+                <div class="p-2 text-center border-b border-[#38362f] ${bgHead}">
+                    <div class="text-[11px] uppercase ${ehHoje ? 'text-[#9fe1cb]' : 'text-[#888780]'}">${nomesDias[d.getDay()]}</div>
+                    <div class="text-lg font-semibold ${ehHoje ? 'text-[#9fe1cb]' : ''}">${d.getDate()}</div>
+                </div>
+                <div class="p-2 flex flex-col gap-1 min-h-[80px]">
+                    ${doDia.length === 0
+                        ? `<span class="text-[11px] text-[#6b6963] text-center pt-2">Livre</span>`
+                        : doDia.map(a => `
+                            <div class="bg-[#2a2825] rounded p-1.5 text-[11px] cursor-pointer border-l-2 border-l-[#0f6e56]" onclick="abrirModalDetalhe('${a.id}')">
+                                <div class="text-[#888780] text-[10px]">${a.hora} - ${a.barbeiro}</div>
+                                <div class="font-medium truncate">${a.cliente}</div>
+                            </div>
+                        `).join("")
+                    }
+                </div>
+            </div>
+        `;
+    }
+    els.semanaScroll.innerHTML = html;
+}
+
+function renderizarAgendaMes() {
+    const nomesMeses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+    const ano = estado.mesAtual.getFullYear();
+    const mes = estado.mesAtual.getMonth();
+
+    els.mesTitulo.textContent = `${nomesMeses[mes]} ${ano}`;
+
+    const primeiroDiaSemana = new Date(ano, mes, 1).getDay();
+    const totalDiasMes = new Date(ano, mes + 1, 0).getDate();
+    const totalDiasMesAnterior = new Date(ano, mes, 0).getDate();
+    const lista = obterAgendamentosFiltrados();
+
+    const labels = ["D", "S", "T", "Q", "Q", "S", "S"];
+    let html = labels.map(l => `<div class="text-center text-[10px] text-[#888780] py-1 uppercase">${l}</div>`).join("");
+
+    for (let i = primeiroDiaSemana - 1; i >= 0; i--) {
+        html += `<button class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm cursor-pointer border-none bg-transparent text-[#6b6963]" disabled>${totalDiasMesAnterior - i}</button>`;
+    }
+
+    for (let dia = 1; dia <= totalDiasMes; dia++) {
+        const dataObj = new Date(ano, mes, dia);
+        const iso = formatarISO(dataObj);
+        const ehHoje = iso === hojeISO();
+        const temAgendamento = lista.some(a => a.data === iso);
+        const classeHoje = ehHoje ? "bg-[#04342c] text-[#9fe1cb] font-semibold" : "text-[#f1efe8] hover:bg-[#232220]";
+
+        html += `
+            <button class="aspect-square flex flex-col items-center justify-center rounded-lg text-sm cursor-pointer relative border-none bg-transparent ${classeHoje}" onclick="selecionarDiaMes('${iso}')">
+                ${dia}
+                ${temAgendamento ? `<span class="absolute bottom-[3px] w-1.5 h-1.5 rounded-full bg-[#9fe1cb]"></span>` : ""}
+            </button>
+        `;
+    }
+
+    els.mesGrid.innerHTML = html;
+    if (!estado.diaSelecionadoMes) estado.diaSelecionadoMes = hojeISO();
+    selecionarDiaMes(estado.diaSelecionadoMes);
+}
+
+function mudarMes(delta) {
+    estado.mesAtual.setMonth(estado.mesAtual.getMonth() + delta);
+    renderizarAgendaMes();
+}
+
+function selecionarDiaMes(iso) {
+    estado.diaSelecionadoMes = iso;
+    const lista = obterAgendamentosFiltrados();
+    const doDia = lista.filter(a => a.data === iso).sort((a, b) => a.hora.localeCompare(b.hora));
+    els.mesDiaSelecionadoTitulo.textContent = `Agendamentos — ${formatarDataExtenso(iso)}`;
+    els.listaMesDia.innerHTML = doDia.length === 0
+        ? `<p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento neste dia.</p>`
+        : doDia.map(cardAgendamentoHTML).join("");
+}
+
+/* ============================================================
+   ABA 3: SERVIÇOS (LÓGICA COMPLETA DE CADASTRO E RENDERIZAÇÃO)
+   ============================================================ */
+
+function renderizarServicos() {
+    if (!els.listaServicosPainel) return;
+
+    if (servicosManager.length === 0) {
+        els.listaServicosPainel.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-[#888780] bg-[#232220] border border-[#38362f] rounded-2xl">Nenhum serviço cadastrado.</div>`;
+        return;
+    }
+
+    els.listaServicosPainel.innerHTML = servicosManager.map((s) => `
+        <div class="bg-white dark:bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-100 dark:border-zinc-700/60 transition-all duration-200" data-id="${s.id}">
+            <div class="relative flex flex-col items-center">
+                <div class="absolute top-3 right-3 flex gap-1">
+                    <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-600 dark:text-zinc-300 text-xs transition-colors" onclick="moverItem('barber', '${s.id}', -1)" title="Subir">▲</button>
+                    <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-600 dark:text-zinc-300 text-xs transition-colors" onclick="moverItem('barber', '${s.id}', 1)" title="Descer">▼</button>
+                </div>
+
+                ${s.foto
+                    ? `<img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${s.foto}" alt="${s.nome}">`
+                    : `<div class="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 flex items-center justify-center text-3xl mb-3 text-zinc-400">✂</div>`
+                }
+
+                <h3 class="font-bold text-zinc-800 dark:text-zinc-100 text-base mb-1 text-center">${s.nome}</h3>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 text-center mb-3 line-clamp-2">${s.descricao || 'Sem descrição'}</p>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[#38362f]">
+                <button onclick="editarServico('${s.id}')" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Editar</button>
+                <button onclick="excluirServico('${s.id}')" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Remover</button>
+            </div>
+        </div>
+    `).join("");
+}
+
 function abrirFormServico() {
     if (els.formServicoPainel) els.formServicoPainel.classList.remove("hidden");
 }
 
 function fecharFormServico() {
+    servicoEmEdicaoId = null;
     if (els.formServicoPainel) els.formServicoPainel.classList.add("hidden");
-    limparInputsServico();
-}
-
-async function adicionarServicoPainel() {
-    const nome = els.psrvNome ? els.psrvNome.value : "";
-    const preco = parseFloat(els.psrvPreco ? els.psrvPreco.value : 0);
-    const tempo = parseInt(els.psrvTempo ? els.psrvTempo.value : 0);
-
-    if (!nome || isNaN(preco) || isNaN(tempo) || preco <= 0) {
-        mostrarAviso("Preencha corretamente os campos do serviço.");
-        return;
-    }
-
-    const imagem = await lerImagem(els.psrvFoto);
-
-    estadoApp.servicos.push({ id: Date.now(), nome, preco, tempo, imagem });
-    renderizarServicos();
-    fecharFormServico();
-    mostrarAviso("Serviço adicionado com sucesso!");
-}
-
-function removerServico(id) {
-    estadoApp.servicos = estadoApp.servicos.filter(s => s.id !== id);
-    renderizarServicos();
-    mostrarAviso("Serviço removido.");
-}
-
-function moverServico(index, direcao) {
-    const novoIndex = index + direcao;
-    if (novoIndex < 0 || novoIndex >= estadoApp.servicos.length) return;
-    
-    const item = estadoApp.servicos.splice(index, 1)[0];
-    estadoApp.servicos.splice(novoIndex, 0, item);
-    renderizarServicos();
+    if (els.psrvNome) els.psrvNome.value = "";
+    if (els.psrvPreco) els.psrvPreco.value = "";
+    if (els.psrvTempo) els.psrvTempo.value = "";
 }
 
 function editarServico(id) {
-    const s = estadoApp.servicos.find(item => item.id === id);
+    const s = servicosManager.find(item => item.id === id);
     if (!s) return;
-    abrirFormServico();
+    servicoEmEdicaoId = id;
     if (els.psrvNome) els.psrvNome.value = s.nome;
     if (els.psrvPreco) els.psrvPreco.value = s.preco;
-    if (els.psrvTempo) els.psrvTempo.value = s.tempo;
+    if (els.psrvTempo) els.psrvTempo.value = s.duracao;
+    abrirFormServico();
 }
 
-function renderizarServicos() {
-    if (!els.listaServicosPainel) return;
+function adicionarServicoPainel() {
+    const nome = els.psrvNome ? els.psrvNome.value.trim() : "";
+    const preco = els.psrvPreco ? parseFloat(els.psrvPreco.value) : 0;
+    const duracao = els.psrvTempo ? parseInt(els.psrvTempo.value) : 0;
 
-    if (estadoApp.servicos.length === 0) {
-        els.listaServicosPainel.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-[#888780] bg-[#232220] border border-[#38362f] rounded-2xl">Nenhum serviço cadastrado.</div>`;
+    if (!nome || isNaN(preco) || isNaN(duracao) || preco <= 0 || duracao <= 0) {
+        mostrarAviso("Preencha todos os campos do serviço corretamente.");
         return;
     }
 
-    els.listaServicosPainel.innerHTML = estadoApp.servicos.map((s, index) => `
-        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-2.5 flex flex-col justify-between">
-            <div class="relative w-full aspect-square bg-[#181715] rounded-xl border border-[#38362f] flex items-center justify-center mb-2.5 overflow-hidden group">
-                ${s.imagem 
-                    ? `<img src="${s.imagem}" alt="${s.nome}" class="w-full h-full object-cover">` 
-                    : `<span class="text-3xl select-none">✂</span>`
-                }
-                <div class="absolute top-1.5 right-1.5 flex flex-col gap-1 z-10">
-                    <button onclick="moverServico(${index}, -1)" class="w-5 h-5 rounded border border-[#4a473f] bg-[#232220]/90 text-[#888780] hover:text-[#f1efe8] hover:bg-[#38362f] flex items-center justify-center text-[9px] cursor-pointer">▲</button>
-                    <button onclick="moverServico(${index}, 1)" class="w-5 h-5 rounded border border-[#4a473f] bg-[#232220]/90 text-[#888780] hover:text-[#f1efe8] hover:bg-[#38362f] flex items-center justify-center text-[9px] cursor-pointer">▼</button>
-                </div>
+    if (servicoEmEdicaoId) {
+        const index = servicosManager.findIndex(s => s.id === servicoEmEdicaoId);
+        if (index !== -1) {
+            servicosManager[index] = { ...servicosManager[index], nome, preco, duracao };
+        }
+        mostrarAviso("Serviço atualizado com sucesso!");
+    } else {
+        const novoServico = {
+            id: "s_" + Date.now(),
+            nome,
+            preco,
+            duracao,
+            ativo: true
+        };
+        servicosManager.push(novoServico);
+        mostrarAviso("Serviço adicionado com sucesso!");
+    }
+
+    salvarServicos();
+    renderizarServicos();
+    fecharFormServico();
+}
+
+function excluirServico(id) {
+    if (!confirm("Tem certeza que deseja excluir este serviço?")) return;
+    servicosManager = servicosManager.filter(s => s.id !== id);
+    salvarServicos();
+    renderizarServicos();
+    mostrarAviso("Serviço excluído com sucesso.");
+}
+
+/* ============================================================
+   ABA 4: PROFISSIONAIS (LÓGICA COMPLETA DE CADASTRO E RENDERIZAÇÃO)
+   ============================================================ */
+
+function renderizarProfissionais() {
+    if (!els.listaProfissionaisPainel) return;
+
+    if (profissionais.length === 0) {
+        els.listaProfissionaisPainel.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-[#888780] bg-[#232220] border border-[#38362f] rounded-2xl">Nenhum profissional cadastrado.</div>`;
+        return;
+    }
+
+    els.listaProfissionaisPainel.innerHTML = profissionais.map((p) => `
+        <div class="relative flex flex-col items-center bg-white dark:bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-100 dark:border-zinc-700/60 transition-all duration-200" data-id="${p.id}">
+            <div class="absolute top-3 right-3 flex gap-1">
+                <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-600 dark:text-zinc-300 text-xs transition-colors" onclick="moverItem('barber', '${p.id}', -1)" title="Subir">▲</button>
+                <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-600 dark:text-zinc-300 text-xs transition-colors" onclick="moverItem('barber', '${p.id}', 1)" title="Descer">▼</button>
             </div>
-            <h4 class="text-xs sm:text-sm font-medium text-[#f1efe8] truncate mb-1" title="${s.nome}">${s.nome}</h4>
-            <div class="flex items-center justify-between text-[11px] sm:text-xs text-[#888780] mb-2.5">
-                <span>${s.tempo} min</span>
-                <span class="font-medium text-[#c4a977]">R$ ${s.preco.toFixed(2).replace('.', ',')}</span>
+
+            ${p.foto
+                ? `<img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${p.foto}" alt="${p.nome}">`
+                : `<div class="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 flex items-center justify-center text-3xl mb-3 text-zinc-400">👤</div>`
+            }
+
+            <h3 class="font-bold text-zinc-800 dark:text-zinc-100 text-base mb-1 text-center">${p.nome}</h3>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 text-center mb-3 line-clamp-2">${p.descricao || 'Sem descrição'}</p>
+
+            <div class="flex flex-col gap-1 w-full text-xs text-zinc-500 dark:text-zinc-400 mb-4 bg-zinc-50 dark:bg-zinc-800/50 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-700/40">
+                <span class="truncate"><strong>E-mail:</strong> ${p.email || '-'}</span>
+                <span><strong>Tel:</strong> ${p.telefone || '-'}</span>
+                ${p.endereco?.cidade ? `<span class="truncate mt-1 border-t border-zinc-200 dark:border-zinc-700 pt-1"><strong>End:</strong> ${p.endereco.cidade}-${p.endereco.uf}</span>` : ''}
             </div>
-            <div class="grid grid-cols-2 gap-1.5 mt-auto">
-                <button onclick="editarServico(${s.id})" class="py-1 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-[11px] font-medium transition-colors cursor-pointer text-center">Editar</button>
-                <button onclick="removerServico(${s.id})" class="py-1 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-[11px] font-medium transition-colors cursor-pointer text-center">Remover</button>
+
+            <div class="flex gap-2 w-full mt-auto pt-3 border-t border-zinc-100 dark:border-zinc-700/50">
+                <button class="flex-1 py-2 px-3 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-700 dark:text-zinc-200 text-xs font-semibold rounded-xl transition-colors" onclick="editBarber('${p.id}')">Editar</button>
+                <button class="flex-1 py-2 px-3 bg-red-50 hover:bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-xs font-semibold rounded-xl transition-colors" onclick="removeBarber('${p.id}')">Remover</button>
             </div>
         </div>
     `).join("");
 }
 
-/* ============================================================
-   ABA 4: GESTÃO DE PROFISSIONAIS
-   ============================================================ */
 function abrirFormProfissional() {
     if (els.formProfissionalPainel) els.formProfissionalPainel.classList.remove("hidden");
 }
 
 function fecharFormProfissional() {
+    profissionalEmEdicaoId = null;
     if (els.formProfissionalPainel) els.formProfissionalPainel.classList.add("hidden");
-    limparInputsProfissional();
-}
-
-async function adicionarProfissionalPainel() {
-    const nome = els.pproNome ? els.pproNome.value : "";
-    const cargo = els.pproCargo ? els.pproCargo.value : "";
-
-    if (!nome || !cargo) {
-        mostrarAviso("Preencha o nome e o cargo do profissional.");
-        return;
-    }
-
-    const imagem = await lerImagem(els.pproFoto);
-
-    estadoApp.profissionais.push({ id: Date.now(), nome, cargo, imagem });
-    renderizarProfissionais();
-    fecharFormProfissional();
-    mostrarAviso("Profissional adicionado com sucesso!");
-}
-
-function removerProfissional(id) {
-    estadoApp.profissionais = estadoApp.profissionais.filter(p => p.id !== id);
-    renderizarProfissionais();
-    mostrarAviso("Profissional removido.");
-}
-
-function moverProfissional(index, direcao) {
-    const novoIndex = index + direcao;
-    if (novoIndex < 0 || novoIndex >= estadoApp.profissionais.length) return;
-    
-    const item = estadoApp.profissionais.splice(index, 1)[0];
-    estadoApp.profissionais.splice(novoIndex, 0, item);
-    renderizarProfissionais();
+    if (els.pproNome) els.pproNome.value = "";
+    if (els.pproCargo) els.pproCargo.value = "";
 }
 
 function editarProfissional(id) {
-    const p = estadoApp.profissionais.find(item => item.id === id);
+    const p = profissionais.find(item => item.id === id);
     if (!p) return;
-    abrirFormProfissional();
+    profissionalEmEdicaoId = id;
     if (els.pproNome) els.pproNome.value = p.nome;
     if (els.pproCargo) els.pproCargo.value = p.cargo;
+    abrirFormProfissional();
 }
 
-function renderizarProfissionais() {
-    if (!els.listaProfissionaisPainel) return;
+function adicionarProfissionalPainel() {
+    const nome = els.pproNome ? els.pproNome.value.trim() : "";
+    const cargo = els.pproCargo ? els.pproCargo.value.trim() : "";
 
-    if (estadoApp.profissionais.length === 0) {
-        els.listaProfissionaisPainel.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-[#888780] bg-[#232220] border border-[#38362f] rounded-2xl">Nenhum profissional cadastrado.</div>`;
+    if (!nome) {
+        mostrarAviso("Digite o nome do profissional.");
         return;
     }
 
-    els.listaProfissionaisPainel.innerHTML = estadoApp.profissionais.map((p, index) => `
-        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-2.5 flex flex-col justify-between">
-            <div class="relative w-full aspect-square bg-[#181715] rounded-xl border border-[#38362f] flex items-center justify-center mb-2.5 overflow-hidden group">
-                ${p.imagem 
-                    ? `<img src="${p.imagem}" alt="${p.nome}" class="w-full h-full object-cover">` 
-                    : `<span class="text-3xl select-none">👤</span>`
-                }
-                <div class="absolute top-1.5 right-1.5 flex flex-col gap-1 z-10">
-                    <button onclick="moverProfissional(${index}, -1)" class="w-5 h-5 rounded border border-[#4a473f] bg-[#232220]/90 text-[#888780] hover:text-[#f1efe8] hover:bg-[#38362f] flex items-center justify-center text-[9px] cursor-pointer">▲</button>
-                    <button onclick="moverProfissional(${index}, 1)" class="w-5 h-5 rounded border border-[#4a473f] bg-[#232220]/90 text-[#888780] hover:text-[#f1efe8] hover:bg-[#38362f] flex items-center justify-center text-[9px] cursor-pointer">▼</button>
-                </div>
-            </div>
-            <h4 class="text-xs sm:text-sm font-medium text-[#f1efe8] truncate mb-1" title="${p.nome}">${p.nome}</h4>
-            <div class="text-[11px] sm:text-xs text-[#888780] mb-2.5 truncate" title="${p.cargo}">${p.cargo}</div>
-            <div class="grid grid-cols-2 gap-1.5 mt-auto">
-                <button onclick="editarProfissional(${p.id})" class="py-1 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-[11px] font-medium transition-colors cursor-pointer text-center">Editar</button>
-                <button onclick="removerProfissional(${p.id})" class="py-1 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-[11px] font-medium transition-colors cursor-pointer text-center">Remover</button>
-            </div>
-        </div>
-    `).join("");
+    if (profissionalEmEdicaoId) {
+        const index = profissionais.findIndex(p => p.id === profissionalEmEdicaoId);
+        if (index !== -1) {
+            profissionais[index] = { ...profissionais[index], nome, cargo: cargo || "Barbeiro" };
+        }
+        mostrarAviso("Profissional atualizado com sucesso!");
+    } else {
+        const novoProfissional = {
+            id: "p_" + Date.now(),
+            nome,
+            cargo: cargo || "Barbeiro"
+        };
+        profissionais.push(novoProfissional);
+        mostrarAviso("Profissional cadastrado com sucesso!");
+    }
+
+    salvarProfissionais();
+    popularFiltroBarbeiros();
+    renderizarProfissionais();
+    fecharFormProfissional();
+}
+
+function excluirProfissional(id) {
+    if (!confirm("Tem certeza que deseja remover este profissional?")) return;
+    profissionais = profissionais.filter(p => p.id !== id);
+    salvarProfissionais();
+    popularFiltroBarbeiros();
+    renderizarProfissionais();
+    mostrarAviso("Profissional removido com sucesso.");
 }
 
 /* ============================================================
-   ABA 5: CLIENTES (CRM)
+   ABA 5: CLIENTES (AGREGAÇÃO DE CLIENTES A PARTIR DE AGENDAMENTOS)
    ============================================================ */
-function carregarClientes() {
-    if (!els.tabelaClientesCorpo) return;
-    renderizarListaClientes(estadoApp.clientes);
+
+function extrairClientes() {
+    const mapaClientes = {};
+
+    agendamentos.forEach(a => {
+        if (!a.cliente) return;
+        const chave = a.cliente.toLowerCase().trim();
+        
+        if (!mapaClientes[chave]) {
+            mapaClientes[chave] = {
+                nome: a.cliente,
+                telefone: a.telefone || "Não informado",
+                ultimaVisita: a.data,
+                totalVisitas: 0,
+                totalGasto: 0
+            };
+        }
+
+        if (a.data > mapaClientes[chave].ultimaVisita) {
+            mapaClientes[chave].ultimaVisita = a.data;
+        }
+
+        if (a.status === "concluido") {
+            mapaClientes[chave].totalVisitas += 1;
+            mapaClientes[chave].totalGasto += Number(a.valor || 0);
+        }
+    });
+
+    return Object.values(mapaClientes);
 }
 
-function renderizarListaClientes(lista) {
+function renderizarClientes(filtro = "") {
     if (!els.tabelaClientesCorpo) return;
 
-    if (lista.length === 0) {
+    const clientes = extrairClientes();
+    const termo = filtro.toLowerCase().trim();
+
+    const filtrados = clientes.filter(c => 
+        c.nome.toLowerCase().includes(termo) || 
+        c.telefone.toLowerCase().includes(termo)
+    );
+
+    if (filtrados.length === 0) {
         els.tabelaClientesCorpo.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-[#888780]">Nenhum cliente encontrado.</td></tr>`;
         return;
     }
 
-    els.tabelaClientesCorpo.innerHTML = lista.map(c => `
-        <tr class="border-b border-[#38362f]/50 hover:bg-[#2a2825]/50 transition-colors">
-            <td class="p-3.5 px-4 font-medium">${c.nome}</td>
+    els.tabelaClientesCorpo.innerHTML = filtrados.map(c => `
+        <tr class="border-b border-[#38362f] hover:bg-[#2a2825]/50 transition-colors">
+            <td class="p-3.5 px-4 font-medium text-[#f1efe8]">${c.nome}</td>
             <td class="p-3.5 px-4 text-[#888780]">${c.telefone}</td>
-            <td class="p-3.5 px-4 text-[#888780]">${c.ultimaVisita}</td>
-            <td class="p-3.5 px-4">${c.visitas}</td>
-            <td class="p-3.5 px-4 font-medium text-emerald-400">${c.totalGasto}</td>
+            <td class="p-3.5 px-4 text-[#888780]">${formatarDataExtenso(c.ultimaVisita)}</td>
+            <td class="p-3.5 px-4 font-medium">${c.totalVisitas} visita(s)</td>
+            <td class="p-3.5 px-4 font-semibold text-[#9fe1cb]">${formatarMoeda(c.totalGasto)}</td>
         </tr>
     `).join("");
 }
 
 function filtrarClientes() {
-    const termo = els.buscaCliente ? els.buscaCliente.value.toLowerCase() : "";
-    const filtrados = estadoApp.clientes.filter(c => 
-        c.nome.toLowerCase().includes(termo) || c.telefone.includes(termo)
-    );
-    renderizarListaClientes(filtrados);
+    const valor = els.buscaCliente ? els.buscaCliente.value : "";
+    renderizarClientes(valor);
 }
 
 /* ============================================================
-   ABA 6: FINANCEIRO
+   ABA 6: FINANCEIRO (ESTATÍSTICAS E HISTÓRICO REAL)
    ============================================================ */
-function renderizarFinanceiro() {
-    const totalReceita = estadoApp.historicoFinanceiro.reduce((acc, item) => acc + item.valor, 0);
-    const totalCortes = estadoApp.historicoFinanceiro.length;
-    const ticketMedio = totalCortes > 0 ? (totalReceita / totalCortes) : 0;
 
-    if (els.finReceitaMes) els.finReceitaMes.textContent = `R$ ${totalReceita.toFixed(2).replace('.', ',')}`;
-    if (els.finTotalCortes) els.finTotalCortes.textContent = totalCortes.toString();
-    if (els.finTicketMedio) els.finTicketMedio.textContent = `R$ ${ticketMedio.toFixed(2).replace('.', ',')}`;
-    if (els.finMaisRealizado) els.finMaisRealizado.textContent = totalCortes > 0 ? estadoApp.historicoFinanceiro[0].servico : "—";
+function renderizarFinanceiro() {
+    const concluidos = agendamentos.filter(a => a.status === "concluido");
+
+    const receitaTotal = concluidos.reduce((acc, a) => acc + Number(a.valor || 0), 0);
+    const totalCortes = concluidos.length;
+    const ticketMedio = totalCortes > 0 ? receitaTotal / totalCortes : 0;
+
+    const contagemServicos = {};
+    concluidos.forEach(a => {
+        if (a.servico) {
+            contagemServicos[a.servico] = (contagemServicos[a.servico] || 0) + 1;
+        }
+    });
+
+    let maisRealizado = "—";
+    let maxQtd = 0;
+    for (const [srv, qtd] of Object.entries(contagemServicos)) {
+        if (qtd > maxQtd) {
+            maxQtd = qtd;
+            maisRealizado = srv;
+        }
+    }
+
+    if (els.finReceitaMes) els.finReceitaMes.textContent = formatarMoeda(receitaTotal);
+    if (els.finTotalCortes) els.finTotalCortes.textContent = totalCortes;
+    if (els.finTicketMedio) els.finTicketMedio.textContent = formatarMoeda(ticketMedio);
+    if (els.finMaisRealizado) els.finMaisRealizado.textContent = maisRealizado;
 
     if (!els.finTabelaCorpo) return;
 
-    if (estadoApp.historicoFinanceiro.length === 0) {
-        els.finTabelaCorpo.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-[#888780]">Nenhum atendimento registrado ainda.</td></tr>`;
+    if (agendamentos.length === 0) {
+        els.finTabelaCorpo.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-[#888780]">Nenhum atendimento registrado ainda.</td></tr>`;
         return;
     }
 
-    els.finTabelaCorpo.innerHTML = estadoApp.historicoFinanceiro.map(item => `
-        <tr class="border-b border-[#38362f]/50 hover:bg-[#2a2825] transition-colors">
-            <td class="p-3 px-4">${item.data}</td>
-            <td class="p-3 px-4 font-medium text-[#f1efe8]">${item.cliente}</td>
-            <td class="p-3 px-4 text-[#888780]">${item.servico}</td>
-            <td class="p-3 px-4 text-[#888780]">${item.profissional}</td>
-            <td class="p-3 px-4 font-semibold text-[#f1efe8]">R$ ${item.valor.toFixed(2).replace('.', ',')}</td>
+    const ordenados = [...agendamentos].sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
+
+    els.finTabelaCorpo.innerHTML = ordenados.map(a => `
+        <tr class="border-b border-[#38362f] hover:bg-[#2a2825]/50 transition-colors">
+            <td class="p-3 px-4 font-mono text-[#888780]">${a.data} ${a.hora}</td>
+            <td class="p-3 px-4 font-medium">${a.cliente}</td>
+            <td class="p-3 px-4 text-[#888780]">${a.servico}</td>
+            <td class="p-3 px-4 text-[#888780]">${a.barbeiro || "Não atribuído"}</td>
+            <td class="p-3 px-4 font-semibold text-[#f1efe8]">${formatarMoeda(a.valor)}</td>
+            <td class="p-3 px-4">${badgeStatusHTML(a.status)}</td>
         </tr>
     `).join("");
 }
 
 /* ============================================================
-   ABA 7: CONFIGURAÇÕES DA EMPRESA E CÓDIGO DE ACESSO
+   MODAL DETALHES DO ATENDIMENTO
    ============================================================ */
-function carregarPerfil() {
-    const emp = estadoApp.empresa;
-    if (els.perfilNome) els.perfilNome.textContent = emp.nome;
-    if (els.perfilCategoria) els.perfilCategoria.textContent = formatarCategoria(emp.categoria);
-    if (els.perfilCnpj) els.perfilCnpj.textContent = emp.cnpj;
-    if (els.perfilExpediente) els.perfilExpediente.textContent = emp.expediente || `${emp.abertura} às ${emp.fechamento}`;
-    if (els.perfilDias && emp.dias) els.perfilDias.textContent = emp.dias;
-    if (els.codigoAcesso) els.codigoAcesso.textContent = emp.codigoAcesso;
-}
 
-function abrirModalEmpresa() {
-    const emp = estadoApp.empresa;
-    if (els.editEmpNome) els.editEmpNome.value = emp.nome;
-    if (els.editEmpCategoria) els.editEmpCategoria.value = emp.categoria;
-    if (els.editEmpCnpj) els.editEmpCnpj.value = emp.cnpj;
-    if (els.editEmpAbertura) els.editEmpAbertura.value = emp.abertura;
-    if (els.editEmpFechamento) els.editEmpFechamento.value = emp.fechamento;
+function abrirModalDetalhe(id) {
+    const a = agendamentos.find(a => a.id === id);
+    if (!a) return;
 
-    if (els.modalOverlay) els.modalOverlay.classList.remove("hidden");
-    if (els.modalEmpresa) els.modalEmpresa.classList.remove("hidden");
-}
+    els.detalheStatusBadge.innerHTML = badgeStatusHTML(a.status);
+    if (els.detalheBarbeiro) els.detalheBarbeiro.textContent = a.barbeiro || "Não informado";
+    els.detalheCliente.textContent = a.cliente;
+    els.detalheServico.textContent = a.servico;
+    els.detalheHorario.textContent = `${formatarDataExtenso(a.data)} às ${a.hora}`;
+    els.detalheValor.textContent = formatarMoeda(a.valor);
+    els.detalheTelefone.textContent = a.telefone;
+    els.detalheObs.textContent = a.observacoes || "Nenhuma observação";
 
-function fecharModalEmpresa() {
-    if (els.modalOverlay) els.modalOverlay.classList.add("hidden");
-    if (els.modalEmpresa) els.modalEmpresa.classList.add("hidden");
-}
-
-function salvarEdicaoEmpresa() {
-    const emp = estadoApp.empresa;
-    emp.nome = els.editEmpNome?.value || emp.nome;
-    emp.categoria = els.editEmpCategoria?.value || emp.categoria;
-    emp.cnpj = els.editEmpCnpj?.value || emp.cnpj;
-    emp.abertura = els.editEmpAbertura?.value || emp.abertura;
-    emp.fechamento = els.editEmpFechamento?.value || emp.fechamento;
-    emp.expediente = `${emp.abertura} às ${emp.fechamento}`;
-
-    carregarPerfil();
-    fecharModalEmpresa();
-    mostrarAviso("Dados da empresa atualizados com sucesso!");
-}
-
-function gerarCodigo() {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let novoCodigo = "TMS-";
-    for (let i = 0; i < 4; i++) {
-        novoCodigo += chars.charAt(Math.floor(Math.random() * chars.length));
+    let html = "";
+    if (a.status === "aguardando") {
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="confirmarPresenca('${a.id}')">Confirmar presença</button>`;
     }
-    estadoApp.empresa.codigoAcesso = novoCodigo;
-    if (els.codigoAcesso) els.codigoAcesso.textContent = novoCodigo;
-    mostrarAviso("Novo código de acesso gerado!");
+    if (a.status === "confirmado") {
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="iniciarAtendimento('${a.id}')">Iniciar atendimento</button>`;
+    }
+    if (a.status === "aguardando" || a.status === "confirmado") {
+        html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="concluirAtendimento('${a.id}')">Concluir atendimento</button>`;
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors" onclick="cancelarAtendimento('${a.id}')">Cancelar</button>`;
+    }
+    if (a.status === "concluido") {
+        html = `<p class="text-center text-[#888780] text-xs">Atendimento já concluído</p>`;
+    }
+    if (a.status === "cancelado") {
+        html = `<p class="text-center text-[#888780] text-xs">Este atendimento foi cancelado</p>`;
+    }
+    els.detalheAcoes.innerHTML = html;
+
+    els.overlayDetalhe.classList.remove("hidden");
+    els.modalDetalhe.classList.remove("hidden");
 }
 
-function copiarCodigo() {
-    navigator.clipboard.writeText(estadoApp.empresa.codigoAcesso);
-    mostrarAviso("Código copiado para a área de transferência!");
+function fecharModalDetalhe() {
+    els.overlayDetalhe.classList.add("hidden");
+    els.modalDetalhe.classList.add("hidden");
+}
+
+function confirmarPresenca(id) { atualizarStatus(id, "confirmado"); mostrarAviso("Presença confirmada!"); }
+function iniciarAtendimento(id) { mostrarAviso("Atendimento iniciado!"); fecharModalDetalhe(); }
+function concluirAtendimento(id) { atualizarStatus(id, "concluido"); mostrarAviso("Atendimento concluído!"); }
+function cancelarAtendimento(id) {
+    if (!confirm("Deseja realmente cancelar este atendimento?")) return;
+    atualizarStatus(id, "cancelado");
+    mostrarAviso("Atendimento cancelado");
+}
+
+function atualizarStatus(id, novoStatus) {
+    const a = agendamentos.find(a => a.id === id);
+    if (a) a.status = novoStatus;
+    salvarAgendamentos();
+    fecharModalDetalhe();
+    carregarDashboardInicio();
+    atualizarAgendaGeral();
 }
 
 /* ============================================================
-   UTILITÁRIOS E TOAST DE FEEDBACK
+   MODAL BLOQUEAR HORÁRIO
    ============================================================ */
-function lerImagem(input) {
-    return new Promise((resolve) => {
-        const file = input && input.files ? input.files[0] : null;
-        if (!file) {
-            resolve(null);
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = () => resolve(null);
-        reader.readAsDataURL(file);
-    });
+
+function abrirModalBloquear() {
+    els.overlayBloquear.classList.remove("hidden");
+    els.modalBloquear.classList.remove("hidden");
 }
 
-function mostrarAviso(mensagem) {
-    if (!els.aviso) return;
-    els.aviso.textContent = mensagem;
-    els.aviso.classList.remove("opacity-0", "pointer-events-none");
-    els.aviso.classList.add("opacity-100");
-
-    setTimeout(() => {
-        els.aviso.classList.remove("opacity-100");
-        els.aviso.classList.add("opacity-0", "pointer-events-none");
-    }, 2500);
+function fecharModalBloquear() {
+    els.overlayBloquear.classList.add("hidden");
+    els.modalBloquear.classList.add("hidden");
 }
 
-function formatarCategoria(cat) {
-    const categorias = {
-        barbearia: "Barbearia",
-        salao: "Salão de Beleza",
-        estetica: "Estética",
-        clinica: "Clínica",
-        outro: "Outro"
-    };
-    return categorias[cat] || cat;
-}
+function confirmarBloqueio() {
+    const barbeiro = els.bloqBarbeiro ? els.bloqBarbeiro.value : "";
+    const data = els.bloqData.value;
+    const inicio = els.bloqInicio.value;
+    const fim = els.bloqFim.value;
+    const motivo = els.bloqMotivo.value.trim();
 
-function limparInputsServico() {
-    if (els.psrvNome) els.psrvNome.value = "";
-    if (els.psrvPreco) els.psrvPreco.value = "";
-    if (els.psrvTempo) els.psrvTempo.value = "";
-    if (els.psrvFoto) els.psrvFoto.value = "";
-}
+    if (!data || !inicio || !fim || !barbeiro) { mostrarAviso("Preencha todos os campos do bloqueio"); return; }
+    if (fim <= inicio) { mostrarAviso("O horário final deve ser maior que o inicial"); return; }
 
-function limparInputsProfissional() {
-    if (els.pproNome) els.pproNome.value = "";
-    if (els.pproCargo) els.pproCargo.value = "";
-    if (els.pproFoto) els.pproFoto.value = "";
+    bloqueios.push({ barbeiro, data, inicio, fim, motivo: motivo || "Horário bloqueado" });
+    salvarBloqueios();
+    mostrarAviso(`Horário bloqueado para ${barbeiro}!`);
+    fecharModalBloquear();
 }
 
 function sairDaConta() {
-    mostrarAviso("Saindo do painel...");
+    if (confirm("Deseja realmente sair do painel administrativo?")) {
+        mostrarAviso("Saindo...");
+    }
 }
 
 /* ============================================================
    INICIALIZAÇÃO
    ============================================================ */
+
 function iniciar() {
-    mapearElementos();
-    irParaAba("inicio");
+    popularFiltroBarbeiros();
+    carregarDashboardInicio();
+    atualizarAgendaGeral();
+    renderizarServicos();
+    renderizarProfissionais();
+    renderizarClientes();
+    renderizarFinanceiro();
+
+    if (els.bloqData) els.bloqData.value = hojeISO();
 }
 
-document.addEventListener("DOMContentLoaded", iniciar);
+iniciar();

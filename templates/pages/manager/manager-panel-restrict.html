@@ -42,10 +42,6 @@
                 <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]" data-aba="financeiro" onclick="irParaAba('financeiro')">
                     <span class="text-lg w-5.5 text-center">💰</span> Financeiro
                 </button>
-                <!-- 
-                <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]" data-aba="config" onclick="irParaAba('config')">
-                    <span class="text-lg w-5.5 text-center">⚙️</span> Configurações
-                </button> -->
             </nav>
         
             <a class="mt-auto mx-3 mb-5 px-4 py-3 text-center rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-sm font-medium transition-colors hover:bg-[#38362f] hover:text-[#f1efe8]" href="/" onclick="sairDaConta()"> 
@@ -56,21 +52,13 @@
         <!-- CONTEÚDO PRINCIPAL -->
         <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
-            <!-- ABA 1: INÍCIO (DASHBOARD OPERACIONAL DO DIA) -->
+            <!-- ABA 1: INÍCIO (DASHBOARD OPERACIONAL E CARDS DO DIA) -->
             <section class="aba-func block" id="aba-inicio">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
                     <div>
                         <h1 class="text-xl font-semibold">Resumo de Hoje</h1>
                         <p class="text-xs text-[#888780]" id="data-atual-str">Acompanhamento em tempo real da operação</p>
                     </div>
-                    <!--<div class="flex items-center gap-2">
-                         <button class="px-3.5 py-2 rounded-xl bg-[#2a2825] border border-[#38362f] text-[#f1efe8] text-xs font-medium hover:bg-[#38362f] transition-colors cursor-pointer" onclick="abrirModalEncaixe()">
-                            + Novo Encaixe
-                        </button>
-                        <button class="px-3.5 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer" onclick="abrirModalBloqueio()">
-                            🔒 Bloquear Horário
-                        </button> 
-                    </div>-->
                 </div>
 
                 <!-- KPIS OPERACIONAIS -->
@@ -93,37 +81,27 @@
                     </div>
                 </div>
 
-                <!-- LINHA DO TEMPO DA AGENDA DE HOJE -->
-                <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden">
-                    <div class="p-4 border-b border-[#38362f] flex justify-between items-center">
-                        <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">Agenda do Dia</h2>
+                <!-- CARDS DE HOJE -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">Agenda de Hoje — Todos os Barbeiros</h2>
                         <span class="text-xs text-[#888780]" id="total-agendamentos-hoje">0 agendamentos</span>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
-                                    <th class="p-3.5 px-4">Horário</th>
-                                    <th class="p-3.5 px-4">Cliente</th>
-                                    <th class="p-3.5 px-4">Serviço</th>
-                                    <th class="p-3.5 px-4">Profissional</th>
-                                    <th class="p-3.5 px-4">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabela-hoje-corpo" class="text-xs text-[#f1efe8]">
-                                <tr>
-                                    <td colspan="6" class="p-6 text-center text-[#888780]">Nenhum agendamento para hoje.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="lista-hoje-cards"></div>
                 </div>
             </section>
 
             <!-- ABA 2: AGENDA COMPLETA -->
             <section class="aba-func hidden" id="aba-agenda">
-                <div class="flex items-center justify-between mb-4 gap-3">
-                    <h1 class="text-lg lg:text-xl font-medium">Agenda</h1>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+                    <h1 class="text-lg lg:text-xl font-medium">Agenda Geral</h1>
+                    
+                    <div class="flex items-center gap-2">
+                        <label for="filtro-barbeiro-agenda" class="text-xs text-[#888780]">Barbeiro:</label>
+                        <select id="filtro-barbeiro-agenda" class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer" onchange="filtrarPorBarbeiro(this.value)">
+                            <option value="todos">Todos os Barbeiros</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="flex gap-1.5 mb-4 flex-wrap">
@@ -150,6 +128,10 @@
                     <div class="text-xs font-medium text-[#888780] uppercase tracking-wider mt-5 mb-3" id="mes-dia-selecionado-titulo">Selecione um dia</div>
                     <div class="flex flex-col gap-2" id="lista-mes-dia"></div>
                 </div>
+
+                <button class="flex items-center justify-center gap-2 p-3 mt-4 w-full rounded-xl border border-dashed border-[#4a473f] bg-transparent text-[#888780] text-xs cursor-pointer hover:border-[#888780] hover:text-[#f1efe8] transition-colors" onclick="abrirModalBloquear()">
+                    🔒 Bloquear horário de um barbeiro
+                </button>
             </section>
 
             <!-- ABA 3: SERVIÇOS -->
@@ -163,18 +145,18 @@
 
                 <div id="form-servico-painel" class="hidden bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-5">
                     <h3 class="text-sm font-medium mb-3">Cadastrar serviço</h3>
-                    <form class="flex flex-col gap-3" novalidate>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <form class="flex flex-col gap-3" novalidate onsubmit="event.preventDefault(); adicionarServicoPainel();">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div class="flex flex-col gap-1">
-                                <label class="text-xs font-medium text-[#888780]" for="psrv-nome">Nome</label>
+                                <label class="text-xs font-medium text-[#888780]" for="psrv-nome">Nome do serviço</label>
                                 <input type="text" id="psrv-nome" placeholder="Ex: Corte degradê" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs font-medium text-[#888780]" for="psrv-preco">Preço (R$)</label>
-                                <input type="number" id="psrv-preco" placeholder="0,00" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
+                                <input type="number" id="psrv-preco" placeholder="0.00" step="0.01" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
                             </div>
                             <div class="flex flex-col gap-1">
-                                <label class="text-xs font-medium text-[#888780]" for="psrv-tempo">Duração (min)</label>
+                                <label class="text-xs font-medium text-[#888780]" for="psrv-tempo">Duração (minutos)</label>
                                 <input type="number" id="psrv-tempo" placeholder="30" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
                             </div>
                         </div>
@@ -185,28 +167,28 @@
                     </form>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5" id="lista-servicos-painel"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5" id="lista-servicos-painel"></div>
             </section>
 
             <!-- ABA 4: PROFISSIONAIS -->
             <section class="aba-func hidden" id="aba-profissionais">
                 <div class="flex items-center justify-between mb-5 gap-3">
                     <h1 class="text-lg lg:text-xl font-medium">Equipe de Profissionais</h1>
-                    <button class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer" onclick="abrirFormProfissional()">
+                    <button class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer" href="/cadastro/barbeiro">
                         + Novo profissional
                     </button>
                 </div>
 
                 <div id="form-profissional-painel" class="hidden bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-5">
                     <h3 class="text-sm font-medium mb-3">Cadastrar profissional</h3>
-                    <form class="flex flex-col gap-3" novalidate>
+                    <form class="flex flex-col gap-3" novalidate onsubmit="event.preventDefault(); adicionarProfissionalPainel();">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs font-medium text-[#888780]" for="ppro-nome">Nome completo</label>
                                 <input type="text" id="ppro-nome" placeholder="Nome do profissional" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
                             </div>
                             <div class="flex flex-col gap-1">
-                                <label class="text-xs font-medium text-[#888780]" for="ppro-cargo">Cargo</label>
+                                <label class="text-xs font-medium text-[#888780]" for="ppro-cargo">Cargo / Especialidade</label>
                                 <input type="text" id="ppro-cargo" placeholder="Ex: Barbeiro Master" class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
                             </div>
                         </div>
@@ -217,10 +199,10 @@
                     </form>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5" id="lista-profissionais-painel"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5" id="lista-profissionais-painel"></div>
             </section>
 
-            <!-- ABA 5: CLIENTES (CRM) -->
+            <!-- ABA 5: CLIENTES -->
             <section class="aba-func hidden" id="aba-clientes">
                 <div class="flex items-center justify-between mb-5 gap-3">
                     <h1 class="text-lg lg:text-xl font-medium">Gestão de Clientes</h1>
@@ -285,65 +267,16 @@
                                     <th class="p-3 px-4">Serviço</th>
                                     <th class="p-3 px-4">Profissional</th>
                                     <th class="p-3 px-4">Valor</th>
+                                    <th class="p-3 px-4">Status</th>
                                 </tr>
                             </thead>
                             <tbody id="fin-tabela-corpo" class="text-xs text-[#f1efe8]">
                                 <tr>
-                                    <td colspan="5" class="p-6 text-center text-[#888780]">Nenhum atendimento registrado ainda.</td>
+                                    <td colspan="6" class="p-6 text-center text-[#888780]">Nenhum atendimento registrado ainda.</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </section>
-
-            <!-- ABA 7: CONFIGURAÇÕES DA EMPRESA -->
-            <section class="aba-func hidden" id="aba-config">
-                <div class="flex items-center justify-between mb-5 gap-3">
-                    <h1 class="text-lg lg:text-xl font-medium">Configurações da Empresa</h1>
-                    <button class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer" onclick="abrirModalEmpresa()">
-                        Editar Dados
-                    </button>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
-                        <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Nome</div>
-                        <div class="text-base font-semibold text-[#f1efe8]" id="perfil-nome">—</div>
-                    </div>
-                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
-                        <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Categoria</div>
-                        <div class="text-base font-semibold text-[#f1efe8]" id="perfil-categoria">—</div>
-                    </div>
-                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
-                        <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">CNPJ</div>
-                        <div class="text-base font-semibold text-[#f1efe8]" id="perfil-cnpj">—</div>
-                    </div>
-                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
-                        <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Expediente</div>
-                        <div class="text-base font-semibold text-[#f1efe8]" id="perfil-expediente">—</div>
-                    </div>
-                </div>
-
-                <!-- CÓDIGO DE ACESSO DA EQUIPE -->
-                <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-5">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-                        <div>
-                            <h2 class="text-sm font-medium">Código de Acesso da Equipe</h2>
-                            <p class="text-xs text-[#888780] mt-0.5">Compartilhe este código para login de funcionários.</p>
-                        </div>
-                        <button class="px-3 py-1.5 rounded-lg border border-[#38362f] bg-[#2a2825] text-[#f1efe8] text-xs font-medium hover:bg-[#38362f] transition-colors" onclick="gerarCodigo()">
-                            🔄 Gerar Novo
-                        </button>
-                    </div>
-
-                    <div id="codigo-acesso" class="bg-[#161513] border border-[#38362f] rounded-xl py-3 px-4 text-center text-2xl font-mono font-bold tracking-widest text-[#f1efe8] mb-3">
-                        —
-                    </div>
-
-                    <button class="w-full py-2.5 rounded-xl border border-[#38362f] bg-[#2a2825] text-[#f1efe8] text-xs font-medium hover:bg-[#38362f] transition-colors cursor-pointer" onclick="copiarCodigo()">
-                        Copiar Código
-                    </button>
                 </div>
             </section>
 
@@ -367,13 +300,11 @@
         <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer" data-aba="profissionais" onclick="irParaAba('profissionais')">
             <span class="text-base">👤</span> Barbeiros
         </button>
-        <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer" data-aba="config" onclick="irParaAba('config')">
-            <span class="text-base">⚙️</span> Ajustes
-        </button>
     </nav>
 
 </div>
 
+<!-- MODAL: DETALHES DO ATENDIMENTO -->
 <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-detalhe" onclick="fecharModalDetalhe()"></div>
 <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-detalhe" onclick="if(event.target===this) fecharModalDetalhe()">
     <div class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
@@ -384,6 +315,10 @@
 
         <div id="detalhe-status-badge" class="mb-3"></div>
 
+        <div class="flex gap-3 py-2 border-b border-[#38362f]">
+            <span class="text-sm w-5">💈</span>
+            <div><div class="text-[11px] text-[#888780]">Barbeiro</div><div class="text-sm font-medium" id="detalhe-barbeiro">—</div></div>
+        </div>
         <div class="flex gap-3 py-2 border-b border-[#38362f]">
             <span class="text-sm w-5">👤</span>
             <div><div class="text-[11px] text-[#888780]">Cliente</div><div class="text-sm font-medium" id="detalhe-cliente">—</div></div>
@@ -410,6 +345,41 @@
         </div>
 
         <div class="flex flex-col gap-2 mt-4" id="detalhe-acoes"></div>
+    </div>
+</div>
+
+<!-- MODAL: BLOQUEAR HORÁRIO -->
+<div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-bloquear" onclick="fecharModalBloquear()"></div>
+<div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-bloquear" onclick="if(event.target===this) fecharModalBloquear()">
+    <div class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-base font-medium">Bloquear horário</h2>
+            <button class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center" onclick="fecharModalBloquear()">✕</button>
+        </div>
+        <form class="flex flex-col gap-3" novalidate>
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="bloq-barbeiro">Barbeiro</label>
+                <select id="bloq-barbeiro" class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                </select>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="bloq-data">Data</label>
+                <input type="date" id="bloq-data" class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="bloq-inicio">Início</label>
+                <input type="time" id="bloq-inicio" value="12:00" class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="bloq-fim">Fim</label>
+                <input type="time" id="bloq-fim" value="13:00" class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="bloq-motivo">Motivo (opcional)</label>
+                <input type="text" id="bloq-motivo" placeholder="Ex: Almoço" class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+            </div>
+            <button type="button" class="w-full h-10 px-4 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm cursor-pointer mt-2" onclick="confirmarBloqueio()">Bloquear horário</button>
+        </form>
     </div>
 </div>
 
