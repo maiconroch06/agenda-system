@@ -54,15 +54,18 @@
 
             <!-- ABA INÍCIO -->
             <section class="aba-func block" id="aba-inicio">
-                <div class="flex items-center justify-between mb-5 gap-3">
-                    <h1 class="text-lg lg:text-xl font-medium">Olá, <span id="inicio-primeiro-nome">—</span> 👋</h1>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
+                    <div>
+                        <h1 class="text-xl font-semibold">Resumo de Hoje</h1>
+                        <p class="text-xs text-[#888780]" id="data-atual-str">Acompanhamento em tempo real da operação</p>
+                    </div>
                 </div>
 
                 <!-- CARDS KPIS RESPONSIVOS -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-6">
-                    <div class="bg-[#04342c] border border-[#0f6e56] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
                         <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Agendamentos hoje</div>
-                        <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#9fe1cb]" id="kpi-total-hoje">0</div>
+                        <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8]" id="kpi-total-hoje">0</div>
                         <div class="text-[11px] sm:text-xs text-[#888780] mt-1 truncate" id="kpi-total-hoje-sub">—</div>
                     </div>
                     <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
@@ -88,7 +91,7 @@
                         <span id="progresso-texto">0 de 0 concluídos</span>
                     </div>
                     <div class="h-2 rounded-full bg-[#2a2825] overflow-hidden">
-                        <div class="h-full rounded-full bg-[#0f6e56] transition-all duration-400 ease-in-out" id="progresso-fill" style="width:0%"></div>
+                        <div class="h-full rounded-full bg-[#dac82b] transition-all duration-400 ease-in-out" id="progresso-fill" style="width:0%"></div>
                     </div>
                     <div class="flex flex-wrap gap-3 mt-2.5">
                         <span class="text-[11px] sm:text-xs text-[#888780] flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#9fe1cb]"></span> Concluídos</span>
@@ -216,9 +219,12 @@
         <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="servicos" onclick="irParaAba('servicos')">
             <span class="text-lg">✂️</span> Serviços
         </button>
-        <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="mais" onclick="abrirMenuMais()">
-            <span class="text-lg">⋯</span> Mais
+        <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="configuracoes" onclick="irParaAba('configuracoes')">
+            <span class="text-lg">⚙</span> Configurações
         </button>
+        <!-- <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="mais" onclick="abrirMenuMais()">
+            <span class="text-lg">⋯</span> Mais
+        </button> -->
     </nav>
 
 </div>
