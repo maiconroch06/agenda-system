@@ -11,12 +11,11 @@
 
     <!-- Header Componente -->
     <header class="sticky top-0 z-30 flex items-center justify-between px-5 py-3 bg-[#232220] border-b border-[#38362f]">
-            <!-- logo componente reutilização-->
-            {% include "componetization/logo/logo-top-horizontal.html" %}
+        <!-- logo componente reutilização-->
+        {% include "componetization/logo/logo-top-horizontal.html" %}
         <div class="flex justify-end mb-4">
             <button 
                 id="btn-toggle-historico"
-                onclick="alternarHistorico()"
                 class="h-9 px-3.5 rounded-lg border border-brand-border bg-[#1c1c1c] text-[#f1efe8] text-xs sm:text-sm font-medium cursor-pointer transition-all hover:bg-[#282724] hover:border-brand-gold/50 flex items-center gap-2 shadow-sm"
             >
                 <span id="texto-btn-historico">Meus Agendamentos</span>
@@ -30,7 +29,7 @@
         <!-- STEPPER (PASSO A PASSO) -->
         <ol class="flex mb-8 relative isolate" id="etapa">
             <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
-                <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#085041] border border-[#0f6e56] flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">1</span>
+                <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">1</span>
                 <span class="text-[#f1efe8] font-medium etapa__label">Serviço</span>
             </li>
             <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
@@ -84,19 +83,19 @@
         </section>
 
         <!-- PAINEL SUCESSO -->
-        <section id="painel-sucesso" hidden>
+        <section id="painel-5" hidden>
             <div class="text-center py-12 flex flex-col items-center gap-3">
                 <div class="w-[64px] h-[64px] rounded-full bg-brand-gold border border-brand-gold text-[#000000] text-[30px] flex items-center justify-center">
                     &check;
                 </div>
                 <h1 class="text-[1.3rem] font-medium text-[#f1efe8] mb-1">Agendamento confirmado!</h1>
-                <p class="text-[14px] text-[#888780] mb-4" id="sucesso-texto"></p>
-                <button 
-                    class="mt-3 h-[44px] px-6 rounded-[10px] border border-[#4a473f] bg-transparent text-[#f1efe8] text-[14px] font-medium cursor-pointer transition-colors hover:bg-[#232220]" 
-                    onclick="reiniciar()"
-                >
-                    Fazer novo agendamento
-                </button>
+                <p class="text-[14px] text-[#888780] mb-2" id="sucesso-texto"></p>
+
+                <!-- INDICADOR DE LOADING -->
+                <div class="flex flex-col items-center gap-2 mt-4">
+                    <div class="w-8 h-8 border-4 border-[#38362f] border-t-brand-gold rounded-full animate-spin"></div>
+                    <span class="text-xs text-[#888780]">Reiniciando em instantes...</span>
+                </div>
             </div>
         </section>
 
@@ -118,7 +117,6 @@
         id="nav-etapa"
         class="fixed bottom-0 left-0 right-0 flex justify-between gap-3 p-3 px-4 bg-[#232220] border-t border-[#38362f] z-20">
 
-        <!-- Evento de avançar e voltar ocorre no arquivo js -->
         <button
             id="btn-voltar"
             class="w-full sm:flex-1 h-11 rounded-lg border border-brand-border bg-transparent text-gray-300 text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-[#111215] hover:text-white active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed">

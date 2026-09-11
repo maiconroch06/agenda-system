@@ -13,10 +13,10 @@ const SERVICOS = [
 ];
 
 const PROFISSIONAIS = [
-    { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "⇄" },
     { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../static/assets/img/funcionarios/barbeiro-master-thiago-silva.png", alt: "thiago" },
     { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../static/assets/img/funcionarios/barbeiro-tres-samuca.png", alt: "samuel" },
     { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../static/assets/img/funcionarios/barbeiro_dois_maik.png",   alt: "maik" },
+    { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "⇄" },
 ];
 
 const NOMES_DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -37,37 +37,7 @@ const HORARIOS_OCUPADOS = {
     6: TODOS_HORARIOS
 };
 
-const historicoCortes = [ // dadosIniciais <- Nome antigo
-    // {
-    //     id: "101",
-    //     servico: "Social & Barba",
-    //     profissional: "Thiago Tomaz",
-    //     data: "Sábado, 15 de Agosto",
-    //     horario: "14:00",
-    //     valor: "R$ 30,00",
-    //     status: "Concluído"
-    // },
-    // {
-    //     id: "102",
-    //     servico: "Degradê",
-    //     profissional: "Samuel",
-    //     data: "Quinta-feira, 20 de Agosto",
-    //     horario: "10:30",
-    //     valor: "R$ 22,00",
-    //     status: "Concluído"
-    // },
-    // {
-    //     id: "103",
-    //     servico: "Corte Militar",
-    //     profissional: "Maik",
-    //     data: "Sexta-feira, 28 de Agosto",
-    //     horario: "16:00",
-    //     valor: "R$ 15,00",
-    //     status: "Confirmado"
-    // }
-];
-
-// 
+const historicoCortes = [];
 
 /* ============================================================
    ESTADO
@@ -97,71 +67,22 @@ const els = {
     btnContinuar:       document.getElementById("btn-continuar"),
     navEtapa:           document.getElementById("nav-etapa"),
     aviso:              document.getElementById("aviso"),
-    sucesso:            document.getElementById("painel-sucesso"),
+    sucesso:            document.getElementById("painel-5"),
     sucessoTexto:       document.getElementById("sucesso-texto"),
-    btnHistorico:       document.getElementById("btn-historico"),
+    btnHistorico:       document.getElementById("btn-toggle-historico"),
     painelHistorico:    document.getElementById("painel-historico"),
     listaHistorico:     document.getElementById("lista-historico"),
     modalHistorico:     document.getElementById("modal-historico"),
     resumoModal:        document.getElementById("resumo-modal-conteudo")
 };
 
-const form = {
-    // nome:           document.getElementById("inp-nome"),
-    // tel:            document.getElementById("inp-tel"),
-    //email:           document.getElementById("inp-email"),
-    //consentimento:     document.getElementById("inp-consentimento"),
-    // erroNome:       document.getElementById("erro-nome"),
-    // erroTel:        document.getElementById("erro-tel"),
-    //erroEmail:       document.getElementById("erro-email"),
-    //erroConsentimento: document.getElementById("erro-consentimento"),
-};
+const form = {};
 
 /* ============================================================
    LOCALSTORAGE & HISTÓRICO INITIALIZATION
    ============================================================ */
 
-// function inicializarLocalStorage() { ANTIGO NOME DA FUNÇÃO
-//     if (!localStorage.getItem("historicoAgendamentos")) {
-//         const dadosIniciais = [
-//             {
-//                 id: "101",
-//                 servico: "Social & Barba",
-//                 profissional: "Thiago Tomaz",
-//                 data: "Sábado, 15 de Agosto",
-//                 horario: "14:00",
-//                 valor: "R$ 30,00",
-//                 status: "Concluído"
-//             },
-//             {
-//                 id: "102",
-//                 servico: "Degradê",
-//                 profissional: "Samuel",
-//                 data: "Quinta-feira, 20 de Agosto",
-//                 horario: "10:30",
-//                 valor: "R$ 22,00",
-//                 status: "Concluído"
-//             },
-//             {
-//                 id: "103",
-//                 servico: "Corte Militar",
-//                 profissional: "Maik",
-//                 data: "Sexta-feira, 28 de Agosto",
-//                 horario: "16:00",
-//                 valor: "R$ 15,00",
-//                 status: "Confirmado"
-//             }
-//         ];
-//         localStorage.setItem("historicoAgendamentos", JSON.stringify(dadosIniciais));
-//     }
-// }
-
-// function obterHistorico() {
-//     return JSON.parse(localStorage.getItem("historicoAgendamentos")) || [];
-// }
-
 function salvarNoHistorico(novoItem) {
-    // const historico = obterHistorico();
     const historico = historicoCortes;
     historico.unshift(novoItem);
     localStorage.setItem("historicoAgendamentos", JSON.stringify(historico));
@@ -211,58 +132,48 @@ function abrirHistorico() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-
-    function voltarParaAgendamento() {
+function voltarParaAgendamento() {
     els.painelHistorico.hidden = true;
     els.etapa.hidden = false;
     els.navEtapa.hidden = false;
     mostrarPainel(estado.etapaAtual);
-    }
-
-/* ============================================================
-   HISTÓRICO DE AGENDAMENTOS (Alternância Dinâmica)
-   ============================================================ */
+}
 
 function alternarHistorico() {
-    const painelHistorico = document.getElementById("painel-historico");
-    const btnToggle = document.getElementById("btn-toggle-historico");
-    const textoBtn = document.getElementById("texto-btn-historico");
-    const stepper = document.getElementById("etapa");
-    const navEtapa = document.getElementById("nav-etapa");
+    // Impede a execução se a tela de sucesso estiver visível
+    if (!els.sucesso.hidden) return;
 
-    // Verifica se o histórico já está visível
-    const estaNoHistorico = !painelHistorico.hasAttribute("hidden");
+    const painelHistorico = els.painelHistorico;
+    const btnToggle = els.btnHistorico;
+    const textoBtn = document.getElementById("texto-btn-historico");
+    const stepper = els.etapa;
+    const navEtapa = els.navEtapa;
+
+    const estaNoHistorico = !painelHistorico.hidden;
 
     if (estaNoHistorico) {
-        // --- SAIR DO HISTÓRICO (VOLTAR AO FLUXO) ---
-        painelHistorico.setAttribute("hidden", "true");
+        painelHistorico.hidden = true;
+        mostrarPainel(estado.etapaAtual || 1);
         
-        // Exibe o painel da etapa em que o usuário estava (ex: estado.etapaAtual)
-        document.getElementById(`painel-${estado.etapaAtual || 1}`).removeAttribute("hidden");
-        
-        if (stepper) stepper.removeAttribute("hidden");
-        if (navEtapa) navEtapa.removeAttribute("hidden");
+        if (stepper) stepper.hidden = false;
+        if (navEtapa) navEtapa.hidden = false;
 
-        // Restaura o botão original
-        textoBtn.textContent = "Meus Agendamentos";
-        btnToggle.classList.remove("border-brand-gold", "text-brand-gold");
+        if (textoBtn) textoBtn.textContent = "Meus Agendamentos";
+        if (btnToggle) btnToggle.classList.remove("border-brand-gold", "text-brand-gold");
     } else {
-        // --- ABRIR HISTÓRICO ---
-        // Oculta todos os painéis de etapa
-        [1, 2, 3, 4].forEach(i => {
+        [1, 2, 3, 4, 5].forEach(i => {
             const p = document.getElementById(`painel-${i}`);
-            if (p) p.setAttribute("hidden", "true");
+            if (p) p.hidden = true;
         });
 
         carregarHistorico();
 
-        painelHistorico.removeAttribute("hidden");
-        if (stepper) stepper.setAttribute("hidden", "true");
-        if (navEtapa) navEtapa.setAttribute("hidden", "true");
+        painelHistorico.hidden = false;
+        if (stepper) stepper.hidden = true;
+        if (navEtapa) navEtapa.hidden = true;
 
-        // Altera o botão para o modo "Voltar"
-        textoBtn.textContent = "← Voltar ao Agendamento";
-        btnToggle.classList.add("border-brand-gold", "text-brand-gold");
+        if (textoBtn) textoBtn.textContent = "← Voltar ao Agendamento";
+        if (btnToggle) btnToggle.classList.add("border-brand-gold", "text-brand-gold");
     }
 }
 
@@ -292,6 +203,7 @@ function carregarHistorico() {
         </div>
     `).join("");
 }
+
 function exibirDetalhesHistorico(id) {
     const historico = historicoCortes;
     const item = historico.find(h => h.id === id);
@@ -346,7 +258,6 @@ function atualizarStepper() {
         const label = item.querySelector(".etapa__label");
 
         if (numero < estado.etapaAtual) {
-            // ETAPA CONCLUÍDA: Fundo dourado com check preto
             item.classList.remove("before:bg-brand-border");
             item.classList.add("before:bg-brand-gold");
 
@@ -356,7 +267,6 @@ function atualizarStepper() {
             label.className = "text-brand-gold font-medium etapa__label";
 
         } else if (numero === estado.etapaAtual) {
-            // ETAPA ATIVA: Fundo dourado com número preto e texto destacado
             item.classList.remove("before:bg-brand-border");
             item.classList.add("before:bg-brand-gold");
 
@@ -366,7 +276,6 @@ function atualizarStepper() {
             label.className = "text-white font-bold etapa__label";
 
         } else {
-            // ETAPA PENDENTE: Fundo escuro com número apagado
             item.classList.remove("before:bg-brand-gold");
             item.classList.add("before:bg-brand-border");
 
@@ -388,8 +297,7 @@ function atualizarBotoes() {
     const podeContinuar = verificarEtapaAtual();
     els.btnContinuar.disabled = !podeContinuar;
 
-    els.btnContinuar.textContent =
-        estado.etapaAtual === 4 ? "Confirmar agendamento" : "Continuar";
+    els.btnContinuar.textContent = estado.etapaAtual === 4 ? "Finalizar" : "Continuar";
 }
 
 function verificarEtapaAtual() {
@@ -592,11 +500,9 @@ function renderizarHorarios() {
         const ocupado = ocupados.includes(horario);
         const ativo = estado.horarioSelecionado === horario;
 
-        // Suporte a transição suave de cor, sombra e posição no hover/unselect
         let classeEstado = "bg-[#1c1c1c] border-2 border-brand-border text-white hover:border-brand-gold/60 hover:-translate-y-0.5 active:scale-95 hover:shadow-md hover:shadow-brand-gold/10 cursor-pointer";
         
         if (ativo) {
-            // Efeito selecionado: escala suave e brilho com transição
             classeEstado = "bg-brand-gold/10 border-2 border-brand-gold text-brand-gold font-bold shadow-md shadow-brand-gold/20 scale-[1.02]";
         } else if (ocupado) {
             classeEstado = "bg-[#1c1c1c] border-2 border-brand-border/30 text-brand-muted/40 opacity-40 line-through cursor-not-allowed";
@@ -664,22 +570,6 @@ function renderizarResumo() {
 }
 
 /* ============================================================
-   MÁSCARA DE TELEFONE
-   ============================================================ */
-
-// form.tel.addEventListener("input", () => {
-//     let digitos = form.tel.value.replace(/\D/g, "").slice(0, 11);
-//     if (digitos.length > 6) {
-//         digitos = digitos.replace(/^(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
-//     } else if (digitos.length > 2) {
-//         digitos = digitos.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
-//     } else {
-//         digitos = digitos.replace(/^(\d{0,2})/, "($1");
-//     }
-//     form.tel.value = digitos;
-// });
-
-/* ============================================================
    VALIDAÇÃO DO FORMULÁRIO
    ============================================================ */
 
@@ -695,34 +585,6 @@ function definirErro(input, erroEl, mensagem) {
 
 function validarFormulario() {
     let valido = true;
-
-    // limparErro(form.nome, form.erroNome);
-    // limparErro(form.tel, form.erroTel);
-    //limparErro(form.email, form.erroEmail);
-    //form.erroConsentimento.textContent = "";
-
-    // if (form.nome.value.trim().length < 3) {
-    //     definirErro(form.nome, form.erroNome, "Informe seu nome completo");
-    //     valido = false;
-    // }
-
-    // const digitos = form.tel.value.replace(/\D/g, "");
-    // if (digitos.length < 10) {
-    //     definirErro(form.tel, form.erroTel, "Informe um telefone válido com DDD");
-    //     valido = false;
-    // }
-
-    /*const emailValor = form.email.value.trim();
-    if (emailValor && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValor)) {
-        definirErro(form.email, form.erroEmail, "Informe um e-mail válido");
-        valido = false;
-    }*/
-
-    /*if (!form.consentimento.checked) {
-        form.erroConsentimento.textContent = "É necessário concordar para continuar";
-        valido = false;
-    }*/
-
     return valido;
 }
 
@@ -734,7 +596,6 @@ function confirmarAgendamento() {
     const servico = SERVICOS.find(s => s.id === estado.servicoSelecionado);
     const profissional = PROFISSIONAIS.find(p => p.id === estado.profissionalSelecionado);
 
-    // Salva o agendamento
     const novoAgendamento = {
         id: Date.now().toString(),
         servico: servico.name,
@@ -754,6 +615,12 @@ function confirmarAgendamento() {
     els.navEtapa.hidden = true;
     els.etapa.hidden = true;
 
+    // Desativa visualmente e funcionalmente o botão do histórico
+    if (els.btnHistorico) {
+        els.btnHistorico.disabled = true;
+        els.btnHistorico.classList.add("opacity-40", "cursor-not-allowed", "pointer-events-none");
+    }
+
     els.sucessoTexto.textContent =
         `${estado.nome.trim()}, seu agendamento de ${servico.name.toLowerCase()} foi confirmado ` +
         `para ${formatarData()} às ${estado.horarioSelecionado}. ` +
@@ -761,77 +628,39 @@ function confirmarAgendamento() {
 
     els.sucesso.hidden = false;
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    setTimeout(() => {
+        reiniciar();
+    }, 4000);
 }
-
-/* ============================================================
-   REINICIAR
-   ============================================================ /
-
-/*function reiniciar() {
-    // 1. Reseta o estado na memória JS
-    estado.etapaAtual = 1;
-    estado.servicoSelecionado = null;
-    estado.profissionalSelecionado = null;
-    estado.diaSelecionado = null;
-    estado.horarioSelecionado = null;
-
-    // 2. Restaura a visibilidade dos elementos da tela
-    els.navEtapa.hidden = false;
-    els.etapa.hidden = false;
-    els.sucesso.hidden = true;
-
-    // 3. Recarrega as listas para gerar inputs sem a propriedade 'checked'
-    carregarServicos();
-    carregarProfissionais();
-
-    // 4. Desmarca o checkbox de consentimento e limpa mensagens de erro
-    /*if (form.consentimento) {
-        form.consentimento.checked = false;
-    }
-    if (form.erroConsentimento) {
-        form.erroConsentimento.textContent = "";
-    }/
-
-    // 5. Exibe o painel inicial
-    mostrarPainel(1);
-}*/
 
 /* ============================================================
    REINICIAR E INICIALIZAÇÃO
    ============================================================ */
 
 function reiniciar() {
-    // 1. Reseta o estado na memória JS
     estado.etapaAtual = 1;
     estado.servicoSelecionado = null;
     estado.profissionalSelecionado = null;
     estado.diaSelecionado = null;
     estado.horarioSelecionado = null;
 
-    // 2. Restaura a visibilidade dos elementos da tela
     if (els.navEtapa) els.navEtapa.hidden = false;
     if (els.etapa) els.etapa.hidden = false;
     if (els.sucesso) els.sucesso.hidden = true;
 
-    // 3. Recarrega as listas e limpa os inputs selecionados
+    // Reativa o botão do histórico
+    if (els.btnHistorico) {
+        els.btnHistorico.disabled = false;
+        els.btnHistorico.classList.remove("opacity-40", "cursor-not-allowed", "pointer-events-none");
+    }
+
     carregarServicos();
     carregarProfissionais();
     mostrarPainel(1);
 }
 
-// Inicializa o fluxo quando o documento estiver pronto
-document.addEventListener("DOMContentLoaded", () => {
-    carregarServicos();
-    carregarProfissionais();
-    mostrarPainel(1);
-
-    // Event listeners dos botões de navegação
-    if (els.btnVoltar) els.btnVoltar.addEventListener("click", voltarEtapa);
-    if (els.btnContinuar) els.btnContinuar.addEventListener("click", avancarEtapa);
-    if (els.btnHistorico) els.btnHistorico.addEventListener("click", alternarHistorico);
-});
-
-function inicializarApp() {
+function iniciar() {
     carregarServicos();
     carregarProfissionais();
 
@@ -842,4 +671,4 @@ function inicializarApp() {
     mostrarPainel(estado.etapaAtual);
 }
 
-document.addEventListener("DOMContentLoaded", inicializarApp);
+document.addEventListener("DOMContentLoaded", iniciar);
