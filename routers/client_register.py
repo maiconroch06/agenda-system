@@ -5,13 +5,13 @@ from models import User
 from models import Address
 from repository import get_all_states
 
-user_register = Blueprint('register', __name__, template_folder='templates')
+client_register = Blueprint('cliente', __name__, template_folder='templates')
 
-@user_register.route('/', methods=['GET'])
+@client_register.route('/', methods=['GET'])
 def register_User_get():
-    return render_template('pages/register/client-register.html')
+    return render_template('pages/register/client-login.html')
 
-@user_register.route('/', methods=['POST'])
+@client_register.route('/', methods=['POST'])
 def register_User_post():
 
     # Dados da sessão do usuário, se houver
@@ -43,19 +43,19 @@ def register_User_post():
             # Chama o método de inserção da classe
             usuario.salvar()
 
-        # Salva os dados na sessão para correção do cliente
+        # Salva os dados na sessão para correção do client_registere
         session['dados-usuario'] = usuario.to_dict()
         return register_Address_get()
         
     except sqlite3.IntegrityError:
         return "Erro: CPF ou E-mail já cadastrados.", 400
 
-@user_register.route('/endereco', methods=['GET'])
+@client_register.route('/endereco', methods=['GET'])
 def register_Address_get():
     estado_siglas = get_all_states()
     return render_template('pages/register/address-register.html', estado_siglas=estado_siglas)
 
-@user_register.route('/endereco', methods=['POST'])
+@client_register.route('/endereco', methods=['POST'])
 def register_Address_post():
 
     session_addr = session.get('dados-endereco', None)
@@ -97,7 +97,7 @@ def register_Address_post():
             # Se for a primeiríssima vez enviando o endereço, apenas salva
             endereco.salvar()
 
-        # Salva os dados na sessão para correção do cliente
+        # Salva os dados na sessão para correção do client_registere
         session['dados-endereco'] = endereco.to_dict()
 
         return finish_Register()
@@ -107,11 +107,11 @@ def register_Address_post():
         print(f"Erro detalhado no banco de dados: {e}")
         return f"Erro ao salvar o endereço: {e}", 400
 
-@user_register.route('/finalizacao', methods=['GET'])
+@client_register.route('/finalizacao', methods=['GET'])
 def finish_Register():
     return render_template('pages/register/finish-register.html')
 
-@user_register.route('/usuario-categoria', methods=['GET'])
+@client_register.route('/usuario-categoria', methods=['GET'])
 def user_category():
     session.pop('dados-usuario', None)  # Limpa os dados do usuário da sessão
     session.pop('dados-endereco', None)  # Limpa os dados do endereço da sessão

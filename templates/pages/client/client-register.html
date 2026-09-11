@@ -85,8 +85,19 @@
                             </div>
                         {% endif %}
                     <!-- Formulário -->
+<<<<<<< HEAD
                     <form id="form-empresa" action="/cliente/cadastro/realizar" method="post" enctype="multipart/form-data" novalidate
+=======
+                    <form id="form-empresa" action="/cliente/cadastro" method="post" enctype="multipart/form-data" novalidate
+>>>>>>> feature-backend
                         class="flex flex-col gap-5">
+
+                        <!-- Mensagem de Erro -->
+                        {% if erro %}
+                            <div class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
+                                {{ erro }}
+                            </div>
+                        {% endif %}
 
                         <!-- Campos principais -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -99,7 +110,7 @@
                                 </label>
 
                                 <input type="text"
-                                    value="{{ session['dados-usuario']['nome'] if session.get('dados-usuario') else 'Teste' }}"
+                                    value="{{ session['dados_usuario']['nome'] if session.get('dados_usuario') else 'Teste' }}"
                                     id="prop-nome" name="nome" placeholder="Ex: nome do proprietário" autocomplete="off"
                                     class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
 
@@ -115,7 +126,7 @@
                                 </label>
 
                                 <input type="tel"
-                                    value="{{ session['dados-usuario']['telefone'] if session.get('dados-usuario') else '(84) 00000-0000' }}"
+                                    value="{{ session['dados_usuario']['telefone'] if session.get('dados_usuario') else '(84) 00000-0000' }}"
                                     id="prop-telefone" name="telefone" placeholder="(84) 00000-0000" maxlength="15"
                                     autocomplete="off"
                                     class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
@@ -133,7 +144,7 @@
                                 </label>
 
                                 <input type="email"
-                                    value="{{ session['dados-usuario']['email'] if session.get('dados-usuario') else 'emaildoproprietario@gmail.com' }}"
+                                    value="{{ session['dados_usuario']['email'] if session.get('dados_usuario') else 'emaildoproprietario@gmail.com' }}"
                                     id="prop-email" name="email" placeholder="emaildoproprietario@gmail.com"
                                     maxlength="70" autocomplete="off"
                                     class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
@@ -151,7 +162,7 @@
                                 </label>
 
                                 <input type="password"
-                                    value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '*************' }}"
+                                    value="{{ session['dados_usuario']['senha'] if session.get('dados_usuario') else '*************' }}"
                                     id="prop-senha" name="senha" placeholder="Digite sua senha" autocomplete="off"
                                     class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
 
@@ -167,7 +178,7 @@
                                 </label>
 
                                 <input type="password"
-                                    value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '*************' }}"
+                                    value="{{ session['dados_usuario']['senha'] if session.get('dados_usuario') else '*************' }}"
                                     id="prop-senha" name="senha" placeholder="Digite sua senha" autocomplete="off"
                                     class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
 
