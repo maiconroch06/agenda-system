@@ -40,7 +40,7 @@
                             </div>
                         {% endif %}
                     <!-- Formulário com Grid em 2 colunas no PC para preencher a largura "gordinha" -->
-                    <form id="form-empresa" action="/cliente/cadastro/finalizacao" method="post" enctype="multipart/form-data" novalidate class="flex flex-col gap-3.5 shrink-0">
+                    <form id="form-empresa" action="/cliente/cadastro" method="post" enctype="multipart/form-data" novalidate class="flex flex-col gap-3.5 shrink-0">
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
 
@@ -74,7 +74,7 @@
                                     E-mail
                                 </label>
                                 <input type="email"
-                                    value="{{ session['dados-usuario']['email'] if session.get('dados-usuario') else 'emaildoproprietario@gmail.com' }}"
+                                    value="{{ session['dados-usuario']['email'] if session.get('dados-usuario') else 'cliente1@gmail.com' }}"
                                     id="prop-email" name="email" placeholder="emaildoproprietario@gmail.com" maxlength="70" autocomplete="off"
                                     class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
                                 <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-email"></span>
@@ -86,7 +86,7 @@
                                     Senha
                                 </label>
                                 <input type="password"
-                                    value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '*************' }}"
+                                    value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '12345' }}"
                                     id="prop-senha" name="senha" placeholder="Digite sua senha" autocomplete="off"
                                     class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
                                 <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-senha"></span>

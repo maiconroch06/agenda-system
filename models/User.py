@@ -1,5 +1,6 @@
 from database import db
 from datetime import datetime, timezone
+from werkzeug.security import generate_password_hash
 
 class User(db.Model):
     __tablename__ = 'usuarios'
@@ -26,7 +27,7 @@ class User(db.Model):
         self.nome_completo = nome_completo
         self.telefone = telefone
         self.email = email
-        self.senha_hash = senha
+        self.senha_hash = generate_password_hash(senha)
         self.endereco_id = id_endereco 
         self.foto_path = foto
 

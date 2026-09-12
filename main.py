@@ -27,8 +27,8 @@ with app.app_context():
 # ==========================================
 # 2. IMPORTS DOS BLUEPRINTS (Apenas APÓS criar o banco)
 # ==========================================
-from routers.public import publics
-from routers.client import client
+from routers.public_route import publics
+from routers.client_route import client
 # from routers.login import user_login
 # from routers.manager import manager
 

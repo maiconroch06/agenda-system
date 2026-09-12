@@ -1,6 +1,7 @@
 from database import db
 from .BarberShop import BarberShop
 
+
 class Client(db.Model):
     __tablename__ = 'clientes'
 

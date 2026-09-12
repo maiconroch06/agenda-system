@@ -33,16 +33,24 @@
                             Informe suas credenciais para acessar sua conta.
                         </p>
                     </div>
+               
 
                     <!-- Formulário com Inputs e Labels Maiores -->
-                    <form id="form-login" action="/cliente/agendamentos" method="post" novalidate class="flex flex-col gap-4 md:gap-5 shrink-0">
+                    <form id="form-login" action="/cliente/login" method="post" novalidate class="flex flex-col gap-4 md:gap-5 shrink-0">
+                        
+                        <!-- Mensagem de erros -->
+                        {% if session.get('erro') %}
+                            <div class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
+                                {{ session.pop('erro')|replace('\n', '<br>')|safe }}
+                            </div>
+                        {% endif %}
 
                         <!-- E-mail -->
                         <div class="flex flex-col">
                             <label for="login-usuario" class="text-xs sm:text-sm font-semibold text-gray-300 mb-1 tracking-wider">
                                 E-mail
                             </label>
-                            <input type="text" id="login-usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off"
+                            <input type="text" name='email' value='cliente1@gmail.com' id="login-usuario" placeholder="Digite seu usuário ou e-mail" autocomplete="off" 
                                 class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm">
                             <span class="campo__erro text-[11px] sm:text-xs text-red-500 mt-1 block" id="erro-login-usuario"></span>
                         </div>
@@ -53,7 +61,7 @@
                                 Senha
                             </label>
 
-                            <input type="password" id="login-senha" placeholder="Digite sua senha"
+                            <input type="password"  name='senha' value='12345' id="login-senha" placeholder="Digite sua senha"
                                 class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm">
 
                             <!-- Mensagem de erro de validação -->
