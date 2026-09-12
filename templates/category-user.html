@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" class="h-full">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tipo Usuário | Agenda System</title>
+        <!-- Importação do CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    </head>
+
+    <body class="min-h-dvh w-screen overflow-y-auto sm:overflow-hidden bg-[#161513] text-gray-100 font-sans antialiased flex items-center justify-center p-3 sm:p-6 md:p-8">
+
+        <!--  -->
+        <div id="tela-tipo" class="w-full h-full flex items-center justify-center">
+
+            <!--  -->
+            <div class="w-full max-w-md sm:max-w-xl lg:max-w-2xl max-h-full flex flex-col justify-center my-auto">
+
+                <!-- Card Principal -->
+                <div class="w-full max-h-full bg-[#1c1c1c] border border-brand-border rounded-2xl p-5 sm:p-8 lg:p-10 shadow-2xl flex flex-col overflow-y-auto">
+                    
+                    <!-- Logo horizontal da barbearia -->
+                    <div class="w-full flex items-center justify-center mb-3 sm:mb-5 lg:mb-6 shrink-0">
+                        {% set logo_class="h-8 sm:h-11 lg:h-13" %}
+                        {% include "componetization/logo/logo-top-horizontal.html" %}
+                    </div>
+
+                    <!-- Título e Subtítulo -->
+                    <div class="mb-5 sm:mb-7 shrink-0 text-center">
+                        <h1 class="tela__titulo text-lg sm:text-xl lg:text-2xl font-bold text-white leading-snug">
+                            Bem-vindo<span id="nome-boas-vindas" class="text-brand-gold"></span>!
+                        </h1>
+                        <p class="tela__subtitulo text-xs sm:text-sm lg:text-base text-brand-muted mt-1 sm:mt-1.5">
+                            Como você vai usar o sistema?
+                        </p>
+                    </div>
+
+                    <!-- Grid de Escolha (1 coluna no Mobile, 2 no PC/Tablet) -->
+                    <div class="tipo-grid grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 lg:gap-5 shrink-0">
+
+                        <!-- Card Gestor -->
+                        <a class="tipo-card flex flex-col items-center justify-center p-5 sm:p-6 lg:p-8 bg-[#181715] border border-brand-border hover:border-brand-gold rounded-xl transition-all duration-300 group cursor-pointer text-center hover:scale-[1.02] active:scale-[0.98] shadow-md" href="/gestor/login">
+                            
+                            <!-- Ícone em círculo -->
+                            <div class="tipo-card__icone w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-brand-bg-primary border border-brand-border group-hover:border-brand-gold/50 flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4 transition-colors shrink-0">
+                                🏢
+                            </div>
+
+                            <strong class="text-sm sm:text-base lg:text-lg font-bold text-white group-hover:text-brand-gold transition-colors block mb-1">
+                                Sou Gestor
+                            </strong>
+                            
+                            <span class="text-xs sm:text-sm text-brand-muted">
+                                Gerencio uma empresa
+                            </span>
+
+                        </a>
+
+                        <!-- Card Barbeiro -->
+                        <a class="tipo-card flex flex-col items-center justify-center p-5 sm:p-6 lg:p-8 bg-[#181715] border border-brand-border hover:border-brand-gold rounded-xl transition-all duration-300 group cursor-pointer text-center hover:scale-[1.02] active:scale-[0.98] shadow-md" href="/barbeiro/login">
+                            
+                            <!-- Ícone em círculo -->
+                            <div class="tipo-card__icone w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-brand-bg-primary border border-brand-border group-hover:border-brand-gold/50 flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4 transition-colors shrink-0">
+                                ✂️
+                            </div>
+
+                            <strong class="text-sm sm:text-base lg:text-lg font-bold text-white group-hover:text-brand-gold transition-colors block mb-1">
+                                Sou Barbeiro
+                            </strong>
+                            
+                            <span class="text-xs sm:text-sm text-brand-muted">
+                                Realizo serviço de cortes
+                            </span>
+
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="{{ url_for('static', filename='js/tipoUsuario.js') }}"></script>
+    </body>
+
+</html>

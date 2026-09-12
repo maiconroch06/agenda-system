@@ -6,14 +6,18 @@ manager = Blueprint('companies', __name__, template_folder='templates')
 def managerSource():
     return redirect('/')
 
-@manager.route('/funcionario/cadastro')
+@manager.route('/cadastro/barbeiro')
+def registerEmployee():
+    return render_template('pages/manager/manage-barber-rp.html')
+
+@manager.route('/editar/barbeiro')
 def managerEmployee():
-    return render_template('registerBarber.html')
+    return render_template('pages/manager/manage-barber-rp.html')
 
 @manager.route('/login')
 def managerLogin():
     return render_template('pages/manager/manager-login.html')
 
 @manager.route('/painel')
-def managerDashBoard():
-    return render_template('pages/manager/manager-panel.html')
+def managerPanel():
+    return render_template('pages/manager/manager-panel-rp.html')

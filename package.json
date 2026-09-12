@@ -1,0 +1,26 @@
+{
+  "name": "agenda-system",
+  "version": "1.0.0",
+  "description": "1. ```sudo apt update```\r 2. ```sudo apt install python3-venv -y```\r 3. ```python3 -m venv .venv```\r 4. ```source .venv/bin/activate```\r 5. ```deactivate```",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tailwind": "npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maiconroch06/agenda-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/maiconroch06/agenda-system/issues"
+  },
+  "homepage": "https://github.com/maiconroch06/agenda-system#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

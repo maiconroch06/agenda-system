@@ -38,7 +38,6 @@ function mostrarAviso(msg) {
     setTimeout(() => els.aviso.classList.remove("visivel"), 2500);
 }
 
-// CORREÇÃO: Função atualizada para comprimir a imagem e evitar QuotaExceededError
 function lerArquivoBase64(input) {
     return new Promise((resolve) => {
         if (!input || !input.files || !input.files[0]) { resolve(null); return; }
@@ -49,7 +48,7 @@ function lerArquivoBase64(input) {
             const img = new Image();
             img.onload = () => {
                 const canvas = document.createElement("canvas");
-                const MAX_WIDTH = 200; // Reduz a resolução para economizar espaço
+                const MAX_WIDTH = 200;
                 const scaleSize = MAX_WIDTH / img.width;
                 canvas.width = MAX_WIDTH;
                 canvas.height = img.height * scaleSize;
@@ -144,7 +143,7 @@ async function addBarber() {
     const nome = els.nome?.value.trim();
     const email = els.email?.value.trim();
     const telefone = els.telefone?.value.trim();
-    const descricao = els.descricao?.value.trim() || ""; // Agora é opcional
+    const descricao = els.descricao?.value.trim() || "";
     
     // Campos de endereço
     const cep = els.cep?.value.trim() || "";
@@ -193,7 +192,7 @@ function renderizarCardsProfissionais(lista = barbers) {
     if (!els.container) return;
 
     if (lista.length === 0) {
-        els.container.innerHTML = <p class="col-span-full text-center text-[14px] text-[#888780] py-6" id="vazia-profissionais">Nenhum barbeiro adicionado ainda.</p>;
+        els.container.innerHTML = `<p class="col-span-full text-center text-[14px] text-[#888780] py-6" id="vazia-profissionais">Nenhum barbeiro adicionado ainda.</p>`;
         if (els.vazia) els.vazia.classList.remove("hidden");
         return;
     }
@@ -229,7 +228,6 @@ function renderizarCardsProfissionais(lista = barbers) {
     `).join("");
 }
 
-// Já estava no seu código, acionada pelo botão de "Remover" no card gerado acima
 function removeBarber(id) {
     barbers = barbers.filter(p => p.id !== id);
     salvarEstado();

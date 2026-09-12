@@ -1,235 +1,135 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" class="h-full">
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
         <title>TMS Barbearia - Cadastrar cliente</title>
-  
     </head>
 
-    <body>
-        <!-- ============================================================
-     TELA 3: DADOS Do USUÁRIO
-     ============================================================ -->
+    <body class="min-h-dvh w-screen overflow-y-auto sm:overflow-hidden bg-[#161513] text-gray-100 font-sans antialiased flex items-center justify-center p-3 sm:p-6">
 
-        <div
-            class="tela ativa min-h-screen w-full bg-brand-bg-primary text-gray-100 font-sans antialiased px-4 py-6 sm:px-6 sm:py-8 md:px-10">
+        <div class="tela ativa w-full h-full flex items-center justify-center">
 
-
-            <div class="w-full max-w-5xl mx-auto">
-
-                <div
-                    class="w-full bg-brand-bg-card border border-brand-border rounded-2xl p-5 sm:p-8 md:p-10 shadow-2xl">
-                    <div class="w-full flex items-center justify-center mb-8 ">
-                        {%set logo_class="h-16 md:h-20 lg:h-24"%}
+            <!--  -->
+            <div class="w-full max-w-xl max-h-full flex flex-col justify-center my-auto">
+                
+                <!-- Card Principal -->
+                <div class="w-full max-h-full bg-[#1c1c1c] border border-brand-border rounded-2xl p-5 sm:p-7 shadow-2xl flex flex-col overflow-y-auto">
+                    
+                    <!-- Logo horizontal da barbearia -->
+                    <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
+                        {% set logo_class="h-10 sm:h-12 md:h-14" %}
                         {% include "componetization/logo/logo-top-horizontal.html" %}
                     </div>
-                    <!-- Indicador das etapas -->
-                    <div class="w-full flex items-center justify-center mb-8 overflow-x-auto">
 
-                        <div class="flex items-center min-w-max">
-
-                            <!-- Etapa 1 -->
-                            <div class="flex items-center gap-2">
-                                <span
-                                    class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-gold text-black text-sm font-bold shrink-0">
-                                    1
-                                </span>
-
-                                <span class="text-xs sm:text-sm font-semibold text-brand-gold whitespace-nowrap">
-                                    Dados do Cliente
-                                </span>
-                            </div>
-
-                            <!-- Linha -->
-                            <span class="w-8 sm:w-12 md:w-16 h-px bg-brand-border mx-2 sm:mx-3"></span>
-
-                           
-                            <!-- Linha -->
-                            <span class="w-8 sm:w-12 md:w-16 h-px bg-brand-border mx-2 sm:mx-3"></span>
-
-                            <!-- Etapa 3 -->
-                            <div class="flex items-center gap-2">
-                                <span
-                                    class="flex items-center justify-center w-8 h-8 rounded-full border border-brand-border text-brand-muted text-sm font-semibold shrink-0">
-                                    2
-                                </span>
-
-                                <span
-                                    class="hidden md:block text-xs sm:text-sm font-medium text-brand-muted whitespace-nowrap">
-                                    Finalizar cadastro
-                                </span>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Logo horizontal da barbearia -->
-
-                    <!-- Título -->
-                    <div class="mb-8">
-                        <h1 class="text-2xl sm:text-3xl font-bold text-white">
+                    <!-- Título e Subtítulo -->
+                    <div class="mb-4 shrink-0 text-center">
+                        <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-white leading-snug">
                             Dados do Cliente
                         </h1>
-
-                        <p class="text-sm sm:text-base text-brand-muted mt-2">
+                        <p class="text-xs sm:text-sm text-brand-muted mt-0.5">
                             Preencha as informações referentes ao cliente.
                         </p>
                     </div>
-
-                        {% if erro %}
-                            <div class="w-full my-12 rounded-lg bg-red-600 border border-red-600 px-4 py-3 text-sm text-white">
-                                {{ erro }}
-                            </div>
-                        {% endif %}
-                    <!-- Formulário -->
-                    <form id="form-empresa" action="/cliente/cadastro" method="post" enctype="multipart/form-data" novalidate
-                        class="flex flex-col gap-5">
-
-                        <!-- Mensagem de Erro -->
+                      <!-- Mensagem de Erro -->
                         {% if session.get('erro') %}
                             <div class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
                                 {{ session.pop('erro') }}
                             </div>
                         {% endif %}
+                    <!-- Formulário com Grid em 2 colunas no PC para preencher a largura "gordinha" -->
+                    <form id="form-empresa" action="/cliente/cadastro/finalizacao" method="post" enctype="multipart/form-data" novalidate class="flex flex-col gap-3.5 shrink-0">
 
-                        <!-- Campos principais -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
 
-                            <!-- Nome -->
+                            <!-- Nome Completo -->
                             <div class="flex flex-col">
-                                <label for="prop-nome"
-                                    class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 tracking-wider">
+                                <label for="prop-nome" class="text-[11px] sm:text-xs font-semibold text-gray-300 mb-0.5 tracking-wider">
                                     Nome completo:
                                 </label>
-
                                 <input type="text"
-                                    value="{{ session['dados_usuario']['nome'] if session.get('dados_usuario') else 'Teste' }}"
+                                    value="{{ session['dados-usuario']['nome'] if session.get('dados-usuario') else 'Teste' }}"
                                     id="prop-nome" name="nome" placeholder="Ex: nome do proprietário" autocomplete="off"
-                                    class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
-
-                                <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-prop-nome">
-                                </span>
+                                    class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
+                                <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-nome"></span>
                             </div>
 
-                             <!-- Telefone -->
+                            <!-- Telefone -->
                             <div class="flex flex-col">
-                                <label for="prop-telefone"
-                                    class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 tracking-wider">
+                                <label for="prop-telefone" class="text-[11px] sm:text-xs font-semibold text-gray-300 mb-0.5 tracking-wider">
                                     Telefone
                                 </label>
-
                                 <input type="tel"
-                                    value="{{ session['dados_usuario']['telefone'] if session.get('dados_usuario') else '(84) 00000-0000' }}"
-                                    id="prop-telefone" name="telefone" placeholder="(84) 00000-0000" maxlength="15"
-                                    autocomplete="off"
-                                    class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
-
-                                <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-prop-telefone">
-                                </span>
+                                    value="{{ session['dados-usuario']['telefone'] if session.get('dados-usuario') else '(84) 00000-0000' }}"
+                                    id="prop-telefone" name="telefone" placeholder="(84) 00000-0000" maxlength="15" autocomplete="off"
+                                    class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
+                                <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-telefone"></span>
                             </div>
 
-
-                            <!-- E-mail -->
-                            <div class="flex flex-col md:col-span-2">
-                                <label for="prop-email"
-                                    class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 tracking-wider">
+                            <!-- E-mail (Ocupa as 2 colunas no desktop) -->
+                            <div class="flex flex-col sm:col-span-2">
+                                <label for="prop-email" class="text-[11px] sm:text-xs font-semibold text-gray-300 mb-0.5 tracking-wider">
                                     E-mail
                                 </label>
-
                                 <input type="email"
-                                    value="{{ session['dados_usuario']['email'] if session.get('dados_usuario') else 'emaildoproprietario@gmail.com' }}"
-                                    id="prop-email" name="email" placeholder="emaildoproprietario@gmail.com"
-                                    maxlength="70" autocomplete="off"
-                                    class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
-
-                                <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-prop-email">
-                                </span>
+                                    value="{{ session['dados-usuario']['email'] if session.get('dados-usuario') else 'emaildoproprietario@gmail.com' }}"
+                                    id="prop-email" name="email" placeholder="emaildoproprietario@gmail.com" maxlength="70" autocomplete="off"
+                                    class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
+                                <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-email"></span>
                             </div>
-
 
                             <!-- Senha -->
                             <div class="flex flex-col">
-                                <label for="prop-senha"
-                                    class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 tracking-wider">
+                                <label for="prop-senha" class="text-[11px] sm:text-xs font-semibold text-gray-300 mb-0.5 tracking-wider">
                                     Senha
                                 </label>
-
                                 <input type="password"
-                                    value="{{ session['dados_usuario']['senha'] if session.get('dados_usuario') else '*************' }}"
+                                    value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '*************' }}"
                                     id="prop-senha" name="senha" placeholder="Digite sua senha" autocomplete="off"
-                                    class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
-
-                                <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-prop-senha">
-                                </span>
+                                    class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
+                                <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-senha"></span>
                             </div>
 
-                             <!-- Senha -->
+                            <!-- Confirmar Senha -->
                             <div class="flex flex-col">
-                                <label for="prop-senha"
-                                    class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 tracking-wider">
+                                <label for="prop-conf-senha" class="text-[11px] sm:text-xs font-semibold text-gray-300 mb-0.5 tracking-wider">
                                     Confirmar a Senha
                                 </label>
-
                                 <input type="password"
-                                    value="{{ session['dados_usuario']['senha'] if session.get('dados_usuario') else '*************' }}"
-                                    id="prop-senha" name="senha" placeholder="Digite sua senha" autocomplete="off"
-                                    class="w-full px-4 py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-sm">
-
-                                <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-prop-senha">
-                                </span>
-                            </div>
-
-
-                            <!-- Foto -->
-                            <div class="flex flex-col">
-                                <label for="prop-foto"
-                                    class="text-xs sm:text-sm font-semibold text-gray-300 mb-2 tracking-wider">
-                                    Foto (3x4)
-                                </label>
-
-                                <input type="file" id="prop-foto" name="foto" accept="image/*"
-                                    class="w-full px-3 py-2.5 bg-[#111215] border border-brand-border rounded-lg text-gray-300 text-sm cursor-pointer focus:outline-none focus:border-brand-gold transition-colors file:mr-4 file:px-3 file:py-2 file:border-0 file:rounded-md file:bg-brand-gold file:text-black file:text-xs file:font-semibold file:cursor-pointer hover:file:bg-brand-gold-hover">
-
-                                <span class="campo__erro text-xs text-red-500 mt-1 block" id="erro-prop-foto">
-                                </span>
+                                    value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '*************' }}"
+                                    id="prop-conf-senha" name="confirmar_senha" placeholder="Digite sua senha" autocomplete="off"
+                                    class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
+                                <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-conf-senha"></span>
                             </div>
 
                         </div>
-
 
                         <!-- Tipo de endereço -->
                         <input type="number" name="tipo_end" value="0" hidden>
 
-
-                        <!-- Navegação -->
-                        <div
-                            class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 mt-5 pt-6 border-t border-brand-border">
-
-                            <button type="button" onclick="window.location.href='/'"
-                                class="w-full sm:w-auto px-6 py-3 border border-brand-border rounded-lg text-gray-300 font-semibold text-sm hover:bg-[#111215] hover:text-white transition-colors cursor-pointer">
-                                Voltar
-                            </button>
-
-                            <button type="submit"
-                                class="w-full sm:w-auto px-6 py-3 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
-                                Próximo →
-                            </button>
-
-                        </div>
+                        <button type="submit"
+                            class="w-full py-2.5 sm:py-3 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-xs sm:text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer mt-2">
+                            Cadastrar
+                        </button>
 
                     </form>
-
+                    
+                    <!-- Div "Já possui uma conta?" -->
+                    <div class="flex items-center justify-center gap-1.5 text-xs sm:text-sm text-brand-muted mt-4 pt-3.5 border-t border-brand-border/40 shrink-0">
+                        <span class="registro-caption">Já possui uma conta?</span>
+                        <a href="/cliente/login" class="text-brand-gold font-semibold hover:underline hover:text-brand-gold-hover transition-colors">
+                            Faça login
+                        </a>
+                    </div>
+                    
                 </div>
+
             </div>
 
-
-            <!-- Aviso -->
-            <div id="aviso" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50">
-            </div>
-
+            <!-- Aviso Toast -->
+            <div id="aviso" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50"></div>
 
             <script src="{{ url_for('static', filename='js/user-register.js') }}"></script>
 

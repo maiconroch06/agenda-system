@@ -3,6 +3,8 @@
 ## Public
 * index.html
     * /
+* category-user.html
+    * /tipo-usuario
 
 ## Client
 * client-login.html
@@ -14,17 +16,16 @@
 * scheduling.html
     * /cliente/agendamento/servicos
 
-## Company -> Manager and Barber
-* employee-login.html
-    * /funcionario/login
-* employee-register.html
-    * /funcionario/cadastro
-
 ## Manager
-* manager-panel.html
+* manager-login.html
+    * /gestor/login
+* manager-panel-rp.html
     * /gestor/painel
+* manage-barber-rp.html
+    * gestor/cadastro/barbeiro
 
 ## Barber
-* barber-panel.html
+* barber-login.html
+    * /barbeiro/login
+* barber-panel-rp.html
     * /barbeiro/painel
-

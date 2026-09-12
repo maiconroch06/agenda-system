@@ -6,6 +6,6 @@ publics = Blueprint('public', __name__)
 def homePage():
     return render_template('index.html')
 
-@publics.route('/barber')
-def registerBarber():
-    return render_template('registerBarber.html')
+@publics.route('/tipo-usuario')
+def category():
+    return render_template('category-user.html')
