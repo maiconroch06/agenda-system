@@ -13,7 +13,7 @@ def clientLogin():
    
 @client.route('/cadastro')
 def clientRegister():
-    return render_template('pages/client/client-rp.html')
+    return render_template('pages/client/client-register.html')
 
 @client.route('/cadastro/finalizacao', methods=['GET','POST'])
 def clientRegisterFinish():
