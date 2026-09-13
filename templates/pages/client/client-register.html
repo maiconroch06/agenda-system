@@ -34,10 +34,10 @@
                         </p>
                     </div>
                       <!-- Mensagem de Erro -->
-                        {% if session.get('erro') %}
-                            <div class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
-                                {{ session.pop('erro') }}
-                            </div>
+                    {% if session.get('erro') %}
+                    <div class="bg-red-500/10 my-8 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
+                        {{ session.pop('erro')|replace('\n', '<br>')|safe }}
+                    </div>
                         {% endif %}
                     <!-- Formulário com Grid em 2 colunas no PC para preencher a largura "gordinha" -->
                     <form id="form-empresa" action="/cliente/cadastro" method="post" enctype="multipart/form-data" novalidate class="flex flex-col gap-3.5 shrink-0">
@@ -50,7 +50,7 @@
                                     Nome completo:
                                 </label>
                                 <input type="text"
-                                    value="{{ session['dados-usuario']['nome'] if session.get('dados-usuario') else 'Teste' }}"
+                                    value="{{ session['dados-usuario']['nome'] if session.get('dados-usuario') else 'Cliente1 Sobrenome' }}"
                                     id="prop-nome" name="nome" placeholder="Ex: nome do proprietário" autocomplete="off"
                                     class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
                                 <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-nome"></span>
@@ -98,7 +98,7 @@
                                     Confirmar a Senha
                                 </label>
                                 <input type="password"
-                                    value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '*************' }}"
+                                    value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '12345' }}"
                                     id="prop-conf-senha" name="confirmar_senha" placeholder="Digite sua senha" autocomplete="off"
                                     class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
                                 <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-conf-senha"></span>

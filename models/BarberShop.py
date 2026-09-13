@@ -40,9 +40,12 @@ class BarberShop(db.Model):
     # cls é uma convenção do Python que representa a própria classe
     @classmethod
     def insertDefualtBarbearia(cls, id_gestor, id_endereco:int):
-        if cls.query.first() is None:
+        
+        barber_shop = db.session.scalars(db.select(cls)).first()
+        
+        if barber_shop is None:
 
-            barbearia = cls(
+            barber_shop = cls(
                     cnpj= cls.getCNPJ(),
                     nome_barbearia='TMS Barbearia',
                     telefone='84999999999',
@@ -52,7 +55,7 @@ class BarberShop(db.Model):
                     gestor_id=id_gestor
                 )
 
-            db.session.add(barbearia)
+            db.session.add(barber_shop)
             db.session.commit()
 
             print('Barbearia cadastrada com sucesso.')

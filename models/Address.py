@@ -39,7 +39,9 @@ class Address(db.Model):
 
     @classmethod
     def insertDefaultAdress(cls):
-        if cls.query.first() is None:
+        adress_default = db.session.scalars(db.select(cls)).first()
+        
+        if adress_default is None:
 
             adress_default = cls(
                 cep = "59215-000",
@@ -54,5 +56,4 @@ class Address(db.Model):
             db.session.add(adress_default)
             db.session.commit()
                 
-            return adress_default.id_endereco
-        return cls.query.first().id_endereco;
+        return adress_default.id_endereco

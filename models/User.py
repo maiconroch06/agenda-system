@@ -40,6 +40,15 @@ class User(db.Model):
             'email': self.email,
             'senha': self.senha_hash,  
         }
+        
+    def getDict(user):
+        return {
+                'id': user.id, 
+                'nome_completo': user.nome_completo,
+                'telefone': user.telefone,
+                'email': user.email,
+                'senha': user.senha_hash,  
+        }
 
     # ============================================================
     # MÉTODOS CRUD OFICIAIS (CORRIGIDOS)
@@ -59,7 +68,16 @@ class User(db.Model):
     # READ - 🔥 CORRIGIDO: Atualizado para a sintaxe moderna db.select
     @classmethod
     def buscar_por_email(cls, email):
-        return db.session.scalar(db.select(cls).filter_by(email=email))
+        return db.session.execute(
+            db.text(
+        """
+            select *
+            from clientes c join usuarios u 
+            on c.cliente_id = u.id where u.email = :email 
+        """
+            ),
+            {"email":email}
+        ).first()
 
     # READ - 🔥 CORRIGIDO: Atualizado para a sintaxe moderna db.select e scalars().all()
     @classmethod
@@ -86,21 +104,22 @@ class User(db.Model):
     # cls é uma convenção do Python que representa a própria classe
     @classmethod
     def insertUserGestor(cls, id_endereco_gestor:int):
-        if cls.query.first() is None:
+        
+        user_manager = db.session.scalars(db.select(cls)).first()
+        
+        if  user_manager is None:
 
-            user_gestor = cls(
-                nome_completo = "Samuel maicon da silva",
+            user_manager = cls(
+                nome_completo = "Samuel Maicon da silva",
                 telefone = "84999999999",
-                email = "samuelmaicongestor@gmail.com",
-                senha = "teste",
+                email = "samuelmaicon.gestor@gmail.com",
+                senha = "1234",
                 id_endereco = id_endereco_gestor,
                 foto = None
                 
                 )
 
-            db.session.add(user_gestor)
+            db.session.add(user_manager)
             db.session.commit()
                 
-            return user_gestor.id
-
-        return cls.query.first().id;
+        return user_manager.id

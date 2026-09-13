@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
-from controllers.authentication_controller import AuthenticationUser
+from controllers.authentication_user_controller import AuthenticationUser
 from models import User
 
 
@@ -42,10 +42,13 @@ def clientRegisterPage():
 @client.route('/cadastro', methods=["POST"])
 def clientRegister():
     if  request.method == "POST":
+        #COLOCAR A VALIDAÇÃO AQUI
+              
+        telefone_temp = ''.join(filter(str.isdigit,request.form.get('telefone')))
         # Instancia o objeto User com os dados do formulário
         usuario = User(
             nome_completo=request.form.get('nome'),
-            telefone=request.form.get('telefone'),
+            telefone=telefone_temp,
             email=request.form.get('email'),
             senha= request.form.get('senha'),
             foto=request.files.get('foto').filename if request.files.get('foto') else None,
