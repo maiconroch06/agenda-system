@@ -3,40 +3,29 @@
 ## Public
 * index.html
     * /
+* category-user.html
+    * /tipo-usuario
 
 ## Client
 * client-login.html
     * /cliente/login
 * client-register.html
     * /cliente/cadastro
-* client-address.html
-    * /cliente/cadastro/endereco
 * finish-register.html
     * /cliente/cadastro/finalizacao
 * scheduling.html
     * /cliente/agendamento/servicos
 
-## Company -> Manager and Barber
-* employee-login.html
-    * /funcionario/login
-* employee-register.html
-    * /funcionario/cadastro
-
 ## Manager
-* manager-panel.html
-    * /gestor/painel/empresa
-    * /gestor/painelEmpresa
-    * /gestor/painel/gestor
-    * /gestor/painelGestor
+* manager-login.html
+    * /gestor/login
+* manager-panel-rp.html
     * /gestor/painel
-    * Qual deles?
+* manage-barber-rp.html
+    * gestor/cadastro/barbeiro
 
 ## Barber
-* barber-panel.html
-    * /barbeiro/painel/empresa
-    * /barbeiro/painelEmpresa
-    * /barbeiro/painel/barbeiro
-    * /barbeiro/painelBarbeiro
+* barber-login.html
+    * /barbeiro/login
+* barber-panel-rp.html
     * /barbeiro/painel
-    * Qual deles?
-

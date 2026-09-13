@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" class="h-full">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+        <title>TMS Barbearia - Cadastrar cliente</title>
+         <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+    </head>
+
+    <body class="min-h-dvh w-screen overflow-y-auto sm:overflow-hidden bg-[#161513] text-gray-100 font-sans antialiased flex items-center justify-center p-3 sm:p-6">
+
+        <div class="tela ativa w-full h-full flex items-center justify-center">
+
+            <!--  -->
+            <div class="w-full max-w-xl max-h-full flex flex-col justify-center my-auto">
+                
+                <!-- Card Principal -->
+                <div class="w-full max-h-full bg-[#1c1c1c] border border-brand-border rounded-2xl p-5 sm:p-7 shadow-2xl flex flex-col overflow-y-auto">
+                    
+                    <!-- Logo horizontal da barbearia -->
+                    <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
+                        {% set logo_class="h-10 sm:h-12 md:h-14" %}
+                        {% include "componetization/logo/logo-top-horizontal.html" %}
+                    </div>
+
+                    <!-- Título e Subtítulo -->
+                    <div class="mb-4 shrink-0 text-center">
+                        <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-white leading-snug">
+                            Dados do Cliente
+                        </h1>
+                        <p class="text-xs sm:text-sm text-brand-muted mt-0.5">
+                            Preencha as informações referentes ao cliente.
+                        </p>
+                    </div>
+                      <!-- Mensagem de Erro -->
+                    {% if session.get('erro') %}
+                    <div class="bg-red-500/10 my-8 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
+                        {{ session.pop('erro')|replace('\n', '<br>')|safe }}
+                    </div>
+                    {% endif %}
+                    <!-- MENSAGEM DE ERROS DO JAVASCRIPT -->
+                    <div id='div-validation-message' class="bg-red-500/10 border mb-8 border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-left font-medium tracking-wide hidden ">
+                        <p id="validation-menssage"></p>
+                    </div>
+
+                    <!-- Formulário com Grid em 2 colunas no PC para preencher a largura "gordinha" -->
+                    <form id="form-barber-shop" action="/cliente/cadastro" method="post" enctype="multipart/form-data" novalidate class="flex flex-col gap-3.5 shrink-0">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
+
+                            <!-- Nome Completo -->
+                            <div class="flex flex-col">
+                                <label for="prop-nome" class="text-[11px] sm:text-xs font-semibold text-gray-300 mb-0.5 tracking-wider">
+                                    Nome completo:
+                                </label>
+                                <input type="text"
+                                    value="{{ session['dados-usuario']['nome'] if session.get('dados-usuario') else 'Cliente1 Sobrenome' }}"
+                                    id="client-name" name="nome" placeholder="Ex: nome do proprietário" autocomplete="off"
+                                    class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
+                                <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-nome"></span>
+                            </div>
+
+                            <!-- Telefone -->
+                            <div class="flex flex-col">
+                                <label for="prop-telefone" class="text-[11px] sm:text-xs font-semibold text-gray-300 mb-0.5 tracking-wider">
+                                    Telefone
+                                </label>
+                                <input type="tel"
+                                    value="{{ session['dados-usuario']['telefone'] if session.get('dados-usuario') else '(84) 00000-0000' }}"
+                                    id="client-telefone" name="telefone" placeholder="(84) 00000-0000" maxlength="15" autocomplete="off"
+                                    class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
+                                <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-telefone"></span>
+                            </div>
+
+                            <!-- E-mail (Ocupa as 2 colunas no desktop) -->
+                            <div class="flex flex-col sm:col-span-2">
+                                <label for="prop-email" class="text-[11px] sm:text-xs font-semibold text-gray-300 mb-0.5 tracking-wider">
+                                    E-mail
+                                </label>
+                                <input type="email"
+                                    value="{{ session['dados-usuario']['email'] if session.get('dados-usuario') else 'cliente1@gmail.com' }}"
+                                    id="client-email" name="email" placeholder="emaildoproprietario@gmail.com" maxlength="70" autocomplete="off"
+                                    class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
+                                <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-email"></span>
+                            </div>
+
+                            <!-- Senha -->
+                            <div class="flex flex-col">
+                                <label for="client-senha" class="text-[11px] sm:text-xs font-semibold text-gray-300 mb-0.5 tracking-wider">
+                                    Senha
+                                </label>
+                                <input type="password"
+                                    value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '12345' }}"
+                                    id="cliente-senha" name="senha" placeholder="Digite sua senha" autocomplete="off"
+                                    class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
+                                <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-senha"></span>
+                            </div>
+
+                            <!-- Confirmar Senha -->
+                            <div class="flex flex-col">
+                                <label for="prop-conf-senha" class="text-[11px] sm:text-xs font-semibold text-gray-300 mb-0.5 tracking-wider">
+                                    Confirmar a Senha
+                                </label>
+                                <input type="password"
+                                    value="{{ session['dados-usuario']['senha'] if session.get('dados-usuario') else '12345' }}"
+                                    id="client-conf-senha" name="confirmar_senha" placeholder="Digite sua senha" autocomplete="off"
+                                    class="w-full px-3 py-2 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs">
+                                <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-conf-senha"></span>
+                            </div>
+
+                        </div>
+
+                        <!-- Tipo de endereço -->
+                        <input type="number" name="tipo_end" value="0" hidden>
+
+                        <button type="submit"
+                            class="w-full py-2.5 sm:py-3 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-xs sm:text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer mt-2">
+                            Cadastrar
+                        </button>
+
+                    </form>
+                    
+                    <!-- Div "Já possui uma conta?" -->
+                    <div class="flex items-center justify-center gap-1.5 text-xs sm:text-sm text-brand-muted mt-4 pt-3.5 border-t border-brand-border/40 shrink-0">
+                        <span class="registro-caption">Já possui uma conta?</span>
+                        <a href="/cliente/login" class="text-brand-gold font-semibold hover:underline hover:text-brand-gold-hover transition-colors">
+                            Faça login
+                        </a>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <!-- Aviso Toast -->
+            <div id="aviso" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50"></div>
+
+            
+            <script src="{{ url_for('static', filename='js/validations/client-register.js') }}"></script>
+
+        </div>
+    </body>
+
+</html>
