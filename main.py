@@ -30,7 +30,8 @@ with app.app_context():
 from routers.public_route import publics
 from routers.client_route import client
 # from routers.login import user_login
-# from routers.manager import manager
+from routers.manager_route import manager
+from routers.barber_route import barber
 
 
 # ==========================================
@@ -38,11 +39,10 @@ from routers.client_route import client
 # ==========================================
 app.register_blueprint(publics)
 app.register_blueprint(client, url_prefix='/cliente')
+app.register_blueprint(manager, url_prefix='/gestor')
+app.register_blueprint(barber, url_prefix='/barbeiro')
 
 
-# app.register_blueprint(user_login, url_prefix='/login')
-# app.register_blueprint(manager, url_prefix='/gestor')
-# app.register_blueprint(client, url_prefix='/cliente')
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 

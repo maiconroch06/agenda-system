@@ -7,6 +7,7 @@
     <title>TMS Barbearia - Agendamentos</title>
     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-[#0f6e56] selection:text-white">
@@ -19,86 +20,101 @@
 
 
         <!-- ÁREA DO USUÁRIO -->
-        <div class="relative">
+        <!-- ÁREA DO USUÁRIO -->
+        <div class="flex items-center  justify-center">
 
-            <!-- BOTÃO DO USUÁRIO -->
-            <button
-                id="btn-usuario"
-                type="button"
-                class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-[#2c2b27] transition-all cursor-pointer"
-            >
+        <!-- BOTÃO DO USUÁRIO -->
+        <button
+            id="btn-usuario"
+            type="button"
+            class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden hover:bg-[#2c2b27] transition-all cursor-pointer"
+        >
 
-                <!-- FOTO DO USUÁRIO -->
+            <!-- FOTO DO USUÁRIO -->
+            {% if session.get('dados_cliente') and session.get('dados_cliente').get('foto_path') %}
+
                 <img
-                    src=""
-                    alt="O"
-                    class="w-9 h-9 rounded-full object-cover border border-[#4a473f]"
-                >
+                    src="{{ url_for('static', filename=session.get('dados_cliente')['foto_path']) }}"
+                    alt="Avatar"
+                    class="w-full h-full object-cover">
 
-                <!-- SETA -->
-                <svg
-                    id="seta-usuario"
-                    class="w-4 h-4 text-[#888780] transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 9l-7 7-7-7"
-                    />
-                </svg>
+            {% else %}
 
-            </button>
+                <span class="text-sm font-bold text-[#f1efe8]">
+                    {{ session.get('dados_cliente')['nome_completo'][0]|upper }}
+                </span>
 
+            {% endif %}
 
-            <!-- DROPDOWN DO USUÁRIO -->
-            <div
-                id="dropdown-usuario"
-                hidden
-                class="absolute right-0 top-12 w-56 bg-[#232220] border border-[#38362f] rounded-xl shadow-2xl overflow-hidden z-50"
-            >
+        </button>
 
-                <!-- DADOS DO USUÁRIO -->
-                <div class="px-4 py-3 border-b border-[#38362f]">
+        <!-- DROPDOWN DO USUÁRIO -->
+        <div
+            id="dropdown-usuario"
+            hidden
+            class="absolute right-0 top-12 w-56 bg-[#232220] border border-[#38362f] rounded-xl shadow-2xl overflow-hidden z-50"
+        >
 
-                    <p class="text-sm font-medium text-[#f1efe8]">
-                        {% if session.get('dados_usuario') %}
-                            {{ session.get('dados_usuario')['nome_completo'] }}
-                        {% endif %}
-        
-                    </p>
+            <!-- DADOS DO USUÁRIO -->
+            <div class="px-4 py-3 border-b border-[#38362f]">
 
-                    <p class="text-xs text-[#888780] mt-1">
-                        Minha conta
-                    </p>
+                <p class="text-sm font-medium text-[#f1efe8]">
+                    {% if session.get('dados_cliente') %}
+                        {{ session.get('dados_cliente')['nome_completo'] }}
+                    {% endif %}
+                </p>
 
-                </div>
-
-
-                <!-- MEUS AGENDAMENTOS -->
-                <button
-                    id="btn-toggle-historico"
-                    type="button"
-                    class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer"
-                >
-                    Meus Agendamentos
-                </button>
-
-
-                <!-- SAIR -->
-                <a
-                    href="/cliente/logout"
-                    class="block px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
-                >
-                    Sair
-                </a>
+                <p class="text-xs text-[#888780] mt-1">
+                    Minha conta
+                </p>
 
             </div>
 
+            <!-- LISTAR SERVIÇOS -->
+            <button
+                onclick="voltarParaAgendamento()"
+                type="button"
+                class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer"
+            >
+                Exibir Cortes
+            </button>
+
+            <!-- MEUS AGENDAMENTOS -->
+            <button
+                id="btn-toggle-historico"
+                type="button"
+                class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer"
+            >
+                Meus Agendamentos
+            </button>
+
+            <!-- SAIR -->
+            <a
+                href="/cliente/logout"
+                class="block px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+            >
+                Sair
+            </a>
+
         </div>
+
+        <!-- SETA -->
+        <svg
+            id="seta-usuario"
+            class="w-4 h-4 text-[#888780] transition-transform"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+            />
+        </svg>
+
+    </div>          
 
     </header>
 
