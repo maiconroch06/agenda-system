@@ -1,19 +1,38 @@
-import os
-from flask import Flask 
-from database import create_database 
+from flask import Flask, session
+from datetime import timedelta
+from database import create_database, db
+from database.seed import initialize
+
 
 app = Flask(__name__)
 
-create_database(app,os)
+# Configura o app e inicializa o db.init_app(app)
+create_database(app)
+
+# IMPORTANTE: Importe os seus modelos aqui ANTES do create_all.
+# Se você não importá-los, o SQLAlchemy não saberá que as tabelas existem e criará um banco vazio!
+from models import *
+
+# ==========================================
+# 1. CRIAÇÃO AUTOMÁTICA DAS TABELAS NO MYSQL
+# ==========================================
+with app.app_context():
+    # Esse comando lê as classes e as cria no banco
+    db.create_all()
+
+    initialize()
+    
+
 
 # ==========================================
 # 2. IMPORTS DOS BLUEPRINTS (Apenas APÓS criar o banco)
 # ==========================================
-from routers.public import publics
-from routers.client import client
-from routers.manager import manager
-from routers.barber import barber
-from routers.login import user_login
+from routers.public_route import publics
+from routers.client_route import client
+# from routers.login import user_login
+from routers.manager_route import manager
+from routers.barber_route import barber
+
 
 # ==========================================
 # 3. REGISTRO DOS BLUEPRINTS
@@ -22,7 +41,11 @@ app.register_blueprint(publics)
 app.register_blueprint(client, url_prefix='/cliente')
 app.register_blueprint(manager, url_prefix='/gestor')
 app.register_blueprint(barber, url_prefix='/barbeiro')
-app.register_blueprint(user_login, url_prefix='/login')
+
+
+
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True)

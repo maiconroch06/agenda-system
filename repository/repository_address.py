@@ -1,4 +1,4 @@
-def obter_todos_estados():
+def get_all_states():
     return {
         "AC": "Acre", "AL": "Alagoas", "AP": "Amapá", "AM": "Amazonas", 
         "BA": "Bahia", "CE": "Ceará", "DF": "Distrito Federal", "ES": "Espírito Santo", 

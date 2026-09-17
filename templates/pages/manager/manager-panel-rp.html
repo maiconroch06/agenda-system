@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia - Painel Administrativo</title>
     <script src="https://cdn.tailwindcss.com"></script>
+     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
@@ -20,6 +21,7 @@
                 {% set logo_class="h-16 md:h-20 lg:h-24" %}
                 {% include "componetization/logo/logo-top-horizontal.html" %}
                 <h1 class="mt-4 text-2xl font-bold">Manager Dash</h1>
+                
             </div>
                     
             <!-- Navegação Desktop -->
@@ -43,10 +45,53 @@
                     <span class="text-lg w-5.5 text-center">💰</span> Financeiro
                 </button> -->
             </nav>
-        
-            <a class="mt-auto mx-3 mb-5 px-4 py-3 text-center rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-sm font-medium transition-colors hover:bg-[#38362f] hover:text-[#f1efe8]" href="/" onclick="sairDaConta()"> 
+           
+            <div class="mt-auto mx-3 mb-5 px-4 py-3 rounded-lg border border-[#38362f] bg-transparent">
+
+            <div class="flex items-center gap-3">
+
+            <!-- Avatar -->
+            <div class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden">
+
+            {% if session.get('dados_gestor')['foto_path'] %}
+
+                <img
+                    src="{{ url_for('static', filename=session.get('dados_gestor')['foto_path']) }}"
+                    alt="Avatar"
+                    class="w-full h-full object-cover">
+
+            {% else %}
+
+                <span class="text-sm font-bold text-[#f1efe8]">
+                    {{ session.get('dados_gestor')['nome_completo'][0]|upper }} <!-- Pega a primeira letra do nome-->
+                </span>
+
+            {% endif %}
+
+        </div>
+
+        <!-- Nome + Sair -->
+        <div class="min-w-0">
+
+        <div class="w-full">
+            <p class="text-sm font-medium text-[#f1efe8]">
+                {{ session.get('dados_gestor')['nome_completo'].split(' ')[0] }}<!-- Aplica um split no espeço em branco e pega o primeiro nome -->
+            </p>
+        </div>
+
+            <a
+                href="/gestor/logout"
+                class="text-xs text-[#888780] hover:text-[#f1efe8] transition-colors">
+
                 Sair
+
             </a>
+
+        </div>
+
+    </div>
+
+</div>
         </aside>
 
         <!-- CONTEÚDO PRINCIPAL -->
