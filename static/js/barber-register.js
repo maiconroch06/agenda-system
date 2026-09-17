@@ -1,7 +1,7 @@
 /* ============================================================
    ESTADO DA APLICAÇÃO
    ============================================================ */
-   const state = {
+const state = {
     etapaAtual: 1,
     isEditing: false,
     fotoBase64: null
@@ -21,12 +21,13 @@ const els = {
     
     // Inputs Step 2
     cep: document.getElementById("pro-cep"),
+    cidade: document.getElementById("pro-cidade"),
+    uf: document.getElementById("pro-uf"),
+    bairro: document.getElementById("pro-bairro"),
     logradouro: document.getElementById("pro-logradouro"),
     numero: document.getElementById("pro-numero"),
     complemento: document.getElementById("pro-complemento"),
-    bairro: document.getElementById("pro-bairro"),
-    cidade: document.getElementById("pro-cidade"),
-    uf: document.getElementById("pro-uf"),
+    sequencia: document.getElementById("pro-sequencia"),
     
     // Controles de Etapa
     step1: document.getElementById("step-1"),
@@ -75,12 +76,13 @@ function prepararModoEdicao(cpf) {
         telefone: "(84) 99169-9246",
         descricao: "Especialista em cortes modernos.",
         cep: "59200-000",
+        cidade: "Nova Cruz",
+        uf: "RN",
+        bairro: "Centro",
         logradouro: "Rua Exemplo",
         numero: "123",
         complemento: "",
-        bairro: "Centro",
-        cidade: "Nova Cruz",
-        uf: "RN"
+        sequencia: "1"
     };
     
     preencherFormulario(mockBarbeiro);
@@ -92,52 +94,17 @@ function preencherFormulario(dados) {
     els.telefone.value = dados.telefone || "";
     els.descricao.value = dados.descricao || "";
     els.cep.value = dados.cep || "";
+    els.cidade.value = dados.cidade || "";
+    els.uf.value = dados.uf || "";
+    els.bairro.value = dados.bairro || "";
     els.logradouro.value = dados.logradouro || "";
     els.numero.value = dados.numero || "";
     els.complemento.value = dados.complemento || "";
-    els.bairro.value = dados.bairro || "";
-    els.cidade.value = dados.cidade || "";
-    els.uf.value = dados.uf || "";
+    els.sequencia.value = dados.sequencia || "";
 }
 
 /* ============================================================
-   NAVEGAÇÃO DO WIZARD
-   ============================================================ */
-function alterarEtapa(direcao) {
-    if (direcao === 'next' && state.etapaAtual === 1) {
-        state.etapaAtual = 2;
-    } else if (direcao === 'prev' && state.etapaAtual === 2) {
-        state.etapaAtual = 1;
-    }
-    renderizarEtapa();
-}
-
-function renderizarEtapa() {
-    if (state.etapaAtual === 1) {
-        els.step1.classList.remove("hidden-step");
-        els.step2.classList.add("hidden-step");
-        
-        els.btnVoltar.classList.add("hidden-step");
-        els.btnProximo.classList.remove("hidden-step");
-        els.btnSubmit.classList.add("hidden-step");
-        
-        atualizarEstiloIndicador(els.ind1, true);
-        atualizarEstiloIndicador(els.ind2, false);
-    } else {
-        els.step1.classList.add("hidden-step");
-        els.step2.classList.remove("hidden-step");
-        
-        els.btnVoltar.classList.remove("hidden-step");
-        els.btnProximo.classList.add("hidden-step");
-        els.btnSubmit.classList.remove("hidden-step");
-
-        atualizarEstiloIndicador(els.ind1, true);
-        atualizarEstiloIndicador(els.ind2, true);
-    }
-}
-
-/* ============================================================
-   NAVEGAÇÃO DO WIZARD
+   NAVEGAÇÃO DO WIZARD E ESTILO DO STEPPER
    ============================================================ */
 function alterarEtapa(direcao) {
     if (direcao === 'next' && state.etapaAtual === 1) {
@@ -165,48 +132,39 @@ function renderizarEtapa() {
         els.btnSubmit.classList.remove("hidden-step");
     }
 
-    // Chama a função que gerencia as cores e o ícone do stepper
     atualizarEstiloIndicador();
 }
 
 function atualizarEstiloIndicador() {
-    // Pegando os dois indicadores mapeados no 'els' do cadastro
     const itens = [els.ind1, els.ind2];
 
     itens.forEach((item, index) => {
         const numero = index + 1;
-        // Pega as tags <span> de dentro da <li>
         const ciclo = item.querySelector("span:first-of-type");
         const label = item.querySelector("span:last-of-type");
 
         if (numero < state.etapaAtual) {
-            // Etapa Concluída (Dourado com check)
             item.classList.remove("before:bg-brand-border", "before:bg-[#4a473f]");
             item.classList.add("before:bg-brand-gold");
 
             ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-brand-gold border border-brand-gold flex items-center justify-center text-[13px] font-bold text-black transition-all";
             ciclo.textContent = "✓";
-
             label.className = "text-brand-gold font-medium transition-all";
 
         } else if (numero === state.etapaAtual) {
-            // Etapa Atual (Dourado com número)
             item.classList.remove("before:bg-brand-border", "before:bg-[#4a473f]");
             item.classList.add("before:bg-brand-gold");
 
             ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-brand-gold border border-brand-gold flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all";
             ciclo.textContent = numero;
-
             label.className = "text-white font-bold transition-all";
 
         } else {
-            // Etapa Futura (Desativada)
             item.classList.remove("before:bg-brand-gold");
             item.classList.add("before:bg-brand-border");
 
             ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-medium text-brand-muted transition-all";
             ciclo.textContent = numero;
-
             label.className = "text-brand-muted transition-all";
         }
     });
@@ -263,7 +221,7 @@ function lerArquivoBase64(input) {
         if (!input || !input.files || !input.files[0]) return resolve(null);
         const reader = new FileReader();
         reader.onload = (e) => {
-            resolve(e.target.result); // Retorna a string Base64 da imagem
+            resolve(e.target.result);
         };
         reader.readAsDataURL(input.files[0]);
     });
@@ -279,12 +237,13 @@ function salvarDados() {
         foto: state.fotoBase64,
         endereco: {
             cep: els.cep.value,
+            cidade: els.cidade.value,
+            uf: els.uf.value,
+            bairro: els.bairro.value,
             logradouro: els.logradouro.value,
             numero: els.numero.value,
             complemento: els.complemento.value,
-            bairro: els.bairro.value,
-            cidade: els.cidade.value,
-            uf: els.uf.value
+            sequencia: els.sequencia.value
         }
     };
 
