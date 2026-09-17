@@ -1,254 +1,295 @@
 /* ============================================================
-   ESTADO SERVIÇOS
+   ESTADO DA APLICAÇÃO
    ============================================================ */
-let barbers = JSON.parse(localStorage.getItem("barber")) || [];
-
-/* ============================================================
-   ELEMENTOS
-   ============================================================ */
-const els = {
-    etapa:       document.getElementById("etapa"),
-    fotoInput:   document.getElementById("pro-foto"),
-    cpf:         document.getElementById("pro-cpf"),
-    nome:        document.getElementById("pro-nome"),
-    email:       document.getElementById("pro-email"),
-    telefone:    document.getElementById("pro-telefone"),
-    descricao:   document.getElementById("pro-descricao"),
-    cep:         document.getElementById("pro-cep"),
-    logradouro:  document.getElementById("pro-logradouro"),
-    numero:      document.getElementById("pro-numero"),
-    complemento: document.getElementById("pro-complemento"),
-    bairro:      document.getElementById("pro-bairro"),
-    cidade:      document.getElementById("pro-cidade"),
-    uf:          document.getElementById("pro-uf"),
-    container:   document.getElementById("lista-cards-profissionais"),
-    vazia:       document.getElementById("vazia-profissionais"),
-    aviso:       document.getElementById("aviso")
+   const state = {
+    etapaAtual: 1,
+    isEditing: false,
+    fotoBase64: null
 };
 
-const estado = { etapaAtual: 2 };
+/* ============================================================
+   MAPEAMENTO DE ELEMENTOS
+   ============================================================ */
+const els = {
+    // Inputs Step 1
+    fotoInput: document.getElementById("pro-foto"),
+    cpf: document.getElementById("pro-cpf"),
+    nome: document.getElementById("pro-nome"),
+    email: document.getElementById("pro-email"),
+    telefone: document.getElementById("pro-telefone"),
+    descricao: document.getElementById("pro-descricao"),
+    
+    // Inputs Step 2
+    cep: document.getElementById("pro-cep"),
+    logradouro: document.getElementById("pro-logradouro"),
+    numero: document.getElementById("pro-numero"),
+    complemento: document.getElementById("pro-complemento"),
+    bairro: document.getElementById("pro-bairro"),
+    cidade: document.getElementById("pro-cidade"),
+    uf: document.getElementById("pro-uf"),
+    
+    // Controles de Etapa
+    step1: document.getElementById("step-1"),
+    step2: document.getElementById("step-2"),
+    ind1: document.getElementById("step-indicator-1"),
+    ind2: document.getElementById("step-indicator-2"),
+    
+    // Botões
+    btnVoltar: document.getElementById("btn-voltar"),
+    btnProximo: document.getElementById("btn-proximo"),
+    btnSubmit: document.getElementById("btn-submit"),
+    
+    // Títulos
+    formTitle: document.getElementById("form-title"),
+    formSubtitle: document.getElementById("form-subtitle"),
+};
 
 /* ============================================================
-   UTILITÁRIOS
+   INICIALIZAÇÃO & MODO DE EDIÇÃO
    ============================================================ */
-function mostrarAviso(msg) {
-    if (!els.aviso) return;
-    els.aviso.textContent = msg;
-    els.aviso.classList.add("visivel");
-    setTimeout(() => els.aviso.classList.remove("visivel"), 2500);
+function init() {
+    aplicarMascaras();
+    configurarEventos();
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const cpfEdicao = urlParams.get('cpf');
+
+    if (cpfEdicao) {
+        state.isEditing = true;
+        prepararModoEdicao(cpfEdicao);
+    }
 }
 
-function lerArquivoBase64(input) {
-    return new Promise((resolve) => {
-        if (!input || !input.files || !input.files[0]) { resolve(null); return; }
-        const file = input.files[0];
-        const reader = new FileReader();
+function prepararModoEdicao(cpf) {
+    els.formTitle.textContent = "Atualizar Barbeiro";
+    els.formSubtitle.textContent = "Altere os dados do profissional";
+    els.btnSubmit.textContent = "Atualizar";
+    
+    els.cpf.value = cpf;
+    els.cpf.disabled = true;
 
-        reader.onload = (e) => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement("canvas");
-                const MAX_WIDTH = 200;
-                const scaleSize = MAX_WIDTH / img.width;
-                canvas.width = MAX_WIDTH;
-                canvas.height = img.height * scaleSize;
-
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-                // Converte para JPEG com 60% de qualidade
-                const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
-                resolve(dataUrl);
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
+    // Exemplo de mock para edição
+    const mockBarbeiro = {
+        nome: "Maicon Pablo Marcelino da Rocha",
+        email: "maiconpablo588@gmail.com",
+        telefone: "(84) 99169-9246",
+        descricao: "Especialista em cortes modernos.",
+        cep: "59200-000",
+        logradouro: "Rua Exemplo",
+        numero: "123",
+        complemento: "",
+        bairro: "Centro",
+        cidade: "Nova Cruz",
+        uf: "RN"
+    };
+    
+    preencherFormulario(mockBarbeiro);
 }
 
-function salvarEstado() {
-    localStorage.setItem("barber", JSON.stringify(barbers));
-    if (typeof sincronizarPainel === "function") sincronizarPainel();
-}
-
-function moverItem(tipo, id, direcao) {
-    if (tipo !== 'barber') return;
-    const indexAtual = barbers.findIndex(p => p.id === id);
-    if (indexAtual === -1) return;
-
-    const novoIndex = indexAtual + direcao;
-    if (novoIndex < 0 || novoIndex >= barbers.length) return;
-
-    const temp = barbers[indexAtual];
-    barbers[indexAtual] = barbers[novoIndex];
-    barbers[novoIndex] = temp;
-
-    salvarEstado();
-    renderizarCardsProfissionais();
+function preencherFormulario(dados) {
+    els.nome.value = dados.nome || "";
+    els.email.value = dados.email || "";
+    els.telefone.value = dados.telefone || "";
+    els.descricao.value = dados.descricao || "";
+    els.cep.value = dados.cep || "";
+    els.logradouro.value = dados.logradouro || "";
+    els.numero.value = dados.numero || "";
+    els.complemento.value = dados.complemento || "";
+    els.bairro.value = dados.bairro || "";
+    els.cidade.value = dados.cidade || "";
+    els.uf.value = dados.uf || "";
 }
 
 /* ============================================================
-   PREVIEW DA FOTO
+   NAVEGAÇÃO DO WIZARD
    ============================================================ */
-function configurarPreviewFoto() {
-    if (!els.fotoInput) return;
-    els.fotoInput.addEventListener('change', async (e) => {
-        const fotoBase64 = await lerArquivoBase64(e.target);
-        const label = e.target.closest('label');
+function alterarEtapa(direcao) {
+    if (direcao === 'next' && state.etapaAtual === 1) {
+        state.etapaAtual = 2;
+    } else if (direcao === 'prev' && state.etapaAtual === 2) {
+        state.etapaAtual = 1;
+    }
+    renderizarEtapa();
+}
 
-        if (fotoBase64) {
-            label.style.backgroundImage = `url(${fotoBase64})`;
-            label.style.backgroundSize = 'cover';
-            label.style.backgroundPosition = 'center';
-            const spans = label.querySelectorAll('span');
-            spans.forEach(span => span.style.opacity = '0');
+function renderizarEtapa() {
+    if (state.etapaAtual === 1) {
+        els.step1.classList.remove("hidden-step");
+        els.step2.classList.add("hidden-step");
+        
+        els.btnVoltar.classList.add("hidden-step");
+        els.btnProximo.classList.remove("hidden-step");
+        els.btnSubmit.classList.add("hidden-step");
+        
+        atualizarEstiloIndicador(els.ind1, true);
+        atualizarEstiloIndicador(els.ind2, false);
+    } else {
+        els.step1.classList.add("hidden-step");
+        els.step2.classList.remove("hidden-step");
+        
+        els.btnVoltar.classList.remove("hidden-step");
+        els.btnProximo.classList.add("hidden-step");
+        els.btnSubmit.classList.remove("hidden-step");
+
+        atualizarEstiloIndicador(els.ind1, true);
+        atualizarEstiloIndicador(els.ind2, true);
+    }
+}
+
+/* ============================================================
+   NAVEGAÇÃO DO WIZARD
+   ============================================================ */
+function alterarEtapa(direcao) {
+    if (direcao === 'next' && state.etapaAtual === 1) {
+        state.etapaAtual = 2;
+    } else if (direcao === 'prev' && state.etapaAtual === 2) {
+        state.etapaAtual = 1;
+    }
+    renderizarEtapa();
+}
+
+function renderizarEtapa() {
+    if (state.etapaAtual === 1) {
+        els.step1.classList.remove("hidden-step");
+        els.step2.classList.add("hidden-step");
+        
+        els.btnVoltar.classList.add("hidden-step");
+        els.btnProximo.classList.remove("hidden-step");
+        els.btnSubmit.classList.add("hidden-step");
+    } else {
+        els.step1.classList.add("hidden-step");
+        els.step2.classList.remove("hidden-step");
+        
+        els.btnVoltar.classList.remove("hidden-step");
+        els.btnProximo.classList.add("hidden-step");
+        els.btnSubmit.classList.remove("hidden-step");
+    }
+
+    // Chama a função que gerencia as cores e o ícone do stepper
+    atualizarEstiloIndicador();
+}
+
+function atualizarEstiloIndicador() {
+    // Pegando os dois indicadores mapeados no 'els' do cadastro
+    const itens = [els.ind1, els.ind2];
+
+    itens.forEach((item, index) => {
+        const numero = index + 1;
+        // Pega as tags <span> de dentro da <li>
+        const ciclo = item.querySelector("span:first-of-type");
+        const label = item.querySelector("span:last-of-type");
+
+        if (numero < state.etapaAtual) {
+            // Etapa Concluída (Dourado com check)
+            item.classList.remove("before:bg-brand-border", "before:bg-[#4a473f]");
+            item.classList.add("before:bg-brand-gold");
+
+            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-brand-gold border border-brand-gold flex items-center justify-center text-[13px] font-bold text-black transition-all";
+            ciclo.textContent = "✓";
+
+            label.className = "text-brand-gold font-medium transition-all";
+
+        } else if (numero === state.etapaAtual) {
+            // Etapa Atual (Dourado com número)
+            item.classList.remove("before:bg-brand-border", "before:bg-[#4a473f]");
+            item.classList.add("before:bg-brand-gold");
+
+            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-brand-gold border border-brand-gold flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all";
+            ciclo.textContent = numero;
+
+            label.className = "text-white font-bold transition-all";
+
         } else {
-            label.style.backgroundImage = 'none';
-            const spans = label.querySelectorAll('span');
-            spans.forEach(span => span.style.opacity = '1');
+            // Etapa Futura (Desativada)
+            item.classList.remove("before:bg-brand-gold");
+            item.classList.add("before:bg-brand-border");
+
+            ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-medium text-brand-muted transition-all";
+            ciclo.textContent = numero;
+
+            label.className = "text-brand-muted transition-all";
         }
     });
 }
 
 /* ============================================================
-   MÁSCARAS
+   EVENTOS & MÁSCARAS
    ============================================================ */
-function aplicarMascaraTelefone() {
-    if (!els.telefone) return;
-    els.telefone.addEventListener("input", (event) => {
-        let value = event.target.value.replace(/\D/g, "").slice(0, 11);
-        value = value.replace(/^(\d{2})(\d)/, "($1) $2");
-        value = value.replace(/(\d{4,5})(\d{4})$/, "$1-$2");
-        event.target.value = value;
+function configurarEventos() {
+    els.btnProximo.addEventListener("click", () => alterarEtapa('next'));
+    els.btnVoltar.addEventListener("click", () => alterarEtapa('prev'));
+    
+    els.btnSubmit.addEventListener("click", (e) => {
+        e.preventDefault();
+        salvarDados();
+    });
+
+    els.fotoInput.addEventListener('change', async (e) => {
+        const foto = await lerArquivoBase64(e.target);
+        const label = e.target.closest('label');
+        
+        if (foto) {
+            state.fotoBase64 = foto;
+            label.style.backgroundImage = `url(${foto})`;
+            label.style.backgroundSize = 'cover';
+            label.style.backgroundPosition = 'center';
+            label.querySelectorAll('span').forEach(span => span.style.opacity = '0');
+        }
     });
 }
 
-function aplicarMascaraCPF() {
-    if (!els.cpf) return;
+function aplicarMascaras() {
+    els.telefone.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, "").slice(0, 11);
+        value = value.replace(/^(\d{2})(\d)/, "($1) $2").replace(/(\d{4,5})(\d{4})$/, "$1-$2");
+        e.target.value = value;
+    });
+
     els.cpf.addEventListener("input", (e) => {
-        let value = e.target.value.replace(/\D/g, "");
-        if (value.length > 11) value = value.slice(0, 11);
-        value = value.replace(/(\d{3})(\d)/, "$1.$2");
-        value = value.replace(/(\d{3})(\d)/, "$1.$2");
-        value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        let value = e.target.value.replace(/\D/g, "").slice(0, 11);
+        value = value.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        e.target.value = value;
+    });
+
+    els.cep.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, "").slice(0, 8);
+        value = value.replace(/^(\d{5})(\d)/, "$1-$2");
         e.target.value = value;
     });
 }
 
-/* ============================================================
-   BARBEIROS (CRUD)
-   ============================================================ */
-async function addBarber() {
-    const cpf = els.cpf?.value.trim();
-    const nome = els.nome?.value.trim();
-    const email = els.email?.value.trim();
-    const telefone = els.telefone?.value.trim();
-    const descricao = els.descricao?.value.trim() || "";
-    
-    // Campos de endereço
-    const cep = els.cep?.value.trim() || "";
-    const logradouro = els.logradouro?.value.trim() || "";
-    const numero = els.numero?.value.trim() || "";
-    const complemento = els.complemento?.value.trim() || "";
-    const bairro = els.bairro?.value.trim() || "";
-    const cidade = els.cidade?.value.trim() || "";
-    const uf = els.uf?.value.trim() || "";
+function lerArquivoBase64(input) {
+    return new Promise((resolve) => {
+        if (!input || !input.files || !input.files[0]) return resolve(null);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            resolve(e.target.result); // Retorna a string Base64 da imagem
+        };
+        reader.readAsDataURL(input.files[0]);
+    });
+}
 
-    if (!cpf) { mostrarAviso("Informe o CPF do barbeiro"); return; }
-    if (!nome) { mostrarAviso("Informe o nome do barbeiro"); return; }
-    if (!email) { mostrarAviso("Informe o e-mail do barbeiro"); return; }
-    if (!telefone) { mostrarAviso("Informe o telefone do barbeiro"); return; }
-
-    const foto = await lerArquivoBase64(els.fotoInput);
-
-    const barber = {
-        id: typeof gerarIdUnico === "function" ? gerarIdUnico() : Date.now().toString(),
-        cpf, nome, email, telefone, descricao, foto,
-        endereco: { cep, logradouro, numero, complemento, bairro, cidade, uf }
+function salvarDados() {
+    const payload = {
+        cpf: els.cpf.value,
+        nome: els.nome.value,
+        email: els.email.value,
+        telefone: els.telefone.value,
+        descricao: els.descricao.value,
+        foto: state.fotoBase64,
+        endereco: {
+            cep: els.cep.value,
+            logradouro: els.logradouro.value,
+            numero: els.numero.value,
+            complemento: els.complemento.value,
+            bairro: els.bairro.value,
+            cidade: els.cidade.value,
+            uf: els.uf.value
+        }
     };
 
-    barbers.push(barber);
-    salvarEstado();
-
-    // Limpeza dos campos
-    [els.cpf, els.nome, els.email, els.telefone, els.descricao, els.cep, els.logradouro, els.numero, els.complemento, els.bairro, els.cidade, els.uf].forEach(input => {
-        if (input) input.value = "";
-    });
-    
-    // Limpa o preview da imagem
-    if (els.fotoInput) {
-        els.fotoInput.value = "";
-        const label = els.fotoInput.closest('label');
-        if (label) {
-            label.style.backgroundImage = 'none';
-            label.querySelectorAll('span').forEach(span => span.style.opacity = '1');
-        }
-    }
-
-    renderizarCardsProfissionais();
+    console.log(state.isEditing ? "Atualizar:" : "Cadastrar:", payload);
+    alert(state.isEditing ? "Barbeiro Atualizado!" : "Barbeiro Cadastrado!");
 }
 
-function renderizarCardsProfissionais(lista = barbers) {
-    if (!els.container) return;
-
-    if (lista.length === 0) {
-        els.container.innerHTML = `<p class="col-span-full text-center text-[14px] text-[#888780] py-6" id="vazia-profissionais">Nenhum barbeiro adicionado ainda.</p>`;
-        if (els.vazia) els.vazia.classList.remove("hidden");
-        return;
-    }
-
-    if (els.vazia) els.vazia.classList.add("hidden");
-
-    els.container.innerHTML = lista.map((p) => `
-        <div class="relative flex flex-col items-center bg-white dark:bg-zinc-800 rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-100 dark:border-zinc-700/60 transition-all duration-200" data-id="${p.id}">
-            <div class="absolute top-3 right-3 flex gap-1">
-                <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-600 dark:text-zinc-300 text-xs transition-colors" onclick="moverItem('barber', '${p.id}', -1)" title="Subir">▲</button>
-                <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-600 dark:text-zinc-300 text-xs transition-colors" onclick="moverItem('barber', '${p.id}', 1)" title="Descer">▼</button>
-            </div>
-
-            ${p.foto
-                ? `<img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${p.foto}" alt="${p.nome}">`
-                : `<div class="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 flex items-center justify-center text-3xl mb-3 text-zinc-400">👤</div>`
-            }
-
-            <h3 class="font-bold text-zinc-800 dark:text-zinc-100 text-base mb-1 text-center">${p.nome}</h3>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 text-center mb-3 line-clamp-2">${p.descricao || 'Sem descrição'}</p>
-
-            <div class="flex flex-col gap-1 w-full text-xs text-zinc-500 dark:text-zinc-400 mb-4 bg-zinc-50 dark:bg-zinc-800/50 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-700/40">
-                <span class="truncate"><strong>E-mail:</strong> ${p.email || '-'}</span>
-                <span><strong>Tel:</strong> ${p.telefone || '-'}</span>
-                ${p.endereco?.cidade ? `<span class="truncate mt-1 border-t border-zinc-200 dark:border-zinc-700 pt-1"><strong>End:</strong> ${p.endereco.cidade}-${p.endereco.uf}</span>` : ''}
-            </div>
-
-            <div class="flex gap-2 w-full mt-auto pt-3 border-t border-zinc-100 dark:border-zinc-700/50">
-                <button class="flex-1 py-2 px-3 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-700 dark:text-zinc-200 text-xs font-semibold rounded-xl transition-colors" onclick="editBarber('${p.id}')">Editar</button>
-                <button class="flex-1 py-2 px-3 bg-red-50 hover:bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-xs font-semibold rounded-xl transition-colors" onclick="removeBarber('${p.id}')">Remover</button>
-            </div>
-        </div>
-    `).join("");
-}
-
-function removeBarber(id) {
-    barbers = barbers.filter(p => p.id !== id);
-    salvarEstado();
-    renderizarCardsProfissionais();
-}
-
-function editBarber(id) {
-    const p = barbers.find(p => p.id === id);
-    if (!p) return;
-    const novoNome = prompt("Nome do barbeiro:", p.nome);
-    if (novoNome !== null && novoNome.trim()) p.nome = novoNome.trim();
-    const novaDesc = prompt("Descrição:", p.descricao || "");
-    if (novaDesc !== null) p.descricao = novaDesc.trim();
-    salvarEstado();
-    renderizarCardsProfissionais();
-}
-
-/* ============================================================
-   INICIALIZAÇÃO
-   ============================================================ */
-renderizarCardsProfissionais();
-configurarPreviewFoto();
-aplicarMascaraTelefone();
-aplicarMascaraCPF();
+init();
