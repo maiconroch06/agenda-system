@@ -14,7 +14,7 @@ def clientSource():
 def clientLoginPage():
     # Verificando o tipo de request GET
     if session.get("dados_cliente") is None:
-        return render_template('pages/client/client-login.html')
+        return render_template('pages/cliente/cliente-login.html')
     
     return redirect(url_for('cliente.clientAgendamentoServicos'))
 
@@ -35,7 +35,7 @@ def logout():
 @cliente.route('/cadastro', methods=["GET"])
 def clientRegisterPage():  
     if session.get("dados_cliente") is None:
-        return render_template('pages/client/client-register.html')
+        return render_template('pages/cliente/cliente-cadastro.html')
     
     return redirect(url_for('cliente.clientAgendamentoServicos'))
    
@@ -59,11 +59,11 @@ def clientRegister():
    
 @cliente.route('/agendamento/servicos', methods=['GET','POST'])
 def clientAgendamentoServicos():
-   return render_template('pages/client/scheduling-rp.html')
+   return render_template('pages/cliente/agendamento-rp.html')
 
 @cliente.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():
-   return render_template('pages/client/scheduling-rp.html')
+   return render_template('pages/client/agendamento-rp.html')
 
 @cliente.before_request
 def authentication():

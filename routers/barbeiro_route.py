@@ -8,8 +8,8 @@ def barberSource():
 
 @barbeiro.route('/login')
 def barberLogin():
-    return render_template('pages/barber/barber-login.html')
+    return render_template('pages/barbeiro/barbeiro-login.html')
 
 @barbeiro.route('/painel')
 def barberPanel():
-    return render_template('pages/barber/barber-panel-rp.html')
+    return render_template('pages/barbeiro/barbeiro-panel-rp.html')
