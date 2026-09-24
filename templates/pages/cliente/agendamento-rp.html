@@ -1,120 +1,96 @@
-
 <!DOCTYPE html>
 <!-- <html lang="pt-br" xmlns:th="http://www.thymeleaf.org"> -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia - Agendamentos</title>
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
-<body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-[#0f6e56] selection:text-white">
+<body
+    class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-[#0f6e56] selection:text-white">
 
     <!-- HEADER -->
-    <header class="sticky top-0 z-30 flex items-center justify-between px-5 py-3 bg-[#232220] border-b border-[#38362f]">
+    <header
+        class="sticky top-0 z-30 flex items-center justify-between px-5 py-3 bg-[#232220] border-b border-[#38362f]">
 
         <!-- LOGO -->
-        {% include "componetization/logo/logo-top-horizontal.html" %}
+        {% include "componetizacao/logo/logo-top-horizontal.html" %}
 
 
         <!-- ÁREA DO USUÁRIO -->
         <!-- ÁREA DO USUÁRIO -->
         <div class="flex items-center  justify-center">
 
-        <!-- BOTÃO DO USUÁRIO -->
-        <button
-            id="btn-usuario"
-            type="button"
-            class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden hover:bg-[#2c2b27] transition-all cursor-pointer"
-        >
+            <!-- BOTÃO DO USUÁRIO -->
+            <button id="btn-usuario" type="button"
+                class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden hover:bg-[#2c2b27] transition-all cursor-pointer">
 
-            <!-- FOTO DO USUÁRIO -->
-            {% if session.get('dados_cliente') and session.get('dados_cliente').get('foto_path') %}
+                <!-- FOTO DO USUÁRIO -->
+                {% if session.get('dados_cliente') and session.get('dados_cliente').get('foto_path') %}
 
-                <img
-                    src="{{ url_for('static', filename=session.get('dados_cliente')['foto_path']) }}"
-                    alt="Avatar"
+                <img src="{{ url_for('static', filename=session.get('dados_cliente')['foto_path']) }}" alt="Avatar"
                     class="w-full h-full object-cover">
 
-            {% else %}
+                {% else %}
 
                 <span class="text-sm font-bold text-[#f1efe8]">
                     {{ session.get('dados_cliente')['nome_completo'][0]|upper }}
                 </span>
 
-            {% endif %}
+                {% endif %}
 
-        </button>
+            </button>
 
-        <!-- DROPDOWN DO USUÁRIO -->
-        <div
-            id="dropdown-usuario"
-            hidden
-            class="absolute right-0 top-12 w-56 bg-[#232220] border border-[#38362f] rounded-xl shadow-2xl overflow-hidden z-50"
-        >
+            <!-- DROPDOWN DO USUÁRIO -->
+            <div id="dropdown-usuario" hidden
+                class="absolute right-0 top-12 w-56 bg-[#232220] border border-[#38362f] rounded-xl shadow-2xl overflow-hidden z-50">
 
-            <!-- DADOS DO USUÁRIO -->
-            <div class="px-4 py-3 border-b border-[#38362f]">
+                <!-- DADOS DO USUÁRIO -->
+                <div class="px-4 py-3 border-b border-[#38362f]">
 
-                <p class="text-sm font-medium text-[#f1efe8]">
-                    {% if session.get('dados_cliente') %}
+                    <p class="text-sm font-medium text-[#f1efe8]">
+                        {% if session.get('dados_cliente') %}
                         {{ session.get('dados_cliente')['nome_completo'] }}
-                    {% endif %}
-                </p>
+                        {% endif %}
+                    </p>
 
-                <p class="text-xs text-[#888780] mt-1">
-                    Minha conta
-                </p>
+                    <p class="text-xs text-[#888780] mt-1">
+                        Minha conta
+                    </p>
+
+                </div>
+
+                <!-- LISTAR SERVIÇOS -->
+                <button onclick="voltarParaAgendamento()" type="button"
+                    class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer">
+                    Exibir Cortes
+                </button>
+
+                <!-- MEUS AGENDAMENTOS -->
+                <button id="btn-toggle-historico" type="button"
+                    class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer">
+                    Meus Agendamentos
+                </button>
+
+                <!-- SAIR -->
+                <a href="/cliente/logout"
+                    class="block px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors">
+                    Sair
+                </a>
 
             </div>
 
-            <!-- LISTAR SERVIÇOS -->
-            <button
-                onclick="voltarParaAgendamento()"
-                type="button"
-                class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer"
-            >
-                Exibir Cortes
-            </button>
-
-            <!-- MEUS AGENDAMENTOS -->
-            <button
-                id="btn-toggle-historico"
-                type="button"
-                class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer"
-            >
-                Meus Agendamentos
-            </button>
-
-            <!-- SAIR -->
-            <a
-                href="/cliente/logout"
-                class="block px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
-            >
-                Sair
-            </a>
+            <!-- SETA -->
+            <svg id="seta-usuario" class="w-4 h-4 text-[#888780] transition-transform" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
 
         </div>
-
-        <!-- SETA -->
-        <svg
-            id="seta-usuario"
-            class="w-4 h-4 text-[#888780] transition-transform"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-        >
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-            />
-        </svg>
-
-    </div>          
 
     </header>
 
@@ -125,9 +101,11 @@
         <!-- STEPPER -->
         <ol class="flex mb-8 relative isolate" id="etapa">
 
-            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
+            <li
+                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
 
-                <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">
+                <span
+                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">
                     1
                 </span>
 
@@ -138,9 +116,11 @@
             </li>
 
 
-            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
+            <li
+                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
 
-                <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
+                <span
+                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
                     2
                 </span>
 
@@ -151,9 +131,11 @@
             </li>
 
 
-            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
+            <li
+                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
 
-                <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
+                <span
+                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
                     3
                 </span>
 
@@ -164,9 +146,11 @@
             </li>
 
 
-            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
+            <li
+                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
 
-                <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
+                <span
+                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
                     4
                 </span>
 
@@ -190,8 +174,7 @@
                 Selecione o serviço que você deseja agendar
             </p>
 
-            <div
-                id="lista-servico"
+            <div id="lista-servico"
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
             </div>
 
@@ -209,8 +192,7 @@
                 Selecione quem irá realizar o seu atendimento
             </p>
 
-            <div
-                id="lista-profissionais"
+            <div id="lista-profissionais"
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
             </div>
 
@@ -228,14 +210,10 @@
                 Selecione um dia e depois escolha um horário disponível
             </p>
 
-            <div
-                class="flex gap-2.5 overflow-x-auto mb-6 pt-1.5 pb-2"
-                id="abas-dias">
+            <div class="flex gap-2.5 overflow-x-auto mb-6 pt-1.5 pb-2" id="abas-dias">
             </div>
 
-            <div
-                class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5 p-1"
-                id="grade-horarios">
+            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5 p-1" id="grade-horarios">
             </div>
 
         </section>
@@ -248,9 +226,7 @@
                 Confirme seu agendamento:
             </h1>
 
-            <div
-                class="bg-[#1c1c1c] border border-[#38362f] rounded-xl p-5 mb-6 shadow-md"
-                id="resumo">
+            <div class="bg-[#1c1c1c] border border-[#38362f] rounded-xl p-5 mb-6 shadow-md" id="resumo">
             </div>
 
         </section>
@@ -267,9 +243,7 @@
                 Consulte o histórico dos seus agendamentos anteriores
             </p>
 
-            <div
-                class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5"
-                id="lista-historico">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5" id="lista-historico">
             </div>
 
         </section>
@@ -280,7 +254,8 @@
 
             <div class="text-center py-12 flex flex-col items-center gap-3">
 
-                <div class="w-[64px] h-[64px] rounded-full bg-brand-gold border border-brand-gold text-[#000000] text-[30px] flex items-center justify-center">
+                <div
+                    class="w-[64px] h-[64px] rounded-full bg-brand-gold border border-brand-gold text-[#000000] text-[30px] flex items-center justify-center">
                     &check;
                 </div>
 
@@ -288,9 +263,7 @@
                     Agendamento confirmado!
                 </h1>
 
-                <p
-                    class="text-[14px] text-[#888780] mb-2"
-                    id="sucesso-texto">
+                <p class="text-[14px] text-[#888780] mb-2" id="sucesso-texto">
                 </p>
 
 
@@ -313,11 +286,8 @@
 
 
     <!-- MODAL DETALHES DO HISTÓRICO -->
-    <div
-        id="modal-historico"
-        hidden
-        class="fixed inset-0 w-screen h-screen bg-black/70 flex items-center justify-center z-[100]"
-    >
+    <div id="modal-historico" hidden
+        class="fixed inset-0 w-screen h-screen bg-black/70 flex items-center justify-center z-[100]">
 
         <div class="bg-[#161513] border border-[#4a473f] rounded-[10px] w-full max-w-[450px] p-6 shadow-2xl mx-4">
 
@@ -329,16 +299,13 @@
 
                 <button
                     class="bg-transparent border-0 text-[#888780] text-[24px] cursor-pointer leading-none hover:text-[#f1efe8]"
-                    onclick="fecharModalHistorico()"
-                >
+                    onclick="fecharModalHistorico()">
                     &times;
                 </button>
 
             </div>
 
-            <div
-                class="bg-[#1c1c1c] border border-[#38362f] rounded-xl p-4 mb-5"
-                id="resumo-modal-conteudo">
+            <div class="bg-[#1c1c1c] border border-[#38362f] rounded-xl p-4 mb-5" id="resumo-modal-conteudo">
             </div>
 
         </div>
@@ -347,22 +314,16 @@
 
 
     <!-- NAVEGAÇÃO FIXA INFERIOR -->
-    <nav
-        id="nav-etapa"
-        class="fixed bottom-0 left-0 right-0 flex justify-between gap-3 p-3 px-4 bg-[#232220] border-t border-[#38362f] z-20"
-    >
+    <nav id="nav-etapa"
+        class="fixed bottom-0 left-0 right-0 flex justify-between gap-3 p-3 px-4 bg-[#232220] border-t border-[#38362f] z-20">
 
-        <button
-            id="btn-voltar"
-            class="w-full sm:flex-1 h-11 rounded-lg border border-brand-border bg-transparent text-gray-300 text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-[#111215] hover:text-white active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
-        >
+        <button id="btn-voltar"
+            class="w-full sm:flex-1 h-11 rounded-lg border border-brand-border bg-transparent text-gray-300 text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-[#111215] hover:text-white active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed">
             Voltar
         </button>
 
-        <button
-            id="btn-continuar"
-            class="w-full sm:flex-1 h-11 rounded-lg bg-brand-gold hover:bg-brand-gold-hover text-black text-sm font-bold cursor-pointer transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
-        >
+        <button id="btn-continuar"
+            class="w-full sm:flex-1 h-11 rounded-lg bg-brand-gold hover:bg-brand-gold-hover text-black text-sm font-bold cursor-pointer transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed">
             Continuar
         </button>
 
@@ -370,10 +331,8 @@
 
 
     <!-- TOAST NOTIFICAÇÃO -->
-    <div
-        class="fixed bottom-[80px] left-1/2 -translate-x-1/2 translate-y-[10px] bg-[#f1efe8] text-[#161513] px-[18px] py-[10px] rounded-[10px] text-[13px] opacity-0 pointer-events-none transition-all duration-200 z-[100] whitespace-nowrap"
-        id="aviso"
-    ></div>
+    <div class="fixed bottom-[80px] left-1/2 -translate-x-1/2 translate-y-[10px] bg-[#f1efe8] text-[#161513] px-[18px] py-[10px] rounded-[10px] text-[13px] opacity-0 pointer-events-none transition-all duration-200 z-[100] whitespace-nowrap"
+        id="aviso"></div>
 
 
     <!-- JAVASCRIPT -->
@@ -428,5 +387,5 @@
     </script>
 
 </body>
-</html>
 
+</html>
