@@ -1,6 +1,6 @@
 from database import db
 
-class BarberShopDaysWeek(db.Model):
+class BarbeariaDiasSemana(db.Model):
     __tablename__ = 'barbearia_dias_da_semana'
 
     # Chave Primária Auto-incremental

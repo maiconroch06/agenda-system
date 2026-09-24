@@ -1,7 +1,7 @@
 from database import db
 from datetime import datetime, timezone
 
-class Scheduling(db.Model):
+class Agendamento(db.Model):
     __tablename__ = 'agendamento'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

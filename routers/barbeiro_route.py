@@ -1,15 +1,15 @@
 from flask import Blueprint, render_template, redirect, url_for
 
-barber = Blueprint('barber', __name__, template_folder='templates')
+barbeiro = Blueprint('barbeiro', __name__, template_folder='templates')
 
-@barber.route('/')
+@barbeiro.route('/')
 def barberSource():
     return redirect('/')
 
-@barber.route('/login')
+@barbeiro.route('/login')
 def barberLogin():
     return render_template('pages/barber/barber-login.html')
 
-@barber.route('/painel')
+@barbeiro.route('/painel')
 def barberPanel():
     return render_template('pages/barber/barber-panel-rp.html')

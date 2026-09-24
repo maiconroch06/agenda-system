@@ -1,46 +1,57 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request
-from controllers.authentication_manager_controller import AuthenticationManager
+from controllers.autenticador_gestor_controller import AutenticadorGestor
 
-manager = Blueprint('gestor', __name__, template_folder='templates')
+gestor = Blueprint('gestor', __name__, template_folder='templates')
 
-@manager.route('/')
+@gestor.route('/')
 def managerSource():
     return redirect('/')
 
-@manager.route('/cadastro/barbeiro')
+@gestor.route('/cadastro/barbeiro', methods=['GET'])
 def registerEmployee():
     return render_template('pages/manager/manage-barber-rp.html')
 
-@manager.route('/editar/barbeiro')
+@gestor.route('/cadastro/barbeiro', methods=['POST'])
+def validateEmployee():
+    photo = request.form.get("barber-photo")
+    cpf = request.form.get("barber-cpf")
+    email = request.form.get("barber-email")
+    name = request.form.get("barber-name")
+    telephone = request.form.get("barber-telephone")
+    address = request.form.get("barber-address")
+    description = request.form.get("barber-description")
+    return AutenticadorGestor.cadastrarBarbeiro(photo, cpf, name, email, telephone, address, description)
+
+@gestor.route('/editar/barbeiro')
 def managerEmployee():
     return render_template('pages/manager/manage-barber-rp.html')
 
-@manager.route('/login', methods=['GET'])
+@gestor.route('/login', methods=['GET'])
 def managerLoginPage():
     if session.get('dados_gestor') is None:
         return render_template('pages/manager/manager-login.html')
         
     return redirect(url_for('gestor.managerPanel'))
 
-@manager.route('/login', methods=["POST"])
+@gestor.route('/login', methods=["POST"])
 def managerLogin():
     email_digitado = request.form.get('manager-email-2')
     senha_digitada =request.form.get('manager-password')
-    return AuthenticationManager.login(email_digitado,senha_digitada)
+    return AutenticadorGestor.login(email_digitado,senha_digitada)
 
-@manager.route('/painel', methods=['POST','GET'])
+@gestor.route('/painel', methods=['POST','GET'])
 def managerPanel():
     return render_template('pages/manager/manager-panel-rp.html')
 
 
-@manager.route('/logout', methods=['POST','GET'])
+@gestor.route('/logout', methods=['POST','GET'])
 def managerLogout():
     session.clear()
     return redirect('/')
 
 
 
-@manager.before_request
+@gestor.before_request
 def authentication():
     
     #Varifica se o cliente tem sessão

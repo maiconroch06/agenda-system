@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from database import db
 
-class BarberShop(db.Model):
+class Barbearia(db.Model):
     __tablename__ = 'barbearias'
 
     # Chave Primária (CNPJ de 14 caracteres limpos)
@@ -39,7 +39,7 @@ class BarberShop(db.Model):
     # chamar o método pela própria classe
     # cls é uma convenção do Python que representa a própria classe
     @classmethod
-    def insertDefualtBarbearia(cls, id_gestor, id_endereco:int):
+    def inserirBarbeariaPadrao(cls, id_gestor, id_endereco:int):
         
         barber_shop = db.session.scalars(db.select(cls)).first()
         

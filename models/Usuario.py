@@ -2,7 +2,7 @@ from database import db
 from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash
 
-class User(db.Model):
+class Usuario(db.Model):
     __tablename__ = 'usuarios'
     
     # 1. Mapeamento das Colunas no MySQL (Sem CPF)
@@ -19,8 +19,8 @@ class User(db.Model):
     # Correto: apontando para id_endereco
     endereco_id = db.Column(db.Integer, db.ForeignKey('enderecos.id_endereco'), nullable=True)
 
-    # Relacionamento virtual apontando para a classe Address
-    enderecos = db.relationship('Address', backref='usuarios', lazy=True)
+    # Relacionamento virtual apontando para a classe Endereco
+    enderecos = db.relationship('Endereco', backref='usuarios', lazy=True)
 
     # 2. Construtor Ajustado para os dados do formulário (Sem CPF)
     def __init__(self, nome_completo, telefone, email, senha, foto, id_endereco):
@@ -115,13 +115,13 @@ class User(db.Model):
     # chamar o método pela própria classe
     # cls é uma convenção do Python que representa a própria classe
     @classmethod
-    def insertUserGestor(cls, id_endereco_gestor:int):
+    def inserirUsuarioGestor(cls, id_endereco_gestor:int):
         
-        user_manager = db.session.scalars(db.select(cls)).first()
+        usuario_gestor = db.session.scalars(db.select(cls)).first()
         
-        if  user_manager is None:
+        if  usuario_gestor is None:
 
-            user_manager = cls(
+            usuario_gestor = cls(
                 nome_completo = "Samuel Maicon da silva",
                 telefone = "84999999999",
                 email = "samuelmaicon.gestor@gmail.com",
@@ -131,7 +131,7 @@ class User(db.Model):
                 
                 )
 
-            db.session.add(user_manager)
+            db.session.add(usuario_gestor)
             db.session.commit()
                 
-        return user_manager.id
+        return usuario_gestor.id

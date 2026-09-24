@@ -1,6 +1,6 @@
 from database import db
 
-class DaysWeek(db.Model):
+class DiasSemana(db.Model):
     __tablename__ = 'dias_da_semana'
 
     # Chave Primária

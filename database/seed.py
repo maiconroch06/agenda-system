@@ -1,12 +1,12 @@
-from models.Address import Address
-from models.BarberShop import BarberShop
-from models.User import User
+from models.Endereco import Endereco
+from models.Barbearia import Barbearia
+from models.Usuario import Usuario
 
 def initialize():
     
     try:
-        id_endereco = Address.insertDefaultAdress()
-        id_gestor = User.insertUserGestor(id_endereco)
-        BarberShop.insertDefualtBarbearia(id_gestor,id_endereco) 
+        id_endereco = Endereco.inserirEnderecoPadrao()
+        id_gestor = Usuario.inserirUsuarioGestor(id_endereco)
+        Barbearia.inserirBarbeariaPadrao(id_gestor,id_endereco) 
     except Exception as erro :
         print(erro + " Erro ao tentar se comunicar com o banco de dados")

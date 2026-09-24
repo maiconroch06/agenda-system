@@ -1,6 +1,6 @@
 from database import db
 
-class BarberHasServicos(db.Model):
+class BarbeiroServico(db.Model):
     __tablename__ = 'barbeiro_has_Servicos'
 
     # Chaves Primárias Compostas e Chaves Estrangeiras

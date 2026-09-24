@@ -1,8 +1,8 @@
 from database import db
-from .BarberShop import BarberShop
+from .Barbearia import Barbearia
 
 
-class Client(db.Model):
+class Cliente(db.Model):
     __tablename__ = 'clientes'
 
     # O parêntese do ForeignKey agora fecha DEPOIS do ondelete/onupdate
@@ -22,7 +22,7 @@ class Client(db.Model):
 
     # 2. Construtor para salvar na tabela clientes
     def __init__(self, cliente_id:int):
-            self.barbearia_cnpj = BarberShop.getCNPJ()
+            self.barbearia_cnpj = Barbearia.getCNPJ()
             self.cliente_id = cliente_id 
 
 

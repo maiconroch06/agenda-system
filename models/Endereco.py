@@ -1,6 +1,6 @@
 from database import db
 
-class Address(db.Model):
+class Endereco(db.Model):
     __tablename__ = 'enderecos'
 
     # Chave Primária e Configurações de Identificação
@@ -38,12 +38,12 @@ class Address(db.Model):
         }
 
     @classmethod
-    def insertDefaultAdress(cls):
-        adress_default = db.session.scalars(db.select(cls)).first()
+    def inserirEnderecoPadrao(cls):
+        endereco_padrao = db.session.scalars(db.select(cls)).first()
         
-        if adress_default is None:
+        if endereco_padrao is None:
 
-            adress_default = cls(
+            endereco_padrao = cls(
                 cep = "59215-000",
                 cidade = "Nova Cruz",
                 numero = 55,
@@ -53,7 +53,7 @@ class Address(db.Model):
                 complemento = None
                     )
 
-            db.session.add(adress_default)
+            db.session.add(endereco_padrao)
             db.session.commit()
                 
-        return adress_default.id_endereco
+        return endereco_padrao.id_endereco

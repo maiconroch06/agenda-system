@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from database import db
 
-class Barber(db.Model):
+class Barbeiro(db.Model):
     __tablename__ = 'barbeiros'
 
     # Chaves Primárias Compostas e Chaves Estrangeiras Simples

@@ -1,6 +1,6 @@
 from database import db
 
-class AgendaBarberTime(db.Model):
+class AgendaBarbeiro(db.Model):
     __tablename__ = 'agenda_barbeiro_horarios'
 
     # Chave Primária Auto-incremental

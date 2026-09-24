@@ -31,7 +31,14 @@
             <h1 class="text-center text-2xl font-medium mb-1.5">Cadastrar Barbeiros</h1>
             <p class="text-center text-[14px] text-[#888780] mb-6">Adicione os barbeiros que trabalham na empresa</p>
 
-            <form id="form-profissional" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-5 mb-5" novalidate>
+            {% if session.get('erro') %}
+                <div class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
+                    {{ session.pop('erro')|replace('\n', '<br>')|safe }}
+                </div>
+            {% endif %}
+            
+            <form id="form-profissional" action="/gestor/cadastro/barbeiro" method="post" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-5 mb-5" novalidate>
+                <!-- Mensagem de erros -->
                 <div class="flex flex-col items-center justify-center gap-2 mb-6 col-span-full">
                     <span class="text-[13px] font-medium text-[#888780]">Foto do Barbeiro</span>
                     
@@ -42,36 +49,36 @@
                         <span class="text-[11px] text-[#888780] group-hover:text-[#9fe1cb]">Upload</span>
                         
                         <!-- O input real fica oculto (classe 'hidden') -->
-                        <input type="file" id="pro-foto" accept="image/*" class="hidden">
+                        <input type="file" name="barber-photo" id="pro-foto" accept="image/*" class="hidden">
                     </label>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div class="flex flex-col gap-1.5">
                         <label for="pro-cpf" class="text-[13px] font-medium text-[#888780]">CPF*</label>
-                        <input type="text" id="pro-cpf" placeholder="000.000.000-00" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                        <input type="text" name="barber-cpf" id="pro-cpf" placeholder="000.000.000-00" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="pro-nome" class="text-[13px] font-medium text-[#888780]">Nome*</label>
-                        <input type="text" id="pro-nome" placeholder="Nome do barbeiro" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                        <input type="text" name="barber-name" id="pro-nome" placeholder="Nome do barbeiro" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="pro-email" class="text-[13px] font-medium text-[#888780]">Email*</label>
-                        <input type="text" id="pro-email" placeholder="barbeiro@gmail.com" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                        <input type="text" name="barber-email" id="pro-email" placeholder="barbeiro@gmail.com" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="pro-tel" class="text-[13px] font-medium text-[#888780]">Telefone*</label>
-                        <input type="text" id="pro-telefone" placeholder="(00) 00000-0000" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                        <input type="text" name="barber-telephone" id="pro-telefone" placeholder="(00) 00000-0000" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="pro-endereco" class="text-[13px] font-medium text-[#888780]">Endereco*</label>
-                        <input type="text" id="pro-endereco" placeholder="Lagrouro, Número, Complemento, Bairro, Cidade e UF - CEP" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                        <input type="text" name="barber-address" id="pro-endereco" placeholder="Lagrouro, Número, Complemento, Bairro, Cidade e UF - CEP" autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1.5">
                         <label for="pro-descricao" class="text-[13px] font-medium text-[#888780]">Descricao</label>
-                        <input type="text" id="pro-descricao" placeholder="Barbeiro experiente em..." autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
+                        <input type="text" name="barber-description" id="pro-descricao" placeholder="Barbeiro experiente em..." autocomplete="off" class="h-11 px-3.5 rounded-[10px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[15px] focus:outline-none focus:border-[#0f6e56] focus:ring-3 focus:ring-[#04342c]">
                     </div>
                 </div>
-                <button type="button" class="w-full sm:w-auto h-10 px-4 rounded-[10px] border border-[#4a473f] bg-transparent text-[#f1efe8] text-[14px] font-medium hover:bg-[#2a2825] transition-colors" onclick="addBarber()">+ Adicionar barbeiro</button>
+                <button type="submit" class="w-full sm:w-auto h-10 px-4 rounded-[10px] border border-[#4a473f] bg-transparent text-[#f1efe8] text-[14px] font-medium hover:bg-[#2a2825] transition-colors" onclick="addBarber()">+ Adicionar barbeiro</button>
             </form>
             
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 mt-2" id="lista-cards-profissionais">

@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from database import db
 
-class Servico(db.Model):
+class Servicos(db.Model):
     __tablename__ = 'servicos'
 
     # Chave Primária

@@ -1,16 +1,16 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
-from controllers.authentication_client_controller import AuthenticationUser
-from models import User
+from controllers.autenticador_cliente_controller import AutenticacaoCliente
+from models import Usuario
 
 
-client = Blueprint('cliente', __name__, template_folder='templates')
+cliente = Blueprint('cliente', __name__, template_folder='templates')
 
-@client.route('/')
+@cliente.route('/')
 def clientSource():
     #redireciona para a raiz do site novamente
     return redirect('/')
  
-@client.route('/login', methods=["GET"])
+@cliente.route('/login', methods=["GET"])
 def clientLoginPage():
     # Verificando o tipo de request GET
     if session.get("dados_cliente") is None:
@@ -18,35 +18,35 @@ def clientLoginPage():
     
     return redirect(url_for('cliente.clientAgendamentoServicos'))
 
-@client.route('/login', methods=["POST"])
+@cliente.route('/login', methods=["POST"])
 def clientLogin():   
     # Verificando o tipo de request POST
    if request.method == "POST":
         email_digitado = request.form.get('email')
         senha_digitada =request.form.get('senha')
-        return AuthenticationUser.login(email_digitado,senha_digitada)
+        return AutenticacaoCliente.login(email_digitado,senha_digitada)
         
 
-@client.route('/logout', methods=["GET","POSt"])
+@cliente.route('/logout', methods=["GET","POSt"])
 def logout():
     session.clear()
     return redirect('/')    
 
-@client.route('/cadastro', methods=["GET"])
+@cliente.route('/cadastro', methods=["GET"])
 def clientRegisterPage():  
     if session.get("dados_cliente") is None:
         return render_template('pages/client/client-register.html')
     
     return redirect(url_for('cliente.clientAgendamentoServicos'))
    
-@client.route('/cadastro', methods=["POST"])
+@cliente.route('/cadastro', methods=["POST"])
 def clientRegister():
     if  request.method == "POST":
         #COLOCAR A VALIDAÇÃO AQUI
               
         telefone_temp = ''.join(filter(str.isdigit,request.form.get('telefone')))
-        # Instancia o objeto User com os dados do formulário
-        usuario = User(
+        # Instancia o objeto Usuario com os dados do formulário
+        usuario = Usuario(
             nome_completo=request.form.get('nome'),
             telefone=telefone_temp,
             email=request.form.get('email'),
@@ -54,18 +54,18 @@ def clientRegister():
             foto=request.files.get('foto').filename if request.files.get('foto') else None,
             id_endereco = None
         )
-        return AuthenticationUser.registerUser(usuario)
+        return AutenticacaoCliente.registrarCliente(usuario)
             
    
-@client.route('/agendamento/servicos', methods=['GET','POST'])
+@cliente.route('/agendamento/servicos', methods=['GET','POST'])
 def clientAgendamentoServicos():
    return render_template('pages/client/scheduling-rp.html')
 
-@client.route('/agendamentos', methods=['GET','POST'])
+@cliente.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():
    return render_template('pages/client/scheduling-rp.html')
 
-@client.before_request
+@cliente.before_request
 def authentication():
     
     if 'dados_gestor' in session:
