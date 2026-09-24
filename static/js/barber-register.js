@@ -145,48 +145,50 @@ async function addBarber() {
     const telefone = els.telefone?.value.trim();
     const descricao = els.descricao?.value.trim() || "";
     
-    // Campos de endereço
-    const cep = els.cep?.value.trim() || "";
-    const logradouro = els.logradouro?.value.trim() || "";
-    const numero = els.numero?.value.trim() || "";
-    const complemento = els.complemento?.value.trim() || "";
-    const bairro = els.bairro?.value.trim() || "";
-    const cidade = els.cidade?.value.trim() || "";
-    const uf = els.uf?.value.trim() || "";
+    if (!cpf) { mostrarAviso("Informe o CPF do barbeiro"); return false; }
+    if (!nome) { mostrarAviso("Informe o nome do barbeiro"); return false; }
+    if (!email) { mostrarAviso("Informe o e-mail do barbeiro"); return false; }
+    if (!telefone) { mostrarAviso("Informe o telefone do barbeiro"); return false; }
 
-    if (!cpf) { mostrarAviso("Informe o CPF do barbeiro"); return; }
-    if (!nome) { mostrarAviso("Informe o nome do barbeiro"); return; }
-    if (!email) { mostrarAviso("Informe o e-mail do barbeiro"); return; }
-    if (!telefone) { mostrarAviso("Informe o telefone do barbeiro"); return; }
-
-    const foto = await lerArquivoBase64(els.fotoInput);
+    // 1. Lê o arquivo selecionado no input
+    let foto = await lerArquivoBase64(els.fotoInput);
+    
+    // Se o usuário não enviou foto, define o caminho da imagem padrão
+    if (!foto) {
+        foto = "/static/assets/img/funcionarios/barbeiro_dois_maik.png";
+    }
 
     const barber = {
         id: typeof gerarIdUnico === "function" ? gerarIdUnico() : Date.now().toString(),
         cpf, nome, email, telefone, descricao, foto,
-        endereco: { cep, logradouro, numero, complemento, bairro, cidade, uf }
+        endereco: { logradouro: els.logradouro?.value.trim() || "" } 
     };
 
     barbers.push(barber);
     salvarEstado();
+    renderizarCardsProfissionais();
 
-    // Limpeza dos campos
-    [els.cpf, els.nome, els.email, els.telefone, els.descricao, els.cep, els.logradouro, els.numero, els.complemento, els.bairro, els.cidade, els.uf].forEach(input => {
-        if (input) input.value = "";
-    });
-    
-    // Limpa o preview da imagem
-    if (els.fotoInput) {
-        els.fotoInput.value = "";
-        const label = els.fotoInput.closest('label');
-        if (label) {
-            label.style.backgroundImage = 'none';
-            label.querySelectorAll('span').forEach(span => span.style.opacity = '1');
-        }
+    // ==========================================
+    // CRUCIAL: Injeta a string da foto dentro do formulário HTML
+    // ==========================================
+    const inputFotoOriginal = document.getElementById("pro-foto");
+    if (inputFotoOriginal) {
+        // Remove o "name" do input file antigo para ele não ir vazio para o Flask
+        inputFotoOriginal.removeAttribute("name");
+        
+        // Cria um input de texto oculto que vai carregar a String Base64 (ou a rota padrão)
+        const hiddenInput = document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.name = "barber-photo"; // O Flask vai ler esse nome
+        hiddenInput.value = foto;          // Atribui a string da imagem aqui
+        
+        // Adiciona este input oculto ao formulário antes do envio final
+        inputFotoOriginal.form.appendChild(hiddenInput);
     }
 
-    renderizarCardsProfissionais();
+    return true; 
 }
+
 
 function renderizarCardsProfissionais(lista = barbers) {
     if (!els.container) return;
@@ -244,6 +246,29 @@ function editBarber(id) {
     salvarEstado();
     renderizarCardsProfissionais();
 }
+
+// Intercepta o envio do formulário de forma correta
+document.getElementById("form-profissional")?.addEventListener("submit", async function(e) {
+    // 1. Previne o envio automático temporariamente para podermos processar o LocalStorage e a Imagem
+    e.preventDefault(); 
+    
+    // Guarda a referência real do formulário usando e.target
+    const formulario = e.target;
+    
+    // 2. Executa a função assíncrona para validar e salvar no LocalStorage
+    const validouESalvou = await addBarber();
+    
+    if (validouESalvou) {
+        // 3. CORRIGIDO: Dispara o envio nativo chamando o método direto no formulário
+        formulario.submit(); 
+    }
+});
+
+// Chame os inicializadores de máscara e preview na carga da página
+configurarPreviewFoto();
+aplicarMascaraCPF();
+aplicarMascaraTelefone();
+
 
 /* ============================================================
    INICIALIZAÇÃO

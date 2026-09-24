@@ -13,6 +13,7 @@ def registerEmployee():
 
 @gestor.route('/cadastro/barbeiro', methods=['POST'])
 def validateEmployee():
+    dados_completos = request.form
     photo = request.form.get("barber-photo")
     cpf = request.form.get("barber-cpf")
     email = request.form.get("barber-email")
@@ -20,6 +21,7 @@ def validateEmployee():
     telephone = request.form.get("barber-telephone")
     address = request.form.get("barber-address")
     description = request.form.get("barber-description")
+    print(dados_completos)
     return AutenticadorGestor.cadastrarBarbeiro(photo, cpf, name, email, telephone, address, description)
 
 @gestor.route('/editar/barbeiro')
