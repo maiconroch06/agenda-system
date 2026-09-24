@@ -9,7 +9,7 @@ def managerSource():
 
 @gestor.route('/cadastro/barbeiro', methods=['GET'])
 def registerEmployee():
-    return render_template('pages/manager/manage-barber-rp.html')
+    return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
 @gestor.route('/cadastro/barbeiro', methods=['POST'])
 def validateEmployee():
@@ -24,12 +24,12 @@ def validateEmployee():
 
 @gestor.route('/editar/barbeiro')
 def managerEmployee():
-    return render_template('pages/manager/manage-barber-rp.html')
+    return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
 @gestor.route('/login', methods=['GET'])
 def managerLoginPage():
     if session.get('dados_gestor') is None:
-        return render_template('pages/manager/manager-login.html')
+        return render_template('pages/gestor/gestor-login.html')
         
     return redirect(url_for('gestor.managerPanel'))
 
@@ -41,7 +41,7 @@ def managerLogin():
 
 @gestor.route('/painel', methods=['POST','GET'])
 def managerPanel():
-    return render_template('pages/manager/manager-panel-rp.html')
+    return render_template('pages/gestor/gestor-painel-dinamico-rp.html')
 
 
 @gestor.route('/logout', methods=['POST','GET'])

@@ -73,7 +73,7 @@ class Usuario(db.Model):
         """
             select *
             from clientes c join usuarios u 
-            on c.cliente_id = u.id where u.email = :email 
+            on c.cliente_id = u.id where u.email = :email
         """
             ),
             {"email":email}

@@ -8,4 +8,4 @@ def homePage():
 
 @publics.route('/tipo-usuario')
 def category():
-    return render_template('category-user.html')
+    return render_template('categoria-gestor-barbeiro.html')
