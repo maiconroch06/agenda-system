@@ -427,9 +427,6 @@
   .mb-1 {
     margin-bottom: var(--spacing);
   }
-  .mb-1\.5 {
-    margin-bottom: calc(var(--spacing) * 1.5);
-  }
   .mb-2 {
     margin-bottom: calc(var(--spacing) * 2);
   }
@@ -529,9 +526,6 @@
   .h-20 {
     height: calc(var(--spacing) * 20);
   }
-  .h-24 {
-    height: calc(var(--spacing) * 24);
-  }
   .h-28 {
     height: calc(var(--spacing) * 28);
   }
@@ -606,9 +600,6 @@
   }
   .w-20 {
     width: calc(var(--spacing) * 20);
-  }
-  .w-24 {
-    width: calc(var(--spacing) * 24);
   }
   .w-28 {
     width: calc(var(--spacing) * 28);
@@ -1962,6 +1953,9 @@
     .hover\:bg-\[\#e2dfd7\]:hover {
       background-color: #e2dfd7;
     }
+    .hover\:bg-\[\#f1efe8\]:hover {
+      background-color: #f1efe8;
+    }
     .hover\:bg-brand-gold:hover {
       background-color: var(--color-brand-gold);
     }
@@ -1981,6 +1975,9 @@
     }
     .hover\:bg-zinc-200:hover {
       background-color: var(--color-zinc-200);
+    }
+    .hover\:text-\[\#161513\]:hover {
+      color: #161513;
     }
     .hover\:text-\[\#f1efe8\]:hover {
       color: #f1efe8;
@@ -2042,10 +2039,6 @@
   }
   .focus\:ring-2:focus {
     --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .focus\:ring-3:focus {
-    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .focus\:ring-\[\#04342c\]:focus {

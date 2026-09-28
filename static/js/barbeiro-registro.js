@@ -43,6 +43,17 @@ const els = {
     // Títulos
     formTitle: document.getElementById("form-title"),
     formSubtitle: document.getElementById("form-subtitle"),
+
+    // Modal Resumo
+    modalOverlay: document.getElementById("overlay-resumo"),
+    modalResumo: document.getElementById("modal-resumo"),
+    rNome: document.getElementById("resumo-nome"),
+    rCpf: document.getElementById("resumo-cpf"),
+    rTelefone: document.getElementById("resumo-telefone"),
+    rEmail: document.getElementById("resumo-email"),
+    rLogradouro: document.getElementById("resumo-logradouro"),
+    rBairroCep: document.getElementById("resumo-bairro-cep"),
+    rCidadeUf: document.getElementById("resumo-cidade-uf"),
 };
 
 /* ============================================================
@@ -227,7 +238,44 @@ function lerArquivoBase64(input) {
     });
 }
 
+/* ============================================================
+   FUNÇÕES DO MODAL DE RESUMO
+   ============================================================ */
 function salvarDados() {
+    // Preenche o modal com os dados dos inputs do formulário
+    els.rNome.textContent = els.nome.value || "—";
+    els.rCpf.textContent = els.cpf.value || "—";
+    els.rTelefone.textContent = els.telefone.value || "—";
+    els.rEmail.textContent = els.email.value || "—";
+    
+    // Concatena endereço de forma organizada
+    const numero = els.numero.value ? `, ${els.numero.value}` : "";
+    els.rLogradouro.textContent = els.logradouro.value ? `${els.logradouro.value}${numero}` : "—";
+    
+    const cep = els.cep.value ? ` - CEP: ${els.cep.value}` : "";
+    els.rBairroCep.textContent = els.bairro.value ? `${els.bairro.value}${cep}` : "—";
+    
+    const uf = els.uf.value ? `/${els.uf.value.toUpperCase()}` : "";
+    els.rCidadeUf.textContent = els.cidade.value ? `${els.cidade.value}${uf}` : "—";
+
+    abrirModalResumo();
+}
+
+// Expõe as funções globalmente para os botões do HTML (onclick)
+window.abrirModalResumo = function() {
+    els.modalOverlay.classList.remove("hidden");
+    els.modalResumo.classList.remove("hidden");
+};
+
+window.fecharModalResumo = function() {
+    els.modalOverlay.classList.add("hidden");
+    els.modalResumo.classList.add("hidden");
+};
+
+window.finalizarCadastro = function() {
+    // Aqui você integra a chamada da API/backend para salvar os dados se necessário
+    // Exemplo de como poderia recolher o payload com os dados:
+    /*
     const payload = {
         cpf: els.cpf.value,
         nome: els.nome.value,
@@ -246,9 +294,25 @@ function salvarDados() {
             sequencia: els.sequencia.value
         }
     };
+    */
+    
+    // Redireciona para o painel de gestão
+    window.location.href = "/gestor/painel";
+};
 
-    console.log(state.isEditing ? "Atualizar:" : "Cadastrar:", payload);
-    alert(state.isEditing ? "Barbeiro Atualizado!" : "Barbeiro Cadastrado!");
-}
+window.novoCadastro = function() {
+    fecharModalResumo();
+    document.getElementById("form-profissional").reset(); // Limpa os dados do formulário
+    
+    // Redefine a imagem de perfil visualmente e no estado
+    const labelFoto = els.fotoInput.closest('label');
+    labelFoto.style.backgroundImage = 'none';
+    labelFoto.querySelectorAll('span').forEach(span => span.style.opacity = '1');
+    state.fotoBase64 = null;
+
+    // Retorna para a Etapa 1
+    state.etapaAtual = 1; 
+    renderizarEtapa();
+};
 
 init();
