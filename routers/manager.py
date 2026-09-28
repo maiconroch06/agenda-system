@@ -8,16 +8,16 @@ def managerSource():
 
 @manager.route('/cadastro/barbeiro')
 def registerEmployee():
-    return render_template('pages/manager/manage-barber-rp.html')
+    return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
 @manager.route('/editar/barbeiro')
 def managerEmployee():
-    return render_template('pages/manager/manage-barber-rp.html')
+    return render_template('pages/gestor/manage-barbeiro-rp.html')
 
 @manager.route('/login')
 def managerLogin():
-    return render_template('pages/manager/manager-login.html')
+    return render_template('pages/gestor/gestor-login.html')
 
 @manager.route('/painel')
 def managerPanel():
-    return render_template('pages/manager/manager-panel-rp.html')
+    return render_template('pages/gestor/gestor-painel-rp.html')
