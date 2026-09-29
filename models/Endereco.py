@@ -4,13 +4,13 @@ class Endereco(db.Model):
     __tablename__ = 'enderecos'
 
     # Chave Primária e Configurações de Identificação
-    id_endereco = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
         
     cep = db.Column(db.String(10), nullable=False)        
     cidade = db.Column(db.String(40), nullable=False)     
     numero = db.Column(db.Integer, nullable=False)        
     bairro = db.Column(db.String(150), nullable=False)    
-    estado = db.Column(db.String(2), nullable=False)      
+    fk_estado =  db.Column(db.Integer, db.ForeignKey('Estados.id'), nullable=True)    
     sequencia = db.Column(db.Integer, nullable=True)      
     complemento = db.Column(db.String(100), nullable=True) 
 
@@ -48,7 +48,7 @@ class Endereco(db.Model):
                 cidade = "Nova Cruz",
                 numero = 55,
                 bairro = "Centro",
-                estado = "RN",
+                estado = 20,
                 sequencia = None,
                 complemento = None
                     )

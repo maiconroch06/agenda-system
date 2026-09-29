@@ -10,7 +10,7 @@ class Barbearia(db.Model):
     nome_barbearia = db.Column(db.String(100), nullable=False)
     telefone = db.Column(db.String(11), nullable=False)
     email_empresa = db.Column(db.String(150), nullable=False)
-    logo_path = db.Column(db.String(255), nullable=False)
+    logo_barbearia = db.Column(db.String(255), nullable=False)
     
     # Controle de Data com o padrão moderno timezone-aware
     data_cadastro = db.Column(
@@ -20,17 +20,13 @@ class Barbearia(db.Model):
     )
     
     # Chaves Estrangeiras com Regra CASCADE
-    endereco_barbearia_cnpj = db.Column(
+    fk_id_endereco = db.Column(
         db.Integer, 
-        db.ForeignKey('enderecos.id_endereco', onupdate='CASCADE', ondelete='CASCADE'), 
+        db.ForeignKey('fk_id_endereco', onupdate='Restrict', ondelete='Restrict'), 
         nullable=False
     )
 
-    gestor_id = db.Column(
-        db.Integer, 
-        db.ForeignKey('usuarios.id', onupdate='CASCADE', ondelete='CASCADE'), 
-        nullable=False
-    )
+
     # Metodo responsavel por retornar o cnpj da empresa
     # pode ser feito via consulta tbm
     def getCNPJ():
@@ -39,7 +35,7 @@ class Barbearia(db.Model):
     # chamar o método pela própria classe
     # cls é uma convenção do Python que representa a própria classe
     @classmethod
-    def inserirBarbeariaPadrao(cls, id_gestor, id_endereco:int):
+    def inserirBarbeariaPadrao(cls, id_endereco:int):
         
         barber_shop = db.session.scalars(db.select(cls)).first()
         
@@ -51,8 +47,8 @@ class Barbearia(db.Model):
                     telefone='84999999999',
                     email_empresa='contato@tmsbarbearia.com',
                     logo_path='default/logo.png',
-                    endereco_barbearia_cnpj=id_endereco,
-                    gestor_id=id_gestor
+                    fk_id_endereco= id_endereco,
+                  
                 )
 
             db.session.add(barber_shop)
@@ -60,3 +56,4 @@ class Barbearia(db.Model):
 
             print('Barbearia cadastrada com sucesso.')
 
+            return barber_shop.cnpj

@@ -17,7 +17,7 @@ class Usuario(db.Model):
     data_atualizacao = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
 
     # Correto: apontando para id_endereco
-    endereco_id = db.Column(db.Integer, db.ForeignKey('enderecos.id_endereco'), nullable=True)
+    fk_id_endereco = db.Column(db.Integer, db.ForeignKey('enderecos.id'), nullable=True)
 
     # Relacionamento virtual apontando para a classe Endereco
     enderecos = db.relationship('Endereco', backref='usuarios', lazy=True)
@@ -127,8 +127,7 @@ class Usuario(db.Model):
                 email = "samuelmaicon.gestor@gmail.com",
                 senha = "1234",
                 id_endereco = id_endereco_gestor,
-                foto = None
-                
+                foto = None   
                 )
 
             db.session.add(usuario_gestor)
