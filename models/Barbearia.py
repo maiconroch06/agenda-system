@@ -47,8 +47,7 @@ class Barbearia(db.Model):
                     telefone='84999999999',
                     email_empresa='contato@tmsbarbearia.com',
                     logo_path='default/logo.png',
-                    fk_id_endereco= id_endereco,
-                  
+                    fk_id_endereco= id_endereco,   
                 )
 
             db.session.add(barber_shop)
