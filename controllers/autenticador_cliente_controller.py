@@ -1,7 +1,7 @@
 from models.usuario import Usuario
 from flask import  session, redirect, url_for
 from sqlalchemy.exc import IntegrityError
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash,generate_password_hash
 from models.cliente import Cliente
 
 class AutenticacaoCliente():
@@ -14,7 +14,7 @@ class AutenticacaoCliente():
             
         # 3. Busca o usuário no MySQL através do método que você já criou na sua classe User
         try:
-            usuario = Usuario.buscar_por_email(email)
+            usuario = Cliente.buscarCLientePorEmail(email)
         except Exception as erro :
             print(f"{erro}")
             session['erro'] = "Erro ao tentar se comunicar com o banco de dados.\nContate o suporte"
@@ -24,6 +24,10 @@ class AutenticacaoCliente():
         # (Nota: Se futuramente usar criptografia com werkzeug, use check_password_hash aqui)
         
         if usuario:
+            print(email)
+            print(usuario.senha_hash)
+            print(senha)
+            print(check_password_hash(usuario.senha_hash, senha))
             if check_password_hash(usuario.senha_hash, senha):
                 # 5. Salva o ID e os dados completos na sessão (Agora incluindo o ID gerado pelo banco!)
                 session['dados_cliente'] = dict(usuario._mapping)
@@ -61,15 +65,15 @@ class AutenticacaoCliente():
             
             session.permanent = True
             session['dados_cliente'] = usuario.to_dict()
-        
+       
         except IntegrityError as i:
             print(f"{i}")
-            session['erro'] = "ATENÇÃO: e-mail já cadastraados no sistema"  
+            session['erro'] = "ATENÇÃO: e-mail já cadastrados no sistema" 
             return redirect(url_for('cliente.clientRegisterPage'))
         except Exception as erro:
             session['erro'] = str(erro)
             return redirect(url_for('cliente.clientRegisterPage'))
         
-        return redirect(url_for('cliente.clientAgendamentoServicos'))
+        return redirect(url_for('cliente.cadastroSucesso'))
     
    

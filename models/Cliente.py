@@ -21,4 +21,17 @@ class Cliente(db.Model):
     def salvar(self):
         db.session.add(self)
         db.session.commit()
-        return self.cliente_id
+        return self.id
+
+    @classmethod
+    def buscarCLientePorEmail(cls, email):
+        return db.session.execute(
+            db.text(
+            """
+                select *
+                from clientes c join usuarios u 
+                on c.id = u.id where u.email = :email
+            """
+                ),
+                {"email":email}
+        ).first()

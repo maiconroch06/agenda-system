@@ -30,7 +30,7 @@ class Usuario(db.Model):
         self.telefone = telefone
         self.cpf = cpf
         self.email = email
-        self.senha_hash = generate_password_hash(senha)
+        self.senha_hash = senha
         self.endereco_id = id_endereco 
         self.foto_path = foto
         self.ativo = ativo
@@ -94,18 +94,7 @@ class Usuario(db.Model):
         return db.session.get(cls, id)
 
     # READ - 🔥 CORRIGIDO: Atualizado para a sintaxe moderna db.select
-    @classmethod
-    def buscar_por_email(cls, email):
-        return db.session.execute(
-            db.text(
-        """
-            select *
-            from clientes c join usuarios u 
-            on c.id = u.id where u.email = :email
-        """
-            ),
-            {"email":email}
-        ).first()
+  
         
         
     # READ - 🔥 CORRIGIDO: Atualizado para a sintaxe moderna db.select e scalars().all()
