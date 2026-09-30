@@ -7,11 +7,11 @@ gestor = Blueprint('gestor', __name__, template_folder='templates')
 def managerSource():
     return redirect('/')
 
-@gestor.route('/cadastro/barbeiro', methods=['GET'])
+@gestor.route('/cadastrar/barbeiro', methods=['GET'])
 def registerEmployee():
     return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html')
 
-@gestor.route('/cadastro/barbeiro', methods=['POST'])
+@gestor.route('/cadastrar/barbeiro', methods=['POST'])
 def validateEmployee():
     photo = request.form.get("barber-photo")
     cpf = request.form.get("barber-cpf")
@@ -23,8 +23,16 @@ def validateEmployee():
     return AutenticadorGestor.cadastrarBarbeiro(photo, cpf, name, email, telephone, address, description)
 
 @gestor.route('/editar/barbeiro')
-def managerEmployee():
+def managerBarber():
     return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html')
+
+@gestor.route('/cadastrar/servico')
+def registerService():
+    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
+
+@gestor.route('/editar/servico')
+def managerService():
+    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
 
 @gestor.route('/login', methods=['GET'])
 def managerLoginPage():

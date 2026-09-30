@@ -1,241 +1,161 @@
 /* ============================================================
-   ESTADO SERVIÇOS
+   ESTADO DA APLICAÇÃO
    ============================================================ */
-
-let servicos = JSON.parse(localStorage.getItem("servicos")) || [];
-
-renderizarCardsServicos("lista-cards-servicos", servicos, "vazia-servicos");
-sincronizarPainel();
+const state = {
+    isEditing: false,
+    fotoBase64: null
+};
 
 /* ============================================================
-   UTILITÁRIOS
+   MAPEAMENTO DE ELEMENTOS
    ============================================================ */
+const els = {
+    // Inputs
+    fotoInput: document.getElementById("srv-foto"),
+    nome: document.getElementById("srv-nome"),
+    preco: document.getElementById("srv-preco"),
+    duracao: document.getElementById("srv-duracao"),
+    
+    // Botão Submit
+    btnSubmit: document.getElementById("btn-submit"),
+    
+    // Títulos
+    formTitle: document.getElementById("form-title"),
+    formSubtitle: document.getElementById("form-subtitle"),
 
-function mostrarAviso(msg) {
-    const el = document.getElementById("aviso");
-    el.textContent = msg;
-    el.classList.add("visivel");
-    setTimeout(() => el.classList.remove("visivel"), 2500);
+    // Modal Resumo
+    modalOverlay: document.getElementById("overlay-resumo"),
+    modalResumo: document.getElementById("modal-resumo"),
+    rNome: document.getElementById("resumo-nome"),
+    rPreco: document.getElementById("resumo-preco"),
+    rDuracao: document.getElementById("resumo-duracao")
+};
+
+/* ============================================================
+   INICIALIZAÇÃO & MODO DE EDIÇÃO
+   ============================================================ */
+function init() {
+    aplicarMascaras();
+    configurarEventos();
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const serviceId = urlParams.get('id');
+
+    if (serviceId) {
+        state.isEditing = true;
+        prepararModoEdicao(serviceId);
+    }
 }
 
-function irParaTela(id) {
-    document.querySelectorAll(".tela").forEach(t => {
-        t.classList.remove("ativa");
-        t.hidden = true;
+function prepararModoEdicao(id) {
+    els.formTitle.textContent = "Atualizar Serviço";
+    els.formSubtitle.textContent = "Altere as opções do serviço registrado";
+    els.btnSubmit.textContent = "Atualizar Serviço";
+
+    // Mock de dados para edição
+    const mockServico = {
+        nome: "Corte e Barba Premium",
+        preco: "R$ 65,00",
+        duracao: "50 min"
+    };
+    
+    preencherFormulario(mockServico);
+}
+
+function preencherFormulario(dados) {
+    els.nome.value = dados.nome || "";
+    els.preco.value = dados.preco || "";
+    els.duracao.value = dados.duracao || "";
+}
+
+/* ============================================================
+   EVENTOS & MÁSCARAS
+   ============================================================ */
+function configurarEventos() {
+    els.btnSubmit.addEventListener("click", (e) => {
+        e.preventDefault();
+        salvarDados();
     });
-    const tela = document.getElementById(id);
-    tela.hidden = false;
-    tela.classList.add("ativa");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    els.fotoInput.addEventListener('change', async (e) => {
+        const foto = await lerArquivoBase64(e.target);
+        const label = e.target.closest('label');
+        
+        if (foto) {
+            state.fotoBase64 = foto;
+            label.style.backgroundImage = `url(${foto})`;
+            label.style.backgroundSize = 'cover';
+            label.style.backgroundPosition = 'center';
+            label.querySelectorAll('span').forEach(span => span.style.opacity = '0');
+        }
+    });
 }
 
-function limparErro(inputId, erroId) {
-    const input = document.getElementById(inputId);
-    const erro = document.getElementById(erroId);
-    if (input) input.classList.remove("invalido");
-    if (erro) erro.textContent = "";
-}
+function aplicarMascaras() {
+    // Máscara para Preço (R$)
+    els.preco.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, "");
+        if (!value) {
+            e.target.value = "";
+            return;
+        }
+        value = (parseInt(value, 10) / 100).toFixed(2);
+        value = value.replace(".", ",").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        e.target.value = `R$ ${value}`;
+    });
 
-function definirErro(inputId, erroId, msg) {
-    const input = document.getElementById(inputId);
-    const erro = document.getElementById(erroId);
-    if (input) input.classList.add("invalido");
-    if (erro) erro.textContent = msg;
+    // Máscara para Duração (minutos)
+    els.duracao.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, "");
+        e.target.value = value ? `${value} min` : "";
+    });
 }
 
 function lerArquivoBase64(input) {
     return new Promise((resolve) => {
-        const arquivo = input.files[0];
-        if (!arquivo) { resolve(null); return; }
+        if (!input || !input.files || !input.files[0]) return resolve(null);
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.readAsDataURL(arquivo);
+        reader.onload = (e) => {
+            resolve(e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
     });
 }
 
-function gerarIdUnico() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+/* ============================================================
+   FUNÇÕES DO MODAL DE RESUMO
+   ============================================================ */
+function salvarDados() {
+    els.rNome.textContent = els.nome.value || "—";
+    els.rPreco.textContent = els.preco.value || "—";
+    els.rDuracao.textContent = els.duracao.value || "—";
+
+    abrirModalResumo();
 }
 
-/* ============================================================
-   ABAS DE AUTH
-   ============================================================ */
+window.abrirModalResumo = function() {
+    els.modalOverlay.classList.remove("hidden");
+    els.modalResumo.classList.remove("hidden");
+};
 
-document.querySelectorAll(".auth-aba").forEach(aba => {
-    aba.addEventListener("click", () => {
-        document.querySelectorAll(".auth-aba").forEach(a => a.classList.remove("ativa"));
-        aba.classList.add("ativa");
+window.fecharModalResumo = function() {
+    els.modalOverlay.classList.add("hidden");
+    els.modalResumo.classList.add("hidden");
+};
 
-        const qual = aba.dataset.aba;
-        document.getElementById("form-login").hidden = qual !== "login";
-        document.getElementById("form-cadastro").hidden = qual !== "cadastro";
-    });
-});
+window.finalizarCadastro = function() {
+    window.location.href = "/gestor/painel";
+};
 
-/* ============================================================
-   DIAS DE FUNCIONAMENTO
-   ============================================================ */
-
-document.querySelectorAll(".dia-btn").forEach(btn => {
-    btn.addEventListener("click", () => btn.classList.toggle("ativo"));
-});
-
-/* ============================================================
-   TELA 4: SERVIÇOS (cadastro)
-   ============================================================ */
-
-async function adicionarServico() {
-    const nome = document.getElementById("srv-nome").value.trim();
-    const preco = parseFloat(document.getElementById("srv-preco").value);
-    const tempo = parseInt(document.getElementById("srv-tempo").value);
-    const fotoInput = document.getElementById("srv-foto");
-
-    if (!nome) { mostrarAviso("Informe o nome do serviço"); return; }
-    if (isNaN(preco) || preco < 0) { mostrarAviso("Informe um preço válido"); return; }
-    if (isNaN(tempo) || tempo < 5) { mostrarAviso("Informe uma duração válida"); return; }
-
-    const foto = await lerArquivoBase64(fotoInput);
+window.novoCadastro = function() {
+    fecharModalResumo();
+    document.getElementById("form-servico").reset();
     
-    const servico = {
-        id: gerarIdUnico(),
-        nome: nome,
-        preco: preco,
-        tempo: tempo,
-        foto: foto
-    }
+    // Reseta imagem visualmente
+    const labelFoto = els.fotoInput.closest('label');
+    labelFoto.style.backgroundImage = 'none';
+    labelFoto.querySelectorAll('span').forEach(span => span.style.opacity = '1');
+    state.fotoBase64 = null;
+};
 
-    servicos.push(servico);
-
-    localStorage.setItem("servicos", JSON.stringify(servicos));
-
-    document.getElementById("srv-nome").value = "";
-    document.getElementById("srv-preco").value = "";
-    document.getElementById("srv-tempo").value = "";
-    fotoInput.value = "";
-
-    renderizarCardsServicos("lista-cards-servicos", servicos, "vazia-servicos");
-}
-
-function renderizarCardsServicos(containerId, lista, vaziaId) {
-    const container = document.getElementById(containerId);
-    const vaziaEl = vaziaId ? document.getElementById(vaziaId) : null;
-
-    if (lista.length === 0) {
-        container.innerHTML = "";
-        if (vaziaEl) container.appendChild(vaziaEl);
-        if (vaziaEl) vaziaEl.style.display = "block";
-        return;
-    }
-
-    if (vaziaEl) vaziaEl.style.display = "none";
-
-    container.innerHTML = lista.map((s, idx) => `
-        <div class="item-card" data-id="${s.id}">
-            <div class="ordem-btns">
-                <button class="ordem-btn" onclick="moverItem('${s.id}', -1)" title="Subir">▲</button>
-                <button class="ordem-btn" onclick="moverItem('${s.id}', 1)" title="Descer">▼</button>
-            </div>
-            ${s.foto
-                ? `<img class="item-card__foto" src="${s.foto}" alt="${s.nome}">`
-                : `<div class="item-card__foto-placeholder">✂️</div>`
-            }
-            <div class="item-card__nome">${s.nome}</div>
-            <div class="item-card__meta">
-                <span>${s.tempo} min</span>
-                <span>R$ ${s.preco.toFixed(2).replace(".", ",")}</span>
-            </div>
-            <div class="item-card__acoes">
-                <button onclick="editarServico('${s.id}')">Editar</button>
-                <button class="btn-remover" onclick="removerServico('${s.id}')">Remover</button>
-            </div>
-        </div>
-    `).join("");
-}
-
-function removerServico(id) {
-    servicos = servicos.filter(s => s.id !== id);
-    localStorage.setItem("servicos", JSON.stringify(servicos));
-    renderizarCardsServicos("lista-cards-servicos", servicos, "vazia-servicos");
-    sincronizarPainel();
-}
-
-function editarServico(id) {
-    const s = servicos.find(s => s.id === id);
-    if (!s) return;
-    const novoNome = prompt("Nome do serviço:", s.nome);
-    if (novoNome !== null && novoNome.trim()) s.nome = novoNome.trim();
-    const novoPreco = prompt("Preço (R$):", s.preco);
-    if (novoPreco !== null && !isNaN(parseFloat(novoPreco))) s.preco = parseFloat(novoPreco);
-    const novoTempo = prompt("Duração (min):", s.tempo);
-    if (novoTempo !== null && !isNaN(parseInt(novoTempo))) s.tempo = parseInt(novoTempo);
-    localStorage.setItem("servicos", JSON.stringify(servicos));
-    renderizarCardsServicos("lista-cards-servicos", servicos, "vazia-servicos");
-    sincronizarPainel();
-}
-
-function moverItem(id, direcao) {
-    const lista = servicos;
-    const idx = lista.findIndex(i => i.id === id);
-    const novoIdx = idx + direcao;
-    if (novoIdx < 0 || novoIdx >= lista.length) return;
-    [lista[idx], lista[novoIdx]] = [lista[novoIdx], lista[idx]];
-    localStorage.setItem("servicos", JSON.stringify(servicos));
-    renderizarCardsServicos("lista-cards-servicos", servicos, "vazia-servicos");
-    sincronizarPainel();
-}
-
-/*function moverItem(tipo, id, direcao) {
-    const lista = tipo === "servico" ? servicos : profissionais;
-    const idx = lista.findIndex(i => i.id === id);
-    const novoIdx = idx + direcao;
-    if (novoIdx < 0 || novoIdx >= lista.length) return;
-    [lista[idx], lista[novoIdx]] = [lista[novoIdx], lista[idx]];
-    if (tipo === "servico") {
-        renderizarCardsServicos("lista-cards-servicos", app.servicos, "vazia-servicos");
-        sincronizarPainel();
-    } else {
-        renderizarCardsProfissionais("lista-cards-profissionais", app.profissionais, "vazia-profissionais");
-        sincronizarPainel();
-    }
-}*/
-
-function sincronizarPainel() {
-    const containerS = document.getElementById("lista-servicos-painel");
-    
-    if (!containerS) return;
-
-    if (servicos.length === 0) {
-        containerS.innerHTML = `<p class="lista-vazia">Nenhum serviço cadastrado.</p>`;
-    } else {
-        containerS.innerHTML = servicos.map(s => `
-            <div class="item-card" data-id="${s.id}">
-                <div class="ordem-btns">
-                    <button class="ordem-btn" onclick="moverItemPainel('servico', '${s.id}', -1)">▲</button>
-                    <button class="ordem-btn" onclick="moverItemPainel('servico', '${s.id}', 1)">▼</button>
-                </div>
-                ${s.foto
-                    ? `<img class="item-card__foto" src="${s.foto}" alt="${s.nome}">`
-                    : `<div class="item-card__foto-placeholder">✂️</div>`
-                }
-                <div class="item-card__nome">${s.nome}</div>
-                <div class="item-card__meta">
-                    <span>${s.tempo} min</span>
-                    <span>R$ ${s.preco.toFixed(2).replace(".", ",")}</span>
-                </div>
-                <div class="item-card__acoes">
-                    <button onclick="editarServico('${s.id}')">Editar</button>
-                    <button class="btn-remover" onclick="removerServico('${s.id}')">Remover</button>
-                </div>
-            </div>
-        `).join("");
-    }
-}
-
-function voltar() {
-    window.location.href = "cadastroEmpresa.html"
-}
-
-function salvarServicos() {
-    localStorage.setItem("servicos", JSON.stringify(servicos));
-    window.location.href = "painelAdministrativo.html"
-}
+init();
