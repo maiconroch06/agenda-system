@@ -73,7 +73,7 @@ class AutenticacaoCliente():
             db.session.rollback()
 
             print(f"{i}")
-            session['erro'] = "ATENÇÃO: e-mail já cadastrados no sistema" 
+            session['erro'] = "ATENÇÃO: e-mail ou telefone já cadastrados no sistema" 
             return redirect(url_for('cliente.clientRegisterPage'))
         except Exception as erro:
             db.session.rollback()

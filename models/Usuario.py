@@ -90,11 +90,7 @@ class Usuario(db.Model):
     @classmethod
     def buscar_por_id(cls, id):
         return db.session.get(cls, id)
-
-    # READ - 🔥 CORRIGIDO: Atualizado para a sintaxe moderna db.select
-  
-        
-        
+       
     # READ - 🔥 CORRIGIDO: Atualizado para a sintaxe moderna db.select e scalars().all()
 
     def listar_todos(cls):

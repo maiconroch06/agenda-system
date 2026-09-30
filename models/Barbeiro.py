@@ -17,3 +17,34 @@ class Barbeiro(db.Model):
         db.String(500), 
         nullable=False
     )
+
+    # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
+    def salvar(self):
+        db.session.execute(
+            db.text(
+                """
+                insert into barbeiros (id, data_liberacao,ativo,descricao) values (:id,:data_liberacao,:ativo,:descricao)
+                """
+            ),{
+                "id": self.id,
+                "data_liberacao":self.data_liberacao,
+                "ativo": self.ativo,
+                "descricao": self.descricao
+            }
+        )
+
+        
+       
+
+    @classmethod
+    def buscarCLientePorEmail(cls, email):
+        return db.session.execute(
+                db.text(
+                """
+                    select *
+                    from clientes c join usuarios u 
+                    on c.id = u.id where u.email = :email
+                """
+                    ),
+                    {"email":email}
+            ).first()

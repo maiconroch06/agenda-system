@@ -13,9 +13,9 @@
 <body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-[#0f6e56] selection:text-white">
     
     <div id="tela-profissionais" class="tela-ativa flex min-h-screen items-center justify-center p-4">
-        
+             
         <div class="w-full max-w-3xl bg-[#232220] border border-[#38362f] rounded-[14px] p-6 sm:p-8">
-
+                
             <ol class="flex mb-1 relative isolate" id="etapa">
                 <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
                     <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#085041] border border-[#0f6e56] flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">1</span>
@@ -27,6 +27,12 @@
                     <span class="etapa__label">Serviços</span>
                 </li>
             </ol>
+            <!-- Logo proporcional -->
+            <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
+                {% set logo_class="h-10 sm:h-12 md:h-14" %}
+                {% include "componetizacao/logo/logo-top-horizontal.html" %}
+            </div>
+
 
             <h1 class="text-center text-2xl font-medium mb-1.5">Cadastrar Barbeiros</h1>
             <p class="text-center text-[14px] text-[#888780] mb-6">Adicione os barbeiros que trabalham na empresa</p>
@@ -86,12 +92,17 @@
             </div>
 
             <div class="flex flex-col-reverse sm:flex-row justify-between gap-3 mt-6">
-                <button class="h-10 px-4 rounded-[10px] border-none bg-transparent text-[#888780] text-[14px] hover:text-[#f1efe8] transition-colors" onclick="back()">← Voltar</button>
-                <button class="h-11 px-5 rounded-[10px] bg-[#f1efe8] text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all" onclick="registerBarber()">Concluir cadastro →</button>
+                <a href="/gestor/painel">
+                    <button class="h-10 px-4 rounded-[10px] border-none bg-transparent text-[#888780] text-[14px] hover:text-[#f1efe8] transition-colors">← Voltar</button>
+                </a>
+                <a href="">
+                    <button class="h-11 px-5 rounded-[10px] bg-[#f1efe8] text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all" onclick="registerBarber()">Concluir cadastro →</button>
+                </a>
+
             </div>
         </div>
     </div>
     
-    <script src="{{ url_for('static', filename='js/barber-register.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/barbeiro-registro.js')}}"></script>
 </body>
 </html>
