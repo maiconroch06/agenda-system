@@ -63,7 +63,7 @@
 
                     <div class="flex items-center gap-3">
 
-                        <!-- Avatar -->
+                        <!-- Avatar --
                         <div
                             class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden">
 
@@ -76,20 +76,20 @@
 
                             <span class="text-sm font-bold text-[#f1efe8]">
                                 {{ session.get('dados_gestor')['nome_completo'][0]|upper }}
-                                <!-- Pega a primeira letra do nome-->
+                                <!-- Pega a primeira letra do nome--
                             </span>
 
                             {% endif %}
 
                         </div>
 
-                        <!-- Nome + Sair -->
+                        <!-- Nome + Sair --
                         <div class="min-w-0">
 
                             <div class="w-full">
                                 <p class="text-sm font-medium text-[#f1efe8]">
                                     {{ session.get('dados_gestor')['nome_completo'].split(' ')[0]
-                                    }}<!-- Aplica um split no espeço em branco e pega o primeiro nome -->
+                                    }}<!-- Aplica um split no espeço em branco e pega o primeiro nome --
                                 </p>
                             </div>
 
@@ -100,7 +100,7 @@
 
                             </a>
 
-                        </div>
+                        </div> -->
 
                     </div>
 
@@ -523,7 +523,7 @@
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso"></div>
 
-    <script src="{{ url_for('static', filename='js/manager-panel.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gestor-painel.js') }}"></script>
 </body>
 
 </html>
