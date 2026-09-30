@@ -84,8 +84,6 @@ class Usuario(db.Model):
         
                     )
 
-        db.session.commit()
-
         return result.lastrowid
 
     # READ - Busca o usuário diretamente pela Chave Primária (id)

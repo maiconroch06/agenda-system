@@ -3,6 +3,7 @@ from flask import  session, redirect, url_for
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash,generate_password_hash
 from models.cliente import Cliente
+from database import db
 
 class AutenticacaoCliente():
     
@@ -65,12 +66,18 @@ class AutenticacaoCliente():
             
             session.permanent = True
             session['dados_cliente'] = usuario.to_dict()
+
+            db.session.commit()
        
         except IntegrityError as i:
+            db.session.rollback()
+
             print(f"{i}")
             session['erro'] = "ATENÇÃO: e-mail já cadastrados no sistema" 
             return redirect(url_for('cliente.clientRegisterPage'))
         except Exception as erro:
+            db.session.rollback()
+
             session['erro'] = str(erro)
             return redirect(url_for('cliente.clientRegisterPage'))
         

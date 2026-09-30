@@ -66,7 +66,7 @@ class Endereco(db.Model):
                             "fk_estado": self.fk_estado
                         }
                     )
-        db.session.commit()
+        
                         
         return resultado.lastrowid
 
@@ -83,8 +83,7 @@ class Endereco(db.Model):
             cls.sequencia= None
             cls.complemento= None
             cls.fk_estado= 20
-               
-                
+                     
             return cls.inserirEndereco(cls)
 
         return -1

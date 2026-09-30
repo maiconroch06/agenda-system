@@ -57,8 +57,7 @@ class Estados(db.Model):
             {"sigla_estado": "TO"}
             ])
 
-            db.session.commit()
-
+           
             return 1
 
         return 0

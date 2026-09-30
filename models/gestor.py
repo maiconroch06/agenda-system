@@ -60,4 +60,4 @@ class Gestor(db.Model):
                     "fk_cnpj_barbearia": cnpj
                 }
             )
-        db.session.commit()
+        

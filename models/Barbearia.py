@@ -80,9 +80,7 @@ class Barbearia(db.Model):
                         "fk_id_endereco": id_endereco
                     }
                 )
-
-            db.session.commit()
-
+       
             print('Barbearia cadastrada com sucesso.')
 
             return cls.getCNPJ()
