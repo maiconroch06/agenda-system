@@ -1,26 +1,29 @@
-from .Address import Address
-from .Days_Week import DaysWeek
-from .User import User
-from .BarberShop import BarberShop
-from .Barber import Barber
-from .Client import Client
-from .Service import Servico  # Ajuste o nome do arquivo .py se for diferente de Service
-from .Barber_has_Service import BarberHasServicos
-from .BarberShop_Days_Week import BarberShopDaysWeek
-from .Agenda_Barber_Time import AgendaBarberTime
-from .Scheduling import Scheduling
-
+from .estados import Estados
+from .endereco import Endereco
+from .barbearia import Barbearia
+from .dias_da_semana import DiasSemana
+from .usuario import Usuario
+from .gestor import Gestor
+from .barbeiro import Barbeiro
+from .cliente import Cliente
+from .servicos import Servicos
+from .barbeiro_has_servicos import barbeiroHasServicos
+from .horarios_barbearia import HorariosBarbearia
+from .horarios_barbeiro import HorariosBarbeiro
+from .agendamento import Agendamento
 
 __all__ = [
-    'Address',
-    'DaysWeek',
-    'User',
-    'BarberShop',
-    'Barber',
-    'Client',
-    'Servico',
-    'BarberHasServicos',
-    'BarberShopDaysWeek',
-    'AgendaBarberTime',
-    'Scheduling'
+    'estados',
+    'endereco',
+    'barbearia',
+    'dias_da_semana',
+    'usuario',
+    'gestor',
+    'barbeiro',
+    'cliente',
+    'servicos',
+    'barbeiro_has_servicos',
+    'horarios_barbearia',
+    'horarios_barbeiro',
+    'agendamento'
 ]

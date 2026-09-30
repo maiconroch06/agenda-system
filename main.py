@@ -19,7 +19,7 @@ from models import *
 with app.app_context():
     # Esse comando lê as classes e as cria no banco
     db.create_all()
-
+    # Populando banco com dados padrões
     initialize()
     
 
@@ -28,19 +28,19 @@ with app.app_context():
 # 2. IMPORTS DOS BLUEPRINTS (Apenas APÓS criar o banco)
 # ==========================================
 from routers.public_route import publics
-from routers.client_route import client
+from routers.cliente_route import cliente
 # from routers.login import user_login
-from routers.manager_route import manager
-from routers.barber_route import barber
+from routers.gestor_route import gestor
+from routers.barbeiro_route import barbeiro
 
 
 # ==========================================
 # 3. REGISTRO DOS BLUEPRINTS
 # ==========================================
 app.register_blueprint(publics)
-app.register_blueprint(client, url_prefix='/cliente')
-app.register_blueprint(manager, url_prefix='/gestor')
-app.register_blueprint(barber, url_prefix='/barbeiro')
+app.register_blueprint(cliente, url_prefix='/cliente')
+app.register_blueprint(gestor, url_prefix='/gestor')
+app.register_blueprint(barbeiro, url_prefix='/barbeiro')
 
 
 
