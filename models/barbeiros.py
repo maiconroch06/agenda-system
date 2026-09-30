@@ -33,9 +33,7 @@ class Barbeiro(db.Model):
             }
         )
 
-        
-       
-
+   
     @classmethod
     def buscarCLientePorEmail(cls, email):
         return db.session.execute(
