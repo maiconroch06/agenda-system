@@ -1,6 +1,6 @@
 from models.endereco import Endereco
 from models.barbearia import Barbearia
-from models.usuario import Usuario
+from models.usuarios import Usuario
 from models.gestor import Gestor
 from models.estados import Estados
 from database import db

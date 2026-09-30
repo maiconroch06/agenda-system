@@ -2,9 +2,9 @@ from .estados import Estados
 from .endereco import Endereco
 from .barbearia import Barbearia
 from .dias_da_semana import DiasSemana
-from .usuario import Usuario
+from .usuarios import Usuario
 from .gestor import Gestor
-from .barbeiro import Barbeiro
+from .barbeiros import Barbeiro
 from .cliente import Cliente
 from .servicos import Servicos
 from .barbeiro_has_servicos import barbeiroHasServicos
@@ -17,9 +17,9 @@ __all__ = [
     'endereco',
     'barbearia',
     'dias_da_semana',
-    'usuario',
+    'usuarios',
     'gestor',
-    'barbeiro',
+    'barbeiros',
     'cliente',
     'servicos',
     'barbeiro_has_servicos',
