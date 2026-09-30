@@ -58,9 +58,31 @@ class Usuario(db.Model):
 
     # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
     def salvar(self):
-        db.session.add(self)
+        result = db.session.execute(
+                        db.text("""
+                              insert into usuarios 
+                              (nome_completo,telefone,cpf,email,senha_hash,foto_nome,ativo, data_cadastro, data_atualizacao, fk_id_endereco)
+                                values (:nome_completo, :telefone, :cpf, :email, :senha_hash, :foto_nome, :ativo, :data_cadastro, :data_atualizacao, :fk_id_endereco)  
+                        """),
+                        {
+                            "nome_completo": self.nome_completo,
+                            "telefone": self.telefone,
+                            "cpf": self.cpf,
+                            "email": self.email,
+                            "senha_hash": generate_password_hash(self.senha_hash),
+                            "foto_nome": self.foto_nome,
+                            "ativo": self.ativo,
+                            "data_cadastro": self.data_cadastro,
+                            "data_atualizacao": self.data_atualizacao,
+                            "fk_id_endereco": self.fk_id_endereco
+    
+                         }
+        
+                    )
+
         db.session.commit()
-        return self.id 
+
+        return result.lastrowid
 
     # READ - Busca o usuário diretamente pela Chave Primária (id)
     @classmethod
@@ -129,31 +151,18 @@ class Usuario(db.Model):
         usuario_gestor = cls.consultarUsuario()
         
         if not usuario_gestor:
-
-            db.session.execute(
-                db.text("""
-                      insert into usuarios 
-                      (nome_completo,telefone,cpf,email,senha_hash,foto_nome,ativo, data_cadastro, data_atualizacao, fk_id_endereco)
-                        values (:nome_completo, :telefone, :cpf, :email, :senha_hash, :foto_nome, :ativo, :data_cadastro, :data_atualizacao, :fk_id_endereco)  
-                """),
-                {
-                    "nome_completo": "Samuel Maicon da Silva",
-                    "telefone": "84999999999",
-                    "cpf": "12345678901",
-                    "email": "gestorbb@gmail.com",
-                    "senha_hash": generate_password_hash("1234"),
-                    "foto_nome": "samuel.jpg",
-                    "ativo": 1,
-                    "data_cadastro": "2026-09-29 20:00:00",
-                    "data_atualizacao": "2026-09-29 20:00:00",
-                    "fk_id_endereco": 1
-
-                 }
-
-            )
-
-            db.session.commit()
-                
-            return 1
-
+            
+            cls.fk_id_endereco = id_endereco_gestor
+            cls.nome_completo = "Samuel Maicon da Silva"
+            cls.telefone="84999999999"
+            cls.cpf="12345678901"
+            cls.email="samuelmaicon.gestor@gmail.com"
+            cls.senha_hash="1234"
+            cls.foto_nome="samuel.jpg"
+            cls.ativo=1
+            cls.data_cadastro=datetime.now(timezone.utc)
+            cls.data_atualizacao=datetime.now(timezone.utc)                                    
+               
+            return cls.salvar(cls)
+        
         return -1

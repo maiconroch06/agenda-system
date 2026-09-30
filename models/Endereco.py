@@ -32,48 +32,59 @@ class Endereco(db.Model):
         resultado = db.session.execute(sql) # retorna um resultset
         return  resultado.fetchall() # pega todos os registros retornados por uma consulta SQL e coloca em uma lista.
 
+    def inserirEndereco(self):
+        resultado = db.session.execute(
+                        db.text("""
+                            INSERT INTO enderecos
+                            (
+                                cep,
+                                cidade,
+                                numero,
+                                bairro,
+                                sequencia,
+                                complemento,
+                                fk_estado
+                            )
+                            VALUES
+                            (
+                                :cep,
+                                :cidade,
+                                :numero,
+                                :bairro,
+                                :sequencia,
+                                :complemento,
+                                :fk_estado
+                            )
+                        """),
+                        {
+                            "cep": self.cep,
+                            "cidade":self.cidade,
+                            "numero": self.numero,
+                            "bairro": self.bairro,
+                            "sequencia": self.sequencia,
+                            "complemento": self.complemento,
+                            "fk_estado": self.fk_estado
+                        }
+                    )
+        db.session.commit()
+                        
+        return resultado.lastrowid
+
     @classmethod
     def inserirEnderecoPadrao(cls):
 
         endereco_padrao = cls.consultarEnderecoInicial()
         
         if not endereco_padrao: # Verifica se não existe endereço padrão cadastrado
-
-            resultado = db.session.execute(
-                db.text("""
-                    INSERT INTO enderecos
-                    (
-                        cep,
-                        cidade,
-                        numero,
-                        bairro,
-                        sequencia,
-                        complemento,
-                        fk_estado
-                    )
-                    VALUES
-                    (
-                        :cep,
-                        :cidade,
-                        :numero,
-                        :bairro,
-                        :sequencia,
-                        :complemento,
-                        :fk_estado
-                    )
-                """),
-                {
-                    "cep": "59215000",
-                    "cidade": "Nova Cruz",
-                    "numero": 55,
-                    "bairro": "Centro",
-                    "sequencia": None,
-                    "complemento": None,
-                    "fk_estado": 20
-                }
-            )
-            db.session.commit()
+            cls.cep = "59215000"
+            cls.cidade= "Nova Cruz"
+            cls.numero= 55
+            cls.bairro= "Centro"
+            cls.sequencia= None
+            cls.complemento= None
+            cls.fk_estado= 20
+               
                 
-            return resultado.lastrowid
+            return cls.inserirEndereco(cls)
 
         return -1

@@ -61,14 +61,13 @@ def authentication():
             return redirect(url_for('cliente.clientAgendamentoServicos'))
         
         
-    #Criando as minhas rotas publicas
+    #Criando as rotas publicas para gestor
     routers_publics = ['gestor.managerSource','gestor.managerLoginPage', 'gestor.managerLogin']
     
     # se a rota for publica ele retorna aqui e envia para a rota desejada;
     if request.endpoint  in routers_publics:
         return 
     
-    # Se a rota não estiver nas rotas publicas ele verifica o token
-    
+    # Se a rota não estiver nas rotas publicas ele verifica q sessão
     if 'dados_gestor' not in session:
         return redirect(url_for('gestor.managerLoginPage'))

@@ -81,7 +81,6 @@ class Barbearia(db.Model):
                     }
                 )
 
-
             db.session.commit()
 
             print('Barbearia cadastrada com sucesso.')

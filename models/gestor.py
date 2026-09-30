@@ -24,11 +24,20 @@ class Gestor(db.Model):
             self.cliente_id = cliente_id 
             self.fk_cnpj_barbearia = cnpj
     
-    # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
-    def salvar(self):
-        db.session.add(self)
-        db.session.commit()
-        return self.cliente_id
+    # as consultas devem ser nas classes, pois cada tipo de usuario vai ter consultas com atributos e tabelas diferentes
+    @classmethod
+    def consultarGestorEmail(email:str, cnpj:str):
+        resultado = db.session.execute(
+              db.text(
+               """
+               select * from gestor g join usuarios u  on u.id = g.id where u.email =:email and g.cnpj=:cnpj
+                """    
+              ),
+              {"email":email, "cnpj":cnpj}
+         )
+
+        return resultado.fetchall()
+        
 
 
     @classmethod
