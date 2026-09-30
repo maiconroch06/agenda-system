@@ -1,4 +1,5 @@
 from database import db
+from sqlalchemy import text
 
 class Endereco(db.Model):
     __tablename__ = 'enderecos'
@@ -10,9 +11,9 @@ class Endereco(db.Model):
     cidade = db.Column(db.String(40), nullable=False)     
     numero = db.Column(db.Integer, nullable=False)        
     bairro = db.Column(db.String(150), nullable=False)    
-    fk_estado =  db.Column(db.Integer, db.ForeignKey('Estados.id'), nullable=True)    
     sequencia = db.Column(db.Integer, nullable=True)      
-    complemento = db.Column(db.String(100), nullable=True) 
+    complemento = db.Column(db.String(100), nullable=True)
+    fk_estado =  db.Column(db.Integer, db.ForeignKey('estados.id'), nullable=True)     
 
     def __init__(self, cep, cidade, numero, bairro, estado, sequencia=None, complemento=None):
         self.cep = cep
@@ -24,36 +25,55 @@ class Endereco(db.Model):
         self.sequencia = sequencia
         self.complemento = complemento
 
-    # Serializador para converter o endereço em dicionário/JSON se precisar
-    def to_dict(self):
-        return {
-            'id_endereco': self.id_endereco,
-            'cep': self.cep,
-            'cidade': self.cidade,
-            'numero': self.numero,
-            'bairro': self.bairro,
-            'estado': self.estado,
-            'sequencia': self.sequencia,
-            'complemento': self.complemento
-        }
+    def consultarEnderecoInicial():
+        sql = text("""
+                    select * from enderecos limit 1    
+                """)  
+        resultado = db.session.execute(sql) # retorna um resultset
+        return  resultado.fetchall() # pega todos os registros retornados por uma consulta SQL e coloca em uma lista.
 
     @classmethod
     def inserirEnderecoPadrao(cls):
-        endereco_padrao = db.session.scalars(db.select(cls)).first()
+
+        endereco_padrao = cls.consultarEnderecoInicial()
         
-        if endereco_padrao is None:
+        if not endereco_padrao: # Verifica se não existe endereço padrão cadastrado
 
-            endereco_padrao = cls(
-                cep = "59215-000",
-                cidade = "Nova Cruz",
-                numero = 55,
-                bairro = "Centro",
-                estado = 20,
-                sequencia = None,
-                complemento = None
+            resultado = db.session.execute(
+                db.text("""
+                    INSERT INTO enderecos
+                    (
+                        cep,
+                        cidade,
+                        numero,
+                        bairro,
+                        sequencia,
+                        complemento,
+                        fk_estado
                     )
-
-            db.session.add(endereco_padrao)
+                    VALUES
+                    (
+                        :cep,
+                        :cidade,
+                        :numero,
+                        :bairro,
+                        :sequencia,
+                        :complemento,
+                        :fk_estado
+                    )
+                """),
+                {
+                    "cep": "59215000",
+                    "cidade": "Nova Cruz",
+                    "numero": 55,
+                    "bairro": "Centro",
+                    "sequencia": None,
+                    "complemento": None,
+                    "fk_estado": 20
+                }
+            )
             db.session.commit()
                 
-        return endereco_padrao.id_endereco
+            return resultado.lastrowid
+
+        return -1

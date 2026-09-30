@@ -1,4 +1,4 @@
-from models.Usuario import Usuario
+from models.usuario import Usuario
 from flask import Blueprint, session, redirect, url_for
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash

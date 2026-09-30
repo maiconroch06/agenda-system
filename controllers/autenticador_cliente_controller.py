@@ -1,8 +1,8 @@
-from models.Usuario import Usuario
+from models.usuario import Usuario
 from flask import  session, redirect, url_for
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
-from models.Cliente import Cliente
+from models.cliente import Cliente
 
 class AutenticacaoCliente():
     

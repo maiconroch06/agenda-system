@@ -1,24 +1,16 @@
 from database import db
-from .Barbearia import Barbearia
 
 
 class Cliente(db.Model):
     __tablename__ = 'clientes'
 
-    # O parêntese do ForeignKey agora fecha DEPOIS do ondelete/onupdate
-    barbearia_cnpj = db.Column(
-        db.String(14), 
-        db.ForeignKey('barbearias.cnpj', onupdate='CASCADE', ondelete='CASCADE'), 
-        primary_key=True, 
-        nullable=False
-    )
-    
-    cliente_id = db.Column(
+    id = db.Column(
         db.Integer, 
         db.ForeignKey('usuarios.id', onupdate='CASCADE', ondelete='CASCADE'), 
         primary_key=True, 
         nullable=False
     )
+    data_ultimo_servico = db.Column(db.DateTime,  nullable=True)
 
     # 2. Construtor para salvar na tabela clientes
     def __init__(self, cliente_id:int):

@@ -1,27 +1,19 @@
-from datetime import datetime, timezone
 from database import db
+from sqlalchemy.dialects.mysql import TINYINT
 
 class Barbeiro(db.Model):
     __tablename__ = 'barbeiros'
 
-    # Chaves Primárias Compostas e Chaves Estrangeiras Simples
-    barbearia_cnpj = db.Column(
-        db.String(14), 
-        db.ForeignKey('barbearias.cnpj', onupdate='CASCADE', ondelete='CASCADE'), 
-        primary_key=True, 
-        nullable=False
-    )
-    barbeiro_id = db.Column(
+    id = db.Column(
         db.Integer, 
         db.ForeignKey('usuarios.id', onupdate='CASCADE', ondelete='CASCADE'), 
         primary_key=True, 
         nullable=False
     )
+    data_liberacao = db.Column(db.DateTime, nullable = True )
+    ativo = db.Column(TINYINT(1), nullable=False) 
     
-    ativo = db.Column(db.Boolean, default=True, nullable=False) 
-    
-    data_liberacao = db.Column(
-        db.DateTime, 
-        default=lambda: datetime.now(timezone.utc), 
+    descricao = db.Column(
+        db.String(500), 
         nullable=False
     )

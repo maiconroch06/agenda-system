@@ -1,6 +1,7 @@
 from database import db
 from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash
+from sqlalchemy.dialects.mysql import TINYINT
 
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
@@ -8,11 +9,12 @@ class Usuario(db.Model):
     # 1. Mapeamento das Colunas no MySQL (Sem CPF)
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome_completo = db.Column(db.String(100), nullable=False)
-    telefone = db.Column(db.String(11))
+    telefone = db.Column(db.String(11), unique=True)
+    cpf = db.Column(db.CHAR(11), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     senha_hash = db.Column(db.String(255), nullable=False)
-    foto_path = db.Column(db.String(255), nullable=True)
-    ativo = db.Column(db.Boolean, default=True, nullable=False)
+    foto_nome = db.Column(db.String(255), nullable=True)
+    ativo = db.Column(TINYINT(1), default=1, nullable=False)
     data_cadastro = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     data_atualizacao = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
 
@@ -92,7 +94,7 @@ class Usuario(db.Model):
         ).first()
 
     # READ - 🔥 CORRIGIDO: Atualizado para a sintaxe moderna db.select e scalars().all()
-    @classmethod
+
     def listar_todos(cls):
         stmt = db.select(cls).order_by(cls.nome_completo.asc())
         return db.session.scalars(stmt).all()
@@ -111,26 +113,47 @@ class Usuario(db.Model):
             db.session.commit()
             return True
         return False
+
+    def consultarUsuario():
+        return db.session.execute(
+            db.text("""
+                   select * from usuarios limit 1 
+            """)
+        ).fetchall()
     
     # chamar o método pela própria classe
     # cls é uma convenção do Python que representa a própria classe
     @classmethod
     def inserirUsuarioGestor(cls, id_endereco_gestor:int):
         
-        usuario_gestor = db.session.scalars(db.select(cls)).first()
+        usuario_gestor = cls.consultarUsuario()
         
-        if  usuario_gestor is None:
+        if not usuario_gestor:
 
-            usuario_gestor = cls(
-                nome_completo = "Samuel Maicon da silva",
-                telefone = "84999999999",
-                email = "samuelmaicon.gestor@gmail.com",
-                senha = "1234",
-                id_endereco = id_endereco_gestor,
-                foto = None   
-                )
+            db.session.execute(
+                db.text("""
+                      insert into usuarios 
+                      (nome_completo,telefone,cpf,email,senha_hash,foto_nome,ativo, data_cadastro, data_atualizacao, fk_id_endereco)
+                        values (:nome_completo, :telefone, :cpf, :email, :senha_hash, :foto_nome, :ativo, :data_cadastro, :data_atualizacao, :fk_id_endereco)  
+                """),
+                {
+                    "nome_completo": "Samuel Maicon da Silva",
+                    "telefone": "84999999999",
+                    "cpf": "12345678901",
+                    "email": "gestorbb@gmail.com",
+                    "senha_hash": generate_password_hash("1234"),
+                    "foto_nome": "samuel.jpg",
+                    "ativo": 1,
+                    "data_cadastro": "2026-09-29 20:00:00",
+                    "data_atualizacao": "2026-09-29 20:00:00",
+                    "fk_id_endereco": 1
 
-            db.session.add(usuario_gestor)
+                 }
+
+            )
+
             db.session.commit()
                 
-        return usuario_gestor.id
+            return 1
+
+        return -1
