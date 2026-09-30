@@ -97,24 +97,13 @@ class Usuario(db.Model):
         """
             select *
             from clientes c join usuarios u 
-            on c.cliente_id = u.id where u.email = :email
+            on c.id = u.id where u.email = :email
         """
             ),
             {"email":email}
         ).first()
         
         
-    @classmethod
-    def buscar_por_email_gestor(cls, email):
-        return db.session.execute(
-                    db.text(
-                """
-                   select * from barbearias b join usuarios u  on u.id = b.gestor_id where u.email =:email
-                """
-                    ),
-                    {"email":email}
-        ).first()
-
     # READ - 🔥 CORRIGIDO: Atualizado para a sintaxe moderna db.select e scalars().all()
 
     def listar_todos(cls):

@@ -26,17 +26,16 @@ class Gestor(db.Model):
     
     # as consultas devem ser nas classes, pois cada tipo de usuario vai ter consultas com atributos e tabelas diferentes
     @classmethod
-    def consultarGestorEmail(email:str, cnpj:str):
+    def consultarGestorEmail(cls,email:str, cnpj:str):
         resultado = db.session.execute(
               db.text(
                """
-               select * from gestor g join usuarios u  on u.id = g.id where u.email =:email and g.cnpj=:cnpj
+               select * from gestor g join usuarios u  on u.id = g.id where u.email =:email and g.fk_cnpj_barbearia=:cnpj
                 """    
               ),
               {"email":email, "cnpj":cnpj}
          )
-
-        return resultado.fetchall()
+        return resultado.mappings().first()
         
 
 

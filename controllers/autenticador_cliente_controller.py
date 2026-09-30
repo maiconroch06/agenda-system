@@ -16,6 +16,7 @@ class AutenticacaoCliente():
         try:
             usuario = Usuario.buscar_por_email(email)
         except Exception as erro :
+            print(f"{erro}")
             session['erro'] = "Erro ao tentar se comunicar com o banco de dados.\nContate o suporte"
             return  redirect(url_for('cliente.clientLoginPage'))
 
@@ -45,7 +46,7 @@ class AutenticacaoCliente():
     def registrarCliente(usuario:Usuario):
         # Salvando os dados na sessão do Flask
         try:
-            usuario.salvar()
+            id_cliente = usuario.salvar()
         
             # salvar o usuario como cliente
             cliente = Cliente(
