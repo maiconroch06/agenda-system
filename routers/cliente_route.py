@@ -52,7 +52,9 @@ def clientRegister():
             email=request.form.get('email'),
             senha= request.form.get('senha'),
             foto=request.files.get('foto').filename if request.files.get('foto') else None,
-            id_endereco = None
+            id_endereco = None,
+            ativo=1
+            
         )
         return AutenticacaoCliente.registrarCliente(usuario)
             

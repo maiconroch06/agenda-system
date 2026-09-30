@@ -50,7 +50,7 @@ class AutenticacaoCliente():
         
             # salvar o usuario como cliente
             cliente = Cliente(
-                usuario.to_dict().get('id')
+               id_cliente
             )
 
             id_cliente = cliente.salvar()
@@ -62,7 +62,8 @@ class AutenticacaoCliente():
             session.permanent = True
             session['dados_cliente'] = usuario.to_dict()
         
-        except IntegrityError:
+        except IntegrityError as i:
+            print(f"{i}")
             session['erro'] = "ATENÇÃO: e-mail já cadastraados no sistema"  
             return redirect(url_for('cliente.clientRegisterPage'))
         except Exception as erro:

@@ -10,7 +10,7 @@ class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome_completo = db.Column(db.String(100), nullable=False)
     telefone = db.Column(db.String(11), unique=True)
-    cpf = db.Column(db.CHAR(11), unique=True, nullable=False)
+    cpf = db.Column(db.CHAR(11), unique=True, nullable=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     senha_hash = db.Column(db.String(255), nullable=False)
     foto_nome = db.Column(db.String(255), nullable=True)
@@ -25,13 +25,17 @@ class Usuario(db.Model):
     enderecos = db.relationship('Endereco', backref='usuarios', lazy=True)
 
     # 2. Construtor Ajustado para os dados do formulário (Sem CPF)
-    def __init__(self, nome_completo, telefone, email, senha, foto, id_endereco):
+    def __init__(self, nome_completo, telefone, email, senha, foto, id_endereco, ativo, data_cadastro, data_atualizacao, cpf):
         self.nome_completo = nome_completo
         self.telefone = telefone
+        self.cpf = cpf
         self.email = email
         self.senha_hash = generate_password_hash(senha)
         self.endereco_id = id_endereco 
         self.foto_path = foto
+        self.ativo = ativo
+        self.data_cadastro = data_cadastro
+        self.data_atualizacao = data_atualizacao
 
     # 3. Serialização para a Sessão / Respostas JSON
     def to_dict(self):
