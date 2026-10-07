@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMS Barbearia - Painel Administrativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+</head>
+
+<body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
+
+    <div class="flex flex-col min-h-screen">
+
+        <div class="flex flex-1 pb-20 md:pb-0">
+
+            <!-- SIDEBAR DESKTOP -->
+            <div class="flex items-center justify-start mb-4 md:mb-6 shrink-0">
+                {% set logo_class="h-10 sm:h-12 md:h-14" %}
+                {% with aba_atual='barbeiros' %}
+                    {% include "componetizacao/SiderBar/sider-bar-gestor.html" %}
+                {% endwith %}
+            </div>
+
+            <!-- CONTEÚDO PRINCIPAL -->
+            <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+                
+                <!-- ABA 4: BARBEIROS -->
+                <section class="aba-func hidden" id="aba-profissionais">
+                    <div class="flex items-center justify-between mb-5 gap-3">
+                        <h1 class="text-lg lg:text-xl font-medium">Equipe de Barbeiros</h1>
+                        <a href="/gestor/painel/barbeiro/cadastro"
+                            class="inline-block px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
+                            + Novo Barbeiro
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
+                        id="lista-profissionais-painel"></div>
+                </section>
+            </main>
+        </div>
+
+        <!-- NAVEGAÇÃO INFERIOR MOBILE -->
+        <nav
+            class="bottom-nav md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#232220] border-t border-[#38362f] flex z-40">
+            <button
+                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#f1efe8] text-[10px] cursor-pointer"
+                data-aba="inicio" onclick="irParaAba('inicio')">
+                <span class="text-base">🏠</span> Início
+            </button>
+            <button
+                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
+                data-aba="agenda" onclick="irParaAba('agenda')">
+                <span class="text-base">📅</span> Agenda
+            </button>
+            <button
+                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
+                data-aba="servicos" onclick="irParaAba('servicos')">
+                <span class="text-base">✂️</span> Serviços
+            </button>
+            <button
+                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
+                data-aba="clientes" onclick="irParaAba('clientes')">
+                <span class="text-base">👥</span> Clientes
+            </button>
+            <button
+                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
+                data-aba="profissionais" onclick="irParaAba('profissionais')">
+                <span class="text-base">👤</span> Barbeiros
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- MODAL: BLOQUEAR HORÁRIO -->
+    <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-bloquear" onclick="fecharModalBloquear()"></div>
+    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-bloquear"
+        onclick="if(event.target===this) fecharModalBloquear()">
+        <div
+            class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-base font-medium">Bloquear horário</h2>
+                <button
+                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
+                    onclick="fecharModalBloquear()">✕</button>
+            </div>
+            <form class="flex flex-col gap-3" novalidate>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-[#888780]" for="bloq-barbeiro">Barbeiro</label>
+                    <select id="bloq-barbeiro"
+                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                    </select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-[#888780]" for="bloq-data">Data</label>
+                    <input type="date" id="bloq-data"
+                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-[#888780]" for="bloq-inicio">Início</label>
+                    <input type="time" id="bloq-inicio" value="12:00"
+                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-[#888780]" for="bloq-fim">Fim</label>
+                    <input type="time" id="bloq-fim" value="13:00"
+                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-[#888780]" for="bloq-motivo">Motivo (opcional)</label>
+                    <input type="text" id="bloq-motivo" placeholder="Ex: Almoço"
+                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                </div>
+                <button type="button"
+                    class="w-full h-10 px-4 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm cursor-pointer mt-2"
+                    onclick="confirmarBloqueio()">Bloquear horário</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST AVISO -->
+    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+        id="aviso"></div>
+
+    <script src="{{ url_for('static', filename='js/gestor-painel.js') }}"></script>
+</body>
+
+</html>
