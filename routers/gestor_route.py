@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request
 from controllers.autenticador_gestor_controller import AutenticadorGestor
+from models.cliente import Cliente
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
 
@@ -7,12 +8,13 @@ gestor = Blueprint('gestor', __name__, template_folder='templates')
 def managerSource():
     return redirect('/')
 
-@gestor.route('/cadastrar/barbeiro', methods=['GET'])
+@gestor.route('painel/barbeiro/cadastro', methods=['GET'])
 def registerEmployee():
-    return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html')
+    return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
-@gestor.route('/cadastrar/barbeiro', methods=['POST'])
+@gestor.route('painel/barbeiro/cadastro', methods=['POST'])
 def validateEmployee():
+    dados_completos = request.form
     photo = request.form.get("barber-photo")
     cpf = request.form.get("barber-cpf")
     email = request.form.get("barber-email")
@@ -20,19 +22,17 @@ def validateEmployee():
     telephone = request.form.get("barber-telephone")
     address = request.form.get("barber-address")
     description = request.form.get("barber-description")
+    print(dados_completos)
     return AutenticadorGestor.cadastrarBarbeiro(photo, cpf, name, email, telephone, address, description)
 
 @gestor.route('/editar/barbeiro')
-def managerBarber():
-    return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html')
+def managerEmployee():
+    return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
-@gestor.route('/cadastrar/servico')
-def registerService():
-    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
-
-@gestor.route('/editar/servico')
-def managerService():
-    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
+@gestor.route('/painel/clientes')
+def gestorExibirClientes():
+    usuario = Cliente()
+    return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios=usuario.buscarTodosCLientes())
 
 @gestor.route('/login', methods=['GET'])
 def managerLoginPage():
@@ -49,7 +49,7 @@ def managerLogin():
 
 @gestor.route('/painel', methods=['POST','GET'])
 def managerPanel():
-    return render_template('pages/gestor/gestor-painel-rp.html')
+    return render_template('pages/gestor/gestor-painel-dinamico-rp.html')
 
 
 @gestor.route('/logout', methods=['POST','GET'])
@@ -67,14 +67,13 @@ def authentication():
             return redirect(url_for('cliente.clientAgendamentoServicos'))
         
         
-    #Criando as minhas rotas publicas
+    #Criando as rotas publicas para gestor
     routers_publics = ['gestor.managerSource','gestor.managerLoginPage', 'gestor.managerLogin']
     
     # se a rota for publica ele retorna aqui e envia para a rota desejada;
     if request.endpoint  in routers_publics:
         return 
     
-    # Se a rota não estiver nas rotas publicas ele verifica o token
-    
+    # Se a rota não estiver nas rotas publicas ele verifica q sessão
     if 'dados_gestor' not in session:
         return redirect(url_for('gestor.managerLoginPage'))

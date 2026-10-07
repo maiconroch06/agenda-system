@@ -16,83 +16,10 @@
         <div class="flex flex-1 pb-20 md:pb-0">
 
             <!-- SIDEBAR DESKTOP -->
-            <aside id="sidebar"
-                class="hidden md:flex md:flex-col md:w-64 md:h-screen md:sticky md:top-0 shrink-0 bg-[#232220] border-r border-[#38362f]">
-
-                <!-- Logo -->
-                <div class="block items-center px-5 py-5 border-b border-[#38362f]">
-                    {% set logo_class="h-16 md:h-20 lg:h-24" %}
-                    {% include "componetizacao/logo/logo-top-horizontal.html" %}
-                    <h1 class="mt-4 text-2xl font-bold">Manager Dash</h1>
-
-                </div>
-
-                <!-- Navegação Desktop -->
-                <nav class="flex flex-col p-3 gap-1 overflow-y-auto">
-                    <button
-                        class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-[#2a2825] text-[#f1efe8] font-medium text-sm cursor-pointer text-left w-full transition-colors"
-                        data-aba="inicio" onclick="irParaAba('inicio')">
-                        <span class="text-lg w-5.5 text-center">🏠</span> Início
-                    </button>
-                    <button
-                        class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
-                        data-aba="agenda" onclick="irParaAba('agenda')">
-                        <span class="text-lg w-5.5 text-center">📅</span> Agenda
-                    </button>
-                    <button
-                        class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
-                        data-aba="servicos" onclick="irParaAba('servicos')">
-                        <span class="text-lg w-5.5 text-center">✂️</span> Serviços
-                    </button>
-                    <button
-                        class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
-                        data-aba="barbeiros" onclick="irParaAba('barbeiros')">
-                        <span class="text-lg w-5.5 text-center">👤</span> Barbeiros
-                    </button>
-                    <button
-                        class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
-                        data-aba="clientes" onclick="irParaAba('clientes')">
-                        <span class="text-lg w-5.5 text-center">👥</span> Clientes
-                    </button>
-                    <!-- <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]" data-aba="financeiro" onclick="irParaAba('financeiro')">
-                    <span class="text-lg w-5.5 text-center">💰</span> Financeiro
-                </button> -->
-                </nav>
-
-                <div class="mt-auto mx-3 mb-5 px-4 py-3 rounded-lg border border-[#38362f] bg-transparent">
-                    <div class="flex items-center gap-3">
-                        <!-- Avatar -->
-                        <div class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden">
-                            {% if session.get('dados_gestor')['foto_path'] %}
-                            <img src="{{ url_for('static', filename=session.get('dados_gestor')['foto_path']) }}"
-                                alt="Avatar" class="w-full h-full object-cover">
-
-                            {% else %}
-
-                            <span class="text-sm font-bold text-[#f1efe8]">
-                                {{ session.get('dados_gestor')['nome_completo'][0]|upper }}
-                                <!-- Pega a primeira letra do nome-->
-                            </span>
-                            {% endif %}
-                        </div>
-                        <!-- Nome + Sair -->
-                        <div class="min-w-0">
-                            <div class="w-full">
-                                <p class="text-sm font-medium text-[#f1efe8]">
-                                    {{ session.get('dados_gestor')['nome_completo'].split(' ')[0]}}
-                                    <!-- Aplica um split no espeço em branco e pega o primeiro nome -->
-                                </p>
-                            </div>
-
-                            <a href="/gestor/logout"
-                                class="text-xs text-[#888780] hover:text-[#f1efe8] transition-colors">
-                                Sair
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
-            </aside>
+            <div class="flex items-center justify-start mb-4 md:mb-6 shrink-0">
+                    {% set logo_class="h-10 sm:h-12 md:h-14" %}
+                    {% include "componetizacao/SiderBar/sider-bar-gestor.html" %}
+            </div>
 
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
@@ -201,28 +128,65 @@
                 <section class="aba-func hidden" id="aba-servicos">
                     <div class="flex items-center justify-between mb-5 gap-3">
                         <h1 class="text-lg lg:text-xl font-medium">Catálogo de Serviços</h1>
-                        <a href="/gestor/cadastrar/servico"
-                            class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer inline-block text-center">
+                        <button
+                            class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer"
+                            onclick="abrirFormServico()">
                             + Novo serviço
-                        </a>
+                        </button>
+                    </div>
+
+                    <div id="form-servico-painel"
+                        class="hidden bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-5">
+                        <h3 class="text-sm font-medium mb-3">Cadastrar serviço</h3>
+                        <form class="flex flex-col gap-3" novalidate
+                            onsubmit="event.preventDefault(); adicionarServicoPainel();">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-xs font-medium text-[#888780]" for="psrv-nome">Nome do
+                                        serviço</label>
+                                    <input type="text" id="psrv-nome" placeholder="Ex: Corte degradê"
+                                        class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-xs font-medium text-[#888780]" for="psrv-preco">Preço
+                                        (R$)</label>
+                                    <input type="number" id="psrv-preco" placeholder="0.00" step="0.01"
+                                        class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-xs font-medium text-[#888780]" for="psrv-tempo">Duração
+                                        (minutos)</label>
+                                    <input type="number" id="psrv-tempo" placeholder="30"
+                                        class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
+                                </div>
+                            </div>
+                            <div class="flex justify-end gap-2 mt-2">
+                                <button type="button"
+                                    class="px-4 py-2 rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-xs font-medium hover:bg-[#2a2825]"
+                                    onclick="fecharFormServico()">Cancelar</button>
+                                <button type="button"
+                                    class="px-4 py-2 rounded-lg bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7]"
+                                    onclick="adicionarServicoPainel()">Salvar</button>
+                            </div>
+                        </form>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
                         id="lista-servicos-painel"></div>
                 </section>
 
-                <!-- ABA 4: PROFISSIONAIS -->
-                <section class="aba-func hidden" id="aba-barbeiros">
+                <!-- ABA 4: BARBEIROS -->
+                <section class="aba-func hidden" id="aba-profissionais">
                     <div class="flex items-center justify-between mb-5 gap-3">
                         <h1 class="text-lg lg:text-xl font-medium">Equipe de Barbeiros</h1>
-                        <a href="/gestor/cadastrar/barbeiro"
+                        <a href="/gestor/painel/barbeiro/cadastro"
                             class="inline-block px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
-                            + Novo barbeiro
+                            + Novo Barbeiro
                         </a>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
-                        id="lista-barbeiros-painel"></div>
+                        id="lista-profissionais-painel"></div>
                 </section>
 
                 <!-- ABA 5: CLIENTES -->
@@ -303,7 +267,7 @@
                                         <th class="p-3 px-4">Data</th>
                                         <th class="p-3 px-4">Cliente</th>
                                         <th class="p-3 px-4">Serviço</th>
-                                        <th class="p-3 px-4">Barbeiro</th>
+                                        <th class="p-3 px-4">Profissional</th>
                                         <th class="p-3 px-4">Valor</th>
                                         <th class="p-3 px-4">Status</th>
                                     </tr>
@@ -347,7 +311,7 @@
             </button>
             <button
                 class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
-                data-aba="barbeiros" onclick="irParaAba('barbeiros')">
+                data-aba="profissionais" onclick="irParaAba('profissionais')">
                 <span class="text-base">👤</span> Barbeiros
             </button>
         </nav>
@@ -473,7 +437,7 @@
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso"></div>
 
-    <script src="{{ url_for('static', filename='js/gestor-painel.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gestor-painel-dinamico.js') }}"></script>
 </body>
 
 </html>

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
 from controllers.autenticador_cliente_controller import AutenticacaoCliente
 from models import Usuario
+from datetime import datetime, timezone
 
 
 cliente = Blueprint('cliente', __name__, template_folder='templates')
@@ -43,27 +44,39 @@ def clientRegisterPage():
 def clientRegister():
     if  request.method == "POST":
         #COLOCAR A VALIDAÇÃO AQUI
-              
+        
+        #remove a pontuação do telefone      
         telefone_temp = ''.join(filter(str.isdigit,request.form.get('telefone')))
+
+       
         # Instancia o objeto Usuario com os dados do formulário
         usuario = Usuario(
             nome_completo=request.form.get('nome'),
             telefone=telefone_temp,
+            cpf=None,
             email=request.form.get('email'),
             senha= request.form.get('senha'),
             foto=request.files.get('foto').filename if request.files.get('foto') else None,
-            id_endereco = None
+            id_endereco = None,
+            ativo=1,
+            data_cadastro=datetime.now(timezone.utc),
+            data_atualizacao=datetime.now(timezone.utc)
+            
         )
         return AutenticacaoCliente.registrarCliente(usuario)
             
    
 @cliente.route('/agendamento/servicos', methods=['GET','POST'])
 def clientAgendamentoServicos():
-   return render_template('pages/cliente/cliente-agendamento-rp.html')
+   return render_template('pages/cliente/agendamento-rp.html')
 
 @cliente.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():
-   return render_template('pages/cliente/cliente-agendamento-rp.html')
+   return render_template('pages/cliente/agendamento-rp.html')
+
+@cliente.route('/cadastro/sucesso', methods=['GET','POST'])
+def cadastroSucesso():
+   return render_template('pages/cliente/cadastro_realizado_rp.html')
 
 @cliente.before_request
 def authentication():

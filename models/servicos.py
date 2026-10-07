@@ -1,17 +1,18 @@
 from datetime import datetime, timezone
 from database import db
+from sqlalchemy.dialects.mysql import TINYINT
 
 class Servicos(db.Model):
     __tablename__ = 'servicos'
 
     # Chave Primária
-    id_servicos = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
     descricao = db.Column('descrição', db.String(255), nullable=False)  
     valor = db.Column(db.Numeric(10, 2), nullable=False)                
     duracao = db.Column(db.Integer, nullable=False)                     
-    imagem = db.Column(db.String(45), nullable=False)
-    ativo = db.Column(db.Boolean, default=True, nullable=False)         
+    foto_nome = db.Column(db.String(45), nullable=False)
+    ativo = db.Column(TINYINT(1),  nullable=False)         
     
     data_cadastro = db.Column(
         db.DateTime, 
@@ -19,8 +20,9 @@ class Servicos(db.Model):
         nullable=False
     )
     
-    barbearia_cnpj = db.Column(
-        db.String(14), 
-        db.ForeignKey('barbearias.cnpj', onupdate='CASCADE', ondelete='CASCADE'), 
-        nullable=False
-    )
+    data_atualizacao = db.Column(
+            db.DateTime, 
+            default=lambda: datetime.now(timezone.utc), 
+            nullable=False
+        )
+    

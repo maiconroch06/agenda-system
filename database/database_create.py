@@ -16,8 +16,7 @@ class Database_create:
 
 def create_database(app):
     
-    #Para criar o banco o usuario dev_barbearia deve esta com os privilegios de root
-        
+    #Para criar o banco o usuario dev_barbearia deve esta com os privilegios de root  
     conexao = pymysql.connect(
         host=Database_create.SERVIDOR,
         user=Database_create.USUARIO,
