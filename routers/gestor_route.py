@@ -69,8 +69,13 @@ def gestorAbaServicos():
     return render_template('pages/gestor/gestor-painel-servicos-rp.html')
 
 
+@gestor.route('/painel/servicos/gerenciar')
+def gestorGerenciaServicos():
+    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
+
+
 # Painel Gestor - Aba de visualização dos Barbeiros cadastrados
-@gestor.route('/painel', methods=['POST','GET'])
+@gestor.route('/painel/barbeiros', methods=['POST','GET'])
 def gestorAbaBarbeiros():
     return render_template('pages/gestor/gestor-painel-barbeiros-rp.html')
 

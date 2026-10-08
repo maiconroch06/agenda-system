@@ -418,8 +418,17 @@
   .mt-5 {
     margin-top: calc(var(--spacing) * 5);
   }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+  .mt-10 {
+    margin-top: calc(var(--spacing) * 10);
+  }
   .mt-auto {
     margin-top: auto;
+  }
+  .mr-5 {
+    margin-right: calc(var(--spacing) * 5);
   }
   .mb-0\.5 {
     margin-bottom: calc(var(--spacing) * 0.5);
@@ -459,6 +468,9 @@
   }
   .ml-4 {
     margin-left: calc(var(--spacing) * 4);
+  }
+  .ml-5 {
+    margin-left: calc(var(--spacing) * 5);
   }
   .line-clamp-1 {
     overflow: hidden;
@@ -534,6 +546,9 @@
   }
   .h-28 {
     height: calc(var(--spacing) * 28);
+  }
+  .h-40 {
+    height: calc(var(--spacing) * 40);
   }
   .h-\[28px\] {
     height: 28px;
@@ -612,6 +627,9 @@
   }
   .w-28 {
     width: calc(var(--spacing) * 28);
+  }
+  .w-40 {
+    width: calc(var(--spacing) * 40);
   }
   .w-56 {
     width: calc(var(--spacing) * 56);
@@ -784,6 +802,9 @@
   }
   .justify-end {
     justify-content: flex-end;
+  }
+  .justify-start {
+    justify-content: flex-start;
   }
   .gap-0\.5 {
     gap: calc(var(--spacing) * 0.5);
@@ -1734,6 +1755,9 @@
     .group-hover\:text-\[\#9fe1cb\]:is(:where(.group):hover *) {
       color: #9fe1cb;
     }
+    .group-hover\:text-black:is(:where(.group):hover *) {
+      color: var(--color-black);
+    }
     .group-hover\:text-brand-gold:is(:where(.group):hover *) {
       color: var(--color-brand-gold);
     }
@@ -1905,6 +1929,9 @@
     .hover\:border-brand-gold:hover {
       border-color: var(--color-brand-gold);
     }
+    .hover\:border-brand-gold-hover:hover {
+      border-color: var(--color-brand-gold-hover);
+    }
     .hover\:border-brand-gold\/40:hover {
       border-color: color-mix(in srgb, #cfa85f 40%, transparent);
     }
@@ -1932,6 +1959,9 @@
     .hover\:border-white:hover {
       border-color: var(--color-white);
     }
+    .hover\:bg-\[\#0b6351\]:hover {
+      background-color: #0b6351;
+    }
     .hover\:bg-\[\#2a2825\]:hover {
       background-color: #2a2825;
     }
@@ -1943,6 +1973,9 @@
     }
     .hover\:bg-\[\#3a1510\]:hover {
       background-color: #3a1510;
+    }
+    .hover\:bg-\[\#4d1c16\]:hover {
+      background-color: #4d1c16;
     }
     .hover\:bg-\[\#04342c\]:hover {
       background-color: #04342c;
@@ -1961,6 +1994,9 @@
     }
     .hover\:bg-\[\#e2dfd7\]:hover {
       background-color: #e2dfd7;
+    }
+    .hover\:bg-\[\#f1efe8\]:hover {
+      background-color: #f1efe8;
     }
     .hover\:bg-brand-gold:hover {
       background-color: var(--color-brand-gold);
@@ -1981,6 +2017,9 @@
     }
     .hover\:bg-zinc-200:hover {
       background-color: var(--color-zinc-200);
+    }
+    .hover\:text-\[\#161513\]:hover {
+      color: #161513;
     }
     .hover\:text-\[\#f1efe8\]:hover {
       color: #f1efe8;
@@ -2040,6 +2079,9 @@
   .focus\:border-brand-gold:focus {
     border-color: var(--color-brand-gold);
   }
+  .focus\:border-brand-gold-hover:focus {
+    border-color: var(--color-brand-gold-hover);
+  }
   .focus\:ring-2:focus {
     --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -2050,6 +2092,9 @@
   }
   .focus\:ring-\[\#04342c\]:focus {
     --tw-ring-color: #04342c;
+  }
+  .focus\:ring-brand-gold:focus {
+    --tw-ring-color: var(--color-brand-gold);
   }
   .focus\:outline-none:focus {
     --tw-outline-style: none;
