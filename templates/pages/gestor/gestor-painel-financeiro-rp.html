@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMS Barbearia - Painel Administrativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+</head>
+
+<body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
+
+    <div class="flex flex-col min-h-screen">
+
+        <div class="flex flex-1 pb-20 md:pb-0">
+
+            <!-- SIDEBAR DESKTOP -->
+            <div class="flex items-center justify-start mb-4 md:mb-6 shrink-0">
+                    {% set logo_class="h-10 sm:h-12 md:h-14" %}
+                    {% include "componetizacao/SiderBar/sider-bar-gestor.html" %}
+            </div>
+
+            <!-- CONTEÚDO PRINCIPAL -->
+            <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+
+                <!-- ABA 6: FINANCEIRO -->
+                <section class="aba-func" id="aba-financeiro">
+                    <div class="flex items-center justify-between mb-5 gap-3">
+                        <h1 class="text-lg lg:text-xl font-medium">Dashboard Financeiro</h1>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-6">
+                        <div
+                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Receita do
+                                Mês</div>
+                            <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-receita-mes">R$ 0,00</div>
+                        </div>
+                        <div
+                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Total
+                                Atendimentos</div>
+                            <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-total-cortes">0</div>
+                        </div>
+                        <div
+                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Valor Médio ao Mês
+                            </div>
+                            <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-ticket-medio">R$ 0,00</div>
+                        </div>
+                        <div
+                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Serviço Mais
+                                Realizado</div>
+                            <div class="text-lg font-semibold text-[#f1efe8] truncate" id="fin-mais-realizado">—</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden">
+                        <div
+                            class="p-3 px-4 border-b border-[#38362f] text-xs font-medium text-[#888780] uppercase tracking-wider">
+                            Histórico de Atendimentos</div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr
+                                        class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
+                                        <th class="p-3 px-4">Data</th>
+                                        <th class="p-3 px-4">Cliente</th>
+                                        <th class="p-3 px-4">Serviço(s)</th>
+                                        <th class="p-3 px-4">Barbeiro</th>
+                                        <th class="p-3 px-4">Valor</th>
+                                        <th class="p-3 px-4">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fin-tabela-corpo" class="text-xs text-[#f1efe8]">
+                                    <tr>
+                                        <td colspan="6" class="p-6 text-center text-[#888780]">Nenhum atendimento
+                                            registrado ainda.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <!-- NAVEGAÇÃO INFERIOR MOBILE -->
+        {% include "componetizacao/SiderBar/side-bar-gestor-mobile.html" %}
+
+    </div>
+
+    <!-- TOAST AVISO -->
+    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+        id="aviso"></div>
+
+    <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gestor-painel-inicio.js') }}"></script>
+
+</body>
+
+</html>

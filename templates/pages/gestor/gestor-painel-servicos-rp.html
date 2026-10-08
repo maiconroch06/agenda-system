@@ -81,34 +81,7 @@
         </div>
 
         <!-- NAVEGAÇÃO INFERIOR MOBILE -->
-        <nav
-            class="bottom-nav md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#232220] border-t border-[#38362f] flex z-40">
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#f1efe8] text-[10px] cursor-pointer"
-                data-aba="inicio" onclick="irParaAba('inicio')">
-                <span class="text-base">🏠</span> Início
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
-                data-aba="agenda" onclick="irParaAba('agenda')">
-                <span class="text-base">📅</span> Agenda
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
-                data-aba="servicos" onclick="irParaAba('servicos')">
-                <span class="text-base">✂️</span> Serviços
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
-                data-aba="clientes" onclick="irParaAba('clientes')">
-                <span class="text-base">👥</span> Clientes
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
-                data-aba="profissionais" onclick="irParaAba('profissionais')">
-                <span class="text-base">👤</span> Barbeiros
-            </button>
-        </nav>
+        {% include "componetizacao/SiderBar/side-bar-gestor-mobile.html" %}
 
     </div>
 

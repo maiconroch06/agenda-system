@@ -59,13 +59,13 @@ def gestorPainel():
 
 # Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros
 @gestor.route('/painel/agenda')
-def gestorAbaAgenda():
+def gestorPainelAgenda():
     return render_template('pages/gestor/gestor-painel-agenda-rp.html')
 
 
 # Painel Gestor - Aba de visualização dos Serviços cadastrados
 @gestor.route('/painel/servicos')
-def gestorAbaServicos():
+def gestorPainelServicos():
     return render_template('pages/gestor/gestor-painel-servicos-rp.html')
 
 
@@ -76,7 +76,7 @@ def gestorGerenciaServicos():
 
 # Painel Gestor - Aba de visualização dos Barbeiros cadastrados
 @gestor.route('/painel/barbeiros', methods=['POST','GET'])
-def gestorAbaBarbeiros():
+def gestorPainelBarbeiros():
     return render_template('pages/gestor/gestor-painel-barbeiros-rp.html')
 
 
@@ -113,4 +113,10 @@ def gestorAbaBarbeiros():
 def gestorExibirClientes():
     usuario = Cliente()
     return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios=usuario.buscarTodosCLientes())
+
+
+# Painel Gestor - Aba Financeira
+@gestor.route('/painel/financeiro')
+def gestorPainelFinaceiro():
+    return render_template('pages/gestor/gestor-painel-financeiro-rp.html')
 
