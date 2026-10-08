@@ -184,5 +184,3 @@ class AutenticadorGestor():
             return redirect(url_for('gestor.gestorServicoCadastrar'))
             
         return redirect(url_for('gestor.gestorAbaServicos'))    
-=======
->>>>>>> feature-backend
