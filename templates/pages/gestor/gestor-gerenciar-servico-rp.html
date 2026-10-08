@@ -10,14 +10,21 @@
 </head>
 <body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen flex p-4 sm:p-6 antialiased selection:bg-[#0f6e56] selection:text-white overflow-x-hidden">
     
+   
+
     <!-- Container Principal -->
     <div class="w-full max-w-2xl m-auto bg-[#232220] border border-[#38362f] rounded-[14px] p-5 sm:p-6 shadow-xl">
+        <!-- Logo horizontal da barbearia -->
+   <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
+    {% set logo_class="h-10 sm:h-12 md:h-14" %}
+    {% include "componetizacao/logo/logo-top-horizontal.html" %}
+</div>
 
         <h1 id="form-title" class="text-center text-xl font-medium mb-1">Cadastrar Serviço</h1>
         <p id="form-subtitle" class="text-center text-[13px] text-[#888780] mb-5">Preencha os dados do serviço para disponibilizar no agendamento</p>
 
         <!-- Formulário -->
-        <form id="form-servico" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" novalidate>
+        <form id="form-servico" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" method="post"  action="/gestor/painel/servicos/cadastrar" >
             <div class="space-y-4">
                 <!-- Upload de Imagem -->
                 <div class="flex flex-col items-center justify-center gap-1.5">
@@ -33,24 +40,25 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div class="flex flex-col gap-1 col-span-full">
                         <label for="srv-nome" class="text-[12px] font-medium text-[#888780]">Nome do Serviço*</label>
-                        <input type="text" id="srv-nome" placeholder="Ex: Corte Degradê + Barba" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                        <input type="text" id="srv-nome" name= "srv-nome" placeholder="Ex: Corte Degradê + Barba" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="srv-preco" class="text-[12px] font-medium text-[#888780]">Preço (R$)*</label>
-                        <input type="text" id="srv-preco" placeholder="R$ 0,00" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                        <input type="text" id="srv-preco" name="srv-preco" placeholder="R$ 0,00" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="srv-duracao" class="text-[12px] font-medium text-[#888780]">Duração (min)*</label>
-                        <input type="text" id="srv-duracao" placeholder="Ex: 45 min" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                        <input type="text" id="srv-duracao" name="srv-duracao" placeholder="Ex: 45 min" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
                     </div>
                 </div>
+                <div class="flex justify-end">
+                    <a href="/gestor/painel/servicos"><button type="button" id="btn-submit" class="h-10 px-5 mr-5 rounded-[8px] border-1 border-white text-white hover:bg-amber-50 hover:text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">voltar</button></a>
+                    <button type="submit" id="btn-submit" class="h-10 px-5 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">Cadastrar</button>
+                </div>    
             </div>
         </form>
 
-        <!-- Botão Ação -->
-        <div class="flex justify-end">
-            <button type="button" id="btn-submit" class="h-10 px-5 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">Cadastrar</button>
-        </div>
+       
     </div>
 
     <!-- Modal de Resumo -->

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request
 from controllers.autenticador_gestor_controller import AutenticadorGestor
 from models.cliente import Cliente
+from models.servicos import Servicos
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
 
@@ -19,30 +20,13 @@ def gestorLoginPagina():
     return redirect(url_for('gestor.gestorPainel'))
 
 
-# Tela de Login - ?
+
+# Autenticação de Gestor - ?
 @gestor.route('/login', methods=["POST"])
 def gestorLogin():
     email_digitado = request.form.get('manager-email-2')
     senha_digitada = request.form.get('manager-password')
     return AutenticadorGestor.login(email_digitado,senha_digitada)
-
-# Autenticação de Gestor - ?
-@gestor.before_request
-def authentication():
-    #Varifica se o cliente tem sessão
-    if 'dados_cliente' in session:
-            return redirect(url_for('cliente.clientAgendamentoServicos'))
-        
-    #Criando as rotas publicas para gestor
-    routers_publics = ['gestor.gestorSource','gestor.gestorLoginPagina', 'gestor.gestorLogin']
-    
-    # se a rota for publica ele retorna aqui e envia para a rota desejada;
-    if request.endpoint in routers_publics:
-        return 
-    
-    # Se a rota não estiver nas rotas publicas ele verifica q sessão
-    if 'dados_gestor' not in session:
-        return redirect(url_for('gestor.gestorLoginPagina'))
 
 # Logout Gestor - Encerramento da sessão do Gestor
 @gestor.route('/logout', methods=['POST','GET'])
@@ -66,12 +50,56 @@ def gestorAbaAgenda():
 # Painel Gestor - Aba de visualização dos Serviços cadastrados
 @gestor.route('/painel/servicos')
 def gestorAbaServicos():
-    return render_template('pages/gestor/gestor-painel-servicos-rp.html')
+    # consulta no banco, 
+    servicos = Servicos().consultarTodosOsServicos()
+    return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = servicos)
 
+# Painel Gestor - Aba de visualização dos Serviços cadastrados
+@gestor.route('/painel/servicos/cadastrar', methods=['GET'])
+def gestorServicoPageCadastrar():
+    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
+
+
+# Painel Gestor - Aba de visualização dos Serviços cadastrados
+@gestor.route('/painel/servicos/cadastrar', methods=['POST'])
+def gestorServicoCadastrar():
+    foto_nome = "foto_nome"
+    descricao_servico = request.form.get('srv-nome')
+    preco = request.form.get('srv-preco')
+    duracao = request.form.get('srv-duracao')
+
+    if not descricao_servico.strip() or not preco.strip() or not duracao.strip():
+        return render_template("pages/gestor/gestor-gerenciar-servico-rp.html")
+    return AutenticadorGestor.cadastrarServico(foto_nome, descricao_servico, float(preco), int(duracao))
+
+# Painel Gestor - Aba de Clientes
+@gestor.route('/painel/clientes')
+def gestorExibirClientes():
+    usuario = Cliente()
+    return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios=usuario.buscarTodosCLientes())
+
+# CONFIGURAÇÃO DAS ROTAS PRIVADAS
+@gestor.before_request
+def authentication():
+    #Varifica se o cliente tem sessão
+    if 'dados_cliente' in session:
+            return redirect(url_for('cliente.clientAgendamentoServicos'))
+        
+    #Criando as rotas publicas para gestor
+    routers_publics = ['gestor.gestorSource','gestor.gestorLoginPagina', 'gestor.gestorLogin']
+    
+    # se a rota for publica ele retorna aqui e envia para a rota desejada;
+    if request.endpoint in routers_publics:
+        return 
+    
+    # Se a rota não estiver nas rotas publicas ele verifica q sessão
+    if 'dados_gestor' not in session:
+        return redirect(url_for('gestor.gestorLoginPagina'))
+    
 
 # Painel Gestor - Aba de visualização dos Barbeiros cadastrados
-@gestor.route('/painel/barbeiros', methods=['GET'])
-def gestorAbaBarbeiros():
+#@gestor.route('/painel/barbeiros', methods=['GET'])
+#def gestorAbaBarbeiros():
 
 
     
@@ -102,9 +130,5 @@ def gestorAbaBarbeiros():
     #     return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
 
-# Painel Gestor - Aba de Clientes
-@gestor.route('/painel/clientes')
-def gestorExibirClientes():
-    usuario = Cliente()
-    return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios=usuario.buscarTodosCLientes())
+
 

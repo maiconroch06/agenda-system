@@ -27,54 +27,47 @@
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
                 <!-- ABA 3: SERVIÇOS -->
-                <section class="aba-func hidden" id="aba-servicos">
+                <section class="aba-func" id="aba-servicos">
                     <div class="flex items-center justify-between mb-5 gap-3">
                         <h1 class="text-lg lg:text-xl font-medium">Catálogo de Serviços</h1>
-                        <button
-                            class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer"
-                            onclick="abrirFormServico()">
+                        
+                    <a href="/gestor/painel/servicos/cadastrar">
+                            <button
+                            class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
                             + Novo serviço
-                        </button>
+                            </button>
+                    </a>
                     </div>
-
-                    <div id="form-servico-painel"
-                        class="hidden bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-5">
-                        <h3 class="text-sm font-medium mb-3">Cadastrar serviço</h3>
-                        <form class="flex flex-col gap-3" novalidate
-                            onsubmit="event.preventDefault(); adicionarServicoPainel();">
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <div class="flex flex-col gap-1">
-                                    <label class="text-xs font-medium text-[#888780]" for="psrv-nome">Nome do
-                                        serviço</label>
-                                    <input type="text" id="psrv-nome" placeholder="Ex: Corte degradê"
-                                        class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
-                                </div>
-                                <div class="flex flex-col gap-1">
-                                    <label class="text-xs font-medium text-[#888780]" for="psrv-preco">Preço
-                                        (R$)</label>
-                                    <input type="number" id="psrv-preco" placeholder="0.00" step="0.01"
-                                        class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
-                                </div>
-                                <div class="flex flex-col gap-1">
-                                    <label class="text-xs font-medium text-[#888780]" for="psrv-tempo">Duração
-                                        (minutos)</label>
-                                    <input type="number" id="psrv-tempo" placeholder="30"
-                                        class="h-10 px-3 rounded-lg border border-[#38362f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none">
-                                </div>
-                            </div>
-                            <div class="flex justify-end gap-2 mt-2">
-                                <button type="button"
-                                    class="px-4 py-2 rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-xs font-medium hover:bg-[#2a2825]"
-                                    onclick="fecharFormServico()">Cancelar</button>
-                                <button type="button"
-                                    class="px-4 py-2 rounded-lg bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7]"
-                                    onclick="adicionarServicoPainel()">Salvar</button>
-                            </div>
-                        </form>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- seus cards aqui -->
                     </div>
+                    
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
-                        id="lista-servicos-painel"></div>
+                        id="lista-servicos-painel">
+                       {% for servico in listaServicos%}
+                        <div class=" dark:bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-700/60 transition-all duration-200" >
+                            <div class="relative flex flex-col items-center">
+                                
+                                <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${s.foto}" alt="${s.nome}">
+                               <!--
+                                ${s.foto
+                                    ? ``
+                                    : `<div class="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 flex items-center justify-center text-3xl mb-3 text-zinc-400">✂</div>`
+                                }
+                                --> 
+                
+                                <h3 class="font-bold   text-base mb-1 text-center">{{servico.descricao}}</h3>
+                                <p class="text-xs   text-center mb-3 line-clamp-2">Valor {{servico.valor}} | duracao {{servico.duracao}} minutos</p>
+                               
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[#38362f]">
+                                <button onclick="editarServico('${s.id}')"  class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Editar</button>
+                                <button onclick="excluirServico('${s.id}')" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Remover</button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </section>
 
             </main>

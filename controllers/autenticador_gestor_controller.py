@@ -1,8 +1,10 @@
 from models.gestor import Gestor
+from models.servicos import Servicos
 from models.barbearia import Barbearia
 from flask import Blueprint, session, redirect, url_for
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
+from database import db
 
 class AutenticadorGestor():
     
@@ -48,3 +50,41 @@ class AutenticadorGestor():
             session['erro'] = "Por favor, preencha todos os campos."
             return redirect(url_for('gestor.gestorBarbeiroCadastro'))
         return "<h1>Deu Certo</h1>"
+
+    def cadastrarServico(foto:str, descricao: str, preco: float, duracao:int ):
+        # Validação inicial simples
+        if (preco < 0) or (duracao < 0):
+            return  redirect(url_for('gestor.gestorServicoCadastrar'))
+         
+       # Salvando os dados na sessão do Flask
+        try:
+            servicos = Servicos()
+            servicos.descricao = descricao
+            servicos.foto_nome = foto
+            servicos.valor = preco
+            servicos.duracao = duracao
+                
+            resultado_servico = servicos.salvarServico()
+
+            if not resultado_servico:
+                session['erro'] = 'Erro ao criar o serviço'
+                return redirect(url_for('gestor.gestorServicoCadastrar'))
+            
+            db.session.commit()
+       
+        except IntegrityError as i:
+            db.session.rollback()
+            
+
+            print(f"{i}")
+            session['erro'] = "Erro ao cadastrar o serviço!" 
+            return redirect(url_for('gestor.gestorServicoCadastrar'))
+        except Exception as erro:
+            print(f"{erro}")
+            db.session.rollback()
+
+            session['erro'] = str(erro)
+            return redirect(url_for('gestor.gestorServicoCadastrar'))
+        
+        return redirect(url_for('gestor.gestorAbaServicos'))
+    
