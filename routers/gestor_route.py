@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, redirect, url_for, session, request, flash
+import base64, os
+from flask import Blueprint, render_template, redirect, url_for, session, request
 from controllers.autenticador_gestor_controller import AutenticadorGestor
+from controllers.validar_cadastro_barbeiro import ValidarBarbeiro
 from models.cliente import Cliente
-from models.servicos import Servicos
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
 
@@ -20,13 +21,30 @@ def gestorLoginPagina():
     return redirect(url_for('gestor.gestorPainel'))
 
 
-
-# Autenticação de Gestor - ?
+# Tela de Login - ?
 @gestor.route('/login', methods=["POST"])
 def gestorLogin():
     email_digitado = request.form.get('manager-email-2')
     senha_digitada = request.form.get('manager-password')
     return AutenticadorGestor.login(email_digitado,senha_digitada)
+
+# Autenticação de Gestor - ?
+@gestor.before_request
+def authentication():
+    #Varifica se o cliente tem sessão
+    if 'dados_cliente' in session:
+            return redirect(url_for('cliente.clientAgendamentoServicos'))
+        
+    #Criando as rotas publicas para gestor
+    routers_publics = ['gestor.gestorSource','gestor.gestorLoginPagina', 'gestor.gestorLogin']
+    
+    # se a rota for publica ele retorna aqui e envia para a rota desejada;
+    if request.endpoint in routers_publics:
+        return 
+    
+    # Se a rota não estiver nas rotas publicas ele verifica q sessão
+    if 'dados_gestor' not in session:
+        return redirect(url_for('gestor.gestorLoginPagina'))
 
 # Logout Gestor - Encerramento da sessão do Gestor
 @gestor.route('/logout', methods=['POST','GET'])
@@ -50,93 +68,87 @@ def gestorAbaAgenda():
 # Painel Gestor - Aba de visualização dos Serviços cadastrados
 @gestor.route('/painel/servicos')
 def gestorAbaServicos():
-    # consulta no banco, 
-    servicos = Servicos().consultarTodosOsServicos()
-    return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = servicos)
-
-# Painel Gestor - Aba de visualização dos Serviços cadastrados
-@gestor.route('/painel/servicos/cadastrar', methods=['GET'])
-def gestorServicoPageCadastrar():
-    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
+    return render_template('pages/gestor/gestor-painel-servicos-rp.html')
 
 
-# Painel Gestor - Aba de visualização dos Serviços cadastrados
-@gestor.route('/painel/servicos/cadastrar', methods=['POST'])
-def gestorServicoCadastrar():
-    foto_nome = "foto_nome"
-    descricao_servico = request.form.get('srv-nome')
-    preco = request.form.get('srv-preco')
-    duracao = request.form.get('srv-duracao')
-     
-    return AutenticadorGestor.cadastrarServico(foto_nome, descricao_servico, preco, duracao)
+# Painel Gestor - Aba de visualização dos Barbeiros cadastrados
+@gestor.route('/painel/barbeiros', methods=['GET'])
+def gestorAbaBarbeiros():
+    return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html')
 
-# Painel Gestor - Remover servico
-@gestor.route('/painel/servicos/deletar/<int:id_servico>', methods=['GET'])
-def gestorServicoDeletar(id_servico:int): 
-    return AutenticadorGestor.deletarServico(id_servico)
+    
+# Gerenciar Barbeiro (Cadastro) - Cadastro de Barbeiro
+# @gestor.route('painel/barbeiro/cadastro', methods=['GET'])
+# def gestorBarbeiroCadastro():
+#     return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
-# Painel Gestor - Editar servico
-@gestor.route('/painel/servicos/editar/<int:id_servico>', methods=['GET'])
-def gestorServicoEditar(id_servico:int): 
-    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
+
+# Gerenciar Barbeiro (Cadastro->Validação) - Validando dados informados no cadastro do Barbeiro
+@gestor.route('painel/barbeiro/cadastro', methods=['POST'])
+def gestorBarbeiroValidar():
+    # foto_base64 = foto = request.files.get("foto")
+
+    # # Deve salvar arquivo
+    # if foto_base64:
+    #     # 1. Isola os dados binários reais da string Base64
+    #     if "," in foto_base64:
+    #         cabecalho, dados_imagem = foto_base64.split(",", 1)
+    #     else:
+    #         dados_imagem = foto_base64
+            
+    #     try:
+    #         # 2. Decodifica os bytes da imagem
+    #         conteudo_binario = base64.b64decode(dados_imagem)
+            
+    #         # 3. Garante que as pastas de destino existam para não dar erro de "Folder not found"
+    #         pasta_destino = "static/uploads"
+    #         os.makedirs(pasta_destino, exist_ok=True)
+            
+    #         # Remove caracteres especiais do CPF para o nome do arquivo (opcional, mas recomendado)
+    #         cpf_limpo = "".join(filter(str.isdigit, cpf)) if cpf else "sem_cpf"
+    #         caminho_arquivo = os.path.join(pasta_destino, f"{cpf_limpo}.jpg")
+            
+    #         # 4. Salva o arquivo final
+    #         with open(caminho_arquivo, "wb") as f:
+    #             f.write(conteudo_binario)
+                
+    #     except Exception as e:
+    #         # Se a string base64 vier corrompida ou houver erro de permissão de escrita
+    #         print(f"Erro ao processar e salvar a imagem: {e}")
+    #         # Aqui você pode decidir se retorna um erro para o usuário ou se continua sem foto
+
+    # cpf = request.form.get("cpf")
+    # nome = request.form.get("nome")
+    # email = request.form.get("email")
+    # telefone = request.form.get("telefone")
+    # senha = request.form.get("senha")
+    # confirmaSenha = request.form.get("confirmar-senha")
+    # descricao = request.form.get("descricao")
+
+    # cep = request.form.get("cep")
+    # cidade = request.form.get("cidade")
+    # uf = request.form.get("unidade-federal")
+    # bairro = request.form.get("bairro")
+    # logradouro = request.form.get("logradouro")
+    # numero = request.form.get("numero")
+    # complemento = request.form.get("complemento")
+    # sequencia = request.form.get("sequencia")
+    return ValidarBarbeiro.validarFormulario(
+        request,
+        'pages/gestor/gestor-gerenciar-barbeiro-rp.html',
+        'gestor.gestorAbaBarbeiros'
+    )
+
+
+# # Gerenciar Barbeiro (Edição) - Editando dados de um Barbeiro existente
+# @gestor.route('/editar/barbeiro')
+# def gestorBarbeiroEditar():
+#     return render_template('pages/gestor/gestor-barbeiro-rp.html')
+
 
 # Painel Gestor - Aba de Clientes
 @gestor.route('/painel/clientes')
 def gestorExibirClientes():
     usuario = Cliente()
     return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios=usuario.buscarTodosCLientes())
-
-# CONFIGURAÇÃO DAS ROTAS PRIVADAS
-@gestor.before_request
-def authentication():
-    #Varifica se o cliente tem sessão
-    if 'dados_cliente' in session:
-            return redirect(url_for('cliente.clientAgendamentoServicos'))
-        
-    #Criando as rotas publicas para gestor
-    routers_publics = ['gestor.gestorSource','gestor.gestorLoginPagina', 'gestor.gestorLogin']
-    
-    # se a rota for publica ele retorna aqui e envia para a rota desejada;
-    if request.endpoint in routers_publics:
-        return 
-    
-    # Se a rota não estiver nas rotas publicas ele verifica q sessão
-    if 'dados_gestor' not in session:
-        return redirect(url_for('gestor.gestorLoginPagina'))
-    
-
-# Painel Gestor - Aba de visualização dos Barbeiros cadastrados
-#@gestor.route('/painel/barbeiros', methods=['GET'])
-#def gestorAbaBarbeiros():
-
-
-    
-    # Gerenciar Barbeiro (Cadastro) - Cadastro de Barbeiro
-    # @gestor.route('painel/barbeiro/cadastro', methods=['GET'])
-    # def gestorBarbeiroCadastro():
-    #     return render_template('pages/gestor/gestor-barbeiro-rp.html')
-
-
-    # # Gerenciar Barbeiro (Cadastro->Validação) - Validando dados informados no cadastro do Barbeiro
-    # @gestor.route('painel/barbeiro/cadastro', methods=['POST'])
-    # def gestorBarbeiroValidar():
-    #     dados_completos = request.form
-    #     photo = request.form.get("barber-photo")
-    #     cpf = request.form.get("barber-cpf")
-    #     email = request.form.get("barber-email")
-    #     name = request.form.get("barber-name")
-    #     telephone = request.form.get("barber-telephone")
-    #     address = request.form.get("barber-address")
-    #     description = request.form.get("barber-description")
-    #     print(dados_completos)
-    #     return AutenticadorGestor.cadastrarBarbeiro(photo, cpf, name, email, telephone, address, description)
-
-
-    # # Gerenciar Barbeiro (Edição) - Editando dados de um Barbeiro existente
-    # @gestor.route('/editar/barbeiro')
-    # def gestorBarbeiroEditar():
-    #     return render_template('pages/gestor/gestor-barbeiro-rp.html')
-
-
-
 

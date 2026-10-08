@@ -15,13 +15,21 @@ class Endereco(db.Model):
     complemento = db.Column(db.String(100), nullable=True)
     fk_estado =  db.Column(db.Integer, db.ForeignKey('estados.id'), nullable=True)     
 
-    def __init__(self, cep, cidade, numero, bairro, estado, sequencia=None, complemento=None):
+    def __init__(
+        self,
+        cep,
+        cidade,
+        numero,
+        bairro,
+        estado,
+        sequencia=None,
+        complemento=None
+    ):
         self.cep = cep
-        self.cidade = cidade if (cidade := cidade) else None
         self.cidade = cidade
         self.numero = numero
         self.bairro = bairro
-        self.estado = estado
+        self.fk_estado = estado
         self.sequencia = sequencia
         self.complemento = complemento
 

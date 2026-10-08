@@ -43,6 +43,7 @@ class AutenticadorGestor():
             # Se o email não estiver cadastrado                  
             session['erro'] = "ATENÇÃO: usuário não cadastrado.\nRealize o seu cadastro"
             return redirect(url_for('gestor.gestorLoginPagina'))
+<<<<<<< HEAD
 
     def cadastrarBarbeiro(photo:str, cpf:str, name:str, email:str, telephone:str, address:str, description:str):
         # Validação inicial simples
@@ -184,3 +185,5 @@ class AutenticadorGestor():
             return redirect(url_for('gestor.gestorServicoCadastrar'))
             
         return redirect(url_for('gestor.gestorAbaServicos'))    
+=======
+>>>>>>> feature-backend
