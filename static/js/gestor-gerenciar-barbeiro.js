@@ -189,7 +189,7 @@ function configurarEventos() {
     els.btnVoltar.addEventListener("click", () => alterarEtapa('prev'));
     
     els.btnSubmit.addEventListener("click", (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         salvarDados();
     });
 
@@ -273,31 +273,19 @@ window.fecharModalResumo = function() {
 };
 
 window.finalizarCadastro = function() {
-    // Aqui você integra a chamada da API/backend para salvar os dados se necessário
-    // Exemplo de como poderia recolher o payload com os dados:
-    /*
-    const payload = {
-        cpf: els.cpf.value,
-        nome: els.nome.value,
-        email: els.email.value,
-        telefone: els.telefone.value,
-        descricao: els.descricao.value,
-        foto: state.fotoBase64,
-        endereco: {
-            cep: els.cep.value,
-            cidade: els.cidade.value,
-            uf: els.uf.value,
-            bairro: els.bairro.value,
-            logradouro: els.logradouro.value,
-            numero: els.numero.value,
-            complemento: els.complemento.value,
-            sequencia: els.sequencia.value
-        }
-    };
-    */
+    // 1. Busca o formulário pelo ID correto
+    const formulario = document.getElementById("form-profissional");
     
-    // Redireciona para o painel de gestão
-    window.location.href = "/gestor/painel";
+    if (formulario) {
+        // Desativa o botão de clique para evitar duplo envio
+        const btnFinalizar = document.querySelector("#modal-resumo button[onclick='finalizarCadastro()']");
+        if (btnFinalizar) btnFinalizar.disabled = true;
+
+        // 2. Libera e dispara o envio tradicional do HTML
+        formulario.submit();
+    } else {
+        console.error("Formulário #form-profissional não foi encontrado no HTML.");
+    }
 };
 
 window.novoCadastro = function() {

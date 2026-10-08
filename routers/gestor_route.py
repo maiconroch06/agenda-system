@@ -1,5 +1,7 @@
+import base64, os
 from flask import Blueprint, render_template, redirect, url_for, session, request
 from controllers.autenticador_gestor_controller import AutenticadorGestor
+from controllers.validar_cadastro_barbeiro import ValidarBarbeiro
 from models.cliente import Cliente
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
@@ -72,34 +74,76 @@ def gestorAbaServicos():
 # Painel Gestor - Aba de visualização dos Barbeiros cadastrados
 @gestor.route('/painel/barbeiros', methods=['GET'])
 def gestorAbaBarbeiros():
-
+    return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html')
 
     
-    # Gerenciar Barbeiro (Cadastro) - Cadastro de Barbeiro
-    # @gestor.route('painel/barbeiro/cadastro', methods=['GET'])
-    # def gestorBarbeiroCadastro():
-    #     return render_template('pages/gestor/gestor-barbeiro-rp.html')
+# Gerenciar Barbeiro (Cadastro) - Cadastro de Barbeiro
+# @gestor.route('painel/barbeiro/cadastro', methods=['GET'])
+# def gestorBarbeiroCadastro():
+#     return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
 
-    # # Gerenciar Barbeiro (Cadastro->Validação) - Validando dados informados no cadastro do Barbeiro
-    # @gestor.route('painel/barbeiro/cadastro', methods=['POST'])
-    # def gestorBarbeiroValidar():
-    #     dados_completos = request.form
-    #     photo = request.form.get("barber-photo")
-    #     cpf = request.form.get("barber-cpf")
-    #     email = request.form.get("barber-email")
-    #     name = request.form.get("barber-name")
-    #     telephone = request.form.get("barber-telephone")
-    #     address = request.form.get("barber-address")
-    #     description = request.form.get("barber-description")
-    #     print(dados_completos)
-    #     return AutenticadorGestor.cadastrarBarbeiro(photo, cpf, name, email, telephone, address, description)
+# Gerenciar Barbeiro (Cadastro->Validação) - Validando dados informados no cadastro do Barbeiro
+@gestor.route('painel/barbeiro/cadastro', methods=['POST'])
+def gestorBarbeiroValidar():
+    # foto_base64 = foto = request.files.get("foto")
+
+    # # Deve salvar arquivo
+    # if foto_base64:
+    #     # 1. Isola os dados binários reais da string Base64
+    #     if "," in foto_base64:
+    #         cabecalho, dados_imagem = foto_base64.split(",", 1)
+    #     else:
+    #         dados_imagem = foto_base64
+            
+    #     try:
+    #         # 2. Decodifica os bytes da imagem
+    #         conteudo_binario = base64.b64decode(dados_imagem)
+            
+    #         # 3. Garante que as pastas de destino existam para não dar erro de "Folder not found"
+    #         pasta_destino = "static/uploads"
+    #         os.makedirs(pasta_destino, exist_ok=True)
+            
+    #         # Remove caracteres especiais do CPF para o nome do arquivo (opcional, mas recomendado)
+    #         cpf_limpo = "".join(filter(str.isdigit, cpf)) if cpf else "sem_cpf"
+    #         caminho_arquivo = os.path.join(pasta_destino, f"{cpf_limpo}.jpg")
+            
+    #         # 4. Salva o arquivo final
+    #         with open(caminho_arquivo, "wb") as f:
+    #             f.write(conteudo_binario)
+                
+    #     except Exception as e:
+    #         # Se a string base64 vier corrompida ou houver erro de permissão de escrita
+    #         print(f"Erro ao processar e salvar a imagem: {e}")
+    #         # Aqui você pode decidir se retorna um erro para o usuário ou se continua sem foto
+
+    # cpf = request.form.get("cpf")
+    # nome = request.form.get("nome")
+    # email = request.form.get("email")
+    # telefone = request.form.get("telefone")
+    # senha = request.form.get("senha")
+    # confirmaSenha = request.form.get("confirmar-senha")
+    # descricao = request.form.get("descricao")
+
+    # cep = request.form.get("cep")
+    # cidade = request.form.get("cidade")
+    # uf = request.form.get("unidade-federal")
+    # bairro = request.form.get("bairro")
+    # logradouro = request.form.get("logradouro")
+    # numero = request.form.get("numero")
+    # complemento = request.form.get("complemento")
+    # sequencia = request.form.get("sequencia")
+    return ValidarBarbeiro.validarFormulario(
+        request,
+        'pages/gestor/gestor-gerenciar-barbeiro-rp.html',
+        'gestor.gestorAbaBarbeiros'
+    )
 
 
-    # # Gerenciar Barbeiro (Edição) - Editando dados de um Barbeiro existente
-    # @gestor.route('/editar/barbeiro')
-    # def gestorBarbeiroEditar():
-    #     return render_template('pages/gestor/gestor-barbeiro-rp.html')
+# # Gerenciar Barbeiro (Edição) - Editando dados de um Barbeiro existente
+# @gestor.route('/editar/barbeiro')
+# def gestorBarbeiroEditar():
+#     return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
 
 # Painel Gestor - Aba de Clientes
