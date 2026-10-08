@@ -1,7 +1,7 @@
 from models.gestor import Gestor
 from models.servicos import Servicos
 from models.barbearia import Barbearia
-from flask import Blueprint, session, redirect, url_for
+from flask import Blueprint, session, redirect, url_for, flash
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 from database import db
@@ -51,40 +51,136 @@ class AutenticadorGestor():
             return redirect(url_for('gestor.gestorBarbeiroCadastro'))
         return "<h1>Deu Certo</h1>"
 
-    def cadastrarServico(foto:str, descricao: str, preco: float, duracao:int ):
+    def cadastrarServico(novo_foto_nome:str, novo_descricao: str, novo_valor: str, novo_duracao:str ):
         # Validação inicial simples
-        if (preco < 0) or (duracao < 0):
+        if not novo_descricao.strip() or not novo_valor.strip() or not novo_duracao.strip():
+            flash("Campos vazios! Verifique se os campos estão vazios!")
             return  redirect(url_for('gestor.gestorServicoCadastrar'))
-         
-       # Salvando os dados na sessão do Flask
+
+        session['dados-servicos'] = {
+            'duracao':novo_duracao,
+            'nome': novo_descricao,
+            'valor': novo_valor
+        }
+
+        print(novo_valor)
         try:
+            valor = float(novo_valor)
+            duracao = int(novo_duracao)
+
+            if (valor < -1) or (duracao < -1):
+                flash("Os valores de preco e duração devem ser maiores que zero!")
+                return  redirect(url_for('gestor.gestorServicoCadastrar'))
+         
+            # Salvando os dados na sessão do Flask
+        
             servicos = Servicos()
-            servicos.descricao = descricao
-            servicos.foto_nome = foto
-            servicos.valor = preco
+            servicos.descricao = novo_descricao
+            servicos.foto_nome = novo_foto_nome
+            servicos.valor = valor
             servicos.duracao = duracao
                 
             resultado_servico = servicos.salvarServico()
 
             if not resultado_servico:
-                session['erro'] = 'Erro ao criar o serviço'
+                flash( 'Erro ao criar o serviço')
                 return redirect(url_for('gestor.gestorServicoCadastrar'))
             
             db.session.commit()
+            session.pop('dados-servicos')
        
         except IntegrityError as i:
             db.session.rollback()
             
 
             print(f"{i}")
-            session['erro'] = "Erro ao cadastrar o serviço!" 
+            flash( "Erro ao cadastrar o serviço!" )
             return redirect(url_for('gestor.gestorServicoCadastrar'))
+        except (ValueError, TypeError):
+            flash("Os campos Preço e duração só aceitam números!" )
+            return redirect(url_for('gestor.gestorServicoCadastrar'))
+        
         except Exception as erro:
             print(f"{erro}")
             db.session.rollback()
 
-            session['erro'] = str(erro)
+            flash("Confira se digitou o campo ")
             return redirect(url_for('gestor.gestorServicoCadastrar'))
         
         return redirect(url_for('gestor.gestorAbaServicos'))
+
+    def deletarServico(id_servico):
+        try:
+            servicos = Servicos()
+           
+            resultado = servicos.deletarServico(id_servico)
+
+            if resultado:
+                flash("Serviço de código ["+ str(id_servico) + "] deletado com sucesso!")
+            
+            db.session.commit()
+
+        except Exception as error:
+            db.session.rollback()
+            print(f"{error}")
+            flash("Não foi possivel deletar o serviço, consulte o suporte!")
+        
+        return redirect(url_for('gestor.gestorAbaServicos'))
+  
+    def editarServico(servico_atualizado:Servicos):
+        # Validação inicial simples
+        if not servico_atualizado.descricao.strip() or not servico_atualizado.valor.strip() or not servico_atualizado.duracao.strip():
+            flash("Campos vazios! Verifique se os campos estão vazios!")
+            return  redirect(url_for('gestor.gestorServicoCadastrar'))
     
+        session['dados-servicos'] = {
+                'duracao':new_duracao,
+                'nome': new_descricao,
+                'valor': new_valor
+        }
+    
+        print(new_valor)
+        try:
+            valor = float(new_valor)
+            duracao = int(new_duracao)
+    
+            if (valor < -1) or (duracao < -1):
+                flash("Os valores de preco e duração devem ser maiores que zero!")
+                return  redirect(url_for('gestor.gestorServicoCadastrar'))
+             
+            # atualizando os dados na sessão do Flask
+            
+            servicos = Servicos()
+            servicos.descricao = new_descricao
+            servicos.foto_nome = new_foto_nome
+            servicos.valor = valor
+            servicos.duracao = duracao
+                    
+            resultado_servico = servicos.salvarServico()
+    
+            if not resultado_servico:
+                flash( 'Erro ao criar o serviço')
+                return redirect(url_for('gestor.gestorServicoCadastrar'))
+                
+            db.session.commit()
+            session.pop('dados-servicos')
+           
+        except IntegrityError as i:
+            db.session.rollback()
+                
+    
+            print(f"{i}")
+            flash( "Erro ao cadastrar o serviço!" )
+            return redirect(url_for('gestor.gestorServicoCadastrar'))
+        except (ValueError, TypeError):
+            flash("Os campos Preço e duração só aceitam números!" )
+            return redirect(url_for('gestor.gestorServicoCadastrar'))
+            
+        except Exception as erro:
+            print(f"{erro}")
+            db.session.rollback()
+    
+            flash("Confira se digitou o campo ")
+            return redirect(url_for('gestor.gestorServicoCadastrar'))
+            
+        return redirect(url_for('gestor.gestorAbaServicos'))    

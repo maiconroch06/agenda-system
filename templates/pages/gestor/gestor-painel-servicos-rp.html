@@ -26,6 +26,17 @@
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
+                 <!-- Mensagem de Erro -->
+                {% with messages = get_flashed_messages(with_categories=false) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="p-4 rounded-lg border border-green-600 bg-green-950 text-green-200 mb-5">
+                                <p>{{ message }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+ 
                 <!-- ABA 3: SERVIÇOS -->
                 <section class="aba-func" id="aba-servicos">
                     <div class="flex items-center justify-between mb-5 gap-3">
@@ -62,8 +73,12 @@
                                
                             </div>
                             <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[#38362f]">
-                                <button onclick="editarServico('${s.id}')"  class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Editar</button>
-                                <button onclick="excluirServico('${s.id}')" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Remover</button>
+                                <a href="/gestor/painel/servicos/editar/{{servico.id}}" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">
+                                    <button>Editar</button>
+                                </a>    
+                                <a href="/gestor/painel/servicos/deletar/{{servico.id}}" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">
+                                    <button  >Remover</button>    
+                                </a>  
                             </div>
                         </div>
                         {% endfor %}

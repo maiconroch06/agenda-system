@@ -25,9 +25,7 @@ class Servicos(db.Model):
             default=lambda: datetime.now(timezone.utc), 
             nullable=False
         )
-    
-         
-    
+        
     def salvarServico(self):
         resultado = db.session.execute(
             
@@ -60,5 +58,34 @@ class Servicos(db.Model):
         )
 
         return resultado.mappings().all()
+
+   
+    def deletarServico(self, id: int):
+                
+        db.session.execute( 
+                db.text(
+                    """
+                    DELETE FROM servicos WHERE id = :id
+                    """
+                ),{
+                    "id": id
+                }
+        )
+    
+        return 1
+
+    def atualizarServico(self, id: int):
+                
+        db.session.execute( 
+             db.text(
+                """
+                 update servicos set ....  where id = :id
+                """
+            ),{
+                "id": id
+            }
+            )
+    
+        return 1
 
     

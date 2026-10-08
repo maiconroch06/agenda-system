@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, session, request
+from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from controllers.autenticador_gestor_controller import AutenticadorGestor
 from models.cliente import Cliente
 from models.servicos import Servicos
@@ -67,10 +67,18 @@ def gestorServicoCadastrar():
     descricao_servico = request.form.get('srv-nome')
     preco = request.form.get('srv-preco')
     duracao = request.form.get('srv-duracao')
+     
+    return AutenticadorGestor.cadastrarServico(foto_nome, descricao_servico, preco, duracao)
 
-    if not descricao_servico.strip() or not preco.strip() or not duracao.strip():
-        return render_template("pages/gestor/gestor-gerenciar-servico-rp.html")
-    return AutenticadorGestor.cadastrarServico(foto_nome, descricao_servico, float(preco), int(duracao))
+# Painel Gestor - Remover servico
+@gestor.route('/painel/servicos/deletar/<int:id_servico>', methods=['GET'])
+def gestorServicoDeletar(id_servico:int): 
+    return AutenticadorGestor.deletarServico(id_servico)
+
+# Painel Gestor - Editar servico
+@gestor.route('/painel/servicos/editar/<int:id_servico>', methods=['GET'])
+def gestorServicoEditar(id_servico:int): 
+    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
 
 # Painel Gestor - Aba de Clientes
 @gestor.route('/painel/clientes')
