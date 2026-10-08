@@ -70,37 +70,36 @@ def gestorAbaServicos():
 
 
 # Painel Gestor - Aba de visualização dos Barbeiros cadastrados
-@gestor.route('/painel', methods=['POST','GET'])
+@gestor.route('/painel/barbeiros', methods=['GET'])
 def gestorAbaBarbeiros():
-    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html')
 
 
+    
     # Gerenciar Barbeiro (Cadastro) - Cadastro de Barbeiro
-    @gestor.route('painel/barbeiro/cadastro', methods=['GET'])
-    def gestorBarbeiroCadastro():
-        return render_template('pages/gestor/gestor-barbeiro-rp.html')
+    # @gestor.route('painel/barbeiro/cadastro', methods=['GET'])
+    # def gestorBarbeiroCadastro():
+    #     return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
 
-    # Gerenciar Barbeiro (Cadastro->Validação) - Validando dados informados no cadastro do Barbeiro
-    @gestor.route('painel/barbeiro/cadastro', methods=['POST'])
-    def gestorBarbeiroValidar():
-        dados_completos = request.form
-        photo = request.form.get("barber-photo")
-        cpf = request.form.get("barber-cpf")
-        email = request.form.get("barber-email")
-        name = request.form.get("barber-name")
-        telephone = request.form.get("barber-telephone")
-        address = request.form.get("barber-address")
-        description = request.form.get("barber-description")
-        print(dados_completos)
-        return AutenticadorGestor.cadastrarBarbeiro(photo, cpf, name, email, telephone, address, description)
+    # # Gerenciar Barbeiro (Cadastro->Validação) - Validando dados informados no cadastro do Barbeiro
+    # @gestor.route('painel/barbeiro/cadastro', methods=['POST'])
+    # def gestorBarbeiroValidar():
+    #     dados_completos = request.form
+    #     photo = request.form.get("barber-photo")
+    #     cpf = request.form.get("barber-cpf")
+    #     email = request.form.get("barber-email")
+    #     name = request.form.get("barber-name")
+    #     telephone = request.form.get("barber-telephone")
+    #     address = request.form.get("barber-address")
+    #     description = request.form.get("barber-description")
+    #     print(dados_completos)
+    #     return AutenticadorGestor.cadastrarBarbeiro(photo, cpf, name, email, telephone, address, description)
 
 
-    # Gerenciar Barbeiro (Edição) - Editando dados de um Barbeiro existente
-    @gestor.route('/editar/barbeiro')
-    def gestorBarbeiroEditar():
-        return render_template('pages/gestor/gestor-barbeiro-rp.html')
-
+    # # Gerenciar Barbeiro (Edição) - Editando dados de um Barbeiro existente
+    # @gestor.route('/editar/barbeiro')
+    # def gestorBarbeiroEditar():
+    #     return render_template('pages/gestor/gestor-barbeiro-rp.html')
 
 
 # Painel Gestor - Aba de Clientes
