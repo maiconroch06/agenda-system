@@ -77,16 +77,16 @@ const SERVICOS_PADRAO = [
     { id: "s3", nome: "Degradê & Barba", duracao: 60, preco: 70, ativo: true }
 ];
 
-let profissionais = carregarDoStorage("profissionais_manager", PROFISSIONAIS_PADRAO);
+let barbeiros = carregarDoStorage("barbeiros_manager", PROFISSIONAIS_PADRAO);
 let agendamentos = carregarDoStorage("agendamentos_manager", AGENDAMENTOS_PADRAO);
 let servicosManager = carregarDoStorage("servicos_manager", SERVICOS_PADRAO);
 let bloqueios = carregarDoStorage("bloqueios_manager", []);
 
 let servicoEmEdicaoId = null;
-let profissionalEmEdicaoId = null;
+let barbeiroEmEdicaoId = null;
 
 function salvarAgendamentos() { salvarNoStorage("agendamentos_manager", agendamentos); }
-function salvarProfissionais() { salvarNoStorage("profissionais_manager", profissionais); }
+function salvarBarbeiros() { salvarNoStorage("barbeiros_manager", barbeiros); }
 function salvarServicos() { salvarNoStorage("servicos_manager", servicosManager); }
 function salvarBloqueios() { salvarNoStorage("bloqueios_manager", bloqueios); }
 
@@ -136,9 +136,9 @@ const els = {
     psrvPreco: document.getElementById("psrv-preco"),
     psrvTempo: document.getElementById("psrv-tempo"),
 
-    // Profissionais
-    formProfissionalPainel: document.getElementById("form-profissional-painel"),
-    listaProfissionaisPainel: document.getElementById("lista-profissionais-painel"),
+    // Barbeiros
+    formBarbeiroPainel: document.getElementById("form-barbeiro-painel"),
+    listaBarbeirosPainel: document.getElementById("lista-barbeiros-painel"),
     pproNome: document.getElementById("ppro-nome"),
     pproCargo: document.getElementById("ppro-cargo"),
 
@@ -231,7 +231,7 @@ function irParaAba(aba) {
     if (aba === "inicio") carregarDashboardInicio();
     else if (aba === "agenda") atualizarAgendaGeral();
     else if (aba === "servicos") renderizarServicos();
-    else if (aba === "profissionais") renderizarProfissionais();
+    else if (aba === "barbeiros") renderizarBarbeiros();
     else if (aba === "clientes") renderizarClientes();
     else if (aba === "financeiro") renderizarFinanceiro();
 
@@ -324,7 +324,7 @@ function popularFiltroBarbeiros() {
     let html = `<option value="todos">Todos os Barbeiros</option>`;
     let htmlModal = ``;
     
-    profissionais.forEach(p => {
+    barbeiros.forEach(p => {
         html += `<option value="${p.nome}">${p.nome}</option>`;
         htmlModal += `<option value="${p.nome}">${p.nome}</option>`;
     });
@@ -516,7 +516,7 @@ function renderizarServicos() {
                 <p class="text-xs text-zinc-500 dark:text-zinc-400 text-center mb-3 line-clamp-2">${s.descricao || 'Sem descrição'}</p>
             </div>
             <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[#38362f]">
-                <button onclick="editarServico('${s.id}')" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Editar</button>
+                <button onclick="editarServico('${s.id}')"  class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Editar</button>
                 <button onclick="excluirServico('${s.id}')" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Remover</button>
             </div>
         </div>
@@ -590,15 +590,15 @@ function excluirServico(id) {
    ABA 4: PROFISSIONAIS (LÓGICA COMPLETA DE CADASTRO E RENDERIZAÇÃO)
    ============================================================ */
 
-function renderizarProfissionais() {
-    if (!els.listaProfissionaisPainel) return;
+function renderizarBarbeiros() {
+    if (!els.listaBarbeirosPainel) return;
 
-    if (profissionais.length === 0) {
-        els.listaProfissionaisPainel.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-[#888780] bg-[#232220] border border-[#38362f] rounded-2xl">Nenhum profissional cadastrado.</div>`;
+    if (barbeiros.length === 0) {
+        els.listaBarbeirosPainel.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-[#888780] bg-[#232220] border border-[#38362f] rounded-2xl">Nenhum barbeiro cadastrado.</div>`;
         return;
     }
 
-    els.listaProfissionaisPainel.innerHTML = profissionais.map((p) => `
+    els.listaBarbeirosPainel.innerHTML = barbeiros.map((p) => `
         <div class="relative flex flex-col items-center bg-white dark:bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-100 dark:border-zinc-700/60 transition-all duration-200" data-id="${p.id}">
             <div class="absolute top-3 right-3 flex gap-1">
                 <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-600 dark:text-zinc-300 text-xs transition-colors" onclick="moverItem('barber', '${p.id}', -1)" title="Subir">▲</button>
@@ -620,71 +620,71 @@ function renderizarProfissionais() {
             </div>
 
             <div class="flex gap-2 w-full mt-auto pt-3 border-t border-zinc-100 dark:border-zinc-700/50">
-                <button class="flex-1 py-2 px-3 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-700 dark:text-zinc-200 text-xs font-semibold rounded-xl transition-colors" onclick="editBarber('${p.id}')">Editar</button>
-                <button class="flex-1 py-2 px-3 bg-red-50 hover:bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-xs font-semibold rounded-xl transition-colors" onclick="removeBarber('${p.id}')">Remover</button>
+                <button onclick="editBarber('${p.id}')"   class="flex-1 py-1.5 px-3 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Editar</button>
+                <button onclick="removeBarber('${p.id}')" class="flex-1 py-1.5 px-3 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Remover</button>
             </div>
         </div>
     `).join("");
 }
 
-function abrirFormProfissional() {
-    if (els.formProfissionalPainel) els.formProfissionalPainel.classList.remove("hidden");
+function abrirFormBarbeiro() {
+    if (els.formBarbeiroPainel) els.formBarbeiroPainel.classList.remove("hidden");
 }
 
-function fecharFormProfissional() {
-    profissionalEmEdicaoId = null;
-    if (els.formProfissionalPainel) els.formProfissionalPainel.classList.add("hidden");
+function fecharFormBarbeiro() {
+    barbeiroEmEdicaoId = null;
+    if (els.formBarbeiroPainel) els.formBarbeiroPainel.classList.add("hidden");
     if (els.pproNome) els.pproNome.value = "";
     if (els.pproCargo) els.pproCargo.value = "";
 }
 
-function editarProfissional(id) {
-    const p = profissionais.find(item => item.id === id);
+function editarBarbeiro(id) {
+    const p = barbeiros.find(item => item.id === id);
     if (!p) return;
-    profissionalEmEdicaoId = id;
+    barbeiroEmEdicaoId = id;
     if (els.pproNome) els.pproNome.value = p.nome;
     if (els.pproCargo) els.pproCargo.value = p.cargo;
-    abrirFormProfissional();
+    abrirFormBarbeiro();
 }
 
-function adicionarProfissionalPainel() {
+function adicionarBarbeiroPainel() {
     const nome = els.pproNome ? els.pproNome.value.trim() : "";
     const cargo = els.pproCargo ? els.pproCargo.value.trim() : "";
 
     if (!nome) {
-        mostrarAviso("Digite o nome do profissional.");
+        mostrarAviso("Digite o nome do barbeiro.");
         return;
     }
 
-    if (profissionalEmEdicaoId) {
-        const index = profissionais.findIndex(p => p.id === profissionalEmEdicaoId);
+    if (barbeiroEmEdicaoId) {
+        const index = barbeiros.findIndex(p => p.id === barbeiroEmEdicaoId);
         if (index !== -1) {
-            profissionais[index] = { ...profissionais[index], nome, cargo: cargo || "Barbeiro" };
+            barbeiros[index] = { ...barbeiros[index], nome, cargo: cargo || "Barbeiro" };
         }
-        mostrarAviso("Profissional atualizado com sucesso!");
+        mostrarAviso("Barbeiro atualizado com sucesso!");
     } else {
-        const novoProfissional = {
+        const novoBarbeiro = {
             id: "p_" + Date.now(),
             nome,
             cargo: cargo || "Barbeiro"
         };
-        profissionais.push(novoProfissional);
-        mostrarAviso("Profissional cadastrado com sucesso!");
+        barbeiros.push(novoBarbeiro);
+        mostrarAviso("Barbeiro cadastrado com sucesso!");
     }
 
-    salvarProfissionais();
+    salvarBarbeiros();
     popularFiltroBarbeiros();
-    renderizarProfissionais();
-    fecharFormProfissional();
+    renderizarBarbeiros();
+    fecharFormBarbeiro();
 }
 
-function excluirProfissional(id) {
-    if (!confirm("Tem certeza que deseja remover este profissional?")) return;
-    profissionais = profissionais.filter(p => p.id !== id);
-    salvarProfissionais();
+function excluirBarbeiro(id) {
+    if (!confirm("Tem certeza que deseja remover este barbeiro?")) return;
+    barbeiros = barbeiros.filter(p => p.id !== id);
+    salvarBarbeiros();
     popularFiltroBarbeiros();
-    renderizarProfissionais();
-    mostrarAviso("Profissional removido com sucesso.");
+    renderizarBarbeiros();
+    mostrarAviso("Barbeiro removido com sucesso.");
 }
 
 /* ============================================================
@@ -914,7 +914,7 @@ function iniciar() {
     carregarDashboardInicio();
     atualizarAgendaGeral();
     renderizarServicos();
-    renderizarProfissionais();
+    renderizarBarbeiros();
     renderizarClientes();
     renderizarFinanceiro();
 

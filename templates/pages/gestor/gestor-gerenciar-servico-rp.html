@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Serviço | Agenda System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+</head>
+<body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen flex p-4 sm:p-6 antialiased selection:bg-[#0f6e56] selection:text-white overflow-x-hidden">
+    
+    <!-- Container Principal -->
+    <div class="w-full max-w-2xl m-auto bg-[#232220] border border-[#38362f] rounded-[14px] p-5 sm:p-6 shadow-xl">
+
+        <h1 id="form-title" class="text-center text-xl font-medium mb-1">Cadastrar Serviço</h1>
+        <p id="form-subtitle" class="text-center text-[13px] text-[#888780] mb-5">Preencha os dados do serviço para disponibilizar no agendamento</p>
+
+        <!-- Formulário -->
+        <form id="form-servico" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" novalidate>
+            <div class="space-y-4">
+                <!-- Upload de Imagem -->
+                <div class="flex flex-col items-center justify-center gap-1.5">
+                    <span class="text-[12px] font-medium text-[#888780]">Imagem do Serviço</span>
+                    <label for="srv-foto" class="relative w-40 h-40 rounded-2xl border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-brand-gold-hover  overflow-hidden group">
+                        <span class="text-2xl text-[#888780] group-hover:text-black leading-none mb-1">✂️</span>
+                        <span class="text-[10px] text-[#888780]">Upload</span>
+                        <input type="file" id="srv-foto" accept="image/*" class="hidden">
+                    </label>
+                </div>
+                
+                <!-- Inputs do Serviço -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="flex flex-col gap-1 col-span-full">
+                        <label for="srv-nome" class="text-[12px] font-medium text-[#888780]">Nome do Serviço*</label>
+                        <input type="text" id="srv-nome" placeholder="Ex: Corte Degradê + Barba" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="srv-preco" class="text-[12px] font-medium text-[#888780]">Preço (R$)*</label>
+                        <input type="text" id="srv-preco" placeholder="R$ 0,00" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="srv-duracao" class="text-[12px] font-medium text-[#888780]">Duração (min)*</label>
+                        <input type="text" id="srv-duracao" placeholder="Ex: 45 min" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Botão Ação -->
+        <div class="flex justify-end">
+            <button type="button" id="btn-submit" class="h-10 px-5 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">Cadastrar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Resumo -->
+    <div class="hidden fixed inset-0 bg-black/65 z-[300] transition-opacity" id="overlay-resumo" onclick="fecharModalResumo()"></div>
+    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6 transition-all" id="modal-resumo">
+        <div class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto shadow-2xl">
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="text-base font-medium text-[#f1efe8]">Resumo do Serviço</h2>
+                <button type="button" class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] hover:text-white text-xs flex items-center justify-center transition-colors" onclick="fecharModalResumo()">✕</button>
+            </div>
+
+            <!-- Dados do Serviço -->
+            <div class="mb-6">
+                <h3 class="text-[11px] font-bold text-brand-gold uppercase tracking-wider mb-2">Dados do Serviço</h3>
+                <div class="bg-[#161513] rounded-xl border border-[#38362f] overflow-hidden">
+                    <div class="flex gap-3 px-3 py-2 border-b border-[#38362f]">
+                        <span class="text-sm w-5 flex items-center justify-center">✂️</span>
+                        <div><div class="text-[10px] text-[#888780]">Nome</div><div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-nome">—</div></div>
+                    </div>
+                    <div class="flex gap-3 px-3 py-2 border-b border-[#38362f]">
+                        <span class="text-sm w-5 flex items-center justify-center">💵</span>
+                        <div><div class="text-[10px] text-[#888780]">Preço</div><div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-preco">—</div></div>
+                    </div>
+                    <div class="flex gap-3 px-3 py-2">
+                        <span class="text-sm w-5 flex items-center justify-center">⏱️</span>
+                        <div><div class="text-[10px] text-[#888780]">Duração</div><div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-duracao">—</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações -->
+            <div class="flex flex-col gap-2">
+                <button type="button" onclick="novoCadastro()" class="w-full h-10 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-white text-[14px] font-semibold hover:bg-[#f1efe8] hover:text-[#161513] active:scale-[0.98] transition-all">Novo cadastro</button>
+                <button type="button" onclick="finalizarCadastro()" class="w-full h-10 rounded-[8px] border border-transparent hover:border-white text-[#888780] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">Finalizar</button>
+                <!-- <button type="button" onclick="fecharModalResumo()" class="w-full h-10 rounded-[8px] bg-transparent text-[#888780] text-[14px] hover:text-white transition-colors">Voltar e Editar</button> -->
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/gerenciar-servico.js') }}"></script>
+</body>
+</html>

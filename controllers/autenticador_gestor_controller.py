@@ -10,7 +10,7 @@ class AutenticadorGestor():
         # Validação inicial simples
         if not email or not senha:
             session['erro'] = "Por favor, preencha todos os campos."
-            return redirect(url_for('gestor.managerLoginPage'))
+            return redirect(url_for('gestor.gestorLoginPagina'))
             
         # 3. Busca o usuário no MySQL através do método que você já criou na sua classe Usuario
         try:
@@ -19,7 +19,7 @@ class AutenticadorGestor():
         except Exception as erro :
             print(f"{erro}")
             session['erro'] = "Erro ao tentar se comunicar com o banco de dados.\nContate o suporte"
-            return  redirect(url_for('gestor.managerLoginPage'))
+            return  redirect(url_for('gestor.gestorLoginPagina'))
 
         # 4. Verifica se o usuário existe e se a senha confere
         # (Nota: Se futuramente usar criptografia com werkzeug, use check_password_hash aqui)
@@ -31,20 +31,20 @@ class AutenticadorGestor():
                 # to_dict para dados salvos via ORM
                 # session['dados_usuario'] = user.to_dict()
                 # Redireciona o cliente logado diretamente para a página de agendamentos
-                return redirect(url_for('gestor.managerPanel'))
+                return redirect(url_for('gestor.gestorPainel'))
             else:
                 session['erro'] = "ATENÇÃO: e-mail ou senha incorretos." 
                         
-                return redirect(url_for('gestor.managerLoginPage'))
+                return redirect(url_for('gestor.gestorLoginPagina'))
                     
         else:
             # Se o email não estiver cadastrado                  
             session['erro'] = "ATENÇÃO: usuário não cadastrado.\nRealize o seu cadastro"
-            return redirect(url_for('gestor.managerLoginPage'))
+            return redirect(url_for('gestor.gestorLoginPagina'))
 
     def cadastrarBarbeiro(photo:str, cpf:str, name:str, email:str, telephone:str, address:str, description:str):
         # Validação inicial simples
         if not photo or not cpf or not name or not email or not telephone or not address or not description:
             session['erro'] = "Por favor, preencha todos os campos."
-            return redirect(url_for('gestor.registerEmployee'))
+            return redirect(url_for('gestor.gestorBarbeiroCadastro'))
         return "<h1>Deu Certo</h1>"
