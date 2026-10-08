@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMS Barbearia - Painel Administrativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+</head>
+
+<body class="bg-[#161513] text-[#f1efe8] font-sans  min-h-screen">
+
+    <div class="flex flex-col min-h-screen">
+
+        <div class="flex flex-1 pb-20 md:pb-0">
+
+            <!-- SIDEBAR DESKTOP -->
+            <!-- Logo proporcional -->
+            
+        
+         
+                <div class="flex items-center justify-start mb-4 md:mb-6 shrink-0">
+                    {% set logo_class="h-10 sm:h-12 md:h-14" %}
+                    {% with aba_atual='clientes' %}
+                        {% include "componetizacao/SiderBar/sider-bar-gestor.html" %}
+                    {% endwith %}
+                </div>
+
+                <!-- ABA 5: CLIENTES -->
+                <section class="aba-func w-full ml-5 mt-10 mr-5" id="aba-clientes">
+                    <div class="flex items-center justify-between mb-5 gap-3">
+                        <h1 class="text-lg lg:text-xl font-medium">Gestão de Clientes</h1>
+                        <input type="text" id="busca-cliente" placeholder="Buscar por nome ou telefone..."
+                            class="h-10 px-3 w-64 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none">
+                    </div>
+
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr
+                                        class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
+                                        <th class="p-3.5 px-4">Cliente</th>
+                                        <th class="p-3.5 px-4">Telefone</th>
+                                        <th class="p-3.5 px-4">Última Visita</th>
+                                        <th class="p-3.5 px-4">Total Visitas</th>
+                                        <th class="p-3.5 px-4">Total Gasto</th>
+                                    </tr>
+                                    {% for usuario in usuarios%}
+                                    <tr
+                                        
+                                        class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
+                                        <td class="p-3.5 px-4">{{usuario.nome_completo}}</td>
+                                        <td class="p-3.5 px-4">({{ usuario.telefone[:2] }}) {{ usuario.telefone[2:7] }}-{{ usuario.telefone[7:] }}</td>
+                                        <td class="p-3.5 px-4">{{ usuario.data_ultimo_servico | default('-', true)}}</td>
+                                        <td class="p-3.5 px-4">0</td>
+                                        <td class="p-3.5 px-4">0</td>
+                                       
+                                    </tr>
+                                     {% endfor %}
+                                </thead>
+                                <tbody id="tabela-clientes-corpo" class="text-xs text-[#f1efe8]">
+                                    <tr>
+                                        <td colspan="5" class="p-6 text-center text-[#888780]">Nenhum cliente
+                                            cadastrado.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+        <!-- NAVEGAÇÃO INFERIOR MOBILE -->
+        <nav
+            class="bottom-nav md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#232220] border-t border-[#38362f] flex z-40">
+            <button
+                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#f1efe8] text-[10px] cursor-pointer"
+                data-aba="inicio" onclick="irParaAba('inicio')">
+                <span class="text-base">🏠</span> Início
+            </button>
+            <button
+                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
+                data-aba="agenda" onclick="irParaAba('agenda')">
+                <span class="text-base">📅</span> Agenda
+            </button>
+            <button
+                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
+                data-aba="servicos" onclick="irParaAba('servicos')">
+                <span class="text-base">✂️</span> Serviços
+            </button>
+            <button
+                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
+                data-aba="clientes" onclick="irParaAba('clientes')">
+                <span class="text-base">👥</span> Cliente
+            </button>
+            <button
+                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
+                data-aba="profissionais" onclick="irParaAba('profissionais')">
+                <span class="text-base">👤</span> Barbeiros
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- MODAL: DETALHES DO ATENDIMENTO -->
+    <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-detalhe" onclick="fecharModalDetalhe()"></div>
+    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-detalhe"
+        onclick="if(event.target===this) fecharModalDetalhe()">
+        <div
+            class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-base font-medium">Detalhes do atendimento</h2>
+                <button
+                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
+                    onclick="fecharModalDetalhe()">✕</button>
+            </div>
+
+            <div id="detalhe-status-badge" class="mb-3"></div>
+
+            <div class="flex gap-3 py-2 border-b border-[#38362f]">
+                <span class="text-sm w-5">💈</span>
+                <div>
+                    <div class="text-[11px] text-[#888780]">Barbeiro</div>
+                    <div class="text-sm font-medium" id="detalhe-barbeiro">—</div>
+                </div>
+            </div>
+            <div class="flex gap-3 py-2 border-b border-[#38362f]">
+                <span class="text-sm w-5">👤</span>
+                <div>
+                    <div class="text-[11px] text-[#888780]">Cliente</div>
+                    <div class="text-sm font-medium" id="detalhe-cliente">—</div>
+                </div>
+            </div>
+            <div class="flex gap-3 py-2 border-b border-[#38362f]">
+                <span class="text-sm w-5">✂️</span>
+                <div>
+                    <div class="text-[11px] text-[#888780]">Serviço</div>
+                    <div class="text-sm font-medium" id="detalhe-servico">—</div>
+                </div>
+            </div>
+            <div class="flex gap-3 py-2 border-b border-[#38362f]">
+                <span class="text-sm w-5">🕐</span>
+                <div>
+                    <div class="text-[11px] text-[#888780]">Horário</div>
+                    <div class="text-sm font-medium" id="detalhe-horario">—</div>
+                </div>
+            </div>
+            <div class="flex gap-3 py-2 border-b border-[#38362f]">
+                <span class="text-sm w-5">💵</span>
+                <div>
+                    <div class="text-[11px] text-[#888780]">Valor</div>
+                    <div class="text-sm font-medium" id="detalhe-valor">—</div>
+                </div>
+            </div>
+            <div class="flex gap-3 py-2 border-b border-[#38362f]">
+                <span class="text-sm w-5">📞</span>
+                <div>
+                    <div class="text-[11px] text-[#888780]">Telefone</div>
+                    <div class="text-sm font-medium" id="detalhe-telefone">—</div>
+                </div>
+            </div>
+            <div class="flex gap-3 py-2">
+                <span class="text-sm w-5">📝</span>
+                <div>
+                    <div class="text-[11px] text-[#888780]">Observações</div>
+                    <div class="text-sm font-medium" id="detalhe-obs">—</div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2 mt-4" id="detalhe-acoes"></div>
+        </div>
+    </div>
+
+    <!-- TOAST AVISO -->
+    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+        id="aviso"></div>
+
+    <!-- aqui io js pode manipular algumas informações, como exibir um modal com o resumo das informações do cliente-->
+    <script src="{{ url_for('static', filename='js/gestor-painel-dinamico.js') }}"></script>
+</body>
+
+</html>

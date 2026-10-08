@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request
 from controllers.autenticador_gestor_controller import AutenticadorGestor
+from models.cliente import Cliente
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
 
@@ -27,6 +28,11 @@ def validateEmployee():
 @gestor.route('/editar/barbeiro')
 def managerEmployee():
     return render_template('pages/gestor/gestor-barbeiro-rp.html')
+
+@gestor.route('/painel/clientes')
+def gestorExibirClientes():
+    usuario = Cliente()
+    return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios=usuario.buscarTodosCLientes())
 
 @gestor.route('/login', methods=['GET'])
 def managerLoginPage():
