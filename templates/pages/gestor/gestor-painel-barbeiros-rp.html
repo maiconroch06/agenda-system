@@ -27,7 +27,7 @@
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
                 
                 <!-- ABA 4: BARBEIROS -->
-                <section class="aba-func hidden" id="aba-profissionais">
+                <section class="aba-func" id="aba-profissionais">
                     <div class="flex items-center justify-between mb-5 gap-3">
                         <h1 class="text-lg lg:text-xl font-medium">Equipe de Barbeiros</h1>
                         <a href="/gestor/painel/barbeiro/cadastro"
@@ -37,7 +37,33 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
-                        id="lista-profissionais-painel"></div>
+                        id="lista-profissionais-painel">
+                        {%  for barbeiro in barbeiros %}
+                            <div class="relative flex flex-col items-center bg-white dark:bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-100 dark:border-zinc-700/60 transition-all duration-200">
+                        
+                                <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${p.foto}" alt="${p.nome}">
+                                <!-- ${p.foto
+                                    ? `<img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${p.foto}" alt="${p.nome}">`
+                                    : `<div class="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 flex items-center justify-center text-3xl mb-3 text-zinc-400">👤</div>`
+                                 -->
+
+                                    <h3 class="font-bold text-zinc-800 dark:text-zinc-100 text-base mb-1 text-center">{{barbeiro.nome_completo}}</h3>
+                                    <p class="text-xs text-zinc-500 dark:text-zinc-400 text-center mb-3 line-clamp-2">{{barbeiro.descricao}}</p>
+
+                                    <div class="flex flex-col gap-1 w-full text-xs text-zinc-500 dark:text-zinc-400 mb-4 bg-zinc-50 dark:bg-zinc-800/50 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-700/40">
+                                        <span class="truncate"><strong>E-mail:</strong> {{barbeiro.email}}</span>
+                                        <span><strong>Tel:</strong> {{barbeiro.telefone}}</span>
+                                        
+                                        <span class="truncate mt-1 border-t border-zinc-200 dark:border-zinc-700 pt-1"><strong>End:</strong> {{barbeiro.fk_id_endereco}}</span>
+                                    </div>
+
+                                    <div class="flex gap-2 w-full mt-auto pt-3 border-t border-zinc-100 dark:border-zinc-700/50">
+                                        <button  class="flex-1 py-1.5 px-3 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Editar</button>
+                                        <button  class="flex-1 py-1.5 px-3 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Remover</button>
+                                    </div>
+                            </div>       
+                        {%endfor%}
+                    </div>
                 </section>
             </main>
         </div>

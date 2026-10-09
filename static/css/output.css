@@ -8,23 +8,30 @@
     monospace;
     --color-red-50: oklch(97.1% 0.013 17.38);
     --color-red-100: oklch(93.6% 0.032 17.717);
+    --color-red-300: oklch(80.8% 0.114 19.571);
     --color-red-400: oklch(70.4% 0.191 22.216);
     --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-600: oklch(57.7% 0.245 27.325);
+    --color-red-800: oklch(44.4% 0.177 26.899);
     --color-red-950: oklch(25.8% 0.092 26.042);
     --color-amber-50: oklch(98.7% 0.022 95.277);
     --color-amber-100: oklch(96.2% 0.059 95.617);
     --color-amber-200: oklch(92.4% 0.12 95.746);
+    --color-amber-300: oklch(87.9% 0.169 91.605);
     --color-amber-400: oklch(82.8% 0.189 84.429);
     --color-amber-500: oklch(76.9% 0.188 70.08);
     --color-amber-800: oklch(47.3% 0.137 46.201);
     --color-amber-900: oklch(41.4% 0.112 45.904);
+    --color-amber-950: oklch(27.9% 0.077 45.635);
     --color-green-200: oklch(92.5% 0.084 155.995);
     --color-green-400: oklch(79.2% 0.209 151.711);
     --color-green-600: oklch(62.7% 0.194 149.214);
     --color-green-800: oklch(44.8% 0.119 151.328);
     --color-green-900: oklch(39.3% 0.095 152.535);
     --color-green-950: oklch(26.6% 0.065 152.934);
+    --color-emerald-300: oklch(84.5% 0.143 164.978);
+    --color-emerald-800: oklch(43.2% 0.095 166.913);
+    --color-emerald-950: oklch(26.2% 0.051 172.552);
     --color-gray-100: oklch(96.7% 0.003 264.542);
     --color-gray-200: oklch(92.8% 0.006 264.531);
     --color-gray-300: oklch(87.2% 0.01 258.338);
@@ -569,8 +576,14 @@
   .h-28 {
     height: calc(var(--spacing) * 28);
   }
+  .h-30 {
+    height: calc(var(--spacing) * 30);
+  }
   .h-40 {
     height: calc(var(--spacing) * 40);
+  }
+  .h-48 {
+    height: calc(var(--spacing) * 48);
   }
   .h-\[28px\] {
     height: 28px;
@@ -811,6 +824,9 @@
   }
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
   .grid-cols-7 {
     grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -1095,6 +1111,9 @@
   .border-brand-gold {
     border-color: var(--color-brand-gold);
   }
+  .border-emerald-800 {
+    border-color: var(--color-emerald-800);
+  }
   .border-green-600 {
     border-color: var(--color-green-600);
   }
@@ -1109,6 +1128,9 @@
     @supports (color: color-mix(in lab, red, red)) {
       border-color: color-mix(in oklab, var(--color-red-500) 30%, transparent);
     }
+  }
+  .border-red-800 {
+    border-color: var(--color-red-800);
   }
   .border-transparent {
     border-color: transparent;
@@ -1218,6 +1240,9 @@
       background-color: color-mix(in oklab, var(--color-amber-900) 40%, transparent);
     }
   }
+  .bg-amber-950 {
+    background-color: var(--color-amber-950);
+  }
   .bg-black {
     background-color: var(--color-black);
   }
@@ -1257,6 +1282,9 @@
       background-color: color-mix(in oklab, var(--color-brand-gold) 10%, transparent);
     }
   }
+  .bg-emerald-950 {
+    background-color: var(--color-emerald-950);
+  }
   .bg-green-900 {
     background-color: var(--color-green-900);
   }
@@ -1280,6 +1308,9 @@
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-red-500) 10%, transparent);
     }
+  }
+  .bg-red-950 {
+    background-color: var(--color-red-950);
   }
   .bg-transparent {
     background-color: transparent;
@@ -1635,6 +1666,9 @@
   .text-amber-100 {
     color: var(--color-amber-100);
   }
+  .text-amber-300 {
+    color: var(--color-amber-300);
+  }
   .text-amber-400 {
     color: var(--color-amber-400);
   }
@@ -1653,6 +1687,9 @@
       color: color-mix(in oklab, var(--color-brand-muted) 40%, transparent);
     }
   }
+  .text-emerald-300 {
+    color: var(--color-emerald-300);
+  }
   .text-gray-100 {
     color: var(--color-gray-100);
   }
@@ -1667,6 +1704,9 @@
   }
   .text-green-400 {
     color: var(--color-green-400);
+  }
+  .text-red-300 {
+    color: var(--color-red-300);
   }
   .text-red-400 {
     color: var(--color-red-400);
@@ -2275,6 +2315,9 @@
     .sm\:h-14 {
       height: calc(var(--spacing) * 14);
     }
+    .sm\:h-20 {
+      height: calc(var(--spacing) * 20);
+    }
     .sm\:w-12 {
       width: calc(var(--spacing) * 12);
     }
@@ -2405,6 +2448,9 @@
     }
     .md\:h-20 {
       height: calc(var(--spacing) * 20);
+    }
+    .md\:h-24 {
+      height: calc(var(--spacing) * 24);
     }
     .md\:h-screen {
       height: 100vh;

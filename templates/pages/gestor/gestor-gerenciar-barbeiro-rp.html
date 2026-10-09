@@ -32,6 +32,11 @@
             </li>
         </ol>
 
+        <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
+            {% set logo_class="h-20 sm:h-20 md:h-24" %}
+            {% include "componetizacao/logo/logo-top-horizontal.html" %}
+        </div>
+
         <h1 id="form-title" class="text-center text-xl font-medium mb-1">Cadastrar Barbeiro</h1>
         <p id="form-subtitle" class="text-center text-[13px] text-[#888780] mb-4">Preencha os dados do profissional</p>
 
@@ -58,7 +63,7 @@
             {% endif %}
         {% endwith %}
 
-
+                            
         <!-- Formulário: padding interno e margin inferior reduzidos -->
         <form id="form-profissional" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" action="/gestor/painel/barbeiro/cadastro" method="post" enctype="multipart/form-data" novalidate>
             
