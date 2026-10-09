@@ -42,8 +42,6 @@ app.register_blueprint(cliente, url_prefix='/cliente')
 app.register_blueprint(gestor, url_prefix='/gestor')
 app.register_blueprint(barbeiro, url_prefix='/barbeiro')
 
-
-
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
 

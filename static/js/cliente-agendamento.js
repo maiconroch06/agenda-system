@@ -13,9 +13,9 @@ const SERVICOS = [
 ];
 
 const PROFISSIONAIS = [
-    { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../../static/assets/img/funcionarios/barbeiro-master-thiago-silva.png", alt: "thiago" },
-    { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../../static/assets/img/funcionarios/barbeiro-tres-samuca.png", alt: "samuel" },
-    { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../../static/assets/img/funcionarios/barbeiro_dois_maik.png",   alt: "maik" },
+    { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../../static/assets/img/barbeiros/barbeiro-master-thiago-silva.png", alt: "thiago" },
+    { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../../static/assets/img/barbeiros/barbeiro-tres-samuca.png", alt: "samuel" },
+    { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../../static/assets/img/barbeiros/barbeiro_dois_maik.png",   alt: "maik" },
     { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "⇄" },
 ];
 
@@ -49,6 +49,7 @@ const estado = {
     profissionalSelecionado: null,
     diaSelecionado:          null,
     horarioSelecionado:      null,
+    agendamentoConcluido:    false,
     nome:                   "Maicon Rocha"
 };
 
@@ -69,6 +70,7 @@ const els = {
     aviso:              document.getElementById("aviso"),
     sucesso:            document.getElementById("painel-5"),
     sucessoTexto:       document.getElementById("sucesso-texto"),
+    btnVoltarInicio:    document.getElementById("btn-voltar-inicio"),
     btnHistorico:       document.getElementById("btn-toggle-historico"),
     painelHistorico:    document.getElementById("painel-historico"),
     listaHistorico:     document.getElementById("lista-historico"),
@@ -134,15 +136,21 @@ function abrirHistorico() {
 
 function voltarParaAgendamento() {
     els.painelHistorico.hidden = true;
-    els.etapa.hidden = false;
-    els.navEtapa.hidden = false;
-    mostrarPainel(estado.etapaAtual);
+    
+    if (estado.agendamentoConcluido) {
+        reiniciar();
+    } else {
+        els.etapa.hidden = false;
+        els.navEtapa.hidden = false;
+        mostrarPainel(estado.etapaAtual);
+    }
+
+    const textoBtn = document.getElementById("texto-btn-historico");
+    if (textoBtn) textoBtn.textContent = "Meus Agendamentos";
+    if (els.btnHistorico) els.btnHistorico.classList.remove("border-brand-gold", "text-brand-gold");
 }
 
 function alternarHistorico() {
-    // Impede a execução se a tela de sucesso estiver visível
-    if (!els.sucesso.hidden) return;
-
     const painelHistorico = els.painelHistorico;
     const btnToggle = els.btnHistorico;
     const textoBtn = document.getElementById("texto-btn-historico");
@@ -153,10 +161,14 @@ function alternarHistorico() {
 
     if (estaNoHistorico) {
         painelHistorico.hidden = true;
-        mostrarPainel(estado.etapaAtual || 1);
         
-        if (stepper) stepper.hidden = false;
-        if (navEtapa) navEtapa.hidden = false;
+        if (estado.agendamentoConcluido) {
+            reiniciar();
+        } else {
+            mostrarPainel(estado.etapaAtual || 1);
+            if (stepper) stepper.hidden = false;
+            if (navEtapa) navEtapa.hidden = false;
+        }
 
         if (textoBtn) textoBtn.textContent = "Meus Agendamentos";
         if (btnToggle) btnToggle.classList.remove("border-brand-gold", "text-brand-gold");
@@ -615,11 +627,7 @@ function confirmarAgendamento() {
     els.navEtapa.hidden = true;
     els.etapa.hidden = true;
 
-    // Desativa visualmente e funcionalmente o botão do histórico
-    if (els.btnHistorico) {
-        els.btnHistorico.disabled = true;
-        els.btnHistorico.classList.add("opacity-40", "cursor-not-allowed", "pointer-events-none");
-    }
+    estado.agendamentoConcluido = true;
 
     els.sucessoTexto.textContent =
         `${estado.nome.trim()}, seu agendamento de ${servico.name.toLowerCase()} foi confirmado ` +
@@ -628,10 +636,6 @@ function confirmarAgendamento() {
 
     els.sucesso.hidden = false;
     window.scrollTo({ top: 0, behavior: "smooth" });
-
-    setTimeout(() => {
-        reiniciar();
-    }, 4000);
 }
 
 /* ============================================================
@@ -644,16 +648,11 @@ function reiniciar() {
     estado.profissionalSelecionado = null;
     estado.diaSelecionado = null;
     estado.horarioSelecionado = null;
+    estado.agendamentoConcluido = false;
 
     if (els.navEtapa) els.navEtapa.hidden = false;
     if (els.etapa) els.etapa.hidden = false;
     if (els.sucesso) els.sucesso.hidden = true;
-
-    // Reativa o botão do histórico
-    if (els.btnHistorico) {
-        els.btnHistorico.disabled = false;
-        els.btnHistorico.classList.remove("opacity-40", "cursor-not-allowed", "pointer-events-none");
-    }
 
     carregarServicos();
     carregarProfissionais();
@@ -667,6 +666,7 @@ function iniciar() {
     if (els.btnVoltar) els.btnVoltar.addEventListener("click", voltarEtapa);
     if (els.btnContinuar) els.btnContinuar.addEventListener("click", avancarEtapa);
     if (els.btnHistorico) els.btnHistorico.addEventListener("click", alternarHistorico);
+    if (els.btnVoltarInicio) els.btnVoltarInicio.addEventListener("click", reiniciar);
 
     mostrarPainel(estado.etapaAtual);
 }

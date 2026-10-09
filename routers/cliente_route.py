@@ -68,11 +68,11 @@ def clientRegister():
    
 @cliente.route('/agendamento/servicos', methods=['GET','POST'])
 def clientAgendamentoServicos():
-   return render_template('pages/cliente/agendamento-rp.html')
+   return render_template('pages/cliente/cliente-agendamento-rp.html')
 
 @cliente.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():
-   return render_template('pages/cliente/agendamento-rp.html')
+   return render_template('pages/cliente/cliente-agendamento-rp.html')
 
 @cliente.route('/cadastro/sucesso', methods=['GET','POST'])
 def cadastroSucesso():

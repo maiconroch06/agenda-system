@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia - Painel Administrativo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
@@ -89,7 +91,7 @@
         </div>
 
         <!-- NAVEGAÇÃO INFERIOR MOBILE -->
-        {% include "componetizacao/SiderBar/side-bar-gestor-mobile.html" %}
+        {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
 
     </div>
 

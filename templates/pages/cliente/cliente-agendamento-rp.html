@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<!-- <html lang="pt-br" xmlns:th="http://www.thymeleaf.org"> -->
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia - Agendamentos</title>
 
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
-<body
-    class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-[#0f6e56] selection:text-white">
+<body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-brand-gold selection:text-white">
 
     <!-- HEADER -->
     <header
@@ -22,8 +22,7 @@
 
 
         <!-- ÁREA DO USUÁRIO -->
-        <!-- ÁREA DO USUÁRIO -->
-        <div class="flex items-center  justify-center">
+        <div class="flex items-center justify-center">
 
             <!-- BOTÃO DO USUÁRIO -->
             <button id="btn-usuario" type="button"
@@ -73,7 +72,7 @@
                 <!-- MEUS AGENDAMENTOS -->
                 <button id="btn-toggle-historico" type="button"
                     class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer">
-                    Meus Agendamentos
+                    <span id="texto-btn-historico">Meus Agendamentos</span>
                 </button>
 
                 <!-- SAIR -->
@@ -100,66 +99,44 @@
 
         <!-- STEPPER -->
         <ol class="flex mb-8 relative isolate" id="etapa">
-
-            <li
-                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
-
-                <span
-                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">
+            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
+                <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all etapa__ciclo">
                     1
                 </span>
-
                 <span class="text-[#f1efe8] font-medium etapa__label">
                     Serviço
                 </span>
-
             </li>
 
-
-            <li
-                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
-
+            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
                 <span
-                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
+                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all etapa__ciclo">
                     2
                 </span>
-
                 <span class="etapa__label">
                     Barbeiro
                 </span>
-
             </li>
 
-
-            <li
-                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
-
+            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
                 <span
-                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
+                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all etapa__ciclo">
                     3
                 </span>
-
                 <span class="etapa__label">
                     Horário
                 </span>
-
             </li>
 
-
-            <li
-                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
-
+            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
                 <span
-                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
+                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all etapa__ciclo">
                     4
                 </span>
-
                 <span class="etapa__label">
                     Confirmação
                 </span>
-
             </li>
-
         </ol>
 
 
@@ -263,20 +240,15 @@
                     Agendamento confirmado!
                 </h1>
 
-                <p class="text-[14px] text-[#888780] mb-2" id="sucesso-texto">
+                <p class="text-[14px] text-[#888780] mb-6" id="sucesso-texto">
                 </p>
 
 
-                <!-- LOADING -->
-                <div class="flex flex-col items-center gap-2 mt-4">
-
-                    <div class="w-8 h-8 border-4 border-[#38362f] border-t-brand-gold rounded-full animate-spin"></div>
-
-                    <span class="text-xs text-[#888780]">
-                        Reiniciando em instantes...
-                    </span>
-
-                </div>
+                <!-- BOTÃO VOLTAR -->
+                <button id="btn-voltar-inicio" type="button"
+                    class="mt-2 w-full max-w-[250px] h-11 rounded-lg bg-brand-gold hover:bg-brand-gold-hover text-black text-sm font-bold cursor-pointer transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98]">
+                    Voltar ao Início
+                </button>
 
             </div>
 
@@ -336,7 +308,7 @@
 
 
     <!-- JAVASCRIPT -->
-    <script src="{{ url_for('static', filename='js/agendamentos.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cliente-agendamento.js') }}"></script>
 
 
     <!-- CONTROLE DO DROPDOWN -->
@@ -389,3 +361,41 @@
 </body>
 
 </html>
+
+
+<!-- 
+    <!-- PAINEL SUCESSO - Com Loanding--
+    <section id="painel-5" hidden>
+
+        <div class="text-center py-12 flex flex-col items-center gap-3">
+
+            <div
+                class="w-[64px] h-[64px] rounded-full bg-brand-gold border border-brand-gold text-[#000000] text-[30px] flex items-center justify-center">
+                &check;
+            </div>
+
+            <h1 class="text-[1.3rem] font-medium text-[#f1efe8] mb-1">
+                Agendamento confirmado!
+            </h1>
+
+            <p class="text-[14px] text-[#888780] mb-2" id="sucesso-texto">
+            </p>
+
+
+            <!-- LOADING --
+            <div class="flex flex-col items-center gap-2 mt-4">
+
+                <div class="w-8 h-8 border-4 border-[#38362f] border-t-brand-gold rounded-full animate-spin"></div>
+
+                <span class="text-xs text-[#888780]">
+                    Reiniciando em instantes...
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+-->

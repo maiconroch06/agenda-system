@@ -1,0 +1,46 @@
+<!-- NAVEGAÇÃO INFERIOR MOBILE -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#232220] border-t border-[#38362f] grid grid-cols-6 items-center p-1.5 gap-0.5">
+
+    <!-- Início -->
+    <a href="/gestor/painel" 
+       class="flex flex-col items-center justify-center p-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-colors text-center w-full min-w-0 {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel' else 'text-[#888780] hover:text-[#f1efe8]' }}">
+        <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-inicio.html" %}</span>
+        <span class="truncate w-full">Início</span>
+    </a>
+
+    <!-- Agenda -->
+    <a href="/gestor/painel/agenda" 
+       class="flex flex-col items-center justify-center p-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-colors text-center w-full min-w-0 {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/agenda') else 'text-[#888780] hover:text-[#f1efe8]' }}">
+        <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-agenda.html" %}</span>
+        <span class="truncate w-full">Agenda</span>
+    </a>
+
+    <!-- Serviços -->
+    <a href="/gestor/painel/servicos" 
+       class="flex flex-col items-center justify-center p-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-colors text-center w-full min-w-0 {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/servicos') else 'text-[#888780] hover:text-[#f1efe8]' }}">
+        <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-servico.html" %}</span>
+        <span class="truncate w-full">Serviços</span>
+    </a>
+
+    <!-- Barbeiros -->
+    <a href="/gestor/painel/barbeiros" 
+       class="flex flex-col items-center justify-center p-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-colors text-center w-full min-w-0 {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/barbeiros') else 'text-[#888780] hover:text-[#f1efe8]' }}">
+        <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-barbeiro.html" %}</span>
+        <span class="truncate w-full">Barbeiros</span>
+    </a>
+
+    <!-- Clientes -->
+    <a href="/gestor/painel/clientes" 
+       class="flex flex-col items-center justify-center p-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-colors text-center w-full min-w-0 {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/clientes') else 'text-[#888780] hover:text-[#f1efe8]' }}">
+        <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-cliente.html" %}</span>
+        <span class="truncate w-full">Clientes</span>
+    </a>
+
+    <!-- Financeiro -->
+    <a href="/gestor/painel/financeiro" 
+       class="flex flex-col items-center justify-center p-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-colors text-center w-full min-w-0 {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/financeiro') else 'text-[#888780] hover:text-[#f1efe8]' }}">
+        <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-financeiro.html" %}</span>
+        <span class="truncate w-full">Financeiro</span>
+    </a>
+
+</nav>

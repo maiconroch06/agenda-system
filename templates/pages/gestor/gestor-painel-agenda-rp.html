@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia - Painel Administrativo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
@@ -27,7 +29,7 @@
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
                 <!-- ABA 2: AGENDA COMPLETA -->
-                <section class="aba-func hidden" id="aba-agenda">
+                <section class="aba-func" id="aba-agenda">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
                         <h1 class="text-lg lg:text-xl font-medium">Agenda Geral</h1>
 
@@ -77,45 +79,13 @@
                         <div class="flex flex-col gap-2" id="lista-mes-dia"></div>
                     </div>
 
-                    <button
-                        class="flex items-center justify-center gap-2 p-3 mt-4 w-full rounded-xl border border-dashed border-[#4a473f] bg-transparent text-[#888780] text-xs cursor-pointer hover:border-[#888780] hover:text-[#f1efe8] transition-colors"
-                        onclick="abrirModalBloquear()">
-                        🔒 Bloquear horário de um barbeiro
-                    </button>
                 </section>
 
             </main>
         </div>
 
         <!-- NAVEGAÇÃO INFERIOR MOBILE -->
-        <nav
-            class="bottom-nav md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#232220] border-t border-[#38362f] flex z-40">
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#f1efe8] text-[10px] cursor-pointer"
-                data-aba="inicio" onclick="irParaAba('inicio')">
-                <span class="text-base">🏠</span> Início
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
-                data-aba="agenda" onclick="irParaAba('agenda')">
-                <span class="text-base">📅</span> Agenda
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
-                data-aba="servicos" onclick="irParaAba('servicos')">
-                <span class="text-base">✂️</span> Serviços
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
-                data-aba="clientes" onclick="irParaAba('clientes')">
-                <span class="text-base">👥</span> Clientes
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer"
-                data-aba="profissionais" onclick="irParaAba('profissionais')">
-                <span class="text-base">👤</span> Barbeiros
-            </button>
-        </nav>
+        {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
 
     </div>
 
@@ -238,7 +208,8 @@
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso"></div>
 
-    <script src="{{ url_for('static', filename='js/gestor-painel.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gestor-painel-agenda.js') }}"></script>
 </body>
 
 </html>

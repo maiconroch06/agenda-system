@@ -4,8 +4,8 @@
 @layer theme {
   :root, :host {
     --font-sans: "Montserrat", sans-serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-    monospace;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
     --color-red-50: oklch(97.1% 0.013 17.38);
     --color-red-100: oklch(93.6% 0.032 17.717);
     --color-red-300: oklch(80.8% 0.114 19.571);
@@ -121,7 +121,7 @@
     line-height: 1.5;
     -webkit-text-size-adjust: 100%;
     tab-size: 4;
-    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
+    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
     font-feature-settings: var(--default-font-feature-settings, normal);
     font-variation-settings: var(--default-font-variation-settings, normal);
     -webkit-tap-highlight-color: transparent;
@@ -148,7 +148,7 @@
     font-weight: bolder;
   }
   code, kbd, samp, pre {
-    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace);
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
     font-feature-settings: var(--default-mono-font-feature-settings, normal);
     font-variation-settings: var(--default-mono-font-variation-settings, normal);
     font-size: 1em;
@@ -248,13 +248,13 @@
   :-moz-ui-invalid {
     box-shadow: none;
   }
-  button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-button {
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
     appearance: button;
   }
   ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
     height: auto;
   }
-  [hidden]:where(:not([hidden='until-found'])) {
+  [hidden]:where(:not([hidden="until-found"])) {
     display: none !important;
   }
 }
@@ -429,9 +429,6 @@
   .mt-5 {
     margin-top: calc(var(--spacing) * 5);
   }
-  .mt-6 {
-    margin-top: calc(var(--spacing) * 6);
-  }
   .mt-10 {
     margin-top: calc(var(--spacing) * 10);
   }
@@ -446,9 +443,6 @@
   }
   .mb-1 {
     margin-bottom: var(--spacing);
-  }
-  .mb-1\.5 {
-    margin-bottom: calc(var(--spacing) * 1.5);
   }
   .mb-2 {
     margin-bottom: calc(var(--spacing) * 2);
@@ -516,6 +510,10 @@
   .aspect-square {
     aspect-ratio: 1 / 1;
   }
+  .size-6 {
+    width: calc(var(--spacing) * 6);
+    height: calc(var(--spacing) * 6);
+  }
   .h-1\.5 {
     height: calc(var(--spacing) * 1.5);
   }
@@ -551,9 +549,6 @@
   }
   .h-20 {
     height: calc(var(--spacing) * 20);
-  }
-  .h-24 {
-    height: calc(var(--spacing) * 24);
   }
   .h-28 {
     height: calc(var(--spacing) * 28);
@@ -633,9 +628,6 @@
   .w-20 {
     width: calc(var(--spacing) * 20);
   }
-  .w-24 {
-    width: calc(var(--spacing) * 24);
-  }
   .w-28 {
     width: calc(var(--spacing) * 28);
   }
@@ -683,6 +675,9 @@
   }
   .max-w-6xl {
     max-width: var(--container-6xl);
+  }
+  .max-w-\[250px\] {
+    max-width: 250px;
   }
   .max-w-\[450px\] {
     max-width: 450px;
@@ -1679,9 +1674,6 @@
   .text-white {
     color: var(--color-white);
   }
-  .text-zinc-100 {
-    color: var(--color-zinc-100);
-  }
   .text-zinc-400 {
     color: var(--color-zinc-400);
   }
@@ -1866,12 +1858,6 @@
   }
   .peer-checked\:text-brand-gold:is(:where(.peer):checked ~ *) {
     color: var(--color-brand-gold);
-  }
-  .selection\:bg-\[\#0f6e56\] ::selection {
-    background-color: #0f6e56;
-  }
-  .selection\:bg-\[\#0f6e56\]::selection {
-    background-color: #0f6e56;
   }
   .selection\:bg-brand-gold ::selection {
     background-color: var(--color-brand-gold);
@@ -2173,10 +2159,6 @@
     --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
-  .focus\:ring-3:focus {
-    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
   .focus\:ring-\[\#04342c\]:focus {
     --tw-ring-color: #04342c;
   }
@@ -2248,6 +2230,9 @@
     .sm\:mb-8 {
       margin-bottom: calc(var(--spacing) * 8);
     }
+    .sm\:h-9 {
+      height: calc(var(--spacing) * 9);
+    }
     .sm\:h-11 {
       height: calc(var(--spacing) * 11);
     }
@@ -2259,6 +2244,9 @@
     }
     .sm\:h-20 {
       height: calc(var(--spacing) * 20);
+    }
+    .sm\:w-9 {
+      width: calc(var(--spacing) * 9);
     }
     .sm\:w-12 {
       width: calc(var(--spacing) * 12);
@@ -2464,6 +2452,9 @@
     .lg\:hidden {
       display: none;
     }
+    .lg\:h-10 {
+      height: calc(var(--spacing) * 10);
+    }
     .lg\:h-13 {
       height: calc(var(--spacing) * 13);
     }
@@ -2472,6 +2463,9 @@
     }
     .lg\:h-24 {
       height: calc(var(--spacing) * 24);
+    }
+    .lg\:w-10 {
+      width: calc(var(--spacing) * 10);
     }
     .lg\:w-16 {
       width: calc(var(--spacing) * 16);
@@ -2611,6 +2605,16 @@
   }
   .\[\&\:\:-webkit-details-marker\]\:hidden::-webkit-details-marker {
     display: none;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 @property --tw-translate-x {
@@ -2787,16 +2791,6 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
-  }
-}
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 @layer properties {

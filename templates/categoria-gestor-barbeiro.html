@@ -5,18 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tipo Usuário | Agenda System</title>
-    <!-- Importação do CSS -->
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
-<body
-    class="min-h-dvh w-screen overflow-y-auto sm:overflow-hidden bg-[#161513] text-gray-100 font-sans antialiased flex items-center justify-center p-3 sm:p-6 md:p-8">
+<body class="min-h-dvh w-screen overflow-y-auto sm:overflow-hidden bg-[#161513] text-gray-100 font-sans antialiased flex items-center justify-center p-3 sm:p-6 md:p-8">
 
-    <!--  -->
     <div id="tela-tipo" class="w-full h-full flex items-center justify-center">
 
-        <!--  -->
         <div class="w-full max-w-md sm:max-w-xl lg:max-w-2xl max-h-full flex flex-col justify-center my-auto">
 
             <!-- Card Principal -->
@@ -47,9 +45,9 @@
                         href="/gestor/login">
 
                         <!-- Ícone em círculo -->
-                        <div
-                            class="tipo-card__icone w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-brand-bg-primary border border-brand-border group-hover:border-brand-gold/50 flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4 transition-colors shrink-0">
-                            🏢
+                        <div class="tipo-card__icone w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-brand-bg-primary border border-brand-border group-hover:border-brand-gold/50 flex items-center justify-center mb-3 sm:mb-4 transition-colors shrink-0">
+                            {% set icone_class = "w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10" %}
+                            {% include "componetizacao/icones/icone-inicio.html" %}
                         </div>
 
                         <strong
@@ -70,7 +68,7 @@
                         <!-- Ícone em círculo -->
                         <div
                             class="tipo-card__icone w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-brand-bg-primary border border-brand-border group-hover:border-brand-gold/50 flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4 transition-colors shrink-0">
-                            ✂️
+                            {% include "componetizacao/icones/icone-barbeiro.html" %}
                         </div>
 
                         <strong
