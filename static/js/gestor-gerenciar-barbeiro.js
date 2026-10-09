@@ -275,7 +275,7 @@ window.fecharModalResumo = function() {
 window.finalizarCadastro = function() {
     // 1. Busca o formulário pelo ID correto
     const formulario = document.getElementById("form-profissional");
-    
+   
     if (formulario) {
         // Desativa o botão de clique para evitar duplo envio
         const btnFinalizar = document.querySelector("#modal-resumo button[onclick='finalizarCadastro()']");

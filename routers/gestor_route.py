@@ -92,18 +92,19 @@ def gestorAbaBarbeiros():
 
 
 # Gerenciar Barbeiro  - Validando dados informados no cadastro do Barbeiro
-@gestor.route('painel/barbeiro/cadastro', methods=['GET'])
+@gestor.route('painel/barbeiro/cadastrar', methods=['GET'])
 def gestorBarbeiroPage():
     return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html')
 
 
 # Gerenciar Barbeiro (Cadastro->Validação) - Validando dados informados no cadastro do Barbeiro
-@gestor.route('painel/barbeiro/cadastro', methods=['POST'])
+@gestor.route('painel/barbeiro/cadastrar', methods=['POST'])
 def gestorBarbeiroValidar():
+    
     return ValidarBarbeiro.validarFormulario(
         request,
         'pages/gestor/gestor-gerenciar-barbeiro-rp.html',
-        'gestor.gestorAbaBarbeiros'
+        'gestor.gestorAbaBarbeiros',
     )
 ##################################################################################
 #  CLIENTES

@@ -39,7 +39,7 @@ class Barbeiro(db.Model):
         return db.session.execute(
             db.text(
                     """
-                    SELECT * FROM barbeiros b inner join usuarios u on b.id = u.id
+                    SELECT * FROM barbeiros b inner join usuarios u on b.id = u.id 
             
                      """
                  )
