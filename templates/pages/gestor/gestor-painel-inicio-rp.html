@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia - Painel Administrativo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
@@ -29,8 +31,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
                         <div>
                             <h1 class="text-xl font-semibold">Resumo de Hoje</h1>
-                            <p class="text-xs text-[#888780]" id="data-atual-str">Acompanhamento em tempo real da
-                                operação</p>
+                            <p class="text-xs text-[#888780]" id="data-atual-str"></p>
                         </div>
                     </div>
 

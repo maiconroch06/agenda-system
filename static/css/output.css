@@ -418,9 +418,6 @@
   .mt-5 {
     margin-top: calc(var(--spacing) * 5);
   }
-  .mt-6 {
-    margin-top: calc(var(--spacing) * 6);
-  }
   .mt-10 {
     margin-top: calc(var(--spacing) * 10);
   }
@@ -435,9 +432,6 @@
   }
   .mb-1 {
     margin-bottom: var(--spacing);
-  }
-  .mb-1\.5 {
-    margin-bottom: calc(var(--spacing) * 1.5);
   }
   .mb-2 {
     margin-bottom: calc(var(--spacing) * 2);
@@ -505,6 +499,10 @@
   .aspect-square {
     aspect-ratio: 1 / 1;
   }
+  .size-6 {
+    width: calc(var(--spacing) * 6);
+    height: calc(var(--spacing) * 6);
+  }
   .h-1\.5 {
     height: calc(var(--spacing) * 1.5);
   }
@@ -513,6 +511,9 @@
   }
   .h-4 {
     height: calc(var(--spacing) * 4);
+  }
+  .h-5 {
+    height: calc(var(--spacing) * 5);
   }
   .h-6 {
     height: calc(var(--spacing) * 6);
@@ -540,9 +541,6 @@
   }
   .h-20 {
     height: calc(var(--spacing) * 20);
-  }
-  .h-24 {
-    height: calc(var(--spacing) * 24);
   }
   .h-28 {
     height: calc(var(--spacing) * 28);
@@ -622,9 +620,6 @@
   .w-20 {
     width: calc(var(--spacing) * 20);
   }
-  .w-24 {
-    width: calc(var(--spacing) * 24);
-  }
   .w-28 {
     width: calc(var(--spacing) * 28);
   }
@@ -672,6 +667,9 @@
   }
   .max-w-6xl {
     max-width: var(--container-6xl);
+  }
+  .max-w-\[250px\] {
+    max-width: 250px;
   }
   .max-w-\[450px\] {
     max-width: 450px;
@@ -769,6 +767,9 @@
   }
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
   .grid-cols-7 {
     grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -1777,12 +1778,6 @@
   .peer-checked\:text-brand-gold:is(:where(.peer):checked ~ *) {
     color: var(--color-brand-gold);
   }
-  .selection\:bg-\[\#0f6e56\] ::selection {
-    background-color: #0f6e56;
-  }
-  .selection\:bg-\[\#0f6e56\]::selection {
-    background-color: #0f6e56;
-  }
   .selection\:bg-brand-gold ::selection {
     background-color: var(--color-brand-gold);
   }
@@ -1959,9 +1954,6 @@
     .hover\:border-white:hover {
       border-color: var(--color-white);
     }
-    .hover\:bg-\[\#0b6351\]:hover {
-      background-color: #0b6351;
-    }
     .hover\:bg-\[\#2a2825\]:hover {
       background-color: #2a2825;
     }
@@ -1973,9 +1965,6 @@
     }
     .hover\:bg-\[\#3a1510\]:hover {
       background-color: #3a1510;
-    }
-    .hover\:bg-\[\#4d1c16\]:hover {
-      background-color: #4d1c16;
     }
     .hover\:bg-\[\#04342c\]:hover {
       background-color: #04342c;
@@ -2086,10 +2075,6 @@
     --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
-  .focus\:ring-3:focus {
-    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
   .focus\:ring-\[\#04342c\]:focus {
     --tw-ring-color: #04342c;
   }
@@ -2170,11 +2155,17 @@
     .sm\:h-14 {
       height: calc(var(--spacing) * 14);
     }
+    .sm\:h-60 {
+      height: calc(var(--spacing) * 60);
+    }
     .sm\:w-12 {
       width: calc(var(--spacing) * 12);
     }
     .sm\:w-14 {
       width: calc(var(--spacing) * 14);
+    }
+    .sm\:w-60 {
+      width: calc(var(--spacing) * 60);
     }
     .sm\:w-96 {
       width: calc(var(--spacing) * 96);
@@ -2371,6 +2362,9 @@
     .lg\:hidden {
       display: none;
     }
+    .lg\:h-7 {
+      height: calc(var(--spacing) * 7);
+    }
     .lg\:h-13 {
       height: calc(var(--spacing) * 13);
     }
@@ -2379,6 +2373,9 @@
     }
     .lg\:h-24 {
       height: calc(var(--spacing) * 24);
+    }
+    .lg\:w-7 {
+      width: calc(var(--spacing) * 7);
     }
     .lg\:w-16 {
       width: calc(var(--spacing) * 16);
@@ -2518,6 +2515,16 @@
   }
   .\[\&\:\:-webkit-details-marker\]\:hidden::-webkit-details-marker {
     display: none;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 @property --tw-translate-x {
@@ -2694,16 +2701,6 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
-  }
-}
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 @layer properties {

@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia | BarberDash</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
@@ -16,51 +18,7 @@
         <!-- CONTAINER PRINCIPAL COM ESPAÇAMENTO PARA O BOTTOM-NAV -->
         <div class="flex flex-1 pb-20 lg:pb-0">
 
-            <!-- SIDEBAR (Oculta no mobile, visível em telas lg+) -->
-            <aside id="sidebar"
-                class="hidden md:flex md:flex-col md:w-64 md:h-screen md:sticky md:top-0 shrink-0 bg-[#232220] border-r border-[#38362f]">
-
-                <!-- Logo -->
-                <div class="block items-center px-5 py-5 border-b border-[#38362f]">
-                    {% set logo_class="h-16 md:h-20 lg:h-24" %}
-                    {% include "componetizacao/logo/logo-top-horizontal.html" %}
-                    <h1 class="mt-4 text-2xl font-bold">Barber Dash</h1>
-                </div>
-
-                <!-- Navegação Desktop -->
-                <nav class="flex flex-col p-3 gap-1">
-                    <button
-                        class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-[#2a2825] text-[#f1efe8] font-medium text-sm cursor-pointer text-left w-full transition-colors"
-                        data-aba="inicio" onclick="irParaAba('inicio')">
-                        <span class="text-lg w-5.5 text-center">🏠</span> Início
-                    </button>
-
-                    <button
-                        class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
-                        data-aba="agenda" onclick="irParaAba('agenda')">
-                        <span class="text-lg w-5.5 text-center">📅</span> Agenda
-                    </button>
-
-                    <button
-                        class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
-                        data-aba="servicos" onclick="irParaAba('servicos')">
-                        <span class="text-lg w-5.5 text-center">✂️</span> Serviços
-                    </button>
-
-                    <button
-                        class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
-                        data-aba="configuracoes" onclick="irParaAba('configuracoes')">
-                        <span class="text-lg w-5.5 text-center">⚙️</span> Configurações
-                    </button>
-                </nav>
-
-                <!-- Sair (Sempre visível no rodapé da sidebar fixa) -->
-                <a class="mt-auto mx-3 mb-5 px-4 py-3 text-center rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-sm font-medium transition-colors hover:bg-[#38362f] hover:text-[#f1efe8]"
-                    href="/">
-                    Sair
-                </a>
-
-            </aside>
+            {% include "componetizacao/SiderBar/sider-bar-barbeiro.html" %}
 
             <!-- CONTEÚDO PRINCIPAL ADAPTADO -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
@@ -70,8 +28,8 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
                         <div>
                             <h1 class="text-xl font-semibold">Resumo de Hoje</h1>
-                            <p class="text-xs text-[#888780]" id="data-atual-str">Acompanhamento em tempo real da
-                                operação</p>
+                            <p class="text-xs text-[#888780]" id="data-atual-str">
+                                Acompanhamento em tempo real da operação</p>
                         </div>
                     </div>
 
@@ -79,8 +37,7 @@
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
                         <div
                             class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
-                            <div
-                                class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
                                 Agendamentos hoje</div>
                             <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8]"
                                 id="kpi-total-hoje">0</div>
@@ -89,8 +46,7 @@
                         </div>
                         <div
                             class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
-                            <div
-                                class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
                                 Próximo</div>
                             <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8] truncate"
                                 id="kpi-proximo">—</div>
@@ -99,8 +55,7 @@
                         </div>
                         <div
                             class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
-                            <div
-                                class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
                                 Ganhos hoje</div>
                             <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8] truncate"
                                 id="kpi-ganhos-hoje">R$ 0,00</div>
@@ -108,8 +63,7 @@
                         </div>
                         <div
                             class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
-                            <div
-                                class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
                                 Avaliação</div>
                             <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8]"
                                 id="kpi-avaliacao">—</div>
@@ -129,11 +83,11 @@
                         </div>
                         <div class="flex flex-wrap gap-3 mt-2.5">
                             <span class="text-[11px] sm:text-xs text-[#888780] flex items-center gap-2"><span
-                                    class="w-2 h-2 rounded-full bg-[#9fe1cb]"></span> Concluídos</span>
+                                  class="w-2 h-2 rounded-full bg-[#9fe1cb]"></span> Concluídos</span>
                             <span class="text-[11px] sm:text-xs text-[#888780] flex items-center gap-2"><span
-                                    class="w-2 h-2 rounded-full bg-[#f0c05a]"></span> Pendentes</span>
+                                  class="w-2 h-2 rounded-full bg-[#f0c05a]"></span> Pendentes</span>
                             <span class="text-[11px] sm:text-xs text-[#888780] flex items-center gap-2"><span
-                                    class="w-2 h-2 rounded-full bg-[#f0997b]"></span> Cancelados</span>
+                                  class="w-2 h-2 rounded-full bg-[#f0997b]"></span> Cancelados</span>
                         </div>
                     </div>
 
@@ -272,33 +226,7 @@
             </main>
         </div>
 
-        <!-- BOTTOM NAV FIXA MOBILE -->
-        <nav
-            class="bottom-nav lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#232220] border-t border-[#38362f] flex z-40">
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#9fe1cb] text-[10px] cursor-pointer relative"
-                data-aba="inicio" onclick="irParaAba('inicio')">
-                <span class="text-lg">🏠</span> Início
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative"
-                data-aba="agenda" onclick="irParaAba('agenda')">
-                <span class="text-lg">📅</span> Agenda
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative"
-                data-aba="servicos" onclick="irParaAba('servicos')">
-                <span class="text-lg">✂️</span> Serviços
-            </button>
-            <button
-                class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative"
-                data-aba="configuracoes" onclick="irParaAba('configuracoes')">
-                <span class="text-lg">⚙</span> Configurações
-            </button>
-            <!-- <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="mais" onclick="abrirMenuMais()">
-            <span class="text-lg">⋯</span> Mais
-        </button> -->
-        </nav>
+        {% include "componetizacao/SiderBar/sider-bar-barbeiro-mobile.html" %}
 
     </div>
 

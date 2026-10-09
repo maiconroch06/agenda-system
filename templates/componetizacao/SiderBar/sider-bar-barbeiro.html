@@ -1,0 +1,53 @@
+<!-- SIDEBAR (Oculta no mobile, visível em telas lg+) -->
+<aside id="sidebar"
+    class="hidden md:flex md:flex-col md:w-64 md:h-screen md:sticky md:top-0 shrink-0 bg-[#232220] border-r border-[#38362f]">
+
+    <!-- Logo -->
+    <div class="block items-center px-5 py-5 border-b border-[#38362f]">
+        {% set logo_class="h-16 md:h-20 lg:h-24" %}
+        {% include "componetizacao/logo/logo-top-horizontal.html" %}
+        <h1 class="mt-4 text-2xl font-bold">Barber Dash</h1>
+    </div>
+
+    <!-- Navegação Desktop -->
+    <nav class="flex flex-col p-3 gap-1">
+        <button
+            class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-[#2a2825] text-[#f1efe8] font-medium text-sm cursor-pointer text-left w-full transition-colors"
+            data-aba="inicio" onclick="irParaAba('inicio')">
+            <span class="text-lg w-5.5 text-center">
+                {% include "componetizacao/icones/icone-inicio.html" %}
+            </span> Início
+        </button>
+
+        <button
+            class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
+            data-aba="agenda" onclick="irParaAba('agenda')">
+            <span class="text-lg w-5.5 text-center">
+                {% include "componetizacao/icones/icone-agenda.html" %}
+            </span> Agenda
+        </button>
+
+        <button
+            class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
+            data-aba="servicos" onclick="irParaAba('servicos')">
+            <span class="text-lg w-5.5 text-center">
+                {% include "componetizacao/icones/icone-servico.html" %}
+            </span> Serviços
+        </button>
+
+        <button
+            class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
+            data-aba="configuracoes" onclick="irParaAba('configuracoes')">
+            <span class="text-lg w-5.5 text-center">
+                {% include "componetizacao/icones/icone-configuracao.html" %}
+            </span> Configurações
+        </button>
+    </nav>
+
+    <!-- Sair (Sempre visível no rodapé da sidebar fixa) -->
+    <a class="mt-auto mx-3 mb-5 px-4 py-3 text-center rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-sm font-medium transition-colors hover:bg-[#38362f] hover:text-[#f1efe8]"
+        href="/">
+        Sair
+    </a>
+
+</aside>

@@ -11,45 +11,46 @@
     <!-- Navegação Desktop -->
     <nav class="flex flex-col p-3 gap-1 overflow-y-auto">
         
+
         <!-- Início -->
         <a href="/gestor/painel">
             <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
-                <span class="text-lg w-5.5 text-center">🏠</span> Início
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-inicio.html" %}</span> Início
             </button>
         </a>
 
         <!-- Agenda -->
         <a href="/gestor/painel/agenda">
             <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/agenda') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
-                <span class="text-lg w-5.5 text-center">📅</span> Agenda
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-agenda.html" %}</span> Agenda
             </button>
         </a>
 
         <!-- Serviços -->
         <a href="/gestor/painel/servicos">
             <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/servicos') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
-                <span class="text-lg w-5.5 text-center">✂️</span> Serviços
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-servico.html" %}</span> Serviços
             </button>
         </a>
 
         <!-- Barbeiros -->
         <a href="/gestor/painel/barbeiros">
             <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/barbeiros') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
-                <span class="text-lg w-5.5 text-center">👤</span> Barbeiros
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-barbeiro.html" %}</span> Barbeiros
             </button>
         </a>
 
         <!-- Clientes -->
         <a href="/gestor/painel/clientes">
             <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/clientes') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
-                <span class="text-lg w-5.5 text-center">👥</span> Clientes
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-cliente.html" %}</span> Clientes
             </button>
         </a>
         
         <!-- Financeiro -->
         <a href="/gestor/painel/financeiro">
         <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/financeiro') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
-            <span class="text-lg w-5.5 text-center">💰</span> Financeiro
+            <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-financeiro.html" %}</span> Financeiro
         </button>
     </a>
         

@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<!-- <html lang="pt-br" xmlns:th="http://www.thymeleaf.org"> -->
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia - Agendamentos</title>
 
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
-<body
-    class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-[#0f6e56] selection:text-white">
+<body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-brand-gold selection:text-white">
 
     <!-- HEADER -->
     <header
@@ -99,66 +99,44 @@
 
         <!-- STEPPER -->
         <ol class="flex mb-8 relative isolate" id="etapa">
-
-            <li
-                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
-
-                <span
-                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-medium text-[#9fe1cb] etapa__ciclo">
+            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item ativo">
+                <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all etapa__ciclo">
                     1
                 </span>
-
                 <span class="text-[#f1efe8] font-medium etapa__label">
                     Serviço
                 </span>
-
             </li>
 
-
-            <li
-                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
-
+            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
                 <span
-                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
+                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all etapa__ciclo">
                     2
                 </span>
-
                 <span class="etapa__label">
                     Barbeiro
                 </span>
-
             </li>
 
-
-            <li
-                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
-
+            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
                 <span
-                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
+                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all etapa__ciclo">
                     3
                 </span>
-
                 <span class="etapa__label">
                     Horário
                 </span>
-
             </li>
 
-
-            <li
-                class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
-
+            <li class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-[#888780] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-[#4a473f] before:z-0 first:before:content-none etapa__item">
                 <span
-                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-medium text-[#888780] etapa__ciclo">
+                    class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#232220] border border-[#4a473f] flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all etapa__ciclo">
                     4
                 </span>
-
                 <span class="etapa__label">
                     Confirmação
                 </span>
-
             </li>
-
         </ol>
 
 

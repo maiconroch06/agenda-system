@@ -1,11 +1,9 @@
 @import "tailwindcss";
 
 @source "../../templates";
-@source "../../templates/**/*.html";
-@source "../../templates/componetization/**/*.html";
 
 @theme {
-    /* Cores personalizadas (Ex: bg-brand-gold, text-brand-bg-primary) */
+    /* Cores personalizadas */
     --color-brand-gold: #cfa85f;
     --color-brand-gold-hover: #b5932a;
     --color-brand-bg-primary: #0d0e10;
@@ -14,22 +12,21 @@
     --color-brand-border: #272a30;
     --color-brand-muted: #9ca3af;
 
-    /* Fontes (Ex: font-sans, font-title) */
+    /* Fontes */
     --font-sans: "Montserrat", sans-serif;
     --font-title: "Oswald", sans-serif;
 
-    /* Animações (Ex: animate-fade-in) */
+    /* Animações */
     --animate-fade-in: fadeIn 0.3s ease-in-out forwards;
+}
 
-    @keyframes fadeIn {
-        0% {
-            opacity: 0;
-            transform: translateY(6px);
-        }
-
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

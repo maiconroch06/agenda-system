@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia - Painel Administrativo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
@@ -77,11 +79,6 @@
                         <div class="flex flex-col gap-2" id="lista-mes-dia"></div>
                     </div>
 
-                    <button
-                        class="flex items-center justify-center gap-2 p-3 mt-4 w-full rounded-xl border border-dashed border-[#4a473f] bg-transparent text-[#888780] text-xs cursor-pointer hover:border-[#888780] hover:text-[#f1efe8] transition-colors"
-                        onclick="abrirModalBloquear()">
-                        🔒 Bloquear horário de um barbeiro
-                    </button>
                 </section>
 
             </main>

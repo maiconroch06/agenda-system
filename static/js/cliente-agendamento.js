@@ -13,9 +13,9 @@ const SERVICOS = [
 ];
 
 const PROFISSIONAIS = [
-    { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../../static/assets/img/funcionarios/barbeiro-master-thiago-silva.png", alt: "thiago" },
-    { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../../static/assets/img/funcionarios/barbeiro-tres-samuca.png", alt: "samuel" },
-    { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../../static/assets/img/funcionarios/barbeiro_dois_maik.png",   alt: "maik" },
+    { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../../static/assets/img/barbeiros/barbeiro-master-thiago-silva.png", alt: "thiago" },
+    { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../../static/assets/img/barbeiros/barbeiro-tres-samuca.png", alt: "samuel" },
+    { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../../static/assets/img/barbeiros/barbeiro_dois_maik.png",   alt: "maik" },
     { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "⇄" },
 ];
 
