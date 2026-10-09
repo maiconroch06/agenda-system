@@ -1,10 +1,32 @@
- <!-- Footer -->
-<footer class="bg-brand-bg-secondary py-8 border-t border-brand-border/60">
-    <div class="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-brand-muted">
-        <p>&copy; 2026 TMS Barbearia. Todos os direitos reservados.</p>
-        <div class="flex items-center gap-6">
-            <a href="#" class="hover:text-brand-gold transition-colors">Instagram</a>
-            <a href="#" class="hover:text-brand-gold transition-colors">WhatsApp</a>
+<!-- Footer -->
+<footer class="border-t border-brand-border/60 bg-brand-bg-secondary">
+    <div class="mx-auto grid max-w-6xl gap-10 px-5 py-12 text-sm text-brand-muted sm:grid-cols-2 lg:grid-cols-4">
+        <div class="max-w-sm space-y-4 sm:col-span-2">
+            {% set logo_class = 'h-9' %}
+            {% include "componetizacao/logo/logo-top-horizontal.html" %}
+            <p class="leading-relaxed">Estilo e tradição em cada corte. Barbeiros especialistas, ambiente acolhedor e atendimento de alto padrão.</p>
         </div>
+
+        <nav aria-label="Rodapé">
+            <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-white">Navegação</p>
+            <ul class="space-y-2.5">
+                {% for href, label in [('/#home', 'Home'), ('/#equipe', 'Quem Somos'), ('/#servicos', 'Serviços'), ('/#planos', 'Planos'), ('/#faq', 'FAQ')] %}
+                <li><a href="{{ href }}" class="transition-colors hover:text-brand-gold">{{ label }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+
+        <div>
+            <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-white">Atendimento</p>
+            <p>Segunda a Sábado<br>09h às 20h</p>
+            <ul class="mt-4 flex items-center gap-5">
+                <li><a href="#" class="transition-colors hover:text-brand-gold">Instagram</a></li>
+                <li><a href="#" class="transition-colors hover:text-brand-gold">WhatsApp</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="border-t border-brand-border/60">
+        <p class="mx-auto max-w-6xl px-5 py-5 text-center text-xs text-brand-muted sm:text-left">&copy; 2026 TMS Barbearia. Todos os direitos reservados.</p>
     </div>
 </footer>

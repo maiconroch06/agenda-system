@@ -1,8 +1,9 @@
-<!-- NAB-BAR principal, vai ser exibida em cada pagina publica, ou seja, sem autenticação.-->
-<nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-gray-200">
-    <a href="#home" class="hover:text-brand-gold transition-colors">Home</a>
-    <a href="#equipe" class="hover:text-brand-gold transition-colors">Quem Somos</a>
-    <a href="#servicos" class="hover:text-brand-gold transition-colors">Serviços</a>
-    <a href="#planos" class="hover:text-brand-gold transition-colors">Planos</a>
-    <a href="#faq" class="hover:text-brand-gold transition-colors">FAQ</a>
+{# NAV principal (páginas públicas). Desktop: linha central. Mobile: painel aberto pelo botão do header. #}
+<nav id="site-nav" aria-label="Navegação principal"
+    class="absolute inset-x-0 top-full hidden border-b border-[#222222] bg-[#0a0a0a] p-4 text-sm font-medium tracking-wide text-gray-200 lg:static lg:flex lg:items-center lg:gap-8 lg:border-0 lg:bg-transparent lg:p-0">
+    {% for href, label in [('/#home', 'Home'), ('/#equipe', 'Quem Somos'), ('/#servicos', 'Serviços'), ('/#planos', 'Planos'), ('/#faq', 'FAQ')] %}
+    <a href="{{ href }}"
+        class="relative block py-3 transition-colors hover:text-brand-gold lg:py-1 lg:after:absolute lg:after:-bottom-0.5 lg:after:left-0 lg:after:h-px lg:after:w-0 lg:after:bg-brand-gold lg:after:transition-all lg:after:duration-300 lg:hover:after:w-full">{{ label }}</a>
+    {% endfor %}
+    <a href="/tipo-usuario" class="mt-2 block border-t border-[#222222] pt-4 pb-1 text-amber-100 transition-colors hover:text-amber-200 lg:hidden">Acesso Restrito</a>
 </nav>
