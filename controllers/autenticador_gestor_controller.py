@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 from database import db
 from enums import EnumStatusMensagens
+from decimal import Decimal
 
 class AutenticadorGestor():
     
@@ -52,9 +53,9 @@ class AutenticadorGestor():
             return redirect(url_for('gestor.gestorBarbeiroCadastro'))
         return "<h1>Deu Certo</h1>"
 
-    def cadastrarServico(novo_foto_nome:str, novo_descricao: str, novo_valor: str, novo_duracao:str ):
+    def cadastrarServico(novo_foto_nome:str, novo_descricao: str, novo_valor: Decimal, novo_duracao:str ):
         # Validação inicial simples
-        if not novo_descricao.strip() or not novo_valor.strip() or not novo_duracao.strip():
+        if not novo_descricao.strip() or  novo_valor <= Decimal('0') or not novo_duracao.strip():
             flash("Campos vazios! Verifique se os campos estão vazios!", EnumStatusMensagens.AVISO.value)
             return  redirect(url_for('gestor.gestorServicoCadastrar'))
 
@@ -64,13 +65,13 @@ class AutenticadorGestor():
             'valor': novo_valor
         }
 
-        print(novo_valor)
+       
         try:
-            valor = float(novo_valor)
+            
             duracao = int(novo_duracao)
 
-            if (valor < -1) or (duracao < -1):
-                flash("Os valores de preco e duração devem ser maiores que zero!", EnumStatusMensagens.AVISO.value)
+            if (duracao < -1):
+                flash("O valor de duração devem ser maiores que zero!", EnumStatusMensagens.AVISO.value)
                 return  redirect(url_for('gestor.gestorServicoCadastrar'))
          
             # Salvando os dados na sessão do Flask
@@ -78,7 +79,7 @@ class AutenticadorGestor():
             servicos = Servicos()
             servicos.descricao = novo_descricao
             servicos.foto_nome = novo_foto_nome
-            servicos.valor = valor
+            servicos.valor = novo_valor
             servicos.duracao = duracao
                 
             resultado_servico = servicos.salvarServico()
@@ -91,7 +92,8 @@ class AutenticadorGestor():
             session.pop('dados-servicos')
 
             flash( 'Serviço cadastrado com sucesso', EnumStatusMensagens.SUCESSO.value)
-       
+            return redirect(url_for('gestor.gestorAbaServicos'))
+        
         except IntegrityError as i:
             db.session.rollback()
             
@@ -107,10 +109,10 @@ class AutenticadorGestor():
             print(f"{erro}")
             db.session.rollback()
 
-            flash("Confira se digitou o campo ")
+            flash("Confira se digitou o campo ", EnumStatusMensagens.ERRO.value)
             return redirect(url_for('gestor.gestorServicoCadastrar'))
         
-        return redirect(url_for('gestor.gestorAbaServicos'))
+        
 
     def deletarServico(id_servico):
         try:
@@ -130,60 +132,70 @@ class AutenticadorGestor():
         
         return redirect(url_for('gestor.gestorAbaServicos'))
   
-    def editarServico(servico_atualizado:Servicos):
+    def editarServico(id: str, novo_foto_nome:str, nova_descricao: str, novo_valor: Decimal, nova_duracao:str, ativo:str):
+
         # Validação inicial simples
-        if not servico_atualizado.descricao.strip() or not servico_atualizado.valor.strip() or not servico_atualizado.duracao.strip():
-            flash("Campos vazios! Verifique se os campos estão vazios!")
-            return  redirect(url_for('gestor.gestorServicoCadastrar'))
-    
-        session['dados-servicos'] = {
-                'duracao':new_duracao,
-                'nome': new_descricao,
-                'valor': new_valor
-        }
-    
-        print(new_valor)
+        rota_erro = 'gestor.gestorServicoEditarPagina'
+        
         try:
-            valor = float(new_valor)
-            duracao = int(new_duracao)
-    
-            if (valor < -1) or (duracao < -1):
-                flash("Os valores de preco e duração devem ser maiores que zero!")
+           
+            id_servico = int(id)
+            status_ativo = int(ativo)
+
+            if not nova_descricao.strip() or  novo_valor <= Decimal('0') or not nova_duracao.strip() or id_servico < 1:
+                flash("Campos vazios! Verifique se os campos estão vazios!", EnumStatusMensagens.AVISO.value)
                 return  redirect(url_for('gestor.gestorServicoCadastrar'))
-             
+          
+            servico = Servicos().consultarIdServicoValido(id_servico)
+
+
+            if servico is None:
+                flash("Aviso: edição não efetuada, servico inexistente!", EnumStatusMensagens.AVISO.value)
+                return redirect(url_for("gestor.gestorAbaServicos"))
+                        
+            duracao = int(nova_duracao)
+          
+            if (duracao < 0):
+                flash("A duração devem ser maior que zero!", EnumStatusMensagens.AVISO.value)
+                return  redirect(url_for(rota_erro))
+
             # atualizando os dados na sessão do Flask
-            
             servicos = Servicos()
-            servicos.descricao = new_descricao
-            servicos.foto_nome = new_foto_nome
-            servicos.valor = valor
+            
+            servicos.id = id_servico
+            servicos.descricao = nova_descricao
+            servicos.valor = novo_valor
             servicos.duracao = duracao
-                    
-            resultado_servico = servicos.salvarServico()
+            servicos.foto_nome = novo_foto_nome
+            servicos.ativo = status_ativo         
+            servicos.data_atualizacao = servicos.dataFormatada()
+                        
+            resultado_servico = servicos.atualizarServico()
     
-            if not resultado_servico:
-                flash( 'Erro ao criar o serviço')
-                return redirect(url_for('gestor.gestorServicoCadastrar'))
+            if resultado_servico.rowcount == 0:
+                flash( 'Erro ao criar o serviço',EnumStatusMensagens.ERRO.value)
+                return redirect(url_for(rota_erro,id_servico=id_servico))
                 
             db.session.commit()
-            session.pop('dados-servicos')
+
+            flash( 'Servico atualizado com sucesso!',EnumStatusMensagens.SUCESSO.value)
+            return redirect(url_for('gestor.gestorAbaServicos'))
            
         except IntegrityError as i:
             db.session.rollback()
-                
-    
             print(f"{i}")
             flash( "Erro ao cadastrar o serviço!" )
-            return redirect(url_for('gestor.gestorServicoCadastrar'))
-        except (ValueError, TypeError):
+            return redirect(url_for(rota_erro,id_servico=id_servico))
+        
+        except (ValueError, TypeError) as error:
+            print(f" error de tipo {error}")
             flash("Os campos Preço e duração só aceitam números!" )
-            return redirect(url_for('gestor.gestorServicoCadastrar'))
+            return redirect(url_for(rota_erro,id_servico=id_servico))
             
         except Exception as erro:
             print(f"{erro}")
             db.session.rollback()
-    
             flash("Confira se digitou o campo ")
-            return redirect(url_for('gestor.gestorServicoCadastrar'))
+            return redirect(url_for(rota_erro,id_servico=id_servico))
             
-        return redirect(url_for('gestor.gestorAbaServicos'))    
+         

@@ -11,7 +11,7 @@ class Servicos(db.Model):
     descricao = db.Column('descricao', db.String(255), nullable=False)  
     valor = db.Column(db.Numeric(10, 2), nullable=False)                
     duracao = db.Column(db.Integer, nullable=False)                     
-    foto_nome = db.Column(db.String(45), nullable=False)
+    foto_nome = db.Column(db.String(45), nullable=True, default='default.png')
     ativo = db.Column(TINYINT(1),  nullable=False)         
     
     data_cadastro = db.Column(
@@ -38,7 +38,7 @@ class Servicos(db.Model):
                "descricao":self.descricao,
                 "valor": self.valor,
                 "duracao": self.duracao,
-                "foto_nome":"teste",
+                "foto_nome":self.foto_nome,
                 "ativo": 1,
                 "data_cadastro":datetime.now(timezone.utc),
                 "data_atualizacao":datetime.now(timezone.utc)
@@ -52,15 +52,43 @@ class Servicos(db.Model):
         resultado = db.session.execute( 
             db.text(
                 """
-                    select * FROM servicos where ativo = 1
+                    select * FROM servicos
                 """
             )
         )
 
         return resultado.mappings().all()
 
+    @classmethod    
+    def consultarIdServico(cls, id:int):
+        resultado = db.session.execute( 
+            db.text(
+                    """
+                        select * FROM servicos where id=:id
+                    """
+            ),{
+                "id": id
+            }
+        )
+    
+        return resultado.mappings().first()
+
+    @classmethod    
+    def consultarIdServicoValido(cls, id:int):
+        resultado = db.session.execute( 
+            db.text(
+                        """
+                            select count(id) FROM servicos where ativo = 1 and id=:id
+                        """
+                ),{
+                    "id": id
+                }
+            )
+        
+        return resultado.mappings().first()
    
-    def deletarServico(self, id: int):
+    @staticmethod
+    def deletarServico(id: int):
                 
         db.session.execute( 
                 db.text(
@@ -74,18 +102,32 @@ class Servicos(db.Model):
     
         return 1
 
-    def atualizarServico(self, id: int):
+    
+    def atualizarServico(self):
                 
-        db.session.execute( 
+        resultado = db.session.execute( 
              db.text(
                 """
-                 update servicos set ....  where id = :id
+                 update servicos set descricao = :descricao, valor=:valor,duracao=:duracao,foto_nome=:foto_nome,ativo=:ativo,data_atualizacao=:data_atualizacao  where id = :id
                 """
             ),{
-                "id": id
+                "id": self.id,
+                "descricao": self.descricao,
+                "valor": self.valor,
+                "duracao":self.duracao,
+                "foto_nome":self.foto_nome,
+                "ativo": self.ativo,
+                "data_atualizacao":self.data_atualizacao
             }
             )
+        
+        return resultado
     
-        return 1
+    
+    @staticmethod
+    def dataFormatada() -> datetime:
+        return datetime.now(timezone.utc)
+
+
 
     

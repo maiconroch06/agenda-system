@@ -1,0 +1,56 @@
+<dialog id="modal" class="w-full max-w-md rounded-xl p-0 shadow-xl backdrop:bg-black/50">
+
+    <div class="p-6">
+
+        <!-- Cabeçalho -->
+        <div class="flex items-center justify-between mb-4">
+
+            <h1 class="text-lg font-semibold text-gray-800">
+                Remover serviço
+            </h1>
+
+            <!-- Botão fechar -->
+            <button
+                id = "botao-fechar"   
+                type="button"
+                class="text-gray-500 hover:text-gray-800 text-2xl leading-none"
+                aria-label="Fechar modal">
+
+            </button>
+
+        </div>
+
+        <!-- Mensagem -->
+        <p class="text-sm text-gray-600 mb-6">
+            Tem certeza de que deseja remover este serviço?
+            Essa ação poderá ser irreversível.
+        </p>
+
+        <!-- Botões de ação -->
+        <div class="flex justify-end gap-3">
+
+            <button
+                id = "botao-cancelar"   
+                type="button"
+                class="px-4 py-2 rounded-lg text-sm font-medium
+                       bg-gray-100 text-gray-700
+                       hover:bg-gray-200 transition">
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id = "botao-aceitar"   
+                class="px-4 py-2 rounded-lg text-sm font-medium
+                       bg-red-600 text-white
+                       hover:bg-red-700 transition">
+                Remover serviço
+            </button>
+
+        </div>
+
+    </div>
+
+</dialog>
+
+<script src="{{ url_for('static', filename='js/modals/modal-servicos.js') }}"></script>

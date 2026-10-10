@@ -43,6 +43,7 @@ app.register_blueprint(gestor, url_prefix='/gestor')
 app.register_blueprint(barbeiro, url_prefix='/barbeiro')
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.config['UPLOAD_FILES'] = r'static/assets/dados'
 
 
 if __name__ == "__main__":

@@ -1,11 +1,15 @@
 import base64, os
-from flask import Blueprint, render_template, redirect, url_for, session, request, flash
+import time
+from werkzeug.utils import secure_filename
+from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
 from controllers.autenticador_gestor_controller import AutenticadorGestor
 from models.cliente import Cliente
 from models.servicos import Servicos
 from models.barbeiros import Barbeiro
 from  controllers.validar_cadastro_barbeiro import ValidarBarbeiro
 from enums import EnumStatusMensagens
+from decimal import Decimal
+
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
 
@@ -66,22 +70,89 @@ def gestorServicoPageCadastrar():
 # SERVIÇOS - Rota para enviar o serviço par ao cadastro
 @gestor.route('/painel/servicos/cadastrar', methods=['POST'])
 def gestorServicoCadastrar():
-    foto_nome = "foto_nome"
-    descricao_servico = request.form.get('srv-nome')
-    preco = request.form.get('srv-preco')
-    duracao = request.form.get('srv-duracao')
-     
-    return AutenticadorGestor.cadastrarServico(foto_nome, descricao_servico, preco, duracao)
+    
+    # validar o tipo de arquivo
+    # realizar o up
+    # renomeiar com um hash
+    imagem = request.files.get('srv-imagem')
+    
+    foto_nome = 'default.png'
+    
+    if imagem and imagem.filename:
+        # pega a extensao
+        extensao = os.path.splitext(imagem.filename)[1]
 
-# Painel Gestor - Remover servico
-@gestor.route('/painel/servicos/deletar/<int:id_servico>', methods=['GET'])
-def gestorServicoDeletar(id_servico:int): 
+        # valida a imagem
+        if (extensao != '.png' and extensao!='jpg'):
+            flash("O sistema só aceita imagens em formato png ou jpg", EnumStatusMensagens.AVISO.value)
+            return redirect(url_for('gestor.gestorServicoPageCadastrar'))
+     
+        foto_nome = f"{int(time.time())}{extensao}"
+
+        # crio o caminho da pasta
+        pasta = os.path.join(
+            current_app.root_path,
+            current_app.config['UPLOAD_FILES'] ,
+            'post-imagens') 
+
+        # crio a pasta e caso não exista eu crio automaticamente
+        os.makedirs(pasta,exist_ok=True)
+
+        #crio o caminho da pasta com o nome
+        caminho = os.path.join(pasta, foto_nome)
+
+        #salvo a imagem no caminho
+        imagem.save(caminho)
+   
+    descricao_servico = request.form.get('srv-nome').strip()
+    valor = Decimal(request.form.get('srv-preco').strip())
+    duracao = request.form.get('srv-duracao').strip()
+
+     
+    return AutenticadorGestor.cadastrarServico(foto_nome, descricao_servico, valor, duracao)
+
+# SERVIÇOS - REMOVER
+@gestor.route('/painel/servicos/deletar', methods=['POST'])
+def gestorServicoDeletar(): 
+    id_servico = request.form.get('srv-id-deletar')
+    servico = Servicos()
+    servico.consultarIdServico(id_servico)
+    
+    if servico is None:
+        flash("Aviso: Serviço não deletado, serviço inexistente ", EnumStatusMensagens.AVISO.value)
+        return redirect(url_for("gestor.gestorAbaServicos"))
+    
     return AutenticadorGestor.deletarServico(id_servico)
 
-# Painel Gestor - Editar servico
+# SERVIÇOS - Editar servico
 @gestor.route('/painel/servicos/editar/<int:id_servico>', methods=['GET'])
-def gestorServicoEditar(id_servico:int): 
-    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
+def gestorServicoEditarPagina(id_servico:int):
+
+    servico = Servicos().consultarIdServico(id_servico)
+            
+    if servico is None:
+        flash("Edição não efetuado, serviço inexistente", EnumStatusMensagens.AVISO.value)
+        return redirect(url_for("gestor.gestorAbaServicos"))
+    
+    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html', servico = servico, mensagens_status=EnumStatusMensagens)
+
+# SERVIÇOS - Salvar edição do serviço no banco de dados
+@gestor.route('/painel/servicos/editar', methods=['POST'])
+def gestorServicoEditar():
+        
+    foto_nome = "foto_nome"
+    descricao_servico = request.form.get('srv-nome')
+    valor = Decimal(request.form.get('srv-preco').strip())
+    duracao = request.form.get('srv-duracao').strip()
+    ativo = request.form.get('srv-status', type=int)
+    id = request.form.get('srv-id')
+
+
+    return AutenticadorGestor.editarServico(id, foto_nome, descricao_servico, valor, duracao, ativo)
+
+    
+
+    
 
 ##################################################################################
 # BARBEIROS - Aba de visualização dos Barbeiros cadastrados

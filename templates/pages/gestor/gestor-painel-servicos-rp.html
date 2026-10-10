@@ -51,32 +51,42 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
                         id="lista-servicos-painel">
-                       {% for servico in listaServicos%}
-                        <div class=" bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-700/60 transition-all duration-200" >
-                            <div class="relative flex flex-col items-center">
+                       
+                        {% for servico in listaServicos%}
+                            <div class=" bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-700/60 transition-all duration-200" >
+                                <div class="relative flex flex-col items-center">
+                                    
+                                    <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${s.foto}" alt="${s.nome}">
+                                <!--
+                                    ${s.foto
+                                        ? ``
+                                        : `<div class="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 flex items-center justify-center text-3xl mb-3 text-zinc-400">✂</div>`
+                                    }
+                                    --> 
+                    
+                                    <h3 class="font-bold   text-base mb-1 text-center">{{servico.descricao}}</h3>
+                                    <p class="text-xs   text-center mb-3 line-clamp-2">Valor R$ {{servico.valor}} | duracao {{servico.duracao}} minutos</p>
                                 
-                                <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${s.foto}" alt="${s.nome}">
-                               <!--
-                                ${s.foto
-                                    ? ``
-                                    : `<div class="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 flex items-center justify-center text-3xl mb-3 text-zinc-400">✂</div>`
-                                }
-                                --> 
-                
-                                <h3 class="font-bold   text-base mb-1 text-center">{{servico.descricao}}</h3>
-                                <p class="text-xs   text-center mb-3 line-clamp-2">Valor {{servico.valor}} | duracao {{servico.duracao}} minutos</p>
-                               
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[#38362f]">
+                                    <a href="/gestor/painel/servicos/editar/{{servico.id}}" method="GET" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">
+                                        <button  type="submit"> Editar </button> 
+                                    </a>
+
+                                    <form action="/gestor/painel/servicos/deletar" id="form-confirmar-exclusao" method="POST" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">
+                                        <input class="hidden" type="number" name="srv-id-deletar" value="{{servico.id}}">
+                                        <button  type="submit"> Remover </button> 
+                                    </form>
+                                
+                                </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[#38362f]">
-                                <a href="/gestor/painel/servicos/editar/{{servico.id}}" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">
-                                    <button>Editar</button>
-                                </a>    
-                                <a href="/gestor/painel/servicos/deletar/{{servico.id}}" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">
-                                    <button  >Remover</button>    
-                                </a>  
-                            </div>
-                        </div>
                         {% endfor %}
+
+                         <!-- ============================================================
+                                    COMPONENTIZADO - MODAL
+                                    ============================================================ -->
+                                    {% set mensagens=mensagens_status %}
+                                    {% include "componetizacao/modals/modal-confirmacao.html" %}
                     </div>
                 </section>
 
@@ -235,6 +245,7 @@
         id="aviso"></div>
 
     <script src="{{ url_for('static', filename='js/gestor-painel.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modals/modal-servicos.js') }}"></script>
 </body>
 
 </html>
