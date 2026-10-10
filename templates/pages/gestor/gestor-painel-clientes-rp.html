@@ -40,7 +40,7 @@
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead>
-                                    <tr class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
+                                    <tr class="border-b border-[#38362f] text-[16px] uppercase tracking-wider text-[#888780]">
                                         <th class="p-3.5 px-4">Cliente</th>
                                         <th class="p-3.5 px-4">Telefone</th>
                                         <th class="p-3.5 px-4">Última Visita</th>
@@ -48,14 +48,14 @@
                                         <th class="p-3.5 px-4">Total Gasto</th>
                                     </tr>
                                     {% for usuario in usuarios%}
-                                    <tr class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
-                                        <td class="p-3.5 px-4">{{usuario.nome_completo}}</td>
-                                        <td class="p-3.5 px-4">({{ usuario.telefone[:2] }}) {{ usuario.telefone[2:7] }}-{{ usuario.telefone[7:] }}</td>
-                                        <td class="p-3.5 px-4">{{ usuario.data_ultimo_servico | default('-', true)}}</td>
-                                        <td class="p-3.5 px-4">0</td>
-                                        <td class="p-3.5 px-4">0</td>
-                                    </tr>
-                                        {% endfor %}
+                                        <tr class="border-b border-[#38362f] text-[13px] tracking-wider text-[#888780]">
+                                            <td class="p-3.5 px-4 text-white">{{usuario.nome_completo}}</td>
+                                            <td class="p-3.5 px-4">({{ usuario.telefone[:2] }}) {{ usuario.telefone[2:7] }}-{{ usuario.telefone[7:] }}</td>
+                                            <td class="p-3.5 px-4">{{ usuario.data_ultimo_servico | default('-', true)}}</td>
+                                            <td class="p-3.5 px-4 text-white">0 visita(s)</td>
+                                            <td class="p-3.5 px-4 text-[#9FE1CB]">R$ 0</td>
+                                        </tr>
+                                    {% endfor %}
                                 </thead>
                                 <tbody id="tabela-clientes-corpo" class="text-xs text-[#f1efe8]">
                                     <tr>

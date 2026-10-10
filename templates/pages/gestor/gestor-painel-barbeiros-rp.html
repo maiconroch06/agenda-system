@@ -27,17 +27,11 @@
 
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        {% if category == 'success' %}
-                            <div class="mb-4 p-3.5 rounded-[8px] text-[13px] font-medium border bg-emerald-950 text-emerald-300 border-emerald-800">
-                                {{ message }}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+                 <!-- ============================================================
+                COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
+                ============================================================ -->
+                {% set mensagens = mensagens_status %}
+                {% include "componetizacao/mensagens/mensagens.html" %}
                 
                 <!-- ABA 4: BARBEIROS -->
                 <section class="aba-func" id="aba-profissionais">

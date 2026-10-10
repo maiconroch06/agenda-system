@@ -5,6 +5,7 @@ from models.cliente import Cliente
 from models.servicos import Servicos
 from models.barbeiros import Barbeiro
 from  controllers.validar_cadastro_barbeiro import ValidarBarbeiro
+from enums import EnumStatusMensagens
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
 
@@ -50,20 +51,19 @@ def gestorAbaAgenda():
     return render_template('pages/gestor/gestor-painel-agenda-rp.html')
 
 ##################################################################################
-# SERVIÇOS - Aba de visualização dos Serviços cadastrados
+# SERVIÇOS - Aba de visualização de todos Serviços cadastrados
 @gestor.route('/painel/servicos')
 def gestorAbaServicos():
     # consulta no banco, 
     servicos = Servicos().consultarTodosOsServicos()
-    return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = servicos)
+    return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = servicos, mensagens_status=EnumStatusMensagens)
 
-# Painel Gestor - Aba de visualização dos Serviços cadastrados
+# SERVIÇOS - pagina para cadastrar o Serviço
 @gestor.route('/painel/servicos/cadastrar', methods=['GET'])
 def gestorServicoPageCadastrar():
-    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html')
+    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html', mensagens_status=EnumStatusMensagens)
 
-
-# Painel Gestor - Aba de visualização dos Serviços cadastrados
+# SERVIÇOS - Rota para enviar o serviço par ao cadastro
 @gestor.route('/painel/servicos/cadastrar', methods=['POST'])
 def gestorServicoCadastrar():
     foto_nome = "foto_nome"
@@ -88,13 +88,13 @@ def gestorServicoEditar(id_servico:int):
 @gestor.route('/painel/barbeiros', methods=['GET'])
 def gestorAbaBarbeiros():
     barbeiros = Barbeiro()
-    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = barbeiros.consultarBarbeiros())
+    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = barbeiros.consultarBarbeiros(), mensagens_status=EnumStatusMensagens)
 
 
 # Gerenciar Barbeiro  - Validando dados informados no cadastro do Barbeiro
 @gestor.route('painel/barbeiro/cadastrar', methods=['GET'])
 def gestorBarbeiroPage():
-    return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html')
+    return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html', mensagens_status=EnumStatusMensagens)
 
 
 # Gerenciar Barbeiro (Cadastro->Validação) - Validando dados informados no cadastro do Barbeiro

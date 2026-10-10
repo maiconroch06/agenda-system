@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from models.usuarios import Usuario
 from models.endereco import Endereco
 from models.barbeiros import Barbeiro
+from enums import EnumStatusMensagens
 
 
 class ValidarBarbeiro:
@@ -337,12 +338,12 @@ class ValidarBarbeiro:
                 flash(
                     "Atenção! Corrija os seguintes campos: "
                     f"{texto_campos}.",
-                    "warning"
+                    EnumStatusMensagens.AVISO.value
                 )
 
                 return render_template(
                     rota_erro,
-                    erros=erros,
+                    mensagens_status=EnumStatusMensagens,
                     dados_preenchidos=request.form
                 )
 
@@ -382,12 +383,12 @@ class ValidarBarbeiro:
 
                 flash(
                     "Não foi possível cadastrar o barbeiro.",
-                    "danger"
+                    EnumStatusMensagens.ERRO.value
                 )
 
                 return render_template(
                     rota_erro,
-                    erros={},
+                    mensagens_status=EnumStatusMensagens,
                     dados_preenchidos=request.form
                 )
 
@@ -397,7 +398,7 @@ class ValidarBarbeiro:
 
             flash(
                 "Barbeiro cadastrado com sucesso!",
-                "success"
+                EnumStatusMensagens.SUCESSO.value
             )
 
             return redirect(url_for(rota_certa))
@@ -408,12 +409,12 @@ class ValidarBarbeiro:
 
             flash(
                 "Ocorreu um erro ao realizar o cadastro.",
-                "danger"
+                EnumStatusMensagens.ERRO.value
             )
 
             return render_template(
                 rota_erro,
-                erros={},
+                mensagens_status= EnumStatusMensagens,
                 dados_preenchidos=request.form
             )
 

@@ -5,6 +5,7 @@ from flask import Blueprint, session, redirect, url_for, flash
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 from database import db
+from enums import EnumStatusMensagens
 
 class AutenticadorGestor():
     
@@ -54,7 +55,7 @@ class AutenticadorGestor():
     def cadastrarServico(novo_foto_nome:str, novo_descricao: str, novo_valor: str, novo_duracao:str ):
         # Validação inicial simples
         if not novo_descricao.strip() or not novo_valor.strip() or not novo_duracao.strip():
-            flash("Campos vazios! Verifique se os campos estão vazios!")
+            flash("Campos vazios! Verifique se os campos estão vazios!", EnumStatusMensagens.AVISO.value)
             return  redirect(url_for('gestor.gestorServicoCadastrar'))
 
         session['dados-servicos'] = {
@@ -69,7 +70,7 @@ class AutenticadorGestor():
             duracao = int(novo_duracao)
 
             if (valor < -1) or (duracao < -1):
-                flash("Os valores de preco e duração devem ser maiores que zero!")
+                flash("Os valores de preco e duração devem ser maiores que zero!", EnumStatusMensagens.AVISO.value)
                 return  redirect(url_for('gestor.gestorServicoCadastrar'))
          
             # Salvando os dados na sessão do Flask
@@ -83,21 +84,23 @@ class AutenticadorGestor():
             resultado_servico = servicos.salvarServico()
 
             if not resultado_servico:
-                flash( 'Erro ao criar o serviço')
+                flash( 'Erro ao criar o serviço', EnumStatusMensagens.ERRO.value)
                 return redirect(url_for('gestor.gestorServicoCadastrar'))
             
             db.session.commit()
             session.pop('dados-servicos')
+
+            flash( 'Serviço cadastrado com sucesso', EnumStatusMensagens.SUCESSO.value)
        
         except IntegrityError as i:
             db.session.rollback()
             
 
             print(f"{i}")
-            flash( "Erro ao cadastrar o serviço!" )
+            flash( "Erro ao cadastrar o serviço!", EnumStatusMensagens.ERRO.value )
             return redirect(url_for('gestor.gestorServicoCadastrar'))
         except (ValueError, TypeError):
-            flash("Os campos Preço e duração só aceitam números!" )
+            flash("Os campos Preço e duração só aceitam números!", EnumStatusMensagens.AVISO.value )
             return redirect(url_for('gestor.gestorServicoCadastrar'))
         
         except Exception as erro:
@@ -116,14 +119,14 @@ class AutenticadorGestor():
             resultado = servicos.deletarServico(id_servico)
 
             if resultado:
-                flash("Serviço de código ["+ str(id_servico) + "] deletado com sucesso!")
+                flash("Serviço de código ["+ str(id_servico) + "] deletado com sucesso!", EnumStatusMensagens.SUCESSO.value)
             
             db.session.commit()
 
         except Exception as error:
             db.session.rollback()
             print(f"{error}")
-            flash("Não foi possivel deletar o serviço, consulte o suporte!")
+            flash("Não foi possivel deletar o serviço, consulte o suporte!", EnumStatusMensagens.ERRO.value)
         
         return redirect(url_for('gestor.gestorAbaServicos'))
   

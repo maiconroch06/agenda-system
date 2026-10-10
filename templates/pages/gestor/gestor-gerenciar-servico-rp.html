@@ -25,16 +25,13 @@
         <h1 id="form-title" class="text-center text-xl font-medium mb-1">Cadastrar Serviço</h1>
         <p id="form-subtitle" class="text-center text-[13px] text-[#888780] mb-5">Preencha os dados do serviço para disponibilizar no agendamento</p>
         <!-- Mensagem de Erro -->
-                {% with messages = get_flashed_messages(with_categories=false) %}
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div
-                                class="bg-red-500/10 my-8 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
+            <!-- ============================================================
+             COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
+             ============================================================ -->
+            {% set mensagens=mensagens_status %}
+            {% include "componetizacao/mensagens/mensagens.html" %}
+
+
         <!-- Formulário -->
         <form id="form-servico" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" method="post"  action="/gestor/painel/servicos/cadastrar" >
             <div class="space-y-4">
