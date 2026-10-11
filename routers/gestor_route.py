@@ -1,14 +1,12 @@
-import base64, os
-import time
-from werkzeug.utils import secure_filename
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
 from controllers.autenticador_gestor_controller import AutenticadorGestor
 from models.cliente import Cliente
 from models.servicos import Servicos
 from models.barbeiros import Barbeiro
 from  controllers.validar_cadastro_barbeiro import ValidarBarbeiro
-from enums import EnumStatusMensagens
+from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
+from controllers import EnviarImagem 
 
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
@@ -71,41 +69,15 @@ def gestorServicoPageCadastrar():
 @gestor.route('/painel/servicos/cadastrar', methods=['POST'])
 def gestorServicoCadastrar():
     
-    # validar o tipo de arquivo
-    # realizar o up
-    # renomeiar com um hash
     imagem = request.files.get('srv-imagem')
     
-    foto_nome = 'default.png'
-    
-    if imagem and imagem.filename:
-        # pega a extensao
-        extensao = os.path.splitext(imagem.filename)[1]
+    foto_nome = EnviarImagem().enviarImagem(imagem, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
 
-        # valida a imagem
-        if (extensao != '.png' and extensao!='jpg'):
-            flash("O sistema só aceita imagens em formato png ou jpg", EnumStatusMensagens.AVISO.value)
-            return redirect(url_for('gestor.gestorServicoPageCadastrar'))
-     
-        foto_nome = f"{int(time.time())}{extensao}"
-
-        # crio o caminho da pasta
-        pasta = os.path.join(
-            current_app.root_path,
-            current_app.config['UPLOAD_FILES'] ,
-            'post-imagens') 
-
-        # crio a pasta e caso não exista eu crio automaticamente
-        os.makedirs(pasta,exist_ok=True)
-
-        #crio o caminho da pasta com o nome
-        caminho = os.path.join(pasta, foto_nome)
-
-        #salvo a imagem no caminho
-        imagem.save(caminho)
+    if foto_nome is None:
+        return redirect(url_for('gestor.gestorServicoPageCadastrar'))
    
     descricao_servico = request.form.get('srv-nome').strip()
-    valor = Decimal(request.form.get('srv-preco').strip())
+    valor = request.form.get('srv-preco').strip()
     duracao = request.form.get('srv-duracao').strip()
 
      

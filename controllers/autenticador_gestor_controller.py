@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 from database import db
 from enums import EnumStatusMensagens
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 class AutenticadorGestor():
     
@@ -53,24 +53,18 @@ class AutenticadorGestor():
             return redirect(url_for('gestor.gestorBarbeiroCadastro'))
         return "<h1>Deu Certo</h1>"
 
-    def cadastrarServico(novo_foto_nome:str, novo_descricao: str, novo_valor: Decimal, novo_duracao:str ):
+    def cadastrarServico(novo_foto_nome:str, novo_descricao: str, novo_valor: str, novo_duracao:str ):
         # Validação inicial simples
-        if not novo_descricao.strip() or  novo_valor <= Decimal('0') or not novo_duracao.strip():
+        if not novo_descricao.strip() or not novo_valor.strip() or not novo_duracao.strip():
             flash("Campos vazios! Verifique se os campos estão vazios!", EnumStatusMensagens.AVISO.value)
             return  redirect(url_for('gestor.gestorServicoCadastrar'))
 
-        session['dados-servicos'] = {
-            'duracao':novo_duracao,
-            'nome': novo_descricao,
-            'valor': novo_valor
-        }
-
-       
+           
         try:
-            
+            valor = Decimal(novo_valor)
             duracao = int(novo_duracao)
 
-            if (duracao < -1):
+            if (duracao < -1 and valor<=Decimal("0")):
                 flash("O valor de duração devem ser maiores que zero!", EnumStatusMensagens.AVISO.value)
                 return  redirect(url_for('gestor.gestorServicoCadastrar'))
          
@@ -79,7 +73,7 @@ class AutenticadorGestor():
             servicos = Servicos()
             servicos.descricao = novo_descricao
             servicos.foto_nome = novo_foto_nome
-            servicos.valor = novo_valor
+            servicos.valor = valor
             servicos.duracao = duracao
                 
             resultado_servico = servicos.salvarServico()
@@ -89,7 +83,6 @@ class AutenticadorGestor():
                 return redirect(url_for('gestor.gestorServicoCadastrar'))
             
             db.session.commit()
-            session.pop('dados-servicos')
 
             flash( 'Serviço cadastrado com sucesso', EnumStatusMensagens.SUCESSO.value)
             return redirect(url_for('gestor.gestorAbaServicos'))
@@ -101,12 +94,12 @@ class AutenticadorGestor():
             print(f"{i}")
             flash( "Erro ao cadastrar o serviço!", EnumStatusMensagens.ERRO.value )
             return redirect(url_for('gestor.gestorServicoCadastrar'))
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, InvalidOperation):
             flash("Os campos Preço e duração só aceitam números!", EnumStatusMensagens.AVISO.value )
             return redirect(url_for('gestor.gestorServicoCadastrar'))
         
         except Exception as erro:
-            print(f"{erro}")
+            print(f"o erro foi de {erro}")
             db.session.rollback()
 
             flash("Confira se digitou o campo ", EnumStatusMensagens.ERRO.value)

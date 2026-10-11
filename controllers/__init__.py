@@ -1,0 +1,1 @@
+from .enviar_imagem import EnviarImagem

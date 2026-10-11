@@ -49,19 +49,20 @@
         <form id="form-servico" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" method="post"  action= "{{ '/gestor/painel/servicos/editar' if servico else '/gestor/painel/servicos/cadastrar' }}"  enctype="multipart/form-data">
             <div class="space-y-4">
                 <!-- Upload de Imagem -->
-                <div class="flex flex-col items-center justify-center gap-1.5">
-                    <span class="text-[12px] font-medium text-[#888780]">Imagem do Serviço</span>
-                    <label for="srv-foto" class="relative w-40 h-40 rounded-2xl border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-brand-gold-hover  overflow-hidden group">
-                        
-                        <img id="srv-preview"
-                            class="hidden absolute inset-0 w-full h-full object-contain"
-                            alt="Pré-visualização da imagem">
-
-                        <span class="text-2xl text-[#888780] group-hover:text-black leading-none mb-1">✂️</span>
-                        <span class="text-[10px] text-[#888780]">Selecionar imagem</span>
-                        <input type="file" id="srv-foto" name="srv-imagem" accept="image/*" class="hidden">
-                    </label>
-                </div>
+                
+                    <div class="flex flex-col items-center justify-center gap-1.5">
+                        <span class="text-[12px] font-medium text-[#888780]">Imagem do Serviço</span>
+                        <label for="srv-foto" class="relative w-40 h-40 rounded-2xl border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-brand-gold-hover  overflow-hidden group">
+                                <img id="srv-preview"
+                                class=" {{ 'hidden'  if not servico else ''}} absolute inset-0 w-full h-full object-contain"
+                                src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome)) if servico else ''}}"
+                                alt="Pré-visualização da imagem">  
+                            <span class="text-2xl text-[#888780] group-hover:text-black leading-none mb-1">✂️</span>
+                            <span class="text-[10px] text-[#888780]">Selecionar imagem</span>
+                            <input type="file" id="srv-foto" name="srv-imagem" accept="image/*" class="hidden">
+                        </label>
+                    </div>
+                
 
                 <!-- Inputs do Serviço -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">

@@ -9,6 +9,7 @@ ENV/
 *.pyo
 *.pyd
 
+
 # Variáveis de ambiente sensíveis
 .env
 

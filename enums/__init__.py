@@ -1,1 +1,2 @@
 from .enum_status_mensagens import EnumStatusMensagens
+from .enum_nomes_pastas import EnumNomesPastaImagem
