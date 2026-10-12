@@ -1,1 +1,1 @@
-from .enviar_imagem import EnviarImagem
+from .controlador_de_imagens import ControladorDeImagens

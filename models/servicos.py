@@ -119,7 +119,7 @@ class Servicos(db.Model):
                 "ativo": self.ativo,
                 "data_atualizacao":self.data_atualizacao
             }
-            )
+        )
         
         return resultado
     

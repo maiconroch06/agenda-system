@@ -6,7 +6,7 @@ from models.barbeiros import Barbeiro
 from  controllers.validar_cadastro_barbeiro import ValidarBarbeiro
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
-from controllers import EnviarImagem 
+from controllers import ControladorDeImagens 
 
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
@@ -70,8 +70,9 @@ def gestorServicoPageCadastrar():
 def gestorServicoCadastrar():
     
     imagem = request.files.get('srv-imagem')
-    
-    foto_nome = EnviarImagem().enviarImagem(imagem, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
+
+    enviarImagem = ControladorDeImagens() 
+    foto_nome = enviarImagem.enviarImagem(imagem, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
 
     if foto_nome is None:
         return redirect(url_for('gestor.gestorServicoPageCadastrar'))
@@ -79,7 +80,6 @@ def gestorServicoCadastrar():
     descricao_servico = request.form.get('srv-nome').strip()
     valor = request.form.get('srv-preco').strip()
     duracao = request.form.get('srv-duracao').strip()
-
      
     return AutenticadorGestor.cadastrarServico(foto_nome, descricao_servico, valor, duracao)
 
@@ -87,12 +87,15 @@ def gestorServicoCadastrar():
 @gestor.route('/painel/servicos/deletar', methods=['POST'])
 def gestorServicoDeletar(): 
     id_servico = request.form.get('srv-id-deletar')
-    servico = Servicos()
-    servico.consultarIdServico(id_servico)
     
+    servico = Servicos().consultarIdServico(id_servico)
+
     if servico is None:
         flash("Aviso: Serviço não deletado, serviço inexistente ", EnumStatusMensagens.AVISO.value)
         return redirect(url_for("gestor.gestorAbaServicos"))
+
+    controladorDeImagens = ControladorDeImagens()
+    controladorDeImagens.removerImagem(servico["foto_nome"], EnumNomesPastaImagem.IMAGEMS_SERVICOS)
     
     return AutenticadorGestor.deletarServico(id_servico)
 
@@ -111,8 +114,18 @@ def gestorServicoEditarPagina(id_servico:int):
 # SERVIÇOS - Salvar edição do serviço no banco de dados
 @gestor.route('/painel/servicos/editar', methods=['POST'])
 def gestorServicoEditar():
-        
-    foto_nome = "foto_nome"
+
+    imagem_form = request.files.get('srv-imagem')
+    img_padrao = request.form.get('imagem-padrao', None)
+    imagem_anterior = request.form.get('srv-foto_nome_anterior')
+
+    enviarImagem = ControladorDeImagens()    
+    foto_nome = enviarImagem.editarImagem(imagem_anterior, imagem_form, EnumNomesPastaImagem.IMAGEMS_SERVICOS,img_padrao)
+    
+    if foto_nome is None:
+        flash("Atenção: a imagem não é suportada pelo sistema.", EnumStatusMensagens.AVISO.value)
+        return redirect(url_for('gestor.gestorServicoEditarPagina'))
+     
     descricao_servico = request.form.get('srv-nome')
     valor = Decimal(request.form.get('srv-preco').strip())
     duracao = request.form.get('srv-duracao').strip()

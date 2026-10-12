@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
 from controllers.autenticador_cliente_controller import AutenticacaoCliente
-from models import Usuario
+from models import Usuario, Servicos
 from datetime import datetime, timezone
+
 
 
 cliente = Blueprint('cliente', __name__, template_folder='templates')
@@ -68,7 +69,10 @@ def clientRegister():
    
 @cliente.route('/agendamento/servicos', methods=['GET','POST'])
 def clientAgendamentoServicos():
-   return render_template('pages/cliente/cliente-agendamento-rp.html')
+   
+   servicos = Servicos().consultarTodosOsServicos()
+
+   return render_template('pages/cliente/cliente-agendamento-rp.html', servicos=servicos)
 
 @cliente.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():
