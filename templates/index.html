@@ -140,20 +140,38 @@
         <section id="servicos" class="border-t border-brand-border/30 bg-brand-bg-primary py-20 sm:py-28">
             <div class="mx-auto max-w-6xl px-5">
                 {{ section_head('Cuidado completo', 'Nossos <span class="text-brand-gold">Serviços</span>', 'Desde cortes clássicos a tratamentos completos') }}
-
                 <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-                    {% for name, desc, price in services %}
-                    <article class="group flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold">
-                        <div>
-                            <h3 class="font-title mb-3 text-xl text-white">{{ name }}</h3>
-                            <p class="text-sm leading-relaxed text-brand-muted">{{ desc }}</p>
-                        </div>
-                        <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
-                            <span class="text-xl font-bold text-brand-gold">{{ price }}</span>
-                            <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
-                        </div>
-                    </article>
-                    {% endfor %}
+                    {% if servicos %}
+                        {% for servico in servicos %}
+                            <article class="group flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold">
+                                <div>
+                                    <!-- descomentar quando a imagem estiver no banco: -->
+                                    <img src="{{ url_for('static', filename='assets/dados/post-imagens/' ~ servico.foto_nome) }}" alt="{{ servico.descricao }}" class="w-full h-40 object-cover rounded-lg mb-3">
+                                    
+                                    <h3 class="font-title mb-1 text-xl text-white">{{ servico.descricao }}</h3>
+                                    <p class="text-sm leading-relaxed text-brand-muted">Duração: {{ servico.duracao }} min</p>
+                                </div>
+                                <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
+                                    <span class="text-xl font-bold text-brand-gold">R$ {{ "%.2f"|format(servico.valor|float) }}</span>
+                                    <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
+                                </div>
+                            </article>
+                        {% endfor %}
+
+                    {% else %}
+                        {% for name, desc, price in services %}
+                            <article class="group flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold">
+                                <div>
+                                    <h3 class="font-title mb-3 text-xl text-white">{{ name }}</h3>
+                                    <p class="text-sm leading-relaxed text-brand-muted">{{ desc }}</p>
+                                </div>
+                                <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
+                                    <span class="text-xl font-bold text-brand-gold">{{ price }}</span>
+                                    <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </section>
