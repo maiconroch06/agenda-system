@@ -44,9 +44,11 @@
                             </button>
                     </a>
                     </div>
+
+                    <!--
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <!-- seus cards aqui -->
-                    </div>
+                        <!-- seus cards aqui --
+                    </div> -->
                     
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
@@ -56,11 +58,10 @@
                             <div class=" bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-700/60 transition-all duration-200" >
                                 <div class="relative flex flex-col items-center">
                                     
-                                    <img class="w-20 h-20 rounded-full object-contain mb-3  shadow-sm" src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" >
-            
+                                    <img class="w-20 h-20 rounded-full object-contain mb-3 shadow-sm" src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" >
                     
-                                    <h3 class="font-bold   text-base mb-1 text-center">{{servico.descricao}}</h3>
-                                    <p class="text-xs   text-center mb-3 line-clamp-2">Valor R$ {{servico.valor}} | duracao {{servico.duracao}} minutos</p>
+                                    <h3 class="font-bold text-base mb-1 text-center">{{servico.descricao}}</h3>
+                                    <p class="text-xs text-center mb-3 line-clamp-2">Valor R$ {{servico.valor}} | duracao {{servico.duracao}} minutos</p>
                                 
                                 </div>
                                 <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[#38362f]">

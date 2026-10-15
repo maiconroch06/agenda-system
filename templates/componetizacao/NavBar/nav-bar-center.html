@@ -1,7 +1,7 @@
 {# NAV principal (páginas públicas). Desktop: linha central. Mobile: painel aberto pelo botão do header. #}
 <nav id="site-nav" aria-label="Navegação principal"
     class="absolute inset-x-0 top-full hidden border-b border-[#222222] bg-[#0a0a0a] p-4 text-sm font-medium tracking-wide text-gray-200 lg:static lg:flex lg:items-center lg:gap-8 lg:border-0 lg:bg-transparent lg:p-0">
-    {% for href, label in [('/#home', 'Home'), ('/#equipe', 'Quem Somos'), ('/#servicos', 'Serviços'), ('/#planos', 'Planos'), ('/#faq', 'FAQ')] %}
+    {% for href, label in [('/#home', 'Home'), ('/#equipe', 'Quem Somos'), ('/#servicos', 'Serviços'), ('/#planos', 'Planos'), ('/#faq', 'FAQ'), ('/tipo-usuario', 'Área Restrita')] %}
     <a href="{{ href }}"
         class="relative block py-3 transition-colors hover:text-brand-gold lg:py-1 lg:after:absolute lg:after:-bottom-0.5 lg:after:left-0 lg:after:h-px lg:after:w-0 lg:after:bg-brand-gold lg:after:transition-all lg:after:duration-300 lg:hover:after:w-full">{{ label }}</a>
     {% endfor %}

@@ -116,67 +116,115 @@
                     {% endfor %}
                 </div>
 
-                <div class="mt-8 rounded-xl border border-brand-border bg-brand-bg-card p-6 shadow-lg sm:p-10">
+                <div class="mt-8 rounded-xl border border-brand-border bg-brand-bg-card overflow-hidden shadow-lg">
                     {% for b in barbers %}
-                    <div id="panel-{{ loop.index }}" role="tabpanel" aria-labelledby="tab-{{ loop.index }}" tabindex="0"
-                        class="barber-panel {{ '' if loop.first else 'hidden' }} animate-fade-in space-y-4">
-                        <span class="block text-xs font-bold uppercase tracking-[0.2em] text-brand-gold">{{ b.tag }}</span>
-                        <h3 class="font-title text-2xl font-bold text-white sm:text-4xl">{{ b.name }}</h3>
-                        <span class="block text-xs text-brand-muted">{{ b.exp }}</span>
-                        <p class="max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base">{{ b.bio }}</p>
-                        <ul class="flex flex-wrap gap-2 pt-2">
-                            {% for s in b.skills %}
-                            <li class="rounded-full border border-brand-border bg-white/5 px-3.5 py-1 text-xs text-brand-muted">{{ s }}</li>
-                            {% endfor %}
-                        </ul>
-                        <a href="/cliente/login" class="inline-block pt-2 text-sm font-semibold text-brand-gold transition-colors hover:text-white">Agendar com {{ b.name.split()[0] }} →</a>
-                    </div>
+
+                        <div id="panel-{{ loop.index }}" role="tabpanel" aria-labelledby="tab-{{ loop.index }}" tabindex="0"
+                            class="barber-panel {{ '' if loop.first else 'hidden' }} animate-fade-in flex flex-col md:flex-row items-center w-full">
+
+                            <!-- Informações (Texto) -->
+                            <div class="space-y-4 flex-1 w-full text-center md:text-left p-6 sm:p-10 flex flex-col justify-center">
+                                <div>
+                                    <span class="block text-xs font-bold uppercase tracking-[0.2em] text-brand-gold">{{ b.tag }}</span>
+                                    <h3 class="font-title text-2xl font-bold text-white sm:text-4xl mt-1">{{ b.name }}</h3>
+                                    <span class="block text-xs text-brand-muted">{{ b.exp }}</span>
+                                </div>
+                                <p class="max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base mx-auto md:mx-0">{{ b.bio }}</p>
+                                <ul class="flex flex-wrap justify-center md:justify-start gap-2 pt-2">
+                                    {% for s in b.skills %}
+                                    <li class="rounded-full border border-brand-border bg-white/5 px-3.5 py-1 text-xs text-brand-muted">{{ s }}</li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="pt-2">
+                                    <a href="/cliente/login" class="inline-block text-sm font-semibold text-brand-gold transition-colors hover:text-white">Agendar com {{ b.name.split()[0] }} →</a>
+                                </div>
+                            </div>
+
+                            <div class="relative w-full md:w-[300px] shrink-0 overflow-hidden md:border-r border-brand-border/30 aspect-square md:aspect-[3/4] bg-brand-bg-card">
+                                
+                                <img src="{{ url_for('static', filename='assets/img/barbeiros/' ~ b.img) }}" 
+                                    alt="Foto do barbeiro {{ b.name }}" 
+                                    loading="lazy" 
+                                    class="h-full w-full object-cover [mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]
+                                                                      [-webkit-mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]">
+                            </div>
+
+                        </div>
+
                     {% endfor %}
                 </div>
             </div>
         </section>
 
         <!-- Serviços -->
-        <section id="servicos" class="border-t border-brand-border/30 bg-brand-bg-primary py-20 sm:py-28">
-            <div class="mx-auto max-w-6xl px-5">
+        <section id="servicos" class="border-t border-brand-border/30 bg-brand-bg-primary py-20 sm:py-28 overflow-hidden">
+            <div class="mx-auto max-w-6xl px-5 relative">
                 {{ section_head('Cuidado completo', 'Nossos <span class="text-brand-gold">Serviços</span>', 'Desde cortes clássicos a tratamentos completos') }}
-                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-                    {% if servicos %}
-                        {% for servico in servicos %}
-                            <article class="group flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold">
-                                <div>
-                                    <!-- descomentar quando a imagem estiver no banco: -->
-                                    <img src="{{ url_for('static', filename='assets/dados/post-imagens/' ~ servico.foto_nome) }}" alt="{{ servico.descricao }}" class="w-full h-40 object-cover rounded-lg mb-3">
-                                    
-                                    <h3 class="font-title mb-1 text-xl text-white">{{ servico.descricao }}</h3>
-                                    <p class="text-sm leading-relaxed text-brand-muted">Duração: {{ servico.duracao }} min</p>
-                                </div>
-                                <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
-                                    <span class="text-xl font-bold text-brand-gold">R$ {{ "%.2f"|format(servico.valor|float) }}</span>
-                                    <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
-                                </div>
-                            </article>
-                        {% endfor %}
+                
+                <!-- Container do Carrossel -->
+                <div class="relative mx-auto mt-10 h-[450px] w-full max-w-5xl md:h-[420px]">
+                    
+                    <!-- Setas de Navegação -->
+                    <button id="btn-prev-service" class="absolute left-0 top-1/2 z-30 -translate-y-1/2 rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all hover:scale-110 hover:bg-brand-gold hover:text-black hidden sm:block">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
 
-                    {% else %}
-                        {% for name, desc, price in services %}
-                            <article class="group flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold">
-                                <div>
-                                    <h3 class="font-title mb-3 text-xl text-white">{{ name }}</h3>
-                                    <p class="text-sm leading-relaxed text-brand-muted">{{ desc }}</p>
-                                </div>
-                                <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
-                                    <span class="text-xl font-bold text-brand-gold">{{ price }}</span>
-                                    <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
-                                </div>
-                            </article>
-                        {% endfor %}
-                    {% endif %}
+                    <button id="btn-next-service" class="absolute right-0 top-1/2 z-30 -translate-y-1/2 rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all hover:scale-110 hover:bg-brand-gold hover:text-black hidden sm:block">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+
+                    <!-- Lista de Cards -->
+                    <div id="carousel-track" class="relative flex h-full w-full items-center justify-center">
+                        {% if servicos %}
+                            {% for servico in servicos %}
+                                <article class="service-card absolute w-full max-w-[280px] sm:max-w-[300px] flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold">
+                                    <div>           
+                                        <img src="{{ url_for('static', filename='assets/dados/post-imagens/' ~ servico.foto_nome) }}" alt="{{ servico.descricao }}" class="w-full h-55 object-cover rounded-lg mb-3">
+                                        
+                                        <h3 class="font-title mb-1 text-xl text-white">{{ servico.descricao }}</h3>
+                                        <p class="text-sm leading-relaxed text-brand-muted">Duração: {{ servico.duracao }} min</p>
+                                    </div>
+                                    <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
+                                        <span class="text-xl font-bold text-brand-gold">R$ {{ "%.2f"|format(servico.valor|float) }}</span>
+                                        <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        {% else %}
+                            {% for name, desc, price in services %}
+                                <article class="service-card absolute w-full max-w-[280px] sm:max-w-[320px] flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold">
+                                    <div>
+                                        <h3 class="font-title mb-3 text-xl text-white">{{ name }}</h3>
+                                        <p class="text-sm leading-relaxed text-brand-muted">{{ desc }}</p>
+                                    </div>
+                                    <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
+                                        <span class="text-xl font-bold text-brand-gold">{{ price }}</span>
+                                        <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
+                
+                <!-- Controles Mobile (Setas em baixo) -->
+                <div class="mt-6 flex justify-center gap-4 sm:hidden">
+                    <button id="btn-prev-mobile" class="rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                    </button>
+                    <button id="btn-next-mobile" class="rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                    </button>
+                </div>
+
             </div>
         </section>
 
-        <!-- Planos -->
+        <!-- Planos --
         <section id="planos" class="border-t border-brand-border/50 bg-brand-bg-secondary py-20 sm:py-28">
             <div class="mx-auto max-w-6xl px-5">
                 {{ section_head('Assinatura', 'Planos <span class="text-brand-gold">Mensais</span>', 'Mantenha o visual sempre em dia com descontos exclusivos') }}
@@ -203,7 +251,7 @@
                     {% endfor %}
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <!-- FAQ -->
         <section id="faq" class="border-t border-brand-border/30 bg-black py-20 text-white sm:py-28">
@@ -238,27 +286,105 @@
 
     {% include "componetizacao/Footer/footer.html" %}
 
-    <!-- Abas da equipe (acessível: mouse, toque e setas do teclado) -->
     <script>
-    (() => {
-        const tabs = [...document.querySelectorAll('.barber-tab')];
-        const panels = [...document.querySelectorAll('.barber-panel')];
-        const select = (i, focus) => {
-            tabs.forEach((t, n) => {
-                t.setAttribute('aria-selected', n === i);
-                t.tabIndex = n === i ? 0 : -1;
-                panels[n].classList.toggle('hidden', n !== i);
+        (() => {
+            const tabs = [...document.querySelectorAll('.barber-tab')];
+            const panels = [...document.querySelectorAll('.barber-panel')];
+            const select = (i, focus) => {
+                tabs.forEach((t, n) => {
+                    t.setAttribute('aria-selected', n === i);
+                    t.tabIndex = n === i ? 0 : -1;
+                    panels[n].classList.toggle('hidden', n !== i);
+                });
+                if (focus) tabs[i].focus();
+            };
+            tabs.forEach((t, i) => {
+                t.addEventListener('click', () => select(i));
+                t.addEventListener('keydown', e => {
+                    const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+                    if (k) { e.preventDefault(); select((i + k + tabs.length) % tabs.length, true); }
+                });
             });
-            if (focus) tabs[i].focus();
-        };
-        tabs.forEach((t, i) => {
-            t.addEventListener('click', () => select(i));
-            t.addEventListener('keydown', e => {
-                const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-                if (k) { e.preventDefault(); select((i + k + tabs.length) % tabs.length, true); }
-            });
-        });
-    })();
+        })();
+    </script>
+
+    <!-- Script do Carrossel de Serviços 3D -->
+    <script>
+        (() => {
+            const cards = Array.from(document.querySelectorAll('.service-card'));
+            const totalCards = cards.length;
+            
+            if (totalCards === 0) return;
+    
+            // Proteção: Se houver 3 ou menos cards, desativa o 3D e alinha no centro (sem quebrar o layout)
+            if (totalCards <= 3) {
+                const track = document.getElementById('carousel-track');
+                track.classList.remove('relative');
+                track.classList.add('flex', 'gap-4', 'flex-wrap');
+                
+                document.querySelectorAll('#btn-prev-service, #btn-next-service, #btn-prev-mobile, #btn-next-mobile')
+                    .forEach(btn => btn.style.display = 'none');
+                
+                cards.forEach(card => {
+                    card.classList.remove('absolute', 'opacity-0', 'scale-50');
+                    card.classList.add('opacity-100', 'scale-100');
+                });
+                return;
+            }
+    
+            let currentIndex = 0;
+            let autoplayTimer;
+    
+            // Classes de estado (Tailwind) para as animações de surgir/sumir e destacar o meio
+            const classHiddenLeft = ['opacity-0', 'scale-50', '-translate-x-[150%]', 'z-0'];
+            const classLeft = ['opacity-60', 'scale-90', '-translate-x-[85%]', 'sm:-translate-x-[110%]', 'z-10'];
+            const classCenter = ['opacity-100', 'scale-100', 'sm:scale-105', 'translate-x-0', 'z-20', 'border-brand-gold', 'shadow-2xl', 'shadow-brand-gold/10'];
+            const classRight = ['opacity-60', 'scale-90', 'translate-x-[85%]', 'sm:translate-x-[110%]', 'z-10'];
+            const classHiddenRight = ['opacity-0', 'scale-50', 'translate-x-[150%]', 'z-0'];
+    
+            const updateCarousel = () => {
+                const length = totalCards;
+                const prevIndex = (currentIndex - 1 + length) % length;
+                const nextIndex = (currentIndex + 1) % length;
+    
+                cards.forEach((card, i) => {
+                    card.classList.remove(
+                        ...classHiddenLeft, ...classLeft, ...classCenter, ...classRight, ...classHiddenRight
+                    );
+    
+                    if (i === currentIndex) {
+                        card.classList.add(...classCenter);
+                    } else if (i === prevIndex) {
+                        card.classList.add(...classLeft);
+                    } else if (i === nextIndex) {
+                        card.classList.add(...classRight);
+                    } else {
+                        const dist = (i - currentIndex + length) % length;
+                        if (dist < length / 2) {
+                            card.classList.add(...classHiddenRight);
+                        } else {
+                            card.classList.add(...classHiddenLeft);
+                        }
+                    }
+                });
+            };
+    
+            const next = () => { currentIndex = (currentIndex + 1) % totalCards; updateCarousel(); };
+            const prev = () => { currentIndex = (currentIndex - 1 + totalCards) % totalCards; updateCarousel(); };
+    
+            document.getElementById('btn-next-service')?.addEventListener('click', () => { next(); resetTimer(); });
+            document.getElementById('btn-prev-service')?.addEventListener('click', () => { prev(); resetTimer(); });
+            document.getElementById('btn-next-mobile')?.addEventListener('click', () => { next(); resetTimer(); });
+            document.getElementById('btn-prev-mobile')?.addEventListener('click', () => { prev(); resetTimer(); });
+    
+            const resetTimer = () => {
+                clearInterval(autoplayTimer);
+                autoplayTimer = setInterval(next, 4000); // 4 segundos
+            };
+    
+            updateCarousel();
+            resetTimer();
+        })();
     </script>
 </body>
 

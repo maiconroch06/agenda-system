@@ -160,29 +160,25 @@
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
 
                 {% for servico in servicos %}
-                <label class="cursor-pointer w-full group">
-                    <input type="checkbox" name="inputCorte" id="selecionar-servico" class="peer hidden" value="servico.id">
-                    <div
-                        class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col justify-between items-center gap-3 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
+                    <label class="cursor-pointer w-full group">
+                        <input type="checkbox" name="inputCorte" id="selecionar-servico" class="peer hidden" value="servico.id">
+                        <div class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col justify-between items-center gap-3 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
 
-                        <div
-                            class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
-                            <img  src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" />
-                            
+                            <div class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
+                                <img src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" class="w-full h-full object-cover">
+                                
+                            </div>
+
+                            <span class="font-semibold text-base sm:text-sm md:text-base lg:lg-text-base text-white text-center peer-checked:text-brand-gold line-clamp-2 leading-tight w-full min-h-[2.5rem] flex items-center justify-center">
+                            {{servico.descricao}}
+                            </span>
+
+                            <div class="flex justify-between items-center w-full text-sm sm:text-xs md:text-sm lg-text-base text-brand-muted pt-2 border-t border-brand-border/50 mt-auto">
+                                <span>{{servico.duracao}} min</span>
+                                <span class="font-semibold text-white">R$ {{"%.2f" | format (servico.valor) | replace(".", ",")}}</span>
+                            </div>
                         </div>
-
-                        <span
-                            class="font-semibold text-base sm:text-sm md:text-base lg:lg-text-base text-white text-center peer-checked:text-brand-gold line-clamp-2 leading-tight w-full min-h-[2.5rem] flex items-center justify-center">
-                           {{servico.descricao}}
-                        </span>
-
-                        <div
-                            class="flex justify-between items-center w-full text-sm sm:text-xs md:text-sm lg-text-base text-brand-muted pt-2 border-t border-brand-border/50 mt-auto">
-                            <span>{{servico.duracao}} min</span>
-                            <span class="font-semibold text-white">R$ {{"%.2f" | format (servico.valor) | replace(".", ",")}}</span>
-                        </div>
-                    </div>
-                </label>
+                    </label>
                 {%endfor %}
             </div>
 
