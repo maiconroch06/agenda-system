@@ -47,12 +47,13 @@ class Servicos(db.Model):
 
         return resultado.lastrowid
 
-    @classmethod    
+    @classmethod
     def consultarTodosOsServicos(cls):
         resultado = db.session.execute( 
             db.text(
                 """
                     select * FROM servicos
+                    
                 """
             )
         )

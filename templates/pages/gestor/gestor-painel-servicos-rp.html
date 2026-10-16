@@ -58,7 +58,7 @@
                             <div class=" bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-700/60 transition-all duration-200" >
                                 <div class="relative flex flex-col items-center">
                                     
-                                    <img class="w-20 h-20 rounded-full object-contain mb-3 shadow-sm" src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" >
+                                    <img class="w-20 h-20 rounded-full aspect-[3/4] object-cover mb-3 shadow-sm" src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" >
                     
                                     <h3 class="font-bold text-base mb-1 text-center">{{servico.descricao}}</h3>
                                     <p class="text-xs text-center mb-3 line-clamp-2">Valor R$ {{servico.valor}} | duracao {{servico.duracao}} minutos</p>

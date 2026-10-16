@@ -7,8 +7,8 @@ from database import db
 
 def initialize():
         try:
-            id_endereco=0;
-            cnpj_barbearia=None;
+            id_endereco = 0;
+            cnpj_barbearia = None;
 
             if (Estados.inserirEstadosDefault() == 1):
                 id_endereco = Endereco.inserirEnderecoPadrao()

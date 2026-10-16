@@ -35,7 +35,8 @@ class Barbeiro(db.Model):
 
         
     # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
-    def consultarBarbeiros(self):
+    @classmethod
+    def consultarBarbeiros(cls):
         return db.session.execute(
             db.text(
                     """
