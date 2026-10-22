@@ -32,7 +32,7 @@
     <!-- Clientes -->
     <a href="/gestor/painel/clientes" 
        class="flex flex-col items-center justify-center p-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-colors text-center w-full min-w-0 {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/clientes') else 'text-[#888780] hover:text-[#f1efe8]' }}">
-        <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-cliente.html" %}</span>
+        <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-clientes.html" %}</span>
         <span class="truncate w-full">Clientes</span>
     </a>
 
@@ -42,5 +42,12 @@
         <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-financeiro.html" %}</span>
         <span class="truncate w-full">Financeiro</span>
     </a>
+    
+
+    <!-- Opção para exibir outras opções. Essa implementação serve para não poluir a tela mobile -->
+    
+    <!-- <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="mais" onclick="abrirMenuMais()">
+        <span class="text-lg">⋯</span> Mais
+    </button> -->
 
 </nav>

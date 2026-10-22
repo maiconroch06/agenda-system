@@ -43,7 +43,7 @@
         <!-- Clientes -->
         <a href="/gestor/painel/clientes">
             <button class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/clientes') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
-                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-cliente.html" %}</span> Clientes
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-clientes.html" %}</span> Clientes
             </button>
         </a>
         
@@ -68,14 +68,14 @@
                 </span>
                 {% endif %}
             </div>
-            <div class="min-w-0">
+            <div class="min-w-0 flex items-center gap-13">
                 <div class="w-full">
                     <p class="text-sm font-medium text-[#f1efe8]">
                         {{ session.get('dados_gestor')['nome_completo'].split(' ')[0] }}
                     </p>
                 </div>
-                <a href="/gestor/logout" class="text-xs text-[#888780] hover:text-[#f1efe8] transition-colors">
-                    Sair
+                <a href="/gestor/logout" class="text-xs text-[#888780] hover:text-[#f1efe8] transition-colors flex items-center">
+                    SAIR {% include "componetizacao/icones/icone-logout.html" %}
                 </a>
             </div>
         </div>
