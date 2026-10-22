@@ -1,0 +1,37 @@
+<div id="dropdown-usuario" hidden
+    class="absolute right-0 top-12 w-56 bg-[#232220] border border-[#38362f] rounded-xl shadow-2xl overflow-hidden z-50">
+
+    <!-- DADOS DO USUÁRIO -->
+    <div class="px-4 py-3 border-b border-[#38362f]">
+
+        <p class="text-sm font-medium text-[#f1efe8]">
+            {% if session.get('dados_cliente') %}
+            {{ session.get('dados_cliente')['nome_completo'] }}
+            {% endif %}
+        </p>
+
+        <p class="text-xs text-[#888780] mt-1">
+            Minha conta
+        </p>
+
+    </div>
+
+    <!-- LISTAR SERVIÇOS -->
+    <button onclick="voltarParaAgendamento()" type="button"
+        class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer">
+        Exibir Cortes
+    </button>
+
+    <!-- MEUS AGENDAMENTOS -->
+    <button id="btn-toggle-historico" type="button"
+        class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer">
+        <span id="texto-btn-historico">Meus Agendamentos</span>
+    </button>
+
+    <!-- SAIR -->
+    <a href="/cliente/logout"
+        class="block px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors">
+        Sair
+    </a>
+
+</div>
