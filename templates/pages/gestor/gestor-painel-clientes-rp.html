@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
-<body class="bg-[#161513] text-[#f1efe8] font-sans  min-h-screen">
+<body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen">
 
     <div class="flex flex-col min-h-screen">
             
@@ -67,7 +67,6 @@
                         </div>
                     </div>
                 </section>
-
             </main>
         </div>
 
@@ -75,76 +74,7 @@
         {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
 
     </div>
-
-    <!-- MODAL: DETALHES DO ATENDIMENTO -->
-    <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-detalhe" onclick="fecharModalDetalhe()"></div>
-    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-detalhe"
-        onclick="if(event.target===this) fecharModalDetalhe()">
-        <div
-            class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-base font-medium">Detalhes do atendimento</h2>
-                <button
-                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
-                    onclick="fecharModalDetalhe()">✕</button>
-            </div>
-
-            <div id="detalhe-status-badge" class="mb-3"></div>
-
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">💈</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Barbeiro</div>
-                    <div class="text-sm font-medium" id="detalhe-barbeiro">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">👤</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Cliente</div>
-                    <div class="text-sm font-medium" id="detalhe-cliente">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">✂️</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Serviço</div>
-                    <div class="text-sm font-medium" id="detalhe-servico">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">🕐</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Horário</div>
-                    <div class="text-sm font-medium" id="detalhe-horario">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">💵</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Valor</div>
-                    <div class="text-sm font-medium" id="detalhe-valor">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">📞</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Telefone</div>
-                    <div class="text-sm font-medium" id="detalhe-telefone">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2">
-                <span class="text-sm w-5">📝</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Observações</div>
-                    <div class="text-sm font-medium" id="detalhe-obs">—</div>
-                </div>
-            </div>
-
-            <div class="flex flex-col gap-2 mt-4" id="detalhe-acoes"></div>
-        </div>
-    </div>
-
+    
     <!-- TOAST AVISO -->
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso"></div>

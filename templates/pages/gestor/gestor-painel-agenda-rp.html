@@ -29,7 +29,7 @@
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
                 <!-- ABA 2: AGENDA COMPLETA -->
-                <section class="aba-func" id="aba-agenda">
+                <section id="aba-agenda">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
                         <h1 class="text-lg lg:text-xl font-medium">Agenda Geral</h1>
 
@@ -90,73 +90,8 @@
     </div>
 
     <!-- MODAL: DETALHES DO ATENDIMENTO -->
-    <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-detalhe" onclick="fecharModalDetalhe()"></div>
-    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-detalhe"
-        onclick="if(event.target===this) fecharModalDetalhe()">
-        <div
-            class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-base font-medium">Detalhes do atendimento</h2>
-                <button
-                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
-                    onclick="fecharModalDetalhe()">✕</button>
-            </div>
+    {% include "componetizacao/modals/modal-detalhes-atendimento.html" %}
 
-            <div id="detalhe-status-badge" class="mb-3"></div>
-
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">💈</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Barbeiro</div>
-                    <div class="text-sm font-medium" id="detalhe-barbeiro">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">👤</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Cliente</div>
-                    <div class="text-sm font-medium" id="detalhe-cliente">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">✂️</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Serviço</div>
-                    <div class="text-sm font-medium" id="detalhe-servico">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">🕐</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Horário</div>
-                    <div class="text-sm font-medium" id="detalhe-horario">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">💵</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Valor</div>
-                    <div class="text-sm font-medium" id="detalhe-valor">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2 border-b border-[#38362f]">
-                <span class="text-sm w-5">📞</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Telefone</div>
-                    <div class="text-sm font-medium" id="detalhe-telefone">—</div>
-                </div>
-            </div>
-            <div class="flex gap-3 py-2">
-                <span class="text-sm w-5">📝</span>
-                <div>
-                    <div class="text-[11px] text-[#888780]">Observações</div>
-                    <div class="text-sm font-medium" id="detalhe-obs">—</div>
-                </div>
-            </div>
-
-            <div class="flex flex-col gap-2 mt-4" id="detalhe-acoes"></div>
-        </div>
-    </div>
 
     <!-- MODAL: BLOQUEAR HORÁRIO -->
     <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-bloquear" onclick="fecharModalBloquear()"></div>
