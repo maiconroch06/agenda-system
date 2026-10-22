@@ -1642,6 +1642,12 @@
   .text-left {
     text-align: left;
   }
+  .align-baseline {
+    vertical-align: baseline;
+  }
+  .align-text-bottom {
+    vertical-align: text-bottom;
+  }
   .font-mono {
     font-family: var(--font-mono);
   }
@@ -3005,12 +3011,6 @@
     }
   }
   @media (width >= 80rem) {
-    .xl\:p-1 {
-      padding: var(--spacing);
-    }
-    .xl\:p-5 {
-      padding: calc(var(--spacing) * 5);
-    }
     .xl\:p-10 {
       padding: calc(var(--spacing) * 10);
     }
