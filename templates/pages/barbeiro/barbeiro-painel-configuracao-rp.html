@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMS Barbearia | BarberDash</title>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+</head>
+
+<body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
+
+    <div class="flex flex-col min-h-screen">
+
+        <!-- CONTAINER PRINCIPAL COM ESPAÇAMENTO PARA O BOTTOM-NAV -->
+        <div class="flex flex-1 pb-20 lg:pb-0">
+
+            {% include "componetizacao/SiderBar/sider-bar-barbeiro.html" %}
+
+            <!-- CONTEÚDO PRINCIPAL ADAPTADO -->
+            <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+
+                <!-- ABA CONFIGURAÇÕES -->
+                <section class="" id="aba-configuracoes">
+                    <div class="flex items-center justify-between mb-4 gap-3">
+                        <h1 class="text-lg lg:text-xl font-medium">Configurações</h1>
+                    </div>
+
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden mb-4">
+                        <div
+                            class="p-3 px-4 border-b border-[#38362f] text-xs font-medium text-[#888780] uppercase tracking-wider">
+                            Perfil</div>
+                        <div class="flex items-center justify-between p-3.5 px-4 cursor-pointer border-b border-[#38362f] hover:bg-[#2a2825] transition-colors"
+                            onclick="document.getElementById('inp-nova-foto').click()">
+                            <span class="text-sm">Alterar foto</span>
+                            <span class="text-[#6b6963]">›</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3.5 px-4 cursor-pointer border-b border-[#38362f] hover:bg-[#2a2825] transition-colors"
+                            onclick="abrirModalConfig('telefone')">
+                            <div>
+                                <div class="text-sm">Alterar telefone</div>
+                                <div class="text-xs text-[#888780] mt-0.5" id="config-telefone-atual">—</div>
+                            </div>
+                            <span class="text-[#6b6963]">›</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3.5 px-4 cursor-pointer border-b border-[#38362f] hover:bg-[#2a2825] transition-colors"
+                            onclick="abrirModalConfig('descricao')">
+                            <span class="text-sm">Editar descrição profissional</span>
+                            <span class="text-[#6b6963]">›</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3.5 px-4 cursor-pointer hover:bg-[#2a2825] transition-colors"
+                            onclick="abrirModalConfig('senha')">
+                            <span class="text-sm">Alterar senha</span>
+                            <span class="text-[#6b6963]">›</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden mb-4">
+                        <div
+                            class="p-3 px-4 border-b border-[#38362f] text-xs font-medium text-[#888780] uppercase tracking-wider">
+                            Preferências</div>
+                        <div class="flex items-center justify-between p-3.5 px-4 border-b border-[#38362f]">
+                            <span class="text-sm">Notificações</span>
+                            <label class="relative inline-block w-11 h-6 flex-shrink-0 cursor-pointer">
+                                <input type="checkbox" id="toggle-notif" checked class="sr-only peer"
+                                    onchange="alternarNotificacoes()">
+                                <span
+                                    class="absolute inset-0 bg-[#4a473f] rounded-full transition-colors peer-checked:bg-[#0f6e56] peer-checked:after:translate-x-[20px] peer-checked:after:bg-white after:content-[''] after:absolute after:w-[18px] after:h-[18px] after:rounded-full after:left-[3px] after:bottom-[3px] after:bg-[#888780] after:transition-all"></span>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between p-3.5 px-4">
+                            <span class="text-sm">Tema escuro</span>
+                            <label class="relative inline-block w-11 h-6 flex-shrink-0 cursor-pointer">
+                                <input type="checkbox" id="toggle-tema" checked class="sr-only peer"
+                                    onchange="alternarTema()">
+                                <span
+                                    class="absolute inset-0 bg-[#4a473f] rounded-full transition-colors peer-checked:bg-[#0f6e56] peer-checked:after:translate-x-[20px] peer-checked:after:bg-white after:content-[''] after:absolute after:w-[18px] after:h-[18px] after:rounded-full after:left-[3px] after:bottom-[3px] after:bg-[#888780] after:transition-all"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden">
+                        <div class="flex items-center justify-between p-3.5 px-4 cursor-pointer text-[#f0997b] hover:bg-[#3a1510] transition-colors"
+                            onclick="sairDaConta()">
+                            <span class="text-sm">Sair da conta</span>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        {% include "componetizacao/SiderBar/sider-bar-barbeiro-mobile.html" %}
+
+    </div>
+
+    <!-- MODAL: CONFIGURAÇÕES -->
+    <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-config" onclick="fecharModalConfig()"></div>
+    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-config"
+        onclick="if(event.target===this) fecharModalConfig()">
+        <div
+            class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-base font-medium" id="config-modal-titulo">Editar</h2>
+                <button
+                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
+                    onclick="fecharModalConfig()">{% include "componetizacao/icones/icone-X.html" %}</button>
+            </div>
+            <form class="flex flex-col gap-3" novalidate>
+                <div class="flex flex-col gap-1" id="config-campo-texto">
+                    <label class="text-xs font-medium text-[#888780]" id="config-campo-label"
+                        for="config-input">Valor</label>
+                    <input type="text" id="config-input"
+                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                </div>
+                <div class="hidden flex flex-col gap-1" id="config-campo-textarea">
+                    <label class="text-xs font-medium text-[#888780]" for="config-textarea">Descrição</label>
+                    <textarea id="config-textarea"
+                        class="min-h-[70px] p-2.5 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none"></textarea>
+                </div>
+                <div class="hidden flex flex-col gap-1" id="config-campo-senha">
+                    <label class="text-xs font-medium text-[#888780]" for="config-senha-atual">Senha atual</label>
+                    <input type="password" id="config-senha-atual"
+                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                    <label class="text-xs font-medium text-[#888780] mt-2" for="config-senha-nova">Nova senha</label>
+                    <input type="password" id="config-senha-nova"
+                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                </div>
+                <button type="button"
+                    class="w-full h-10 px-4 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm cursor-pointer mt-2"
+                    onclick="salvarConfig()">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: MAIS OPÇÕES -->
+    <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-mais" onclick="fecharMenuMais()"></div>
+    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-mais"
+        onclick="if(event.target===this) fecharMenuMais()">
+        <div
+            class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-base font-medium">Mais opções</h2>
+                <button
+                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
+                    onclick="fecharMenuMais()">{% include "componetizacao/icones/icone-X.html" %}</button>
+            </div>
+            <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden">
+                <div class="flex items-center justify-between p-3.5 px-4 cursor-pointer hover:bg-[#2a2825] transition-colors"
+                    onclick="irParaAba('configuracoes'); fecharMenuMais()">
+                    <span class="text-sm">{% include "componetizacao/icones/icone-configuracao.html" %} Configurações</span>
+                    <span class="text-[#6b6963]">›</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="inp-nova-foto" accept="image/*" class="hidden">
+
+    <div
+        class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+        id="aviso">
+    </div>
+
+    <script src="{{ url_for('static', filename='js/barbeiro-painel.js') }}"></script>
+
+</body>
+
+</html>

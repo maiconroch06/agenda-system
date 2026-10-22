@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMS Barbearia | BarberDash</title>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+</head>
+
+<body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
+
+    <div class="flex flex-col min-h-screen">
+
+        <!-- CONTAINER PRINCIPAL COM ESPAÇAMENTO PARA O BOTTOM-NAV -->
+        <div class="flex flex-1 pb-20 lg:pb-0">
+
+            {% include "componetizacao/SiderBar/sider-bar-barbeiro.html" %}
+
+            <!-- CONTEÚDO PRINCIPAL ADAPTADO -->
+            <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+
+                <!-- ABA AGENDA -->
+                <section class="" id="aba-agenda">
+                    <div class="flex items-center justify-between mb-4 gap-3">
+                        <h1 class="text-lg lg:text-xl font-medium">Agenda</h1>
+                    </div>
+
+                    <div class="flex gap-1.5 mb-4 flex-wrap">
+                        <button
+                            class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#f1efe8] bg-[#f1efe8] text-[#161513] text-xs font-medium cursor-pointer transition-all"
+                            data-filtro="dia" onclick="mudarVisaoAgenda('dia')">Dia</button>
+                        <button
+                            class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all"
+                            data-filtro="semana" onclick="mudarVisaoAgenda('semana')">Semana</button>
+                        <button
+                            class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all"
+                            data-filtro="mes" onclick="mudarVisaoAgenda('mes')">Mês</button>
+                    </div>
+
+                    <div id="agenda-visao-dia">
+                        <div class="flex flex-col gap-2" id="lista-agenda-dia"></div>
+                    </div>
+
+                    <div id="agenda-visao-semana" class="hidden">
+                        <div class="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-none" id="semana-scroll"></div>
+                    </div>
+
+                    <div id="agenda-visao-mes" class="hidden">
+                        <div class="flex items-center justify-between mb-3">
+                            <button
+                                class="w-8 h-8 rounded-full border border-[#4a473f] bg-transparent text-[#f1efe8] hover:bg-[#2a2825] cursor-pointer text-base flex items-center justify-center"
+                                onclick="mudarMes(-1)">‹</button>
+                            <h3 class="text-sm font-medium" id="mes-titulo">—</h3>
+                            <button
+                                class="w-8 h-8 rounded-full border border-[#4a473f] bg-transparent text-[#4a473f] hover:bg-[#2a2825] cursor-pointer text-base flex items-center justify-center text-[#f1efe8]"
+                                onclick="mudarMes(1)">›</button>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1" id="mes-grid"></div>
+                        <div class="text-xs font-medium text-[#888780] uppercase tracking-wider mt-5 mb-3"
+                            id="mes-dia-selecionado-titulo">Selecione um dia</div>
+                        <div class="flex flex-col gap-2" id="lista-mes-dia"></div>
+                    </div>
+
+                    <!--
+                    <button
+                        class="flex items-center justify-center gap-2 p-3 mt-4 w-full rounded-xl border border-dashed border-[#4a473f] bg-transparent text-[#888780] text-xs cursor-pointer hover:border-[#888780] hover:text-[#f1efe8] transition-colors"
+                        onclick="abrirModalBloquear()">
+                        🔒 Bloquear horário
+                    </button> -->
+                </section>
+
+        {% include "componetizacao/SiderBar/sider-bar-barbeiro-mobile.html" %}
+
+    </div>
+
+    <input type="file" id="inp-nova-foto" accept="image/*" class="hidden">
+
+    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+        id="aviso">
+    </div>
+
+    <script src="{{ url_for('static', filename='js/barbeiro-painel.js') }}"></script>
+
+</body>
+
+</html>
