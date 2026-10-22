@@ -80,7 +80,6 @@
                     </div>
 
                 </section>
-
             </main>
         </div>
 
@@ -92,52 +91,8 @@
     <!-- MODAL: DETALHES DO ATENDIMENTO -->
     {% include "componetizacao/modals/modal-detalhes-atendimento.html" %}
 
-
-    <!-- MODAL: BLOQUEAR HORÁRIO -->
-    <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-bloquear" onclick="fecharModalBloquear()"></div>
-    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-bloquear"
-        onclick="if(event.target===this) fecharModalBloquear()">
-        <div
-            class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-base font-medium">Bloquear horário</h2>
-                <button
-                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
-                    onclick="fecharModalBloquear()">✕</button>
-            </div>
-            <form class="flex flex-col gap-3" novalidate>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-[#888780]" for="bloq-barbeiro">Barbeiro</label>
-                    <select id="bloq-barbeiro"
-                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
-                    </select>
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-[#888780]" for="bloq-data">Data</label>
-                    <input type="date" id="bloq-data"
-                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-[#888780]" for="bloq-inicio">Início</label>
-                    <input type="time" id="bloq-inicio" value="12:00"
-                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-[#888780]" for="bloq-fim">Fim</label>
-                    <input type="time" id="bloq-fim" value="13:00"
-                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-[#888780]" for="bloq-motivo">Motivo (opcional)</label>
-                    <input type="text" id="bloq-motivo" placeholder="Ex: Almoço"
-                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
-                </div>
-                <button type="button"
-                    class="w-full h-10 px-4 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm cursor-pointer mt-2"
-                    onclick="confirmarBloqueio()">Bloquear horário</button>
-            </form>
-        </div>
-    </div>
+    <!-- MODAL: * FILTRA AGENDA * Deve ser implementado -->
+    {% include "componetizacao/modals/modal-filtrar-agenda.html" %}
 
     <!-- TOAST AVISO -->
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
