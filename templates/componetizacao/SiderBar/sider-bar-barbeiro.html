@@ -1,6 +1,5 @@
 <!-- SIDEBAR (Oculta no mobile, visível em telas lg+) -->
-<aside id="sidebar"
-    class="hidden md:flex md:flex-col md:w-64 md:h-screen md:sticky md:top-0 shrink-0 bg-[#232220] border-r border-[#38362f]">
+<aside id="sidebar" class="hidden md:flex md:flex-col md:w-64 md:h-screen md:sticky md:top-0 shrink-0 bg-[#232220] border-r border-[#38362f]">
 
     <!-- Logo -->
     <div class="block items-center px-5 py-5 border-b border-[#38362f]">
@@ -11,40 +10,50 @@
 
     <!-- Navegação Desktop -->
     <nav class="flex flex-col p-3 gap-1">
-        <button
-            class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-[#2a2825] text-[#f1efe8] font-medium text-sm cursor-pointer text-left w-full transition-colors"
-            data-aba="inicio" onclick="irParaAba('inicio')">
-            <span class="text-lg w-5.5 text-center">
-                {% include "componetizacao/icones/icone-inicio.html" %}
-            </span> Início
-        </button>
+        <a href="/barbeiro/painel">
+            <button
+                class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/barbeiro/painel' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}"
+                data-aba="inicio" onclick="irParaAba('inicio')">
+                <span class="text-lg w-5.5 text-center">
+                    {% include "componetizacao/icones/icone-inicio.html" %}
+                </span> Início
+            </button>
+        </a>
 
-        <button
-            class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
-            data-aba="agenda" onclick="irParaAba('agenda')">
-            <span class="text-lg w-5.5 text-center">
-                {% include "componetizacao/icones/icone-agenda.html" %}
-            </span> Agenda
-        </button>
+        <a href="/barbeiro/painel/agenda">
+            <button
+                class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/barbeiro/painel/agenda') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}"
+                data-aba="agenda" onclick="irParaAba('agenda')">
+                <span class="text-lg w-5.5 text-center">
+                    {% include "componetizacao/icones/icone-agenda.html" %}
+                </span> Agenda
+            </button>
+        </a>
 
-        <button
-            class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
-            data-aba="servicos" onclick="irParaAba('servicos')">
-            <span class="text-lg w-5.5 text-center">
-                {% include "componetizacao/icones/icone-servico.html" %}
-            </span> Serviços
-        </button>
-
-        <button
-            class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none bg-transparent text-[#888780] font-medium text-sm cursor-pointer text-left w-full transition-colors hover:bg-[#2a2825] hover:text-[#f1efe8]"
-            data-aba="configuracoes" onclick="irParaAba('configuracoes')">
-            <span class="text-lg w-5.5 text-center">
-                {% include "componetizacao/icones/icone-configuracao.html" %}
-            </span> Configurações
-        </button>
+        <!--
+        <a href="/barbeiro/painel/servicos">
+            <button
+                class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/barbeiro/painel/servicos') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}"
+                data-aba="servicos" onclick="irParaAba('servicos')">
+                <span class="text-lg w-5.5 text-center">
+                    {% include "componetizacao/icones/icone-servico.html" %}
+                </span> Serviços
+            </button>
+        </a>
+        -->
+        
+        <a href="/barbeiro/painel/configuracao">
+            <button
+                class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/barbeiro/painel/configuracao') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}"
+                data-aba="configuracoes" onclick="irParaAba('configuracoes')">
+                <span class="text-lg w-5.5 text-center">
+                    {% include "componetizacao/icones/icone-configuracao.html" %}
+                </span> Configurações
+            </button>
+        </a>
     </nav>
 
-    <!-- Sair (Sempre visível no rodapé da sidebar fixa) -->
+    <!-- Sair (Atualizar quando tiver sessão) -->
     <a class="mt-auto mx-3 mb-5 px-4 py-3 text-center rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-sm font-medium transition-colors hover:bg-[#38362f] hover:text-[#f1efe8] flex items-center"
         href="/">
         SAIR {% include "componetizacao/icones/icone-logout.html" %}
