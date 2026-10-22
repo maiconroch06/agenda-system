@@ -7,9 +7,17 @@ def barberSource():
     return redirect('/')
 
 @barbeiro.route('/login')
-def barberLogin():
+def barbeiroLogin():
     return render_template('pages/barbeiro/barbeiro-login.html')
 
 @barbeiro.route('/painel')
-def barberPanel():
-    return render_template('pages/barbeiro/barbeiro-painel-rp.html')
+def barbeiroPainel():
+    return render_template('pages/barbeiro/barbeiro-painel-inicio-rp.html')
+
+@barbeiro.route('/painel/agenda')
+def barbeiroPainelAgenda():
+    return render_template('pages/barbeiro/barbeiro-painel-agenda-rp.html')
+
+@barbeiro.route('/painel/configuracao')
+def barbeiroPainelConfiguracoes():
+    return render_template('pages/barbeiro/barbeiro-painel-configuracao-rp.html')
