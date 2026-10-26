@@ -121,6 +121,10 @@ const els = {
     bloqFim: document.getElementById("bloq-fim"),
     bloqMotivo: document.getElementById("bloq-motivo"),
 
+    // Modal: Menu Mais
+    overlayMais: document.getElementById("overlay-mais"),
+    modalMais: document.getElementById("modal-mais"),
+
     abasFunc: () => document.querySelectorAll(".aba-func"),
     sidebarItems: () => document.querySelectorAll(".sidebar-func__item"),
     bottomNavItems: () => document.querySelectorAll(".bottom-nav__item"),
@@ -330,4 +334,18 @@ function sairDaConta() {
     if (confirm("Deseja realmente sair do painel administrativo?")) {
         mostrarAviso("Saindo...");
     }
+}
+
+/* ============================================================
+   MENU "MAIS" (mobile)
+   ============================================================ */
+
+function abrirMenuMais() {
+    els.overlayMais.classList.remove("hidden");
+    els.modalMais.classList.remove("hidden");
+}
+
+function fecharMenuMais() {
+    els.overlayMais.classList.add("hidden");
+    els.modalMais.classList.add("hidden");
 }

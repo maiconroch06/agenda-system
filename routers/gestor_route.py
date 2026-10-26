@@ -3,7 +3,7 @@ from controllers.autenticador_gestor_controller import AutenticadorGestor
 from models.cliente import Cliente
 from models.servicos import Servicos
 from models.barbeiros import Barbeiro
-from  controllers.validar_cadastro_barbeiro import ValidarBarbeiro
+from controllers.validar_cadastro_barbeiro import ValidarBarbeiro
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
 from controllers import ControladorDeImagens 

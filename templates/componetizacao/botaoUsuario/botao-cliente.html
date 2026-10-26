@@ -1,0 +1,25 @@
+<!-- BOTÃO DO CLIENTE -->
+<button id="btn-usuario" class="flex items-center justify-center" type="button">
+    <div class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden hover:bg-[#2c2b27] transition-all cursor-pointer">
+
+        <!-- FOTO DO USUÁRIO -->
+        {% if session.get('dados_cliente') and session.get('dados_cliente').get('foto_path') %}
+            <img class="w-full h-full object-cover">
+                src="{{ url_for('static', filename=session.get('dados_cliente')['foto_path']) }}" alt="Avatar"
+        {% else %}
+            <span class="text-sm font-bold text-[#f1efe8]">
+                {{ session.get('dados_cliente')['nome_completo'][0]|upper }}
+            </span>
+        {% endif %}
+    </div>
+
+    <!-- SETA PARA BAIXO (Icone) -->
+    <svg id="seta-usuario" class="w-4 h-4 text-[#888780] transition-transform" fill="none" stroke="currentColor"
+        viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+    
+</button>
+        
+<!-- DROPDOWN DO USUÁRIO -->
+{% include "componetizacao/Dropdowns/dropdown-cliente.html" %}

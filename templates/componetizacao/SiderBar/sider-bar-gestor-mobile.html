@@ -1,5 +1,5 @@
 <!-- NAVEGAÇÃO INFERIOR MOBILE -->
-<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#232220] border-t border-[#38362f] grid grid-cols-6 items-center p-1.5 gap-0.5">
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#232220] border-t border-[#38362f] grid grid-cols-5 items-center p-1.5 gap-0.5">
 
     <!-- Início -->
     <a href="/gestor/painel" 
@@ -30,24 +30,95 @@
     </a>
 
     <!-- Clientes -->
-    <a href="/gestor/painel/clientes" 
+    <!-- a href="/gestor/painel/clientes" 
        class="flex flex-col items-center justify-center p-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-colors text-center w-full min-w-0 {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/clientes') else 'text-[#888780] hover:text-[#f1efe8]' }}">
         <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-clientes.html" %}</span>
         <span class="truncate w-full">Clientes</span>
-    </a>
+    </a -->
 
     <!-- Financeiro -->
-    <a href="/gestor/painel/financeiro" 
+    <!--a href="/gestor/painel/financeiro" 
        class="flex flex-col items-center justify-center p-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-colors text-center w-full min-w-0 {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/financeiro') else 'text-[#888780] hover:text-[#f1efe8]' }}">
         <span class="text-base sm:text-lg">{% include "componetizacao/icones/icone-financeiro.html" %}</span>
         <span class="truncate w-full">Financeiro</span>
-    </a>
+    </a --> 
     
 
     <!-- Opção para exibir outras opções. Essa implementação serve para não poluir a tela mobile -->
     
-    <!-- <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="mais" onclick="abrirMenuMais()">
-        <span class="text-lg">⋯</span> Mais
-    </button> -->
+    <button class="bottom-nav__item flex-1 flex flex-col items-center justify-center gap-0.5 border-none bg-transparent text-[#888780] text-[10px] cursor-pointer relative" data-aba="mais"
+        onclick="abrirMenuMais()">
+        <span class="text-base sm:text-lg">⋯</span>
+        <span class="truncate w-full">Mais</span>
+    </button>
 
 </nav>
+
+
+<div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-mais" onclick="fecharMenuMais()"></div>
+<div id="modal-mais"
+    class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6"
+    onclick="if(event.target===this) fecharMenuMais()">
+    
+    <div class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto pb-2">
+        
+        <!-- Espaçamento entre as opções -->
+        <div class="flex flex-col gap-3">
+
+            <!-- Opção de Sair -->
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-base font-medium">Mais opções</h2>
+
+                <button
+                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
+                    onclick="fecharMenuMais()">
+                    {% include "componetizacao/icones/icone-X.html" %}
+                </button>
+            </div>
+
+            <!-- Clientes -->
+            <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/cliente') else 'text-[#888780] hover:text-[#f1efe8]' }}">
+                <a href="/gestor/painel/clientes"
+                   class="flex items-center justify-between p-3.5 px-4 cursor-pointer hover:bg-[#2a2825] transition-colors"
+                   onclick="fecharMenuMais()">
+                    <span class="text-sm">{% include "componetizacao/icones/icone-clientes.html" %}</span>
+                    <span class="truncate w-full">Clientes</span>
+                    <span class="text-[#6b6963]">›</span>
+                </a>
+            </div>
+
+            <!-- Financeiro -->
+            <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/financeiro') else 'text-[#888780] hover:text-[#f1efe8]' }}"">
+                <a href="/gestor/painel/financeiro" 
+                   class="flex items-center justify-between p-3.5 px-4 cursor-pointer hover:bg-[#2a2825] transition-colors"
+                   onclick="fecharMenuMais()">
+                    <span class="text-sm">{% include "componetizacao/icones/icone-financeiro.html" %}</span>
+                    <span class="truncate w-full">Financeiro</span>
+                    <span class="text-[#6b6963]">›</span>
+                </a>
+            </div>
+
+            <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/configuracao') else 'text-[#888780] hover:text-[#f1efe8]' }}"">
+                <a
+                   class="flex items-center justify-between p-3.5 px-4 cursor-pointer hover:bg-[#2a2825] transition-colors"
+                   onclick="fecharMenuMais()">
+                   <span class="text-sm">{% include "componetizacao/icones/icone-configuracao.html" %}</span>
+                   <span class="truncate w-full">Configurações</span>
+                   <span class="text-[#6b6963]">›</span>
+                </a>
+            </div>
+
+            <div class="bg-[#232220] border border-[#f34747] rounded-2xl overflow-hidden">
+                <a href="/gestor/logout"
+                   class="flex items-center justify-between p-3.5 px-4 cursor-pointer hover:bg-[#2a2825] transition-colors"
+                   onclick="fecharMenuMais()">
+                   <span class="text-sm text-[#f34747]">{% include "componetizacao/icones/icone-logout.html" %}</span>
+                   <span class="truncate w-full text-[#f34747]">Sair</span>
+                   <span class="text-[#f34747]">›</span>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</div>

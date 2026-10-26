@@ -15,51 +15,7 @@
     class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-brand-gold selection:text-white">
 
     <!-- HEADER -->
-    <header class="sticky top-0 z-30 flex items-center justify-between px-5 py-3 bg-[#232220] border-b border-[#38362f]">
-
-        <!-- LOGO -->
-        {% include "componetizacao/logo/logo-top-horizontal.html" %}
-
-        <!-- ÁREA DO USUÁRIO -->
-        <div> <!--class="flex items-center justify-center"-->
-
-            <!-- BOTÃO DO USUÁRIO -->
-                <button id="btn-usuario" class="flex items-center justify-center" type="button">
-                    <div class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden hover:bg-[#2c2b27] transition-all cursor-pointer">
-
-                        <!-- FOTO DO USUÁRIO -->
-                        {% if session.get('dados_cliente') and session.get('dados_cliente').get('foto_path') %}
-
-                        <img src="{{ url_for('static', filename=session.get('dados_cliente')['foto_path']) }}" alt="Avatar"
-                            class="w-full h-full object-cover">
-
-                        {% else %}
-
-                        <span class="text-sm font-bold text-[#f1efe8]">
-                            {{ session.get('dados_cliente')['nome_completo'][0]|upper }}
-                        </span>
-
-                        {% endif %}
-
-                    </div>
-
-                    <!-- SETA -->
-                    <svg id="seta-usuario" class="w-4 h-4 text-[#888780] transition-transform" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                    
-                </button>
-                
-
-            </div>
-            
-            <!-- DROPDOWN DO USUÁRIO -->
-            {% include "componetizacao/Dropdowns/dropdown-cliente.html" %}
-
-        </div>
-
-    </header>
+    {% include "componetizacao/Header/header-cliente.html" %}
 
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="max-w-[800px] mx-auto px-4 pt-4 pb-24">

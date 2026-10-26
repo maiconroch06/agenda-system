@@ -201,6 +201,15 @@
                             <div id="panel-{{ loop.index }}" role="tabpanel" aria-labelledby="tab-{{ loop.index }}" tabindex="0"
                                 class="barber-panel {{ '' if loop.first else 'hidden' }} animate-fade-in flex flex-col md:flex-row items-center w-full">
 
+                                <!-- Informações (Imagem) -->
+                                <div class="relative w-full md:w-[300px] shrink-0 overflow-hidden md:border-l border-brand-border/30 aspect-square md:aspect-[3/4] bg-brand-bg-card">
+                                    <img src="{{ url_for('static', filename='assets/img/barbeiros/' ~ b.img) }}" 
+                                        alt="Foto do barbeiro {{ b.name }}" 
+                                        loading="lazy" 
+                                        class="h-full w-full aspect-[3/4] object-cover [mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]
+                                                    [-webkit-mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]">
+                                </div>
+
                                 <!-- Informações (Texto) -->
                                 <div class="space-y-4 flex-1 w-full text-center md:text-left p-6 sm:p-10 flex flex-col justify-center">
                                     <div>
@@ -217,14 +226,6 @@
                                     <div class="pt-2">
                                         <a href="/cliente/login" class="inline-block text-sm font-semibold text-brand-gold transition-colors hover:text-white">Agendar com {{ b.name.split()[0] }} →</a>
                                     </div>
-                                </div>
-
-                                <div class="relative w-full md:w-[300px] shrink-0 overflow-hidden md:border-l border-brand-border/30 aspect-square md:aspect-[3/4] bg-brand-bg-card">
-                                    <img src="{{ url_for('static', filename='assets/img/barbeiros/' ~ b.img) }}" 
-                                        alt="Foto do barbeiro {{ b.name }}" 
-                                        loading="lazy" 
-                                        class="h-full w-full aspect-[3/4] object-cover [mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]
-                                                    [-webkit-mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]">
                                 </div>
                             </div>
                         {% endfor %}
@@ -373,7 +374,7 @@
             if (totalBarbers === 0) return;
 
             // Se houver 3 ou menos barbeiros, alinhar horizontalmente sem quebrar
-            if (totalBarbers <= 3) {
+            if (totalBarbers <= 2) {
                 const track = document.getElementById('barber-carousel-track');
                 track.classList.remove('relative');
                 track.classList.add('flex', 'gap-4', 'flex-wrap');
