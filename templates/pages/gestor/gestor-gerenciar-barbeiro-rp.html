@@ -3,213 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro Funcionario | Agenda System</title>
+    <title>Cadastro Barbeiro | TMS Barbearia</title>
 
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
-    
-    <style>
-        .hidden-step { display: none !important; }
-    </style>
+
 </head>
 
-<body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen flex p-4 sm:p-6 antialiased selection:bg-brand-gold selection:text-white overflow-x-hidden">
+<body class="bg-[#161513] text-[#f1efe8] font-sans h-[100dvh] w-screen flex items-center justify-center p-2 sm:p-4 antialiased selection:bg-brand-gold selection:text-white overflow-hidden">
     
-    <!-- Container Principal com paddings reduzidos -->
-    <div class="w-full max-w-2xl m-auto bg-[#232220] border border-[#38362f] rounded-[14px] p-5 sm:p-6 shadow-xl">
+    <!-- Container Principal com paddings e limites otimizados -->
+    <div class="w-full max-w-2xl bg-[#232220] border border-[#38362f] rounded-[14px] p-3 sm:p-6 shadow-xl flex flex-col ">
 
-        <!-- Stepper: margem inferior reduzida de mb-8 para mb-5 -->
-        <ol class="flex mb-5 relative isolate" id="stepper">
-            <!-- ETAPA 1 -->
-            <li id="step-indicator-1" class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-brand-gold before:z-0 first:before:content-none font-medium">
-                <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-brand-gold border border-brand-gold flex items-center justify-center text-[13px] font-bold text-black shadow-md shadow-brand-gold/30 transition-all">1</span>
-                <span class="text-white font-bold transition-all">Dados do Barbeiro</span>
-            </li>
-        
-            <!-- ETAPA 2 -->
-            <li id="step-indicator-2" class="flex-1 flex flex-col items-center gap-1.5 relative text-[12px] text-brand-muted before:content-[''] before:absolute before:top-[14px] before:-left-1/2 before:w-full before:h-[1px] before:bg-brand-border before:z-0 transition-all">
-                <span class="relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-medium text-brand-muted transition-all">2</span>
-                <span class="text-brand-muted transition-all">Endereço</span>
-            </li>
-        </ol>
-
-        <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
-            {% set logo_class="h-20 sm:h-20 md:h-24" %}
+        <!-- Logótipo -->
+        <div class="flex items-center justify-center shrink-0">
+            {% set logo_class="h-6 sm:h-10" %}
             {% include "componetizacao/logo/logo-top-horizontal.html" %}
         </div>
 
-        <h1 id="form-title" class="text-center text-xl font-medium mb-1">Cadastrar Barbeiro</h1>
-        <p id="form-subtitle" class="text-center text-[13px] text-[#888780] mb-4">Preencha os dados do profissional</p>
+        <div class="flex flex-row items-center justify-between flex-1 mb-2 gap-4">
 
-            <!-- ============================================================
-             COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
-             ============================================================ -->
-            {% set mensagens=mensagens_status%}
-            {% include "componetizacao/mensagens/mensagens.html" %}
-
-                            
-        <!-- Formulário: padding interno e margin inferior reduzidos -->
-        <form id="form-profissional" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" action="/gestor/painel/barbeiro/cadastrar" method="post" enctype="multipart/form-data" novalidate>
+            <!-- Título e Subtítulo (Agrupados) -->
+            <div class="flex flex-col text-left">
+                <h1 id="form-title" class="text-lg sm:text-xl font-medium">
+                    {{ 'Atualizar Barbeiro' if barbeiro else 'Cadastrar Barbeiro' }}
+                </h1>
+                <p id="form-subtitle" class="text-[12px] sm:text-[13px] text-[#888780]">
+                    {{ 'Altere os dados do profissional' if barbeiro else 'Preencha os dados do profissional' }}
+                </p>
+            </div>
             
-            <!-- ETAPA 1: DADOS DO BARBEIRO (space-y reduzido) -->
-            <div id="step-1" class="space-y-4">
-                <div class="flex flex-col items-center justify-center gap-1.5">
-                    <span class="text-[12px] font-medium text-[#888780]">Foto do Barbeiro</span>
-                    <!-- Círculo da foto reduzido para w-20 h-20 -->
-                    <label for="pro-foto" class="relative w-20 h-20 rounded-full border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-[#0f6e56] hover:bg-[#04342c] overflow-hidden group">
-                        <span class="text-2xl text-[#888780] group-hover:text-[#9fe1cb] leading-none mb-1">+</span>
-                        <span class="text-[10px] text-[#888780] group-hover:text-[#9fe1cb]">Upload</span>
+            <div class="flex items-center shrink-0">
+                <span id="step-text-indicator" class="text-[12px] sm:text-[13px] font-semibold text-brand-gold bg-[#161513] px-3 py-1.5 rounded-full border border-[#38362f]">
+                    Etapa 1 / 2
+                </span>
+            </div>
+            
+        </div>
+
+
+        <!-- Mensagens de Status -->
+        {% set mensagens=mensagens_status %}
+        {% include "componetizacao/mensagens/mensagens.html" %}
+
+        <!-- Formulário (Paddings internos reduzidos p-2) -->
+        <form class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-2 sm:p-4 mb-2 flex flex-col justify-center"
+           action="{{ '/gestor/painel/barbeiro/editar' if barbeiro else '/gestor/painel/barbeiro/cadastrar' }}" 
+           method="post" enctype="multipart/form-data" novalidate id="form-profissional">
+            
+            {% if barbeiro %}
+                <input class="hidden" type="text" name="pro-id" value="{{ barbeiro.id }}">
+                <input class="hidden" type="text" name="pro-foto_nome_anterior" value="{{ barbeiro.foto_nome }}">
+            {% endif %}
+
+            <!-- ETAPA 1: DADOS DO BARBEIRO (Aproximados com space-y-1 sm:space-y-2) -->
+            <div id="step-1" class="space-y-1 sm:space-y-2">
+                
+                <!-- Upload de Imagem (Tamanho reduzido no mobile w-16 h-16) -->
+                <div class="flex flex-col items-center justify-center gap-1">
+                    <span class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Foto do Barbeiro</span>
+                    
+                    <label for="pro-foto" class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-brand-gold-hover overflow-hidden group">
+                        
+                        <img id="img_pro-preview"
+                            class="{{ 'hidden' if not barbeiro else '' }} absolute inset-0 w-full h-full object-cover"
+                            src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(barbeiro.foto_nome)) if barbeiro else '' }}"
+                            alt="Pré-visualização">
+
+                        <span class="text-lg sm:text-2xl text-[#888780] group-hover:text-brand-gold leading-none mb-0.5">+</span>
+                        <span class="text-[9px] sm:text-[10px] text-[#888780] group-hover:text-brand-gold">Upload</span>
                         <input type="file" name="foto" id="pro-foto" accept="image/*" class="hidden">
                     </label>
+                    <div id="butao-remover-imagem-pro"></div>
                 </div>
                 
-                <!-- Gaps do grid e inputs reduzidos -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div class="flex flex-col gap-1">
-                        <label for="pro-cpf" class="text-[12px] font-medium text-[#888780]">CPF*</label>
-                        <input type="text" name="cpf" id="pro-cpf" value="529.982.247-25" placeholder="000.000.000-00" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                <!-- Grelha (gap reduzido para gap-2, inputs para h-8 sm:h-9, texto text-[13px]) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div class="flex flex-col gap-0.5">
+                        <label for="pro-cpf" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">CPF*</label>
+                        <input type="text" name="cpf" id="pro-cpf" value="{{ barbeiro.cpf if barbeiro else '' }}" {{ 'readonly' if barbeiro else '' }} placeholder="000.000.000-00" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold disabled:opacity-50 disabled:cursor-not-allowed readonly:opacity-60 transition-all">
                     </div>
-                    <div class="flex flex-col gap-1">
-                        <label for="pro-nome" class="text-[12px] font-medium text-[#888780]">Nome*</label>
-                        <input type="text" name="nome" id="pro-nome" value="Barbeiro" placeholder="Nome do barbeiro" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    <div class="flex flex-col gap-0.5">
+                        <label for="pro-nome" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Nome*</label>
+                        <input type="text" name="nome" id="pro-nome" value="{{ barbeiro.nome if barbeiro else '' }}" placeholder="Nome do barbeiro" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
                     </div>
-                    <div class="flex flex-col gap-1">
-                        <label for="pro-email" class="text-[12px] font-medium text-[#888780]">Email*</label>
-                        <input type="email" name="email" id="pro-email" value="barbeiro@gmail.com" placeholder="barbeiro@gmail.com" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    <div class="flex flex-col gap-0.5">
+                        <label for="pro-email" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Email*</label>
+                        <input type="email" name="email" id="pro-email" value="{{ barbeiro.email if barbeiro else '' }}" placeholder="barbeiro@gmail.com" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
                     </div>
-                    <div class="flex flex-col gap-1">
-                        <label for="pro-telefone" class="text-[12px] font-medium text-[#888780]">Telefone*</label>
-                        <input type="text" name="telefone" id="pro-telefone" value="(00) 00000-0000" placeholder="(00) 00000-0000" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label for="pro-senha" class="text-[12px] font-medium text-[#888780]">Senha*</label>
-                        <input type="password" name="senha" id="pro-senha" value="********" placeholder="********" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label for="pro-confirmar-senha" class="text-[12px] font-medium text-[#888780]">Confirmar Senha*</label>
-                        <input type="password" name="confirmar-senha" value="********" id="pro-confirmar-senha" placeholder="********" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                    </div>
-                    <div class="flex flex-col gap-1 col-span-full">
-                        <label for="pro-descricao" class="text-[12px] font-medium text-[#888780]">Descrição</label>
-                        <textarea name="descricao" id="pro-descricao" placeholder="Especialidades e experiência..." rows="2" class="w-full p-2.5 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] resize-none"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ETAPA 2: ENDEREÇO -->
-            <div id="step-2" class="space-y-4 hidden-step">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div class="flex flex-col gap-1 sm:col-span-1">
-                        <label for="pro-cep" class="text-[12px] font-medium text-[#888780]">CEP*</label>
-                        <input type="text" name="cep" id="pro-cep" value="00000-000" placeholder="00000-000" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                    </div>
-                    <div class="flex gap-3 col-span-full sm:col-span-1">
-                        <div class="flex flex-col gap-1 flex-[3]">
-                            <label for="pro-cidade" class="text-[12px] font-medium text-[#888780]">Cidade*</label>
-                            <input type="text" name="cidade" id="pro-cidade" value="Nova Cruz" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                        </div>
-                        <div class="flex flex-col gap-1 flex-[1]">
-                            <label for="pro-uf" class="text-[12px] font-medium text-[#888780]">UF*</label>
-                            <input type="text" name="unidade-federativa" value="RN" id="pro-uf" maxlength="2" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] uppercase focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label for="pro-bairro" class="text-[12px] font-medium text-[#888780]">Bairro*</label>
-                        <input type="text" name="bairro" id="pro-bairro" value="Bairro" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                    </div>
-                    <div class="flex gap-3 col-span-full sm:col-span-1">
-                        <div class="flex flex-col gap-1 sm:col-span-2 w-full">
-                            <label for="pro-logradouro" class="text-[12px] font-medium text-[#888780]">Logradouro*</label>
-                            <input type="text" name="logradouro" id="pro-logradouro" value="Logrinho" placeholder="Rua, Avenida..." autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                        </div>
-                        <div class="flex flex-col gap-1 w-full">
-                            <label for="pro-numero" class="text-[12px] font-medium text-[#888780]">Número*</label>
-                            <input type="text" name="numero" id="pro-numero" value="123" placeholder="123" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label for="pro-complemento" class="text-[12px] font-medium text-[#888780]">Complemento</label>
-                        <input type="text" name="complemento" id="pro-complemento" value="Sala" placeholder="Apto, Sala..." autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label for="pro-sequencia" class="text-[12px] font-medium text-[#888780]">Sequencia</label>
-                        <input type="text" name="sequencia" id="pro-sequencia" value="123" placeholder="Apto, Sala..." autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    <div class="flex flex-col gap-0.5">
+                        <label for="pro-telefone" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Telefone*</label>
+                        <input type="text" name="telefone" id="pro-telefone" value="{{ barbeiro.telefone if barbeiro else '' }}" placeholder="(00) 00000-0000" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
                     </div>
                     
+                    <div class="flex flex-col gap-0.5">
+                        <label for="pro-senha" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">{{ 'Nova Senha' if barbeiro else 'Senha*' }}</label>
+                        <input type="password" name="senha" id="pro-senha" placeholder="********" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                    </div>
+                    <div class="flex flex-col gap-0.5">
+                        <label for="pro-confirmar-senha" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Confirmar Senha{{ '' if barbeiro else '*' }}</label>
+                        <input type="password" name="confirmar-senha" id="pro-confirmar-senha" placeholder="********" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                    </div>
+                    
+                    <div class="flex flex-col gap-0.5 col-span-full">
+                        <label for="pro-descricao" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Descrição</label>
+                        <!-- Textarea agora com rows="1" -->
+                        <textarea name="descricao" id="pro-descricao" placeholder="Especialidades e experiência..." rows="1" class="w-full p-2 sm:p-2.5 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold resize-none">{{ barbeiro.descricao if barbeiro else '' }}</textarea>
+                    </div>
                 </div>
+            </div>
+
+            <!-- ETAPA 2: ENDEREÇO & STATUS -->
+            <div id="step-2" class="space-y-1 sm:space-y-2 hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div class="flex flex-col gap-0.5 sm:col-span-1">
+                        <label for="pro-cep" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">CEP*</label>
+                        <input type="text" name="cep" id="pro-cep" value="{{ barbeiro.cep if barbeiro else '' }}" placeholder="00000-000" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                    </div>
+                    <div class="flex flex-row gap-2 col-span-full sm:col-span-1">
+                        <div class="flex flex-col gap-0.5 flex-[3]">
+                            <label for="pro-cidade" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Cidade*</label>
+                            <input type="text" name="cidade" id="pro-cidade" value="{{ barbeiro.cidade if barbeiro else '' }}" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                        </div>
+                        <div class="flex flex-col gap-0.5 flex-[1]">
+                            <label for="pro-uf" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">UF*</label>
+                            <input type="text" name="unidade-federativa" id="pro-uf" value="{{ barbeiro.uf if barbeiro else '' }}" maxlength="2" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] uppercase focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-0.5">
+                        <label for="pro-bairro" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Bairro*</label>
+                        <input type="text" name="bairro" id="pro-bairro" value="{{ barbeiro.bairro if barbeiro else '' }}" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-2 col-span-full sm:col-span-1">
+                        <div class="flex flex-col gap-0.5 sm:flex-[2] w-full">
+                            <label for="pro-logradouro" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Logradouro*</label>
+                            <input type="text" name="logradouro" id="pro-logradouro" value="{{ barbeiro.logradouro if barbeiro else '' }}" placeholder="Rua, Avenida..." autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                        </div>
+                        <div class="flex flex-col gap-0.5 sm:flex-[1] w-full">
+                            <label for="pro-numero" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Número*</label>
+                            <input type="text" name="numero" id="pro-numero" value="{{ barbeiro.numero if barbeiro else '' }}" placeholder="123" autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-0.5">
+                        <label for="pro-complemento" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Complemento</label>
+                        <input type="text" name="complemento" id="pro-complemento" value="{{ barbeiro.complemento if barbeiro else '' }}" placeholder="Apto, Sala..." autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                    </div>
+                    <div class="flex flex-col gap-0.5">
+                        <label for="pro-sequencia" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Sequência</label>
+                        <input type="text" name="sequencia" id="pro-sequencia" value="{{ barbeiro.sequencia if barbeiro else '' }}" placeholder="1, 2, 3..." autocomplete="off" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                    </div>
+                    
+                    {% if barbeiro %}
+                        <div class="flex flex-col gap-0.5 col-span-full">
+                            <label for="pro-status" class="text-[11px] sm:text-[12px] font-medium text-[#888780]">Status do Profissional</label>
+                            <select id="pro-status" name="ativo" class="w-full h-8 sm:h-9 px-2 sm:px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[13px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                                <option value="1" {{ 'selected' if barbeiro.ativo == 1 else '' }}>Ativado</option>
+                                <option value="0" {{ 'selected' if barbeiro.ativo == 0 else '' }}>Desativado</option>
+                            </select>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+ 
+            <!-- Botões de Navegação (Alturas h-8 sm:h-9, gap-2) -->
+            <div class="flex flex-col-reverse sm:flex-row justify-between gap-2 mt-4">
+                <button type="button" id="btn-voltar" class="w-full sm:w-auto h-8 sm:h-9 px-4 rounded-[8px] border border-[#4a473f] sm:border-none bg-transparent text-[#888780] text-[13px] sm:text-[14px] hover:text-[#f1efe8] hover:bg-[#2a2825] sm:hover:bg-transparent transition-colors">
+                    Voltar
+                </button>
+                <div class="hidden sm:block flex-1"></div>
+                
+                <button type="button" id="btn-proximo" class="w-full sm:w-auto h-8 sm:h-9 px-5 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[13px] sm:text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">
+                    Próximo
+                </button>
+                
+                <button type="button" id="btn-submit" class="w-full sm:w-auto h-8 sm:h-9 px-5 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[13px] sm:text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all hidden">
+                    {{ 'Atualizar' if barbeiro else 'Cadastrar' }}
+                </button>
             </div>
         </form>
-
-        <div class="flex flex-col-reverse sm:flex-row justify-between gap-3">
-            <button type="button" id="btn-voltar" class="h-10 px-4 rounded-[8px] border-none bg-transparent text-[#888780] text-[14px] hover:text-[#f1efe8] transition-colors hidden-step">Voltar</button>
-            <div class="flex-1"></div>
-            <!-- Botões -->
-            <button type="button" id="btn-proximo" class="h-10 px-5 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">Próximo</button>
-            <button type="button" id="btn-submit" class="h-10 px-5 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all hidden-step">Cadastrar</button>
-        </div>
     </div>
 
-    <!-- Modal de Resumo -->
-    <div class="hidden fixed inset-0 bg-black/65 z-[300] transition-opacity" id="overlay-resumo" onclick="fecharModalResumo()"></div>
-    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6 transition-all" id="modal-resumo">
-        <div class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto shadow-2xl">
-            <div class="flex justify-between items-center mb-5">
-                <h2 class="text-base font-bold text-[#f1efe8]">Resumo do Cadastro</h2>
-                <button type="button" class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] hover:text-white text-xs flex items-center justify-center transition-colors" onclick="fecharModalResumo()">✕</button>
-            </div>
-
-            <!-- Dados Pessoais -->
-            <div class="mb-4">
-                <h3 class="text-[11px] font-bold text-brand-gold uppercase tracking-wider mb-2">Dados Pessoais</h3>
-                <div class="bg-[#161513] rounded-xl border border-[#38362f] overflow-hidden">
-                    <div class="flex gap-3 px-3 py-2 border-b border-[#38362f]">
-                        <span class="text-sm w-5 flex items-center justify-center">👤</span>
-                        <div><div class="text-[10px] text-[#888780]">Nome</div><div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-nome">—</div></div>
-                    </div>
-                    <div class="flex gap-3 px-3 py-2 border-b border-[#38362f]">
-                        <span class="text-sm w-5 flex items-center justify-center">🪪</span>
-                        <div><div class="text-[10px] text-[#888780]">CPF</div><div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-cpf">—</div></div>
-                    </div>
-                    <div class="flex gap-3 px-3 py-2 border-b border-[#38362f]">
-                        <span class="text-sm w-5 flex items-center justify-center">📞</span>
-                        <div><div class="text-[10px] text-[#888780]">Telefone</div><div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-telefone">—</div></div>
-                    </div>
-                    <div class="flex gap-3 px-3 py-2">
-                        <span class="text-sm w-5 flex items-center justify-center">✉️</span>
-                        <div><div class="text-[10px] text-[#888780]">Email</div><div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-email">—</div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Endereço -->
-            <div class="mb-6">
-                <h3 class="text-[11px] font-bold text-brand-gold uppercase tracking-wider mb-2">Endereço</h3>
-                <div class="bg-[#161513] rounded-xl border border-[#38362f] overflow-hidden">
-                    <div class="flex gap-3 px-3 py-2 border-b border-[#38362f]">
-                        <span class="text-sm w-5 flex items-center justify-center">📍</span>
-                        <div><div class="text-[10px] text-[#888780]">Logradouro e Número</div><div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-logradouro">—</div></div>
-                    </div>
-                    <div class="flex gap-3 px-3 py-2 border-b border-[#38362f]">
-                        <span class="text-sm w-5 flex items-center justify-center">🏘️</span>
-                        <div><div class="text-[10px] text-[#888780]">Bairro e CEP</div><div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-bairro-cep">—</div></div>
-                    </div>
-                    <div class="flex gap-3 px-3 py-2">
-                        <span class="text-sm w-5 flex items-center justify-center">🌎</span>
-                        <div><div class="text-[10px] text-[#888780]">Cidade/UF</div><div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-cidade-uf">—</div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ações -->
-            <div class="flex flex-col gap-2">
-               <!--<button type="button" onclick="novoCadastro()" class="w-full h-10 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-black text-[14px] font-semibold hover:bg-[#f1efe8] hover:text-[#161513] active:scale-[0.98] transition-all">Novo cadastro</button> --> 
-                <button type="button" onclick="finalizarCadastro()" class="w-full h-10 rounded-[8px] border border-transparent hover:border-white text-[#888780] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">Finalizar</button>
-                <!-- <button type="button" onclick="fecharModalResumo()" class="w-full h-10 rounded-[8px] bg-transparent text-[#888780] text-[14px] hover:text-white transition-colors">Voltar e Editar</button> -->
-            </div>
-        </div>
-    </div>
-
+    <!-- JS Exclusivo e Centralizado -->
     <script src="{{ url_for('static', filename='js/gestor-gerenciar-barbeiro.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,48 @@
+<nav
+    class="absolute inset-x-0 top-full hidden border-b border-[#222222] bg-[#0a0a0a] p-4 text-sm font-medium tracking-wide text-gray-200 lg:static lg:flex lg:items-center lg:gap-8 lg:border-0 lg:bg-transparent lg:p-0"
+    id="nav-rigth" aria-label="Navegação Paienl Gestor"
+    >
+        
+    <!-- Início -->
+    <a href="/gestor/painel">
+        <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+            <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-inicio.html" %}</span> Início
+        </button>
+    </a>
+
+    <!-- Agenda -->
+    <a href="/gestor/painel/agenda">
+        <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/agenda') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+            <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-agenda.html" %}</span> Agenda
+        </button>
+    </a>
+
+    <!-- Serviços -->
+    <a href="/gestor/painel/servicos">
+        <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/servicos') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+            <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-servico.html" %}</span> Serviços
+        </button>
+    </a>
+
+    <!-- Barbeiros -->
+    <a href="/gestor/painel/barbeiros">
+        <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/barbeiros') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+            <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-barbeiro.html" %}</span> Barbeiros
+        </button>
+    </a>
+
+    <!-- Clientes -->
+    <a href="/gestor/painel/clientes">
+        <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/clientes') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+            <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-clientes.html" %}</span> Clientes
+        </button>
+    </a>
+    
+    <!-- Financeiro -->
+    <a href="/gestor/painel/financeiro">
+        <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/financeiro') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+            <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-financeiro.html" %}</span> Financeiro
+        </button>
+    </a>
+    
+</nav>

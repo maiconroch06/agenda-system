@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMS Barbearia - Painel Administrativo</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!--<link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">-->
+    <!--<script src="https://cdn.tailwindcss.com"></script>-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
 </head>
 
@@ -15,15 +15,10 @@
 
     <div class="flex flex-col min-h-screen">
 
-        <div class="flex flex-1 pb-20 md:pb-0">
+        <div class="flex flex-1">
 
             <!-- SIDEBAR DESKTOP -->
-            <div class="flex items-center justify-start mb-4 md:mb-6 shrink-0">
-                {% set logo_class="h-10 sm:h-12 md:h-14" %}
-                {% with aba_atual='servicos' %}
-                    {% include "componetizacao/SiderBar/sider-bar-gestor.html" %}
-                {% endwith %}
-            </div>
+            {% include "componetizacao/SiderBar/sider-bar-gestor.html" %}
 
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Serviço | Agenda System</title>
+    <title>Cadastro de Serviço | TMS Barbearia</title>
 
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
@@ -14,75 +14,84 @@
 <body
     class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen flex p-4 sm:p-6 antialiased selection:bg-brand-gold selection:text-white overflow-x-hidden">
 
-
-
     <!-- Container Principal -->
     <div class="w-full max-w-2xl m-auto bg-[#232220] border border-[#38362f] rounded-[14px] p-5 sm:p-6 shadow-xl">
+        
         <!-- Logo horizontal da barbearia -->
         <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
             {% set logo_class="h-10 sm:h-12 md:h-14" %}
             {% include "componetizacao/logo/logo-top-horizontal.html" %}
         </div>
 
-        <h1 id="form-title" class="text-center text-xl font-medium mb-1">Cadastrar Serviço</h1>
-        <p id="form-subtitle" class="text-center text-[13px] text-[#888780] mb-5">Preencha os dados do serviço para
-            disponibilizar no agendamento</p>
+        <h1 id="form-title" class="text-center text-xl font-medium mb-1">
+            Cadastrar Serviço
+        </h1>
+        
+        <p id="form-subtitle" class="text-center text-[13px] text-[#888780] mb-5">
+            Preencha os dados do serviço para disponibilizar no agendamento
+        </p>
+
         <!-- Mensagem de Erro -->
-        <!-- ============================================================
-             COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
-             ============================================================ -->
         {% set mensagens=mensagens_status %}
         {% include "componetizacao/mensagens/mensagens.html" %}
-
-
 
         <!-- ============================================================
         PREENCHENDO OS VALORES DOS CAMPOS DINAMICAMENTE
         ============================================================ -->
 
-
-
         <!-- Formulário -->
-        <form id="form-servico" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" method="post"
+        <form class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" method="post"
+            id="form-servico" 
             action="{{ '/gestor/painel/servicos/editar' if servico else '/gestor/painel/servicos/cadastrar' }}"
             enctype="multipart/form-data">
+            
             {% if servico %}
-            {% set id = servico['id'] %}
-            {% set descricao = servico['descricao'] %}
-            {% set valor = servico['valor'] %}
-            {% set duracao = servico['duracao'] %}
-            {% set foto_nome = servico['foto_nome'] %}
-            {% set ativo = servico['ativo'] %}
+                {% set id = servico['id'] %}
+                {% set descricao = servico['descricao'] %}
+                {% set valor = servico['valor'] %}
+                {% set duracao = servico['duracao'] %}
+                {% set foto_nome = servico['foto_nome'] %}
+                {% set ativo = servico['ativo'] %}
  
 
-            <input type="text" id="srv-foto_nome_anterior" name="srv-foto_nome_anterior" value="{{foto_nome}}"
-                class="hidden  w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                <input class="hidden w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold"
+                    id="srv-foto_nome_anterior" type="text" name="srv-foto_nome_anterior" value="{{foto_nome}}">
 
-            <input type="text" id="srv-id" name="srv-id" value="{{ id }}"
-                class="hidden w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                <input class="hidden w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold"
+                    id="srv-id" type="text" name="srv-id" value="{{ id }}">
 
-            {% endif%}
+            {% endif %}
 
             <div class="space-y-4">
+                    
                 <!-- Upload de Imagem -->
-
                 <div class="flex flex-col items-center justify-center gap-1.5">
-                    <span class="text-[12px] font-medium text-[#888780]">Imagem do Serviço</span>
+                    
+                    <span class="text-[12px] font-medium text-[#888780]">
+                        Imagem do Serviço
+                    </span>
+                    
                     <label for="srv-foto"
-                        class="relative w-40 h-40 rounded-2xl border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-brand-gold-hover  overflow-hidden group">
+                        class="relative w-32 h-32 rounded-2xl border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-brand-gold-hover overflow-hidden group">
                         <img id="img_srv-preview"
                             class=" {{ 'hidden'  if not servico else ''}} absolute inset-0 w-full h-full object-contain"
                             src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome)) if servico else ''}}"
                             alt="Pré-visualização da imagem">
-                        <span class="text-2xl text-[#888780] group-hover:text-black leading-none mb-1">✂️</span>
-                        <span class="text-[10px] text-[#888780]">Selecionar imagem</span>
 
-                        <input type="file" id="srv-foto" name="srv-imagem" accept="image/*" class="hidden">
+                        <span class="text-2xl text-[#888780] group-hover:text-brand-gold leading-none mb-1">
+                            {% include "componetizacao/icones/icone-servico.html" %}
+                        </span>
+
+                        <span class="text-[10px] text-[#888780] group-hover:text-brand-gold">
+                            Selecionar imagem
+                        </span>
+
+                        <input id="srv-foto" type="file" name="srv-imagem" accept="image/*" class="hidden">
 
                     </label>
-                    <div id="butao-remover-imagem">
-                       
-                    </div>
+
+                    <div id="butao-remover-imagem"></div>
+
                 </div>
 
 
@@ -90,105 +99,82 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
                     <div class="flex flex-col gap-1 col-span-full">
-                        <label for="srv-nome" class="text-[12px] font-medium text-[#888780]">Nome do Serviço*</label>
-                        <input type="text" id="srv-nome" name="srv-nome" value="{{descricao if descricao else '' }}"
-                            placeholder="Ex: Corte Degradê + Barba" autocomplete="off"
-                            class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                        <label for="srv-nome" class="text-[12px] font-medium text-[#888780]">
+                            Nome do Serviço*
+                        </label>
+                        <input class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold"
+                            type="text" id="srv-nome" name="srv-nome" value="{{descricao if descricao else '' }}"
+                            placeholder="Ex: Corte Degradê + Barba" autocomplete="off">
                     </div>
+
                     <div class="flex flex-col gap-1">
-                        <label for="srv-preco" class="text-[12px] font-medium text-[#888780]">Preço (R$)*</label>
-                        <input type="text" id="srv-preco" name="srv-preco" value="{{valor if valor else ''}}"
-                            placeholder="R$ 0,00" autocomplete="off"
-                            class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                        <label for="srv-preco" class="text-[12px] font-medium text-[#888780]">
+                            Preço (R$)*
+                        </label>
+
+                        <input class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold"
+                            type="text" id="srv-preco" name="srv-preco" value="{{valor if valor else ''}}"
+                            placeholder="R$ 0,00" autocomplete="off">
                     </div>
+                    
                     <div class="flex flex-col gap-1">
-                        <label for="srv-duracao" class="text-[12px] font-medium text-[#888780]">Duração (min)*</label>
-                        <input type="text" id="srv-duracao" name="srv-duracao" value="{{duracao if duracao else '' }}"
-                            placeholder="Ex: 45 min" autocomplete="off"
-                            class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold">
+                        <label for="srv-duracao" class="text-[12px] font-medium text-[#888780]">
+                            Duração (min)*
+                        </label>
+
+                        <input class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold"
+                            type="text" id="srv-duracao" name="srv-duracao" value="{{duracao if duracao else '' }}"
+                            placeholder="Ex: 45 min" autocomplete="off">
                     </div>
 
                     {% if servico %}
-                    <div>
-                        <label for="srv-duracao" class="text-[12px] font-medium text-[#888780]">status do pedido:
-                        </label>
-                        <select id="cars" name="srv-status" class="text-[12px] text-amber">
-                            <option value="1" class="text-[12px] text-gray-700" {{ 'selected' if ativo==1 else '' }}>
-                                Ativado</option>
-                            <option value="0" class="text-[12px] text-gray-700" {{ 'selected' if ativo==0 else '' }}>
-                                Desativado</option>
-                        </select>
-                    </div>
+                        <div>
+                            <label for="srv-duracao" class="text-[12px] font-medium text-[#888780]">
+                                status do pedido:
+                            </label>
+
+                            <select id="cars" name="srv-status" class="text-[12px] text-amber">
+                                
+                                <option value="1" class="text-[12px] text-gray-700" {{ 'selected' if ativo==1 else '' }}>
+                                    Ativado
+                                </option>
+
+                                <option value="0" class="text-[12px] text-gray-700" {{ 'selected' if ativo==0 else '' }}>
+                                    Desativado
+                                </option>
+                                
+                            </select>
+
+                        </div>
                     {% endif %}
                 </div>
-                <div class="flex justify-end">
-                    <a href="/gestor/painel/servicos"><button type="button" id="btn-submit"
-                            class="h-10 px-5 mr-5 rounded-[8px] border-1 border-white text-white hover:bg-amber-50 hover:text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">voltar</button></a>
-                    <button type="submit" id="btn-submit"
-                        class="h-10 px-5 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">
-                        {{ 'Atualizar' if servico else 'Cadastrar' }}</button>
+
+
+                <div class="flex justify-between">
+                    <a href="/gestor/painel/servicos"
+                           class="h-10 px-4 flex items-center rounded-[8px] border-none bg-transparent text-[#888780] text-[14px] hover:text-[#f1efe8] transition-colors"
+                           id="btn-submit" type="button">
+                            Cancelar
+                    </a>
+
+                    <button class="h-10 px-5 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all"
+                       id="btn-submit" type="submit">
+                        {{ 'Atualizar' if servico else 'Cadastrar' }}
+                    </button>
+
                 </div>
             </div>
+
         </form>
 
     </div>
 
-    <!-- Modal de Resumo -->
-    <div class="hidden fixed inset-0 bg-black/65 z-[300] transition-opacity" id="overlay-resumo"
-        onclick="fecharModalResumo()"></div>
-    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6 transition-all"
-        id="modal-resumo">
-        <div
-            class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto shadow-2xl">
-            <div class="flex justify-between items-center mb-5">
-                <h2 class="text-base font-medium text-[#f1efe8]">Resumo do Serviço</h2>
-                <button type="button"
-                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] hover:text-white text-xs flex items-center justify-center transition-colors"
-                    onclick="fecharModalResumo()">✕</button>
-            </div>
-
-            <!-- Dados do Serviço -->
-            <div class="mb-6">
-                <h3 class="text-[11px] font-bold text-brand-gold uppercase tracking-wider mb-2">Dados do Serviço</h3>
-                <div class="bg-[#161513] rounded-xl border border-[#38362f] overflow-hidden">
-                    <div class="flex gap-3 px-3 py-2 border-b border-[#38362f]">
-                        <span class="text-sm w-5 flex items-center justify-center">✂️</span>
-                        <div>
-                            <div class="text-[10px] text-[#888780]">Nome</div>
-                            <div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-nome">—</div>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 px-3 py-2 border-b border-[#38362f]">
-                        <span class="text-sm w-5 flex items-center justify-center">💵</span>
-                        <div>
-                            <div class="text-[10px] text-[#888780]">Preço</div>
-                            <div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-preco">—</div>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 px-3 py-2">
-                        <span class="text-sm w-5 flex items-center justify-center">⏱️</span>
-                        <div>
-                            <div class="text-[10px] text-[#888780]">Duração</div>
-                            <div class="text-[13px] font-medium text-[#f1efe8]" id="resumo-duracao">—</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ações -->
-            <div class="flex flex-col gap-2">
-                <button type="button" onclick="novoCadastro()"
-                    class="w-full h-10 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-white text-[14px] font-semibold hover:bg-[#f1efe8] hover:text-[#161513] active:scale-[0.98] transition-all">Novo
-                    cadastro</button>
-                <button type="button" onclick="finalizarCadastro()"
-                    class="w-full h-10 rounded-[8px] border border-transparent hover:border-white text-[#888780] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">Finalizar</button>
-                <!-- <button type="button" onclick="fecharModalResumo()" class="w-full h-10 rounded-[8px] bg-transparent text-[#888780] text-[14px] hover:text-white transition-colors">Voltar e Editar</button> -->
-            </div>
-        </div>
-    </div>
-
+    <!--
+        JS fazendo aplicação de mascara.
+        Falta Remoção da Mascara no BackEnd.
+            gestor-gerenciar-servico.js
+    --> 
     <script src="{{ url_for('static', filename='js/validacoes/exibir-imagem-servico.js') }}"></script>
-
 
 </body>
 

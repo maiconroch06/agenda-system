@@ -1,7 +1,36 @@
-<header class=" lg:hidden sticky top-0 z-30 flex items-center justify-between px-5 py-3 bg-[#232220] border-b border-[#38362f]">
-    <!-- logo componente reutilização-->
+<header id="header-gestor" class="lg:hidden sticky top-0 z-30 flex items-center justify-between px-5 py-3 bg-[#232220] border-b border-[#38362f]">
+    <!-- LOGO -->
     {% include "componetizacao/logo/logo-top-horizontal.html" %}
-    <div class="flex justify-end mb-4">
-        
-    </div>
+    
+    <!-- BOTÃO DO MENU LATERAL -->
+    <button id="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Abrir menu"
+       class="inline-flex h-10 w-10 items-center justify-center rounded border border-[#cab7b7] text-gray-200 transition-colors hover:text-brand-gold lg:hidden">        
+        <!-- ICONE DE HAMBURGUER-->
+        {% include "componetizacao/icones/icone-hamburguer.html" %}
+
+    </button>
+
+    <!-- MENU LATERAL DIREITO -->
+    {% include "componetizacao/NavBar/nav-bar-rigth.html" %}
+
 </header>
+
+<script>
+(() => {
+    const btn = document.getElementById('nav-toggle'),
+          nav = document.getElementById('nav-rigth'),
+          bar = document.getElementById('header-gestor'),
+          icons = btn.querySelectorAll('svg');
+    const setOpen = open => {
+        nav.classList.toggle('hidden', !open);
+        btn.setAttribute('aria-expanded', open);
+        btn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+        icons[0].classList.toggle('hidden', open);
+        icons[1].classList.toggle('hidden', !open);
+    };
+    btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
+    nav.addEventListener('click', e => e.target.closest('a') && setOpen(false));
+    document.addEventListener('keydown', e => e.key === 'Escape' && setOpen(false));
+    addEventListener('scroll', () => bar.classList.toggle('shadow-lg', scrollY > 8), { passive: true });
+})();
+</script>
