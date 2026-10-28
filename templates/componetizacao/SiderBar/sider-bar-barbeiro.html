@@ -13,7 +13,7 @@
         <a href="/barbeiro/painel">
             <button
                 class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/barbeiro/painel' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}"
-                data-aba="inicio" onclick="irParaAba('inicio')">
+                data-aba="inicio">
                 <span class="text-lg w-5.5 text-center">
                     {% include "componetizacao/icones/icone-inicio.html" %}
                 </span> Início
@@ -23,7 +23,7 @@
         <a href="/barbeiro/painel/agenda">
             <button
                 class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/barbeiro/painel/agenda') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}"
-                data-aba="agenda" onclick="irParaAba('agenda')">
+                data-aba="agenda">
                 <span class="text-lg w-5.5 text-center">
                     {% include "componetizacao/icones/icone-agenda.html" %}
                 </span> Agenda
@@ -45,7 +45,7 @@
         <a href="/barbeiro/painel/configuracao">
             <button
                 class="sidebar-func__item flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/barbeiro/painel/configuracao') else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}"
-                data-aba="configuracoes" onclick="irParaAba('configuracoes')">
+                data-aba="configuracoes">
                 <span class="text-lg w-5.5 text-center">
                     {% include "componetizacao/icones/icone-configuracao.html" %}
                 </span> Configurações
@@ -54,8 +54,8 @@
     </nav>
 
     <!-- Sair (Atualizar quando tiver sessão) -->
-    <a class="mt-auto mx-3 mb-5 px-4 py-3 text-center rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-sm font-medium transition-colors hover:bg-[#38362f] hover:text-[#f1efe8] flex items-center"
-        href="/">
+    <a href="/barbeiro/logout"
+       class="mt-auto mx-3 mb-5 px-4 py-3 text-center rounded-lg border border-[#38362f] bg-transparent text-[#888780] text-sm font-medium transition-colors hover:bg-[#38362f] hover:text-[#f1efe8] justify-center flex items-center">
         SAIR {% include "componetizacao/icones/icone-logout.html" %}
     </a>
 

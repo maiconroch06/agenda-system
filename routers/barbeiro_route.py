@@ -10,6 +10,12 @@ def barberSource():
 def barbeiroLogin():
     return render_template('pages/barbeiro/barbeiro-login.html')
 
+# Logout Barbeiro - Encerramento da sessão do Barbeir
+@barbeiro.route('/logout', methods=['POST','GET'])
+def gestorLogout():
+    #session.clear()
+    return redirect('/')
+
 @barbeiro.route('/painel')
 def barbeiroPainel():
     return render_template('pages/barbeiro/barbeiro-painel-inicio-rp.html')

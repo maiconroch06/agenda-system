@@ -2,7 +2,7 @@
    UTILITÁRIOS DE DATA
    ============================================================ */
 
-   function formatarISO(data) {
+function formatarISO(data) {
     const y = data.getFullYear();
     const m = String(data.getMonth() + 1).padStart(2, "0");
     const d = String(data.getDate()).padStart(2, "0");
