@@ -3,7 +3,7 @@ from controllers.autenticador_gestor_controller import AutenticadorGestor
 from models.cliente import Cliente
 from models.servicos import Servicos
 from models.barbeiros import Barbeiro
-from  controllers.validar_cadastro_barbeiro import ValidarBarbeiro
+from  controllers.gerenciar_cadastro_barbeiro import ValidarBarbeiro
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
 from controllers import ControladorDeImagens 
@@ -156,12 +156,42 @@ def gestorBarbeiroPage():
 # Gerenciar Barbeiro (Cadastro->Validação) - Validando dados informados no cadastro do Barbeiro
 @gestor.route('painel/barbeiro/cadastrar', methods=['POST'])
 def gestorBarbeiroValidar():
+
+    imagem = request.files.get('foto')
+
+    enviarImagem = ControladorDeImagens() 
+    foto_nome = enviarImagem.enviarImagem(imagem, EnumNomesPastaImagem.IMAGENS_BARBEIRO)
+
+    if foto_nome is None:
+            flash("Atenção: a imagem não é suportada pelo sistema.", EnumStatusMensagens.AVISO.value)
+            return redirect(url_for('gestor.gestorServicoEditarPagina'))
     
-    return ValidarBarbeiro.validarFormulario(
+    return ValidarBarbeiro.validarFormularioCriarEditarBarbeiro(
         request,
         'pages/gestor/gestor-gerenciar-barbeiro-rp.html',
         'gestor.gestorAbaBarbeiros',
+        id_barbeiro = None
     )
+
+@gestor.route('painel/barbeiro/editar/<int:id_barbeiro>', methods=['GET'])
+def gestorBarbeiroPageEdit(id_barbeiro:int):
+    barbeiro = Barbeiro().consultarIdBarbeiro(id_barbeiro)
+
+    # return f"Dados barbeiro: {barbeiro}"
+    return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html', barbeiro = barbeiro, mensagens_status=EnumStatusMensagens)
+
+@gestor.route('painel/barbeiro/atualizar/<int:id_barbeiro>', methods=['POST'])
+def gestorBarbeiroPageUpdate(id_barbeiro:int):
+
+    return ValidarBarbeiro.validarFormulario(
+            request,
+            'pages/gestor/gestor-gerenciar-barbeiro-rp.html',
+            'gestor.gestorAbaBarbeiros',
+            id_barbeiro = id_barbeiro
+        )
+
+
+
 ##################################################################################
 #  CLIENTES
 @gestor.route('/painel/clientes')

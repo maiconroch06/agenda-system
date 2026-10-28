@@ -16,7 +16,7 @@ from enums import EnumStatusMensagens
 class ValidarBarbeiro:
 
     @staticmethod
-    def validarFormulario(request, rota_erro: str, rota_certa: str):
+    def validarFormularioCriarEditarBarbeiro(request, rota_erro: str, rota_certa: str, id_barbeiro:int):
 
         try:
             # ==========================================================
@@ -324,25 +324,60 @@ class ValidarBarbeiro:
 
                 campos_com_falha = []
 
-                for campo in erros.keys():
+                for campo, mensagem in erros.items():
 
                     nome_campo = nomes_amigaveis.get(
                         campo,
                         campo
                     )
 
-                    campos_com_falha.append(nome_campo)
+                    campos_com_falha.append(
+                        f"{nome_campo}: {mensagem}"
+                    )
 
-                texto_campos = ", ".join(campos_com_falha)
+                texto_campos = " | ".join(campos_com_falha)
 
                 flash(
-                    "Atenção! Corrija os seguintes campos: "
-                    f"{texto_campos}.",
+                    f"Atenção! Corrija os seguintes campos: {texto_campos}",
                     EnumStatusMensagens.AVISO.value
                 )
 
                 return render_template(
                     rota_erro,
+                    erros=erros,
+                    mensagens_status=EnumStatusMensagens,
+                    dados_preenchidos=request.form
+                )
+
+            erros_unicidade = ValidarBarbeiro.verificarDadosUnicos(
+                cpf=cpf,
+                email=email,
+                telefone=telefone,
+                id_barbeiro=id_barbeiro
+            )
+
+            if erros_unicidade:
+                erros.update(erros_unicidade)
+
+                nomes_amigaveis = {
+                    "cpf": "CPF",
+                    "email": "E-mail",
+                    "telefone": "Telefone"
+                }
+
+                mensagens = [
+                    f"{nomes_amigaveis.get(campo, campo)}: {mensagem}"
+                    for campo, mensagem in erros_unicidade.items()
+                ]
+
+                flash(
+                    "Atenção! " + " | ".join(mensagens),
+                    EnumStatusMensagens.AVISO.value
+                )
+
+                return render_template(
+                    rota_erro,
+                    erros=erros,
                     mensagens_status=EnumStatusMensagens,
                     dados_preenchidos=request.form
                 )
@@ -354,35 +389,58 @@ class ValidarBarbeiro:
             nome_foto = None
 
             if foto and foto.filename:
-
                 nome_foto = secure_filename(foto.filename)
 
-            id_barbeiro = ValidarBarbeiro.salvarBarbeiro(
-                cpf=cpf,
-                nome=nome,
-                email=email,
-                senha=senha,
-                telefone=telefone,
-                foto=nome_foto,
-                descricao=descricao,
-                cep=cep_limpo,
-                cidade=cidade,
-                uf=uf,
-                bairro=bairro,
-                logradouro=logradouro,
-                numero=numero,
-                complemento=complemento,
-                sequencia=sequencia
-            )
+            if id_barbeiro is None:
+                print("Passei aqui!!!")
+                # CADASTRO: insere novos registros
+                resultado = ValidarBarbeiro.criarBarbeiro(
+                    cpf=cpf,
+                    nome=nome,
+                    email=email,
+                    senha=senha,
+                    telefone=telefone,
+                    foto=nome_foto,
+                    descricao=descricao,
+                    cep=cep_limpo,
+                    cidade=cidade,
+                    uf=uf,
+                    bairro=bairro,
+                    logradouro=logradouro,
+                    numero=numero,
+                    complemento=complemento,
+                    sequencia=sequencia
+                )
 
-            # ==========================================================
-            # 20. VERIFICAR SE O CADASTRO FOI REALIZADO
-            # ==========================================================
+                mensagem = "Barbeiro cadastrado com sucesso!"
 
-            if not id_barbeiro:
+            else:
+                # EDIÇÃO: atualiza os registros existentes
+                resultado = ValidarBarbeiro.editarBarbeiro(
+                    id_barbeiro=id_barbeiro,
+                    cpf=cpf,
+                    nome=nome,
+                    email=email,
+                    senha=senha,
+                    telefone=telefone,
+                    foto=nome_foto,
+                    descricao=descricao,
+                    cep=cep_limpo,
+                    cidade=cidade,
+                    uf=uf,
+                    bairro=bairro,
+                    logradouro=logradouro,
+                    numero=numero,
+                    complemento=complemento,
+                    sequencia=sequencia
+                )
 
+                mensagem = "Barbeiro atualizado com sucesso!"
+
+            # 20. VERIFICAR O RESULTADO
+            if not resultado:
                 flash(
-                    "Não foi possível cadastrar o barbeiro.",
+                    "Não foi possível salvar o barbeiro.",
                     EnumStatusMensagens.ERRO.value
                 )
 
@@ -392,14 +450,8 @@ class ValidarBarbeiro:
                     dados_preenchidos=request.form
                 )
 
-            # ==========================================================
             # 21. SUCESSO
-            # ==========================================================
-
-            flash(
-                "Barbeiro cadastrado com sucesso!",
-                EnumStatusMensagens.SUCESSO.value
-            )
+            flash(mensagem, EnumStatusMensagens.SUCESSO.value)
 
             return redirect(url_for(rota_certa))
 
@@ -419,7 +471,7 @@ class ValidarBarbeiro:
             )
 
     @staticmethod
-    def salvarBarbeiro(
+    def criarBarbeiro(
         cpf,
         nome,
         email,
@@ -570,3 +622,192 @@ class ValidarBarbeiro:
             print("======================================")
 
             return None
+
+    @staticmethod
+    def editarBarbeiro(
+        id_barbeiro,
+        cpf,
+        nome,
+        email,
+        senha,
+        telefone,
+        foto,
+        descricao,
+        cep,
+        cidade,
+        uf,
+        bairro,
+        logradouro,
+        numero,
+        complemento,
+        sequencia
+    ):
+        try:
+            print("======================================")
+            print("INICIANDO EDIÇÃO DO BARBEIRO")
+            print("ID:", id_barbeiro)
+            print("======================================")
+
+            # ==========================================================
+            # 1. BUSCAR O BARBEIRO EXISTENTE
+            # ==========================================================
+
+            barbeiro = db.session.get(Barbeiro, id_barbeiro)
+
+            if barbeiro is None:
+                raise Exception("Barbeiro não encontrado.")
+
+            # ==========================================================
+            # 2. BUSCAR O USUÁRIO ASSOCIADO
+            # ==========================================================
+
+            usuario = db.session.get(Usuario, id_barbeiro)
+
+            if usuario is None:
+                raise Exception("Usuário do barbeiro não encontrado.")
+
+            # ==========================================================
+            # 3. BUSCAR O ENDEREÇO ASSOCIADO
+            # ==========================================================
+
+            endereco = db.session.get(
+                Endereco,
+                usuario.fk_id_endereco
+            )
+
+            if endereco is None:
+                raise Exception("Endereço do barbeiro não encontrado.")
+
+            # ==========================================================
+            # 4. BUSCAR O ESTADO PELA UF
+            # ==========================================================
+
+            estado = db.session.execute(
+                db.text("""
+                    SELECT id
+                    FROM estados
+                    WHERE sigla_estado = :uf
+                """),
+                {"uf": uf}
+            ).scalar()
+
+            if estado is None:
+                raise Exception(f"Estado não encontrado para a UF: {uf}")
+
+            # ==========================================================
+            # 5. ATUALIZAR O ENDEREÇO EXISTENTE
+            # ==========================================================
+
+            endereco.cep = cep
+            endereco.cidade = cidade
+            endereco.numero = int(numero)
+            endereco.bairro = bairro
+            endereco.fk_estado = estado
+            endereco.sequencia = sequencia if sequencia else None
+            endereco.complemento = complemento if complemento else None
+
+            # ==========================================================
+            # 6. ATUALIZAR OS DADOS DO USUÁRIO
+            # ==========================================================
+
+            usuario.cpf = re.sub(r"\D", "", cpf)
+            usuario.nome_completo = nome
+            usuario.email = email
+            usuario.telefone = re.sub(r"\D", "", telefone)
+            usuario.data_atualizacao = datetime.now(timezone.utc)
+
+            # Só altera a senha se o usuário informou uma nova.
+            if senha and senha.strip():
+                from werkzeug.security import generate_password_hash
+
+                usuario.senha_hash = generate_password_hash(senha)
+
+            # Só substitui a foto se uma nova foto foi enviada.
+            if foto:
+                usuario.foto_nome = foto
+
+            # ==========================================================
+            # 7. ATUALIZAR OS DADOS DO BARBEIRO
+            # ==========================================================
+
+            barbeiro.descricao = descricao
+
+            # ==========================================================
+            # 8. SALVAR TODAS AS ALTERAÇÕES
+            # ==========================================================
+
+            db.session.commit()
+
+            print("======================================")
+            print("BARBEIRO ATUALIZADO COM SUCESSO")
+            print("======================================")
+
+            return id_barbeiro
+
+        except Exception as erro:
+            db.session.rollback()
+
+            import traceback
+
+            print("======================================")
+            print("ERRO AO EDITAR BARBEIRO")
+            print("======================================")
+            print(f"ERRO: {erro}")
+
+            traceback.print_exc()
+
+            print("======================================")
+
+            return None
+
+    @staticmethod
+    def verificarDadosUnicos(cpf, email, telefone, id_barbeiro=None):
+        cpf = re.sub(r"\D", "", cpf)
+        telefone = re.sub(r"\D", "", telefone)
+        email = email.strip()
+
+        sql = db.text("""
+            SELECT id, cpf, email, telefone
+            FROM usuarios
+            WHERE cpf = :cpf
+            OR LOWER(email) = LOWER(:email)
+            OR telefone = :telefone
+        """)
+
+        registros = db.session.execute(
+            sql,
+            {
+                "cpf": cpf,
+                "email": email,
+                "telefone": telefone
+            }
+        ).mappings().all()
+
+        erros = {}
+
+        for usuario in registros:
+            # Na edição, não considerar o próprio usuário como duplicado.
+            if (
+                id_barbeiro is not None
+                and usuario["id"] == id_barbeiro
+            ):
+                continue
+
+            if usuario["cpf"] == cpf:
+                erros["cpf"] = "Este CPF já está cadastrado."
+
+            if (
+                usuario["email"]
+                and usuario["email"].lower() == email.lower()
+            ):
+                erros["email"] = "Este e-mail já está cadastrado."
+
+            telefone_existente = re.sub(
+                r"\D", "", usuario["telefone"] or ""
+            )
+
+            if telefone_existente == telefone:
+                erros["telefone"] = "Este telefone já está cadastrado."
+
+        return erros
+            

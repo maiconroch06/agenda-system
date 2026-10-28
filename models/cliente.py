@@ -1,57 +1,41 @@
-from database import db
+from datetime import datetime
+from models.usuarios import Usuario
 
+class Cliente(Usuario):
 
-class Cliente(db.Model):
-    __tablename__ = 'clientes'
+    def __init__(
+        self,
+        id: int,
+        nome_completo: str,
+        telefone: str,
+        cpf: str,
+        email: str,
+        senha: str,
+        foto_nome: str,
+        status_usuario: bool,
+        data_cadastro: datetime,
+        data_atualizacao: datetime,
+        fk_id_endereco: int = None,
+        data_ultimo_servico: datetime = None
+    ):
+        super().__init__(
+            id=id,
+            nome_completo=nome_completo,
+            telefone=telefone,
+            cpf=cpf,
+            email=email,
+            senha=senha,
+            foto_nome=foto_nome,
+            status_usuario=status_usuario,
+            data_cadastro=data_cadastro,
+            data_atualizacao=data_atualizacao,
+            fk_id_endereco=fk_id_endereco
+        )
 
-    id = db.Column(
-        db.Integer, 
-        db.ForeignKey('usuarios.id', onupdate='CASCADE', ondelete='CASCADE'), 
-        primary_key=True, 
-        nullable=False
-    )
-    data_ultimo_servico = db.Column(db.DateTime,  nullable=True)
+        self.data_ultimo_servico = data_ultimo_servico
 
-    # 1. Construtor para salvar na tabela clientes
-    def __init__(self, cliente_id:int = None):
-         # Comportamento do Construtor 1 (Salvando com ID)
-        if cliente_id is not None:
-           
-            self.id = cliente_id
-        # Comportamento do Construtor 2 (Criando vazio)
-        else:
-            
-            self.id = None
+    def consultarDataUltimoServico(self):
+        return self.data_ultimo_servico
 
-
-
-    # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
-    def salvar(self):
-        db.session.add(self)
-        db.session.commit()
-        return self.id
-
-    @classmethod
-    def buscarCLientePorEmail(cls, email):
-        return db.session.execute(
-            db.text(
-            """
-                select *
-                from clientes c join usuarios u 
-                on c.id = u.id where u.email = :email
-            """
-                ),
-                {"email":email}
-        ).first()
-
-    @staticmethod  
-    def buscarTodosCLientes():
-        return db.session.execute(
-                db.text(
-                """
-                    select u.nome_completo, u.telefone, c.data_ultimo_servico
-                    from clientes c join usuarios u 
-                    on c.id = u.id
-                """
-                    )
-            ).all()
+    def atualizarDataUltimoServico(self, data: datetime):
+        self.data_ultimo_servico = data

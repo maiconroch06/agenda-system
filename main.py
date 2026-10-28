@@ -1,50 +1,53 @@
+
 from flask import Flask, session
 from datetime import timedelta
-from database import create_database, db
-from database.seed import initialize
-
+from database import create_database
+# from database.seed import initialize
 
 app = Flask(__name__)
 
-# Configura o app e inicializa o db.init_app(app)
-create_database(app)
+# 1. Verifica se o banco existe e configura o SQLAlchemy
+try:
+    create_database(app)
+    print("Banco de dados verificado com sucesso.")
 
-# IMPORTANTE: Importe os seus modelos aqui ANTES do create_all.
-# Se você não importá-los, o SQLAlchemy não saberá que as tabelas existem e criará um banco vazio!
+except RuntimeError as erro:
+    print(f"ERRO AO INICIALIZAR O BANCO: {erro}")
+    raise SystemExit(1)
+
+
+# 2. Importa os modelos
 from models import *
 
-# ==========================================
-# 1. CRIAÇÃO AUTOMÁTICA DAS TABELAS NO MYSQL
-# ==========================================
-with app.app_context():
-    # Esse comando lê as classes e as cria no banco
-    db.create_all()
-    # Populando banco com dados padrões
-    initialize()
-    
+
+# 3. Inicializa os dados padrão
+# Não cria tabelas automaticamente.
+# with app.app_context():
+#     initialize()
 
 
-# ==========================================
-# 2. IMPORTS DOS BLUEPRINTS (Apenas APÓS criar o banco)
-# ==========================================
+# 4. Importa os Blueprints
 from routers.public_route import publics
 from routers.cliente_route import cliente
-# from routers.login import user_login
 from routers.gestor_route import gestor
 from routers.barbeiro_route import barbeiro
 
 
-# ==========================================
-# 3. REGISTRO DOS BLUEPRINTS
-# ==========================================
+# 5. Registra os Blueprints
 app.register_blueprint(publics)
 app.register_blueprint(cliente, url_prefix='/cliente')
 app.register_blueprint(gestor, url_prefix='/gestor')
 app.register_blueprint(barbeiro, url_prefix='/barbeiro')
 
+
+# 6. Configurações da aplicação
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 app.config['UPLOAD_FILES'] = r'static/assets/dados'
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(
+        host='0.0.0.0',
+        port=5000,
+        debug=True
+    )

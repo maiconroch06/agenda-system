@@ -1,59 +1,66 @@
-from database import db
-from sqlalchemy.dialects.mysql import TINYINT
+from datetime import datetime
+from models.usuarios import Usuario
 
-class Barbeiro(db.Model):
-    __tablename__ = 'barbeiros'
 
-    id = db.Column(
-        db.Integer, 
-        db.ForeignKey('usuarios.id', onupdate='CASCADE', ondelete='CASCADE'), 
-        primary_key=True, 
-        nullable=False
-    )
-    data_liberacao = db.Column(db.DateTime, nullable = True )
-    ativo = db.Column(TINYINT(1), nullable=False) 
-    
-    descricao = db.Column(
-        db.String(500), 
-        nullable=False
-    )
+class Barbeiro(Usuario):
 
-    # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
-    def salvar(self):
-        db.session.execute(
-            db.text(
-                """
-                insert into barbeiros (id, data_liberacao,ativo,descricao) values (:id,:data_liberacao,:ativo,:descricao)
-                """
-            ),{
-                "id": self.id,
-                "data_liberacao":self.data_liberacao,
-                "ativo": self.ativo,
-                "descricao": self.descricao
-            }
+    def __init__(
+        self,
+        id: int,
+        nome_completo: str,
+        telefone: str,
+        cpf: str,
+        email: str,
+        senha: str,
+        foto_nome: str,
+        status_usuario: bool,
+        data_cadastro: datetime,
+        data_atualizacao: datetime,
+        data_liberacao: datetime,
+        descricao: str,
+        status_barbeiro: bool,
+        fk_id_agenda: int,
+        fk_id_endereco: int = None
+    ):
+        super().__init__(
+            id=id,
+            nome_completo=nome_completo,
+            telefone=telefone,
+            cpf=cpf,
+            email=email,
+            senha=senha,
+            foto_nome=foto_nome,
+            status_usuario=status_usuario,
+            data_cadastro=data_cadastro,
+            data_atualizacao=data_atualizacao,
+            fk_id_endereco=fk_id_endereco
         )
 
-        
-    # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
-    def consultarBarbeiros(self):
-        return db.session.execute(
-            db.text(
-                    """
-                    SELECT * FROM barbeiros b inner join usuarios u on b.id = u.id 
-            
-                     """
-                 )
-             ).mappings().all()  
+        self.data_liberacao = data_liberacao
+        self.descricao = descricao
+        self.status_barbeiro = status_barbeiro
+        self.fk_id_agenda = fk_id_agenda
 
-    @classmethod
-    def buscarCLientePorEmail(cls, email):
-        return db.session.execute(
-                db.text(
-                """
-                    select *
-                    from clientes c join usuarios u 
-                    on c.id = u.id where u.email = :email
-                """
-                    ),
-                    {"email":email}
-            ).first()
+    def consultarDataLiberacao(self):
+        return self.data_liberacao
+
+    def atualizarDataLiberacao(self, data: datetime):
+        self.data_liberacao = data
+
+    def consultarDescricao(self):
+        return self.descricao
+
+    def atualizarDescricao(self, descricao: str):
+        self.descricao = descricao
+
+    def consultarStatusBarbeiro(self):
+        return self.status_barbeiro
+
+    def atualizarStatusBarbeiro(self, status: bool):
+        self.status_barbeiro = status
+
+    def consultarIdAgenda(self):
+        return self.fk_id_agenda
+
+    def atualizarIdAgenda(self, id_agenda: int):
+        self.fk_id_agenda = id_agenda

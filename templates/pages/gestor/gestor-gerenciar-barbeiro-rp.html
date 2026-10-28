@@ -50,7 +50,7 @@
 
                             
         <!-- Formulário: padding interno e margin inferior reduzidos -->
-        <form id="form-profissional" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" action="/gestor/painel/barbeiro/cadastrar" method="post" enctype="multipart/form-data" novalidate>
+        <form id="form-profissional" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" action="{% if barbeiro %}/gestor/painel/barbeiro/atualizar/{{ barbeiro['id'] }}{% else %}/gestor/painel/barbeiro/cadastrar{% endif %}"  method="post" enctype="multipart/form-data" novalidate>
             
             <!-- ETAPA 1: DADOS DO BARBEIRO (space-y reduzido) -->
             <div id="step-1" class="space-y-4">
@@ -68,31 +68,31 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div class="flex flex-col gap-1">
                         <label for="pro-cpf" class="text-[12px] font-medium text-[#888780]">CPF*</label>
-                        <input type="text" name="cpf" id="pro-cpf" value="529.982.247-25" placeholder="000.000.000-00" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                        <input type="text" name="cpf" id="pro-cpf" value="{{ barbeiro['cpf'] if barbeiro else '529.982.247-25' }}" placeholder="000.000.000-00" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] disabled:opacity-50 disabled:cursor-not-allowed transition-all">
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="pro-nome" class="text-[12px] font-medium text-[#888780]">Nome*</label>
-                        <input type="text" name="nome" id="pro-nome" value="Barbeiro" placeholder="Nome do barbeiro" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                        <input type="text" name="nome" id="pro-nome" value="{{ barbeiro['nome_completo'] if barbeiro else 'Barbeiro' }}" placeholder="Nome do barbeiro" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="pro-email" class="text-[12px] font-medium text-[#888780]">Email*</label>
-                        <input type="email" name="email" id="pro-email" value="barbeiro@gmail.com" placeholder="barbeiro@gmail.com" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                        <input type="email" name="email" id="pro-email" value="{{ barbeiro['email'] if barbeiro else 'barbeiro@gmail.com' }}" placeholder="barbeiro@gmail.com" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="pro-telefone" class="text-[12px] font-medium text-[#888780]">Telefone*</label>
-                        <input type="text" name="telefone" id="pro-telefone" value="(00) 00000-0000" placeholder="(00) 00000-0000" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                        <input type="text" name="telefone" id="pro-telefone" value="{{ barbeiro['telefone'] if barbeiro else '(00) 00000-0000' }}" placeholder="(00) 00000-0000" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="pro-senha" class="text-[12px] font-medium text-[#888780]">Senha*</label>
-                        <input type="password" name="senha" id="pro-senha" value="********" placeholder="********" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                        <input type="password" name="senha" id="pro-senha" placeholder="{{ 'Deixe vazio para manter a senha atual' if barbeiro and barbeiro['senha_hash'] else 'Digite uma senha' }}" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="pro-confirmar-senha" class="text-[12px] font-medium text-[#888780]">Confirmar Senha*</label>
-                        <input type="password" name="confirmar-senha" value="********" id="pro-confirmar-senha" placeholder="********" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                        <input type="password" name="confirmar-senha" placeholder="{{ 'Confirmar senha' if barbeiro and barbeiro['senha_hash'] else 'Digite uma senha' }}" id="pro-confirmar-senha" placeholder="********" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1 col-span-full">
                         <label for="pro-descricao" class="text-[12px] font-medium text-[#888780]">Descrição</label>
-                        <textarea name="descricao" id="pro-descricao" placeholder="Especialidades e experiência..." rows="2" class="w-full p-2.5 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] resize-none"></textarea>
+                        <textarea name="descricao" id="pro-descricao" placeholder="Especialidades e experiência..." rows="2" class="w-full p-2.5 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] resize-none">{{ barbeiro['descricao'] if barbeiro else 'Especialidades e experiência...' }}</textarea>
                     </div>
                 </div>
             </div>
