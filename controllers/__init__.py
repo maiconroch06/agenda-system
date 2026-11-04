@@ -1,1 +1,2 @@
-from .controlador_de_imagens import ControladorDeImagens
+from .controlador_cliente   import ControladorCliente
+from .controlador_barbeiro import ControladorBarbeiro

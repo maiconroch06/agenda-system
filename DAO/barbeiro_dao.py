@@ -1,7 +1,7 @@
 
 from sqlalchemy import text
 from database import db
-from models.barbeiros import Barbeiro
+from models import Barbeiro
 
 
 class BarbeiroDAO:

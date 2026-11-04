@@ -1,7 +1,7 @@
 
 from sqlalchemy import text
 from database import db
-from models.servicos import Servico
+from models import Servico
 
 
 class ServicoDAO:

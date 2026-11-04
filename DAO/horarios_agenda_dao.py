@@ -1,7 +1,7 @@
 
 from sqlalchemy import text
 from database import db
-from models.horarios_agenda import HorariosAgenda
+from models import HorariosAgenda
 
 
 class HorariosAgendaDAO:

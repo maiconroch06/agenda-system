@@ -1,7 +1,7 @@
 
 from sqlalchemy import text
 from database import db
-from models.barbeiro_has_servicos import BarbeiroHasServicos
+from models import BarbeiroHasServicos
 from datetime import datetime
 
 

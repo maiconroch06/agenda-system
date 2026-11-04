@@ -1,10 +1,11 @@
 from datetime import datetime
+from typing import Optional
+from models import Endereco
 
 class Usuario:
 
     def __init__(
         self,
-        id: int,
         nome_completo: str,
         telefone: str,
         cpf: str,
@@ -14,7 +15,8 @@ class Usuario:
         status_usuario: bool,
         data_cadastro: datetime,
         data_atualizacao: datetime,
-        fk_id_endereco: int = None
+        id: Optional[int] = None,
+        endereco: Endereco = None
     ):
         self.id = id
         self.nome_completo = nome_completo
@@ -26,7 +28,7 @@ class Usuario:
         self.status_usuario = status_usuario
         self.data_cadastro = data_cadastro
         self.data_atualizacao = data_atualizacao
-        self.fk_id_endereco = fk_id_endereco
+        self.endereco = endereco
 
     def validarCPF(self):
         return bool(self.cpf and self.cpf.strip())

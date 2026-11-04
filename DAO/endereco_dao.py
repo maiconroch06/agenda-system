@@ -1,7 +1,7 @@
 
 from sqlalchemy import text
 from database import db
-from models.endereco import Endereco
+from models import Endereco
 
 
 class EnderecoDAO:

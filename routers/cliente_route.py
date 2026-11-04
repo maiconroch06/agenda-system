@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
-from controllers.autenticador_cliente_controller import AutenticacaoCliente
-from models import Usuario, Servicos
+from controllers.controlador_cliente import ControladorCliente
+from models import Cliente, Servico
 from datetime import datetime, timezone
+from enums import EnumStatusMensagens
 
 
 
@@ -14,11 +15,7 @@ def clientSource():
  
 @cliente.route('/login', methods=["GET"])
 def clientLoginPage():
-    # Verificando o tipo de request GET
-    if session.get("dados_cliente") is None:
-        return render_template('pages/cliente/cliente-login.html')
-    
-    return redirect(url_for('cliente.clientAgendamentoServicos'))
+    return render_template('pages/cliente/cliente-login.html')
 
 @cliente.route('/login', methods=["POST"])
 def clientLogin():   
@@ -26,7 +23,7 @@ def clientLogin():
    if request.method == "POST":
         email_digitado = request.form.get('email')
         senha_digitada =request.form.get('senha')
-        return AutenticacaoCliente.login(email_digitado,senha_digitada)
+        return ControladorCliente.login(email_digitado,senha_digitada)
         
 
 @cliente.route('/logout', methods=["GET","POSt"])
@@ -37,34 +34,32 @@ def logout():
 @cliente.route('/cadastro', methods=["GET"])
 def clientRegisterPage():  
     if session.get("dados_cliente") is None:
-        return render_template('pages/cliente/cliente-cadastro.html')
+        return render_template('pages/cliente/cliente-cadastro.html',mensagens_status=EnumStatusMensagens)
     
     return redirect(url_for('cliente.clientAgendamentoServicos'))
    
 @cliente.route('/cadastro', methods=["POST"])
 def clientRegister():
-    if  request.method == "POST":
-        #COLOCAR A VALIDAÇÃO AQUI
         
-        #remove a pontuação do telefone      
-        telefone_temp = ''.join(filter(str.isdigit,request.form.get('telefone')))
-
+    #remove a pontuação do telefone      
+    telefone_temp = ''.join(filter(str.isdigit,request.form.get('telefone')))
+    fotoTemp = request.files.get('foto') 
        
-        # Instancia o objeto Usuario com os dados do formulário
-        usuario = Usuario(
+    # Instancia o objeto Usuario com os dados do formulário
+    cliente = Cliente(
             nome_completo=request.form.get('nome'),
             telefone=telefone_temp,
             cpf=None,
             email=request.form.get('email'),
             senha= request.form.get('senha'),
-            foto=request.files.get('foto').filename if request.files.get('foto') else None,
-            id_endereco = None,
-            ativo=1,
+            foto_nome= fotoTemp.filename if request.files.get('foto') else None,
+            endereco = None,
+            status_usuario=1,
             data_cadastro=datetime.now(timezone.utc),
             data_atualizacao=datetime.now(timezone.utc)
-            
-        )
-        return AutenticacaoCliente.registrarCliente(usuario)
+    )
+
+    return ControladorCliente.cadastrarCliente(cliente, fotoTemp)
             
    
 @cliente.route('/agendamento/servicos', methods=['GET','POST'])

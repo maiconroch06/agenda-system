@@ -1,12 +1,11 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
 from controllers.autenticador_gestor_controller import AutenticadorGestor
 from models.cliente import Cliente
-from models.servicos import Servicos
+from models.servicos import Servico
 from models.barbeiros import Barbeiro
-from  controllers.gerenciar_cadastro_barbeiro import ValidarBarbeiro
+from  controllers import ControladorBarbeiro
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
-from controllers import ControladorDeImagens 
 
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
@@ -71,7 +70,7 @@ def gestorServicoCadastrar():
     
     imagem = request.files.get('srv-imagem')
 
-    enviarImagem = ControladorDeImagens() 
+    enviarImagem = ValidadorDeImagens() 
     foto_nome = enviarImagem.enviarImagem(imagem, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
 
     if foto_nome is None:
@@ -94,7 +93,7 @@ def gestorServicoDeletar():
         flash("Aviso: Serviço não deletado, serviço inexistente ", EnumStatusMensagens.AVISO.value)
         return redirect(url_for("gestor.gestorAbaServicos"))
 
-    controladorDeImagens = ControladorDeImagens()
+    controladorDeImagens = ValidadorDeImagens()
     controladorDeImagens.removerImagem(servico["foto_nome"], EnumNomesPastaImagem.IMAGEMS_SERVICOS)
     
     return AutenticadorGestor.deletarServico(id_servico)
@@ -119,7 +118,7 @@ def gestorServicoEditar():
     img_padrao = request.form.get('imagem-padrao', None)
     imagem_anterior = request.form.get('srv-foto_nome_anterior')
 
-    enviarImagem = ControladorDeImagens()    
+    enviarImagem = ValidadorDeImagens()    
     foto_nome = enviarImagem.editarImagem(imagem_anterior, imagem_form, EnumNomesPastaImagem.IMAGEMS_SERVICOS,img_padrao)
     
     if foto_nome is None:
@@ -159,7 +158,7 @@ def gestorBarbeiroValidar():
 
     imagem = request.files.get('foto')
 
-    enviarImagem = ControladorDeImagens() 
+    enviarImagem = ValidadorDeImagens() 
     foto_nome = enviarImagem.enviarImagem(imagem, EnumNomesPastaImagem.IMAGENS_BARBEIRO)
 
     if foto_nome is None:

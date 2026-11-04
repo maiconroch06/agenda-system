@@ -1,7 +1,7 @@
 
 from sqlalchemy import text
 from database import db
-from models.agenda import Agenda
+from models import Agenda
 
 
 class AgendaDAO:

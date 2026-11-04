@@ -1,7 +1,7 @@
 
 from sqlalchemy import text
 from database import db
-from models.gestor import Gestor
+from models import Gestor
 
 
 class GestorDAO:

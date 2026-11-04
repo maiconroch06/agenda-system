@@ -5,8 +5,8 @@ from DAO.cliente_dao import ClienteDAO
 class ClienteRepository:
 
     @staticmethod
-    def salvar(cliente):
-        return ClienteDAO.salvar(cliente)
+    def salvar(cliente, id):
+        return ClienteDAO.salvar(cliente, id)
 
     @staticmethod
     def buscar_por_id(id_cliente):

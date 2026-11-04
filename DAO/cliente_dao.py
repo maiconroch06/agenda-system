@@ -1,42 +1,15 @@
 
 from sqlalchemy import text
 from database import db
-from models.cliente import Cliente
+from models import Cliente
 from datetime import datetime
 
 
 class ClienteDAO:
 
     @staticmethod
-    def salvar(cliente: Cliente):
-        sql_usuario = text("""
-            INSERT INTO usuarios (
-                id,
-                nome_completo,
-                telefone,
-                cpf,
-                email,
-                senha,
-                foto_nome,
-                status_usuario,
-                data_cadastro,
-                data_atualizacao,
-                fk_id_endereco
-            ) VALUES (
-                :id,
-                :nome_completo,
-                :telefone,
-                :cpf,
-                :email,
-                :senha,
-                :foto_nome,
-                :status_usuario,
-                :data_cadastro,
-                :data_atualizacao,
-                :fk_id_endereco
-            )
-        """)
-
+    def salvar(cliente: Cliente, id:int):
+        
         sql_cliente = text("""
             INSERT INTO clientes (
                 id,
@@ -47,33 +20,18 @@ class ClienteDAO:
             )
         """)
 
-        parametros_usuario = {
-            "id": cliente.id,
-            "nome_completo": cliente.nome_completo,
-            "telefone": cliente.telefone,
-            "cpf": cliente.cpf,
-            "email": cliente.email,
-            "senha": cliente.senha,
-            "foto_nome": cliente.foto_nome,
-            "status_usuario": cliente.status_usuario,
-            "data_cadastro": cliente.data_cadastro,
-            "data_atualizacao": cliente.data_atualizacao,
-            "fk_id_endereco": cliente.fk_id_endereco
-        }
-
         parametros_cliente = {
-            "id": cliente.id,
+            "id": id,
             "data_ultimo_servico": cliente.data_ultimo_servico
         }
 
-        db.session.execute(sql_usuario, parametros_usuario)
         db.session.execute(sql_cliente, parametros_cliente)
         db.session.flush()
 
         return cliente.id
 
     @staticmethod
-    def buscar_por_id(id_cliente: int):
+    def consultar_cliente(id_cliente: int):
         sql = text("""
             SELECT
                 u.id,

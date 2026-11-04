@@ -1,6 +1,5 @@
 from models.gestor import Gestor
-from models.servicos import Servicos
-from models.barbearia import Barbearia
+from models import Servico, Barbearia
 from flask import Blueprint, session, redirect, url_for, flash
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash

@@ -13,7 +13,7 @@ from models.barbeiros import Barbeiro
 from enums import EnumStatusMensagens
 
 
-class ValidarBarbeiro:
+class ControladorBarbeiro:
 
     @staticmethod
     def validarFormularioCriarEditarBarbeiro(request, rota_erro: str, rota_certa: str, id_barbeiro:int):

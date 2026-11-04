@@ -1,11 +1,13 @@
 from models.usuarios import Usuario
-from flask import  session, redirect, url_for
+from flask import  session, redirect, url_for, flash
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash,generate_password_hash
 from models.cliente import Cliente
 from database import db
+from services import ValidadorDeImagens, UsuarioService, ClienteService
+from enums import EnumNomesPastaImagem, EnumStatusMensagens
 
-class AutenticacaoCliente():
+class ControladorCliente():
     
     def login(email:str, senha:str):
         # Validação inicial simples
@@ -44,41 +46,43 @@ class AutenticacaoCliente():
             # Se o email não estiver cadastrado                  
             session['erro'] = "ATENÇÃO: usuário não cadastrado.\nRealize o seu cadastro"
             return redirect(url_for('cliente.clientLoginPage'))
-                               
-                    
-    
-    #cadastro funcionando perfeitamente                    
-    def registrarCliente(usuario:Usuario):
+
+   #cadastro funcionando perfeitamente                    
+    def cadastrarCliente(cliente:Cliente, foto):
         # Salvando os dados na sessão do Flask
-        try:
-            id_cliente = usuario.salvar()
         
-            # salvar o usuario como cliente
-            cliente = Cliente(
-               id_cliente
-            )
+        try:
+            validarImagem = ValidadorDeImagens()
 
-            id_cliente = cliente.salvar()
+            cliente.foto_nome =  validarImagem.enviarImagem(foto, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
 
-            if not cliente:
-                session['erro'] = 'Erro ao criar o usuario'
+            id_cliente = UsuarioService(cliente)
+        
+            if (id_cliente):
+                # salvar o usuario como cliente
+                cliente_salvo = ClienteService.cadastrarCliente(cliente, id_cliente)
+            
+
+            if not cliente or not cliente_salvo:
+                flash(f"Erro ao cadastrar o cliente",
+                      EnumStatusMensagens.AVISO.value
+                )
                 return redirect(url_for('cliente.clientRegisterPage'))
             
             session.permanent = True
-            session['dados_cliente'] = usuario.to_dict()
+            session['dados_cliente'] = cliente.to_dict()
 
             db.session.commit()
        
         except IntegrityError as i:
             db.session.rollback()
-
             print(f"{i}")
-            session['erro'] = "ATENÇÃO: e-mail ou telefone já cadastrados no sistema" 
+            flash( "ATENÇÃO: e-mail ou telefone já cadastrados no sistema" , EnumStatusMensagens.ERRO.value)
             return redirect(url_for('cliente.clientRegisterPage'))
+        
         except Exception as erro:
             db.session.rollback()
-
-            session['erro'] = str(erro)
+            flash(str(erro), EnumStatusMensagens.ERRO.value)
             return redirect(url_for('cliente.clientRegisterPage'))
         
         return redirect(url_for('cliente.cadastroSucesso'))

@@ -1,8 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 
-
-class Servicos:
+class Servico:
 
     def __init__(
         self,

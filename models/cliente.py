@@ -1,11 +1,11 @@
 from datetime import datetime
-from models.usuarios import Usuario
+from typing import Optional
+from models import Usuario, Endereco
 
 class Cliente(Usuario):
 
     def __init__(
         self,
-        id: int,
         nome_completo: str,
         telefone: str,
         cpf: str,
@@ -15,11 +15,12 @@ class Cliente(Usuario):
         status_usuario: bool,
         data_cadastro: datetime,
         data_atualizacao: datetime,
-        fk_id_endereco: int = None,
-        data_ultimo_servico: datetime = None
+        endereco: Endereco = None,
+        data_ultimo_servico: datetime = None,
+        id: Optional[int] = None,
     ):
         super().__init__(
-            id=id,
+            id = id,
             nome_completo=nome_completo,
             telefone=telefone,
             cpf=cpf,
@@ -29,7 +30,7 @@ class Cliente(Usuario):
             status_usuario=status_usuario,
             data_cadastro=data_cadastro,
             data_atualizacao=data_atualizacao,
-            fk_id_endereco=fk_id_endereco
+            endereco=endereco
         )
 
         self.data_ultimo_servico = data_ultimo_servico

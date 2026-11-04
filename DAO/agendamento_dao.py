@@ -1,7 +1,7 @@
 
 from sqlalchemy import text
 from database import db
-from models.agendamento import Agendamento
+from models import Agendamento
 from datetime import date, time, datetime
 
 

@@ -4,7 +4,7 @@ import time
 import os
 from werkzeug.utils import secure_filename
 
-class ControladorDeImagens:
+class ValidadorDeImagens:
 
     # Função verifica a extensão do arquivo
     def imgemGExtensaoValida(self, extensao:str):
@@ -12,7 +12,6 @@ class ControladorDeImagens:
         if (extensao != '.png' and extensao!='.jpg' and extensao!='.jpeg'):
             flash("O sistema só aceita imagens em formato png ou jpg", EnumStatusMensagens.AVISO.value)
             return False
-        
         return True
     # Função para salvar a imagem
     def salvarImagem(self, imagem, nomePasta, extensao):
