@@ -1,35 +1,25 @@
 /* ============================================================
-   ESTADO DA APLICAÇÃO
+   ESTADO DA APLICAÇÃO E VARIÁVEIS DO WIZARD
    ============================================================ */
 const state = {
-    etapaAtual: 1,
-    isEditing: false,
-    fotoBase64: null
+    etapaAtual: 1
 };
 
-/* ============================================================
-   MAPEAMENTO DE ELEMENTOS
-   ============================================================ */
 const els = {
-    // Inputs Step 1
+    // Formulário
+    form: document.getElementById("form-profissional"),
+    
+    // Upload de Imagens
     fotoInput: document.getElementById("pro-foto"),
+    imgPreview: document.getElementById("img_pro-preview"),
+    divButoes: document.getElementById("butao-remover-imagem-pro"),
+
+    // Inputs com Máscaras
     cpf: document.getElementById("pro-cpf"),
-    nome: document.getElementById("pro-nome"),
-    email: document.getElementById("pro-email"),
     telefone: document.getElementById("pro-telefone"),
-    descricao: document.getElementById("pro-descricao"),
-    
-    // Inputs Step 2
     cep: document.getElementById("pro-cep"),
-    cidade: document.getElementById("pro-cidade"),
-    uf: document.getElementById("pro-uf"),
-    bairro: document.getElementById("pro-bairro"),
-    logradouro: document.getElementById("pro-logradouro"),
-    numero: document.getElementById("pro-numero"),
-    complemento: document.getElementById("pro-complemento"),
-    sequencia: document.getElementById("pro-sequencia"),
     
-    // Controles de Etapa
+    // Controles de Etapa (Wizard)
     step1: document.getElementById("step-1"),
     step2: document.getElementById("step-2"),
     ind1: document.getElementById("step-indicator-1"),
@@ -38,109 +28,54 @@ const els = {
     // Botões
     btnVoltar: document.getElementById("btn-voltar"),
     btnProximo: document.getElementById("btn-proximo"),
-    btnSubmit: document.getElementById("btn-submit"),
-    
-    // Títulos
-    formTitle: document.getElementById("form-title"),
-    formSubtitle: document.getElementById("form-subtitle"),
-
-    // Modal Resumo
-    modalOverlay: document.getElementById("overlay-resumo"),
-    modalResumo: document.getElementById("modal-resumo"),
-    rNome: document.getElementById("resumo-nome"),
-    rCpf: document.getElementById("resumo-cpf"),
-    rTelefone: document.getElementById("resumo-telefone"),
-    rEmail: document.getElementById("resumo-email"),
-    rLogradouro: document.getElementById("resumo-logradouro"),
-    rBairroCep: document.getElementById("resumo-bairro-cep"),
-    rCidadeUf: document.getElementById("resumo-cidade-uf"),
+    btnSubmit: document.getElementById("btn-submit")
 };
 
 /* ============================================================
-   INICIALIZAÇÃO & MODO DE EDIÇÃO
+   INICIALIZAÇÃO
    ============================================================ */
 function init() {
     aplicarMascaras();
-    configurarEventos();
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const cpfEdicao = urlParams.get('cpf');
-
-    if (cpfEdicao) {
-        state.isEditing = true;
-        prepararModoEdicao(cpfEdicao);
-    }
-}
-
-function prepararModoEdicao(cpf) {
-    els.formTitle.textContent = "Atualizar Barbeiro";
-    els.formSubtitle.textContent = "Altere os dados do profissional";
-    els.btnSubmit.textContent = "Atualizar";
-    
-    els.cpf.value = cpf;
-    els.cpf.disabled = true;
-
-    // Exemplo de mock para edição
-    const mockBarbeiro = {
-        nome: "Maicon Pablo Marcelino da Rocha",
-        email: "maiconpablo588@gmail.com",
-        telefone: "(84) 99169-9246",
-        descricao: "Especialista em cortes modernos.",
-        cep: "59200-000",
-        cidade: "Nova Cruz",
-        uf: "RN",
-        bairro: "Centro",
-        logradouro: "Rua Exemplo",
-        numero: "123",
-        complemento: "",
-        sequencia: "1"
-    };
-    
-    preencherFormulario(mockBarbeiro);
-}
-
-function preencherFormulario(dados) {
-    els.nome.value = dados.nome || "";
-    els.email.value = dados.email || "";
-    els.telefone.value = dados.telefone || "";
-    els.descricao.value = dados.descricao || "";
-    els.cep.value = dados.cep || "";
-    els.cidade.value = dados.cidade || "";
-    els.uf.value = dados.uf || "";
-    els.bairro.value = dados.bairro || "";
-    els.logradouro.value = dados.logradouro || "";
-    els.numero.value = dados.numero || "";
-    els.complemento.value = dados.complemento || "";
-    els.sequencia.value = dados.sequencia || "";
+    configurarEventosWizard();
+    configurarUploadImagem();
 }
 
 /* ============================================================
-   NAVEGAÇÃO DO WIZARD E ESTILO DO STEPPER
+   NAVEGAÇÃO DO WIZARD (STEPPER)
    ============================================================ */
 function alterarEtapa(direcao) {
     if (direcao === 'next' && state.etapaAtual === 1) {
         state.etapaAtual = 2;
-    } else if (direcao === 'prev' && state.etapaAtual === 2) {
-        state.etapaAtual = 1;
+        renderizarEtapa();
+    } else if (direcao === 'prev') {
+        if (state.etapaAtual === 2) {
+            // Se está no step 2, volta pro step 1
+            state.etapaAtual = 1;
+            renderizarEtapa();
+        } else if (state.etapaAtual === 1) {
+            // Se está no step 1, volta para o painel
+            window.location.href = "/gestor/painel"; // Altere para a URL exata do seu painel se for diferente
+            // ou use window.history.back(); para voltar à página anterior do histórico
+        }
     }
-    renderizarEtapa();
 }
 
 function renderizarEtapa() {
+    // Alterna a exibição das etapas
     if (state.etapaAtual === 1) {
-        els.step1.classList.remove("hidden-step");
-        els.step2.classList.add("hidden-step");
+        els.step1.classList.remove("hidden");
+        els.step2.classList.add("hidden");
         
-        els.btnVoltar.classList.add("hidden-step");
-        els.btnProximo.classList.remove("hidden-step");
-        els.btnSubmit.classList.add("hidden-step");
+        els.btnVoltar.textContent = "Cancelar"; // Muda o texto para dar sentido de voltar ao painel
+        els.btnProximo.classList.remove("hidden");
+        els.btnSubmit.classList.add("hidden");
     } else {
-        els.step1.classList.add("hidden-step");
-        els.step2.classList.remove("hidden-step");
+        els.step1.classList.add("hidden");
+        els.step2.classList.remove("hidden");
         
-        els.btnVoltar.classList.remove("hidden-step");
-        els.btnProximo.classList.add("hidden-step");
-        els.btnSubmit.classList.remove("hidden-step");
+        els.btnVoltar.textContent = "Voltar"; // Muda o texto de volta para o padrão da etapa
+        els.btnProximo.classList.add("hidden");
+        els.btnSubmit.classList.remove("hidden");
     }
 
     atualizarEstiloIndicador();
@@ -181,126 +116,110 @@ function atualizarEstiloIndicador() {
     });
 }
 
-/* ============================================================
-   EVENTOS & MÁSCARAS
-   ============================================================ */
-function configurarEventos() {
+function configurarEventosWizard() {
     els.btnProximo.addEventListener("click", () => alterarEtapa('next'));
     els.btnVoltar.addEventListener("click", () => alterarEtapa('prev'));
     
-    els.btnSubmit.addEventListener("click", (e) => {
-        // e.preventDefault();
-        salvarDados();
-    });
-
-    els.fotoInput.addEventListener('change', async (e) => {
-        const foto = await lerArquivoBase64(e.target);
-        const label = e.target.closest('label');
-        
-        if (foto) {
-            state.fotoBase64 = foto;
-            label.style.backgroundImage = `url(${foto})`;
-            label.style.backgroundSize = 'cover';
-            label.style.backgroundPosition = 'center';
-            label.querySelectorAll('span').forEach(span => span.style.opacity = '0');
-        }
+    // Submete o formulário direto
+    els.btnSubmit.addEventListener("click", () => {
+        els.btnSubmit.disabled = true; // Previne múltiplos envios
+        els.btnSubmit.textContent = "Aguarde...";
+        els.form.submit();
     });
 }
 
+/* ============================================================
+   LÓGICA DE UPLOAD E PREVIEW DE IMAGEM
+   ============================================================ */
+function configurarUploadImagem() {
+    const spanTextos = els.fotoInput.parentElement.querySelectorAll('span');
+
+    // Checa ao carregar a página se já tem foto (ex: em edição)
+    if (!els.imgPreview.classList.contains('hidden') && !els.imgPreview.src.includes("default.png")) {
+        ocultarExibirBotaoRemoverImagem(true);
+        spanTextos.forEach(el => el.classList.add('hidden'));
+    }
+
+    els.fotoInput.addEventListener('change', () => {
+        const arquivo = els.fotoInput.files[0];
+
+        if (arquivo && arquivo.type.startsWith('image/')) {
+            els.imgPreview.src = URL.createObjectURL(arquivo);
+            els.imgPreview.classList.remove('hidden');
+
+            spanTextos.forEach(el => el.classList.add('hidden'));
+
+            if (!els.divButoes.querySelector('button')) {
+                ocultarExibirBotaoRemoverImagem(true);
+            }
+            criarInputDefault(false);
+        } else {
+            resetarImagemPreview(spanTextos);
+        }
+    });
+
+    function ocultarExibirBotaoRemoverImagem(visivel) {
+        if (visivel) {
+            const botaoRemover = document.createElement('button');
+            botaoRemover.setAttribute('type', 'button');
+            botaoRemover.innerText = "Remover";
+            botaoRemover.classList.add("mt-2", "h-8", "px-3", "text-white", "rounded-md", "bg-red-900/80", "hover:bg-red-600", "text-[12px]", "transition-all");
+
+            botaoRemover.addEventListener('click', function () {
+                resetarImagemPreview(spanTextos);
+                criarInputDefault(true);
+                els.fotoInput.value = "";
+                botaoRemover.remove();
+            });
+
+            els.divButoes.appendChild(botaoRemover);
+        } else {
+            els.divButoes.querySelector('button')?.remove();
+        }
+    }
+
+    function resetarImagemPreview(spans) {
+        els.imgPreview.classList.add('hidden');
+        els.imgPreview.removeAttribute('src');
+        spans.forEach(el => el.classList.remove('hidden'));
+    }
+
+    function criarInputDefault(visivel) {
+        if (visivel) {
+            const inputPadrao = document.createElement('input');
+            inputPadrao.type = "hidden";
+            inputPadrao.id = "imagem-padrao";
+            inputPadrao.name = "imagem-padrao";
+            inputPadrao.value = "default.png";
+            els.divButoes.appendChild(inputPadrao);
+        } else {
+            els.divButoes.querySelector("#imagem-padrao")?.remove();
+        }
+    }
+}
+
+/* ============================================================
+   MÁSCARAS
+   ============================================================ */
 function aplicarMascaras() {
-    els.telefone.addEventListener("input", (e) => {
+    els.telefone?.addEventListener("input", (e) => {
         let value = e.target.value.replace(/\D/g, "").slice(0, 11);
         value = value.replace(/^(\d{2})(\d)/, "($1) $2").replace(/(\d{4,5})(\d{4})$/, "$1-$2");
         e.target.value = value;
     });
 
-    els.cpf.addEventListener("input", (e) => {
+    els.cpf?.addEventListener("input", (e) => {
         let value = e.target.value.replace(/\D/g, "").slice(0, 11);
         value = value.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
         e.target.value = value;
     });
 
-    els.cep.addEventListener("input", (e) => {
+    els.cep?.addEventListener("input", (e) => {
         let value = e.target.value.replace(/\D/g, "").slice(0, 8);
         value = value.replace(/^(\d{5})(\d)/, "$1-$2");
         e.target.value = value;
     });
 }
 
-function lerArquivoBase64(input) {
-    return new Promise((resolve) => {
-        if (!input || !input.files || !input.files[0]) return resolve(null);
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            resolve(e.target.result);
-        };
-        reader.readAsDataURL(input.files[0]);
-    });
-}
-
-/* ============================================================
-   FUNÇÕES DO MODAL DE RESUMO
-   ============================================================ */
-function salvarDados() {
-    // Preenche o modal com os dados dos inputs do formulário
-    els.rNome.textContent = els.nome.value || "—";
-    els.rCpf.textContent = els.cpf.value || "—";
-    els.rTelefone.textContent = els.telefone.value || "—";
-    els.rEmail.textContent = els.email.value || "—";
-    
-    // Concatena endereço de forma organizada
-    const numero = els.numero.value ? `, ${els.numero.value}` : "";
-    els.rLogradouro.textContent = els.logradouro.value ? `${els.logradouro.value}${numero}` : "—";
-    
-    const cep = els.cep.value ? ` - CEP: ${els.cep.value}` : "";
-    els.rBairroCep.textContent = els.bairro.value ? `${els.bairro.value}${cep}` : "—";
-    
-    const uf = els.uf.value ? `/${els.uf.value.toUpperCase()}` : "";
-    els.rCidadeUf.textContent = els.cidade.value ? `${els.cidade.value}${uf}` : "—";
-
-    abrirModalResumo();
-}
-
-// Expõe as funções globalmente para os botões do HTML (onclick)
-window.abrirModalResumo = function() {
-    els.modalOverlay.classList.remove("hidden");
-    els.modalResumo.classList.remove("hidden");
-};
-
-window.fecharModalResumo = function() {
-    els.modalOverlay.classList.add("hidden");
-    els.modalResumo.classList.add("hidden");
-};
-
-window.finalizarCadastro = function() {
-    // 1. Busca o formulário pelo ID correto
-    const formulario = document.getElementById("form-profissional");
-   
-    if (formulario) {
-        // Desativa o botão de clique para evitar duplo envio
-        const btnFinalizar = document.querySelector("#modal-resumo button[onclick='finalizarCadastro()']");
-        if (btnFinalizar) btnFinalizar.disabled = true;
-
-        // 2. Libera e dispara o envio tradicional do HTML
-        formulario.submit();
-    } else {
-        console.error("Formulário #form-profissional não foi encontrado no HTML.");
-    }
-};
-
-window.novoCadastro = function() {
-    fecharModalResumo();
-    document.getElementById("form-profissional").reset(); // Limpa os dados do formulário
-    
-    // Redefine a imagem de perfil visualmente e no estado
-    const labelFoto = els.fotoInput.closest('label');
-    labelFoto.style.backgroundImage = 'none';
-    labelFoto.querySelectorAll('span').forEach(span => span.style.opacity = '1');
-    state.fotoBase64 = null;
-
-    // Retorna para a Etapa 1
-    state.etapaAtual = 1; 
-    renderizarEtapa();
-};
-
+// Inicializa a aplicação
 init();

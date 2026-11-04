@@ -15,84 +15,7 @@
     class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen pb-[90px] antialiased selection:bg-brand-gold selection:text-white">
 
     <!-- HEADER -->
-    <header
-        class="sticky top-0 z-30 flex items-center justify-between px-5 py-3 bg-[#232220] border-b border-[#38362f]">
-
-        <!-- LOGO -->
-        {% include "componetizacao/logo/logo-top-horizontal.html" %}
-
-
-        <!-- ÁREA DO USUÁRIO -->
-        <div class="flex items-center justify-center">
-
-            <!-- BOTÃO DO USUÁRIO -->
-            <button id="btn-usuario" type="button"
-                class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden hover:bg-[#2c2b27] transition-all cursor-pointer">
-
-                <!-- FOTO DO USUÁRIO -->
-                {% if session.get('dados_cliente') and session.get('dados_cliente').get('foto_path') %}
-
-                <img src="{{ url_for('static', filename=session.get('dados_cliente')['foto_path']) }}" alt="Avatar"
-                    class="w-full h-full object-cover">
-
-                {% else %}
-
-                <span class="text-sm font-bold text-[#f1efe8]">
-                    {{ session.get('dados_cliente')['nome_completo'][0]|upper }}
-                </span>
-
-                {% endif %}
-
-            </button>
-
-            <!-- DROPDOWN DO USUÁRIO -->
-            <div id="dropdown-usuario" hidden
-                class="absolute right-0 top-12 w-56 bg-[#232220] border border-[#38362f] rounded-xl shadow-2xl overflow-hidden z-50">
-
-                <!-- DADOS DO USUÁRIO -->
-                <div class="px-4 py-3 border-b border-[#38362f]">
-
-                    <p class="text-sm font-medium text-[#f1efe8]">
-                        {% if session.get('dados_cliente') %}
-                        {{ session.get('dados_cliente')['nome_completo'] }}
-                        {% endif %}
-                    </p>
-
-                    <p class="text-xs text-[#888780] mt-1">
-                        Minha conta
-                    </p>
-
-                </div>
-
-                <!-- LISTAR SERVIÇOS -->
-                <button onclick="voltarParaAgendamento()" type="button"
-                    class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer">
-                    Exibir Cortes
-                </button>
-
-                <!-- MEUS AGENDAMENTOS -->
-                <button id="btn-toggle-historico" type="button"
-                    class="w-full text-left px-4 py-3 text-sm text-[#f1efe8] hover:bg-[#2c2b27] transition-colors cursor-pointer">
-                    <span id="texto-btn-historico">Meus Agendamentos</span>
-                </button>
-
-                <!-- SAIR -->
-                <a href="/cliente/logout"
-                    class="block px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors">
-                    Sair
-                </a>
-
-            </div>
-
-            <!-- SETA -->
-            <svg id="seta-usuario" class="w-4 h-4 text-[#888780] transition-transform" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-
-        </div>
-
-    </header>
+    {% include "componetizacao/Header/header-cliente.html" %}
 
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="max-w-[800px] mx-auto px-4 pt-4 pb-24">
@@ -160,29 +83,25 @@
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
 
                 {% for servico in servicos %}
-                <label class="cursor-pointer w-full group">
-                    <input type="checkbox" name="inputCorte" id="selecionar-servico" class="peer hidden" value="servico.id">
-                    <div
-                        class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col justify-between items-center gap-3 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
+                    <label class="cursor-pointer w-full group">
+                        <input type="checkbox" name="inputCorte" id="selecionar-servico" class="peer hidden" value="servico.id">
+                        <div class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col justify-between items-center gap-3 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
 
-                        <div
-                            class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
-                            <img  src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" />
-                            
+                            <div class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
+                                <img src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" class="w-full h-full object-cover">
+                                
+                            </div>
+
+                            <span class="font-semibold text-base sm:text-sm md:text-base lg:lg-text-base text-white text-center peer-checked:text-brand-gold line-clamp-2 leading-tight w-full min-h-[2.5rem] flex items-center justify-center">
+                            {{servico.descricao}}
+                            </span>
+
+                            <div class="flex justify-between items-center w-full text-sm sm:text-xs md:text-sm lg-text-base text-brand-muted pt-2 border-t border-brand-border/50 mt-auto">
+                                <span>{{servico.duracao}} min</span>
+                                <span class="font-semibold text-white">R$ {{"%.2f" | format (servico.valor) | replace(".", ",")}}</span>
+                            </div>
                         </div>
-
-                        <span
-                            class="font-semibold text-base sm:text-sm md:text-base lg:lg-text-base text-white text-center peer-checked:text-brand-gold line-clamp-2 leading-tight w-full min-h-[2.5rem] flex items-center justify-center">
-                           {{servico.descricao}}
-                        </span>
-
-                        <div
-                            class="flex justify-between items-center w-full text-sm sm:text-xs md:text-sm lg-text-base text-brand-muted pt-2 border-t border-brand-border/50 mt-auto">
-                            <span>{{servico.duracao}} min</span>
-                            <span class="font-semibold text-white">R$ {{"%.2f" | format (servico.valor) | replace(".", ",")}}</span>
-                        </div>
-                    </div>
-                </label>
+                    </label>
                 {%endfor %}
             </div>
 
