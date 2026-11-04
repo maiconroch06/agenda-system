@@ -13,7 +13,7 @@
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
-    <!-- Header (Exibe apenas para o mobile)-->
+    <!-- HEADER (Exibe apenas para o mobile)-->
     {% include "componetizacao/Header/header-gestor.html" %}
 
     <div class="flex flex-col min-h-screen">
@@ -26,7 +26,7 @@
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
-                <!-- ABA 1: INÍCIO (DASHBOARD OPERACIONAL E CARDS DO DIA) -->
+                <!-- ABA INICIO -->
                 <section class="aba-func block" id="aba-inicio">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
                         <div>
@@ -58,13 +58,23 @@
 
                     <!-- CARDS DE HOJE -->
                     <div class="mb-6">
+
                         <div class="flex justify-between items-center mb-3">
-                            <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">Agenda de Hoje —
-                                Todos os Barbeiros</h2>
-                            <span class="text-xs text-[#888780]" id="total-agendamentos-hoje">0 agendamentos</span>
+
+                            <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">
+                                Agenda de Hoje — Todos os Barbeiros
+                            </h2>
+
+                            <span class="text-xs text-[#888780]" id="total-agendamentos-hoje">
+                                0 agendamentos
+                            </span>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="lista-hoje-cards"></div>
+
+                        <!-- Listagem dos agendamentos de hoje -->
+                        <div class="flex flex-col gap-2" id="lista-hoje-cards"></div>
+
                     </div>
+
                 </section>
 
             </main>

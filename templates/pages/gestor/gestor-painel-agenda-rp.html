@@ -26,19 +26,37 @@
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
-                <!-- ABA 2: AGENDA COMPLETA -->
+                <!-- ABA AGENDA -->
                 <section id="aba-agenda">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
-                        <h1 class="text-lg lg:text-xl font-medium">Agenda Geral</h1>
-
-                        <div class="flex items-center gap-2">
-                            <label for="filtro-barbeiro-agenda" class="text-xs text-[#888780]">Barbeiro:</label>
-                            <select id="filtro-barbeiro-agenda"
-                                class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer"
-                                onchange="filtrarPorBarbeiro(this.value)">
-                                <option value="todos">Todos os Barbeiros</option>
-                            </select>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
+                        <div>
+                            <h1 class="text-lg lg:text-xl font-semibold">Agenda Geral</h1>
+                            <p class="text-xs text-[#888780]" id="data-atual-str"></p>
                         </div>
+
+                        <div class="flex flex-1 justify-end gap-2">
+                            
+                            <div class="flex items-center gap-2">
+                                <label for="filtro-barbeiro-agenda" class="text-xs text-[#888780]">Barbeiro:</label>
+                                <select id="filtro-barbeiro-agenda"
+                                    class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer"
+                                    onchange="filtrarPorBarbeiro(this.value)">
+                                    <option value="todos">Todos os Barbeiros</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Não tem JS -->
+                            <div class="flex items-center gap-2">
+                                <label for="filtro-status-agenda" class="text-xs text-[#888780]">Status:</label>
+                                <select id="filtro-status-agenda"
+                                    class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer"
+                                    onchange="filtrarPorStatus(this.value)">
+                                    <option value="todos">Todos os Status</option>
+                                </select>
+                            </div>
+
+                        </div>
+
                     </div>
 
                     <div class="flex gap-1.5 mb-4 flex-wrap">

@@ -18,6 +18,7 @@
         <!-- CONTAINER PRINCIPAL COM ESPAÇAMENTO PARA O BOTTOM-NAV -->
         <div class="flex flex-1 pb-20 lg:pb-0">
 
+            <!-- SIDEBAR DESKTOP -->
             {% include "componetizacao/SiderBar/sider-bar-barbeiro.html" %}
 
             <!-- CONTEÚDO PRINCIPAL ADAPTADO -->
@@ -25,8 +26,11 @@
 
                 <!-- ABA AGENDA -->
                 <section class="" id="aba-agenda">
-                    <div class="flex items-center justify-between mb-4 gap-3">
-                        <h1 class="text-lg lg:text-xl font-medium">Agenda</h1>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
+                        <div>
+                            <h1 class="text-lg lg:text-xl font-semibold">Agenda</h1>
+                            <p class="text-xs text-[#888780]" id="data-atual-str"></p>
+                        </div>
                     </div>
 
                     <div class="flex gap-1.5 mb-4 flex-wrap">

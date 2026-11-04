@@ -219,19 +219,22 @@ function badgeStatusHTML(status) {
     return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${classes[status] || ''}">${mapa[status]}</span>`;
 }
 
-function cardAgendamentoHTML(a) {
-    const concluidoClasse = a.status === "concluido" ? " opacity-65" : "";
+function cardAgendamentoHTML(item) {
+    const concluidoClasse = item.status === "concluido" ? " opacity-65" : "";
     return `
-        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${a.id}')">
-            <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${a.hora}</div>
+        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
+            <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${item.hora}</div>
+
             <div class="flex-1">
-                <div class="text-sm font-medium">${a.cliente}</div>
-                <div class="text-xs text-[#888780] mt-0.5">${a.servico}</div>
+                <div class="text-sm font-medium">${item.cliente}</div>
+                <div class="text-xs text-[#888780] mt-0.5">${item.servico}</div>
             </div>
+
             <div class="flex flex-col items-end gap-1 flex-shrink-0">
-                ${badgeStatusHTML(a.status)}
-                <div class="text-xs font-medium">${formatarMoeda(a.valor)}</div>
+                ${badgeStatusHTML(item.status)}
+                <div class="text-xs font-medium">Total: ${formatarMoeda(item.valor)}</div>
             </div>
+
         </div>
     `;
 }
@@ -243,6 +246,11 @@ function cardAgendamentoHTML(a) {
 function renderizarInicio() {
     if (els.inicioNome) els.inicioNome.textContent = funcionario.nome;
     const hoje = hojeISO();
+    
+    const dataFormatted = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
+    const elData = document.getElementById("data-atual-str");
+    if (elData) elData.textContent = dataFormatted.charAt(0).toUpperCase() + dataFormatted.slice(1);
+
     const doDia = agendamentos.filter(a => a.data === hoje).sort((a, b) => a.hora.localeCompare(b.hora));
 
     const concluidos = doDia.filter(a => a.status === "concluido");

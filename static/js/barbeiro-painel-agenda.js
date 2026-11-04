@@ -476,6 +476,12 @@ function sairDaConta() {
 function iniciar() {
     renderizarAgendaDia();
     if (els.bloqData) els.bloqData.value = hojeISO();
+
+    // Data debaixo do titulo
+    const dataFormatted = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
+    const elData = document.getElementById("data-atual-str");
+    if (elData) elData.textContent = dataFormatted.charAt(0).toUpperCase() + dataFormatted.slice(1);
+
 }
 
 iniciar();

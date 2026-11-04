@@ -32,27 +32,69 @@ Object.assign(els, {
 function cardAtendimentoHojeHTML(item) {
     const concluidoClasse = item.status === "concluido" ? " opacity-65" : "";
     return `
-        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 flex flex-col justify-between cursor-pointer hover:border-[#4a473f] transition-all hover:scale-[1.01] active:scale-[0.99]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
-            <div class="flex justify-between items-start mb-3">
-                <div>
-                    <span class="text-xs font-mono font-bold text-[#9fe1cb] bg-[#04342c] px-2 py-0.5 rounded-md border border-[#0f6e56]">${item.hora}</span>
-                    <span class="text-xs text-[#888780] ml-2">Barbeiro: <strong class="text-[#f1efe8]">${item.barbeiro || "N/A"}</strong></span>
+        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col w-full gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
+           
+            <div class="flex justify-between items-start w-full gap-3">
+                
+                <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${item.hora}</div>
+            
+                <div class="flex justify-start flex-1 gap-2.5">
+                    <div class="text-sm font-medium">${item.cliente}</div>
+                    <div class="text-xs text-[#888780] mt-0.5">${item.servico}</div>
                 </div>
-                ${badgeStatusHTML(item.status)}
+                
+                <div class="flex flex-col items-end flex-shrink-0">
+                    <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                        ${badgeStatusHTML(item.status)}
+                    </div>
+                </div>
+
             </div>
             
-            <div class="mb-3">
-                <h3 class="text-sm font-semibold text-[#f1efe8]">${item.cliente}</h3>
-                <p class="text-xs text-[#888780]">${item.servico}</p>
+            <div class="flex justify-between items-center border-t border-[#38362f] pt-1.5 mt-1 w-full">
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] uppercase tracking-wider text-[#888780] font-medium hidden sm:block">Total</span>
+                    <span class="text-[15px] sm:text-sm font-bold text-[#f1efe8] rounded-lg">
+                        ${formatarMoeda(item.valor)}
+                    </span>
+                </div>
+                <span class="text-[11px] text-[#888780] flex items-center gap-1 hover:text-[#f1efe8] transition-colors">Ver detalhes &rarr;</span>
             </div>
-
-            <div class="flex justify-between items-center border-t border-[#38362f] pt-2.5 mt-1">
-                <span class="text-xs font-semibold text-[#f1efe8]">${formatarMoeda(item.valor)}</span>
-                <span class="text-[11px] text-[#888780] flex items-center gap-1">Ver detalhes →</span>
-            </div>
+            
         </div>
     `;
 }
+
+/*
+<div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col w-full cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
+    
+    <!-- Parte de Cima: Informações Principais -->
+    <div class="flex justify-between items-start w-full gap-3">
+        <!-- Hora -->
+        <div class="min-w-[44px] text-left text-sm font-semibold leading-tight text-[#f1efe8]">
+            ${item.hora}
+        </div>
+        
+        <!-- Cliente e Serviço -->
+        <div class="flex flex-col flex-1">
+            <div class="text-sm font-medium text-[#f1efe8]">${item.cliente}</div>
+            <div class="text-xs text-[#888780] mt-0.5">${item.servico}</div>
+        </div>
+        
+        <!-- Status -->
+        <div class="flex flex-col items-end flex-shrink-0">
+            ${badgeStatusHTML(item.status)}
+        </div>
+    </div>
+    
+    <!-- Parte de Baixo: Valor e Detalhes -->
+    <div class="flex justify-between items-center border-t border-[#38362f] pt-2.5 mt-3 w-full">
+        <span class="text-sm font-semibold text-[#f1efe8]">${formatarMoeda(item.valor)}</span>
+        <span class="text-[11px] text-[#888780] flex items-center gap-1 hover:text-[#f1efe8] transition-colors">Ver detalhes &rarr;</span>
+    </div>
+
+</div>
+*/
 
 function carregarDashboardInicio() {
     const hoje = hojeISO();
