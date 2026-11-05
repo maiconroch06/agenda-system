@@ -16,7 +16,7 @@ class ControladorCliente():
             self.clienteService.realizarLoginService(email,senha)
             return redirect(url_for('cliente.clientAgendamentoServicos'))
        
-       except Exception as erro :
+       except Exception:
            return  redirect(url_for('cliente.clientLoginPage'))
               
     def cadastrarCliente(self, cliente:Cliente, fotoTemp):

@@ -20,8 +20,6 @@ class ClienteService(UsuarioService):
               flash(f"Erro o salvar o cliente {error}")
 
       def realizarLoginService(self, email, senha):
-          try:
-            
               if not email or not senha:
                 raise Exception("Por favor, preencha todos os campos!")
                           
@@ -33,9 +31,7 @@ class ClienteService(UsuarioService):
                   raise Exception()
                   
               session['dados_cliente'] =  cliente
-          except Exception as error:
-              flash(f"Erro ao consultar o cliente: {error}") 
-              return       
+                
 
      
 

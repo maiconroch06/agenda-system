@@ -3,6 +3,7 @@ from sqlalchemy import text
 from database import db
 from models import Cliente
 from datetime import datetime
+from flask import flash
 
 
 
@@ -86,7 +87,10 @@ class ClienteDAO:
             {"email": email}
         ).mappings().first()
          
-
+        if registro is None:
+            flash(f"Email não cadastrado. Verifique se digitou o email correto!")
+            raise Exception()
+        
         return dict(registro)
     
     def listar_todos(self):
