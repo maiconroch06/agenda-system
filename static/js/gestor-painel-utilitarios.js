@@ -154,7 +154,7 @@ function mostrarAviso(msg) {
 /* Cada aba agora é uma página própria (o sidebar foi componentizado).
    Ajuste as URLs abaixo para as rotas reais do seu backend. */
 const ROTAS_ABAS = {
-    inicio: "/gestor/painel/inicio",
+    inicio: "/gestor/painel/",
     agenda: "/gestor/painel/agenda",
     servicos: "/gestor/painel/servicos",
     clientes: "/gestor/painel/clientes",
