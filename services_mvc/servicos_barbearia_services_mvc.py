@@ -35,9 +35,8 @@ class ServicoBarbearia:
             
             #salvar a imagem na pasta
             #extensão | validar extensao | pegar o novo nome da imagem
-            extensao = ValidadorDeImagens.extensao_foto_servico(foto_servico)
-            ValidadorDeImagens.imgem_extensao_valida(extensao)
-            servico.foto_nome = ValidadorDeImagens.salvarImagem(foto_servico, EnumNomesPastaImagem.IMAGEMS_SERVICOS, extensao)
+            
+            servico.foto_nome = ValidadorDeImagens.salvarImagem(foto_servico, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
             
             self.servico_repositorio.cadastrar_servico(servico)
             

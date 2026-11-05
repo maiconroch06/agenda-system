@@ -8,14 +8,14 @@ from execoes import ImagemErrorExcecao
 class ValidadorDeImagens:
 
     # Função verifica a extensão do arquivo
-    @staticmethod
-    def imgem_extensao_valida(extensao:str):
+    @classmethod
+    def imgem_extensao_valida(cls, extensao:str):
         # valida a imagem
         if (extensao != '.png' and extensao!='.jpg' and extensao!='.jpeg' and extensao != EnumNomesPastaImagem.IMAGEM_PADRAO.value):
             raise ImagemErrorExcecao("O sistema só aceita imagens em formato png ou jpg")
     
-    @staticmethod
-    def extensao_foto_servico(imagem):
+    @classmethod
+    def extensao_foto_servico(cls, imagem):
                                            
         if imagem and imagem.filename:
             # pega a extensao
@@ -28,14 +28,17 @@ class ValidadorDeImagens:
     
     
     # Função para salvar a imagem
-    @staticmethod
-    def salvarImagem(imagem, nomePasta, extensao_foto_nome):
+    @classmethod
+    def salvarImagem(cls, imagem, nomePasta):
         # O nome pode ser criptografado, mas deixei assim para acompanhar as imagems enviadas
         # nesse caso ele esta pegando o tempo em nanoSegundos;
+        
+        extensao_ou_default_imagem = cls.extensao_foto_servico(imagem)
+        cls.imgem_extensao_valida(extensao_ou_default_imagem) 
+        
         try:
-           
-            if extensao_foto_nome != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
-                foto_nome = f"servicos_{int(time.time_ns())}{extensao_foto_nome}"        
+            if extensao_ou_default_imagem != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
+                foto_nome = f"servicos_{int(time.time_ns())}{extensao_ou_default_imagem}"        
                 # crio o caminho da pasta
                 pasta = os.path.join(
                     current_app.root_path,
@@ -53,15 +56,15 @@ class ValidadorDeImagens:
                 
                 return foto_nome
 
-            return extensao_foto_nome
+            return extensao_ou_default_imagem
         
         except (OSError, FileNotFoundError, IsADirectoryError):
             raise Exception("Error ao tentar salvar a imagem no servidor")
 
 
     # Função para editar uma imagem
-    @staticmethod
-    def editarImagem(self, nome_imagem_anterior: str, nova_imagem, nome_pasta:EnumNomesPastaImagem, imagem_padrao): 
+    @classmethod
+    def editarImagem(cls, nome_imagem_anterior: str, nova_imagem, nome_pasta:EnumNomesPastaImagem, imagem_padrao): 
         # Imagem nova
         if nova_imagem and nova_imagem.filename:
             imagemTemp = secure_filename(nova_imagem.filename)
@@ -89,8 +92,8 @@ class ValidadorDeImagens:
             return EnumNomesPastaImagem.IMAGEM_PADRAO.value
 
     # Função remover imagem
-    @staticmethod
-    def removerImagem(self, nome_da_imagem, nome_pasta):
+    @classmethod
+    def removerImagem(cls, nome_da_imagem, nome_pasta):
         try:
             if nome_da_imagem!=EnumNomesPastaImagem.IMAGEM_PADRAO.value:
                 caminho_imagem = os.path.join(
