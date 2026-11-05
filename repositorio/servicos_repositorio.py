@@ -2,7 +2,7 @@
 from DAO.servicos_dao import ServicoDAO
 
 
-class ServicoRepository:
+class ServicoRepositorio:
 
     @staticmethod
     def salvar(servico):

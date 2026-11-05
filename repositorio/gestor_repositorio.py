@@ -2,7 +2,7 @@
 from DAO.gestor_dao import GestorDAO
 
 
-class GestorRepository:
+class GestorRepositorio:
 
     @staticmethod
     def salvar(gestor):

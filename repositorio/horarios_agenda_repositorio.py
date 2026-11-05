@@ -1,7 +1,7 @@
 from DAO.horarios_agenda_dao import HorariosAgendaDAO
 
 
-class HorariosAgendaRepository:
+class HorariosAgendaRepositorio:
 
     @staticmethod
     def salvar(horario):

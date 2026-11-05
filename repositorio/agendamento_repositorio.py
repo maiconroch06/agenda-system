@@ -2,7 +2,7 @@
 from DAO.agendamento_dao import AgendamentoDAO
 
 
-class AgendamentoRepository:
+class AgendamentoRepositorio:
 
     @staticmethod
     def salvar(agendamento):

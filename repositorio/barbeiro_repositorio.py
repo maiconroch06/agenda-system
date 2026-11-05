@@ -2,7 +2,7 @@
 from DAO.barbeiro_dao import BarbeiroDAO
 
 
-class BarbeiroRepository:
+class BarbeiroRepositorio:
 
     @staticmethod
     def salvar(barbeiro):

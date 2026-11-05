@@ -2,7 +2,7 @@
 from DAO.usuario_dao import UsuarioDAO
 
 
-class UsuarioRepository:
+class UsuarioRepositorio:
 
     @staticmethod
     def salvar(usuario):

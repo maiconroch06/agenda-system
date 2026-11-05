@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
-from controllers.controlador_cliente import ControladorCliente
-from models import Cliente, Servico
+from controladores import ControladorCliente
+from models import Cliente
 from datetime import datetime, timezone
 from enums import EnumStatusMensagens
 
@@ -15,15 +15,18 @@ def clientSource():
  
 @cliente.route('/login', methods=["GET"])
 def clientLoginPage():
-    return render_template('pages/cliente/cliente-login.html')
+    return render_template('pages/cliente/cliente-login.html',mensagens_status=EnumStatusMensagens)
 
 @cliente.route('/login', methods=["POST"])
 def clientLogin():   
     # Verificando o tipo de request POST
    if request.method == "POST":
         email_digitado = request.form.get('email')
-        senha_digitada =request.form.get('senha')
-        return ControladorCliente.login(email_digitado,senha_digitada)
+        senha_digitada = request.form.get('senha')
+        
+        controladorCliente = ControladorCliente()
+
+        return controladorCliente.login(email_digitado,senha_digitada)
         
 
 @cliente.route('/logout', methods=["GET","POSt"])
@@ -43,7 +46,7 @@ def clientRegister():
         
     #remove a pontuação do telefone      
     telefone_temp = ''.join(filter(str.isdigit,request.form.get('telefone')))
-    fotoTemp = request.files.get('foto') 
+    fotoTemp = request.files.get('foto' , None) 
        
     # Instancia o objeto Usuario com os dados do formulário
     cliente = Cliente(
@@ -52,22 +55,21 @@ def clientRegister():
             cpf=None,
             email=request.form.get('email'),
             senha= request.form.get('senha'),
-            foto_nome= fotoTemp.filename if request.files.get('foto') else None,
+            foto_nome= None,
             endereco = None,
             status_usuario=1,
             data_cadastro=datetime.now(timezone.utc),
             data_atualizacao=datetime.now(timezone.utc)
     )
-
-    return ControladorCliente.cadastrarCliente(cliente, fotoTemp)
+    
+    controladorCliente = ControladorCliente()
+    
+    return controladorCliente.cadastrarCliente(cliente, fotoTemp)
             
    
 @cliente.route('/agendamento/servicos', methods=['GET','POST'])
 def clientAgendamentoServicos():
-   
-   servicos = Servicos().consultarTodosOsServicos()
-
-   return render_template('pages/cliente/cliente-agendamento-rp.html', servicos=servicos)
+    return render_template('pages/cliente/cliente-agendamento-rp.html')
 
 @cliente.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():

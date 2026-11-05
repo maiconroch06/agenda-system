@@ -2,7 +2,7 @@
 from DAO.endereco_dao import EnderecoDAO
 
 
-class EnderecoRepository:
+class EnderecoRepositorio:
 
     @staticmethod
     def salvar(endereco):

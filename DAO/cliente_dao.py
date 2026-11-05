@@ -5,10 +5,13 @@ from models import Cliente
 from datetime import datetime
 
 
+
+
+
 class ClienteDAO:
 
-    @staticmethod
-    def salvar(cliente: Cliente, id:int):
+    
+    def salvar(self, id:int, dataUltimoServico:datetime | None):
         
         sql_cliente = text("""
             INSERT INTO clientes (
@@ -22,16 +25,16 @@ class ClienteDAO:
 
         parametros_cliente = {
             "id": id,
-            "data_ultimo_servico": cliente.data_ultimo_servico
+            "data_ultimo_servico": dataUltimoServico
         }
 
-        db.session.execute(sql_cliente, parametros_cliente)
-        db.session.flush()
+        resposta_id_cliente = db.session.execute(sql_cliente, parametros_cliente)
+        db.session.commit()
 
-        return cliente.id
+        return resposta_id_cliente.lastrowid
 
-    @staticmethod
-    def consultar_cliente(id_cliente: int):
+    
+    def consultarClienteId(self, id_cliente: int):
         sql = text("""
             SELECT
                 u.id,
@@ -56,13 +59,37 @@ class ClienteDAO:
             {"id_cliente": id_cliente}
         ).mappings().first()
 
-        if registro is None:
-            return None
+        return dict(registro)
 
-        return ClienteDAO._mapear(registro)
+    def loginClienteEmailSenha(self, email, senha):
+        sql = text("""
+            SELECT
+                u.id,
+                u.nome_completo,
+                u.telefone,
+                u.cpf,
+                u.email,
+                u.senha,
+                u.foto_nome,
+                u.status_usuario,
+                u.data_cadastro,
+                u.data_atualizacao,
+                u.fk_id_endereco,
+                c.data_ultimo_servico
+            FROM usuarios u
+            INNER JOIN clientes c ON c.id = u.id
+            WHERE u.email = :email
+        """)
 
-    @staticmethod
-    def listar_todos():
+        registro = db.session.execute(
+            sql,
+            {"email": email}
+        ).mappings().first()
+         
+
+        return dict(registro)
+    
+    def listar_todos(self):
         sql = text("""
             SELECT
                 u.id,
@@ -89,8 +116,8 @@ class ClienteDAO:
             for registro in registros
         ]
 
-    @staticmethod
-    def atualizar(cliente: Cliente):
+   
+    def atualizar(self, cliente: Cliente):
         sql_usuario = text("""
             UPDATE usuarios
             SET
@@ -141,8 +168,8 @@ class ClienteDAO:
 
         return resultado_cliente.rowcount > 0
 
-    @staticmethod
-    def excluir(id_cliente: int):
+    
+    def excluir(self, id_cliente: int):
         sql = text("""
             DELETE FROM clientes
             WHERE id = :id_cliente
@@ -170,8 +197,9 @@ class ClienteDAO:
 
         return True
 
-    @staticmethod
+   
     def atualizar_data_ultimo_servico(
+        self,
         id_cliente: int,
         data: datetime
     ):
@@ -190,19 +218,4 @@ class ClienteDAO:
 
         return resultado.rowcount > 0
 
-    @staticmethod
-    def _mapear(registro):
-        return Cliente(
-            id=registro["id"],
-            nome_completo=registro["nome_completo"],
-            telefone=registro["telefone"],
-            cpf=registro["cpf"],
-            email=registro["email"],
-            senha=registro["senha"],
-            foto_nome=registro["foto_nome"],
-            status_usuario=bool(registro["status_usuario"]),
-            data_cadastro=registro["data_cadastro"],
-            data_atualizacao=registro["data_atualizacao"],
-            fk_id_endereco=registro["fk_id_endereco"],
-            data_ultimo_servico=registro["data_ultimo_servico"]
-        )
+

@@ -94,8 +94,7 @@ function validarFieldNull(name, phone,email,password,password_confirm){
     const error = [];
     
     if (name.value === '' || phone.value=== '' || email.value==='' || password.value === '' || password_confirm.value===''){
-        error.push('ATENÇÃO, verifique se todos os campos estão preenchidos');
-    
+      error.push('ATENÇÃO, verifique se todos os campos estão preenchidos');
     }
 
     return error;

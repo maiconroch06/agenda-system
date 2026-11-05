@@ -1,0 +1,15 @@
+from .cliente_repositorio import ClienteRepositorio
+from .gestor_repositorio import GestorRepositorio
+from .usuario_repositorio import UsuarioRepositorio
+from .barbeiro_repositorio import BarbeiroRepositorio
+from .servicos_repositorio import ServicoRepositorio
+from .agenda_repositorio import AgendaRepositorio
+from .agendamento_repositorio import AgendamentoRepositorio
+from .barbearia_repositorio import BarbeariaRepositorio
+from .barbeiro_has_servicos_repositorio import BarbeiroHasServicosRepositorio
+from .endereco_repositorio import EnderecoRepositorio
+from .horarios_agenda_repositorio import HorariosAgendaRepositorio
+from .repositorio_address import get_all_states
+
+
+

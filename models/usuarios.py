@@ -45,5 +45,9 @@ class Usuario:
     def validarSenha(self):
         return bool(self.senha and self.senha.strip())
 
+    def nomeVazioUsuario(self):
+        if not self.nome_completo or self.nome_completo is None:
+            raise ValueError("O nome do usuário é obrigatório.")
+
     def __str__(self):
         return f"Usuario(id={self.id}, nome={self.nome_completo})"

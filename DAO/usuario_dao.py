@@ -36,8 +36,8 @@ class UsuarioDAO:
             )
         """)
 
-        db.session.execute(sql, {
-            "id": usuario.id,
+        resposta_id_usuario = db.session.execute(sql, {
+            "id": None,
             "nome_completo": usuario.nome_completo,
             "telefone": usuario.telefone,
             "cpf": usuario.cpf,
@@ -47,12 +47,13 @@ class UsuarioDAO:
             "status_usuario": usuario.status_usuario,
             "data_cadastro": usuario.data_cadastro,
             "data_atualizacao": usuario.data_atualizacao,
-            "fk_id_endereco": usuario.fk_id_endereco
+            "fk_id_endereco": usuario.endereco.id if usuario.endereco is not None else None
         })
 
-        db.session.flush()
-
-        return usuario.id
+        db.session.commit()
+        
+        #retorna o ultimo id inserido no banco;
+        return resposta_id_usuario.lastrowid 
 
     @staticmethod
     def buscar_por_id(id_usuario: int):

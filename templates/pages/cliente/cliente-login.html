@@ -43,13 +43,9 @@
                 <form id="form-login" action="/cliente/login" method="post" novalidate
                     class="flex flex-col gap-4 md:gap-5 shrink-0">
 
-                    <!-- Mensagem de erros -->
-                    {% if session.get('erro') %}
-                    <div
-                        class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
-                        {{ session.pop('erro')|replace('\n', '<br>')|safe }}
-                    </div>
-                    {% endif %}
+                    <!-- Mensagem de Erro -->
+                    {% set mensagens =  mensagens_status %}
+                    {% include "componetizacao/mensagens/mensagens.html" %}
 
                     <div id='div-validation-message'
                         class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide hidden ">

@@ -1,9 +1,9 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
-from controllers.autenticador_gestor_controller import AutenticadorGestor
+from controladores.autenticador_gestor_controller import AutenticadorGestor
 from models.cliente import Cliente
 from models.servicos import Servico
 from models.barbeiros import Barbeiro
-from  controllers import ControladorBarbeiro
+from  controladores import ControladorBarbeiro
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
 

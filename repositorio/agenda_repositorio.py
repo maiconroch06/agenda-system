@@ -2,7 +2,7 @@
 from DAO.agenda_dao import AgendaDAO
 
 
-class AgendaRepository:
+class AgendaRepositorio:
 
     @staticmethod
     def salvar(agenda):

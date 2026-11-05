@@ -40,3 +40,5 @@ class Cliente(Usuario):
 
     def atualizarDataUltimoServico(self, data: datetime):
         self.data_ultimo_servico = data
+
+    
