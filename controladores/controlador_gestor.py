@@ -8,15 +8,14 @@ from services_mvc import GestorServiceMVC, ServicoBarbearia
 from execoes import ImagemErrorExcecao 
 
 class ControladorGestor():
+    __gestor_service_mvc = GestorServiceMVC()
+    __servicos_barbearia_service_mvc = ServicoBarbearia()
     
-    def __init__(self):
-        self.gestor_service_mvc = GestorServiceMVC()
-        self.servicos_barbearia_service_mvc = ServicoBarbearia()
-    
-    def login(self, email:str, senha:str):
+    @classmethod
+    def login(cls, email:str, senha:str):
         
             try: 
-                self.gestor_service_mvc.gestorRealizarLoginService(email,senha)   
+                cls.__gestor_service_mvc.gestorRealizarLoginService(email,senha)   
                 return redirect(url_for('gestor.gestorPainel'))
             
             except Exception as error:
@@ -30,10 +29,11 @@ class ControladorGestor():
             return redirect(url_for('gestor.gestorBarbeiroCadastro'))
         return "<h1>Deu Certo</h1>"
 
-    def cadastrarServico(self, foto, novo_descricao: str, novo_valor: str, novo_duracao:str ):
+    @classmethod
+    def cadastrarServico(cls, foto, novo_descricao: str, novo_valor: str, novo_duracao:str ):
         
         try:
-            self.servicos_barbearia_service_mvc.cadastrar_servico_barbearia(foto, novo_descricao, novo_valor, novo_duracao)
+            cls.__servicos_barbearia_service_mvc.cadastrar_servico_barbearia(foto, novo_descricao, novo_valor, novo_duracao)
             return redirect(url_for('gestor.gestorAbaServicos'))
         
         except ImagemErrorExcecao as erros:
@@ -43,94 +43,35 @@ class ControladorGestor():
         except Exception as erros:
             flash(f"{erros}", EnumStatusMensagens.ERRO.value)
             return redirect(url_for('gestor.gestorServicoCadastrar'))
-        
-        
-        
              
-    def deletarServico(id_servico):
+    @classmethod
+    def deletarServico(cls, id_servico):
         try:
-            servicos = Servicos()
-           
-            resultado = servicos.deletarServico(id_servico)
-
-            if resultado:
-                flash("Serviço de código ["+ str(id_servico) + "] deletado com sucesso!", EnumStatusMensagens.SUCESSO.value)
-            
-            db.session.commit()
-
+            cls.__servicos_barbearia_service_mvc.excluir_servico_barbearia(id_servico)   
         except Exception as error:
-            db.session.rollback()
-            print(f"{error}")
-            flash("Não foi possivel deletar o serviço, consulte o suporte!", EnumStatusMensagens.ERRO.value)
+            flash(f"{error}")
+            
+        return redirect(url_for('gestor.gestorAbaServicos'))  
         
-        return redirect(url_for('gestor.gestorAbaServicos'))
-  
-    def editarServico(id: str, novo_foto_nome:str, nova_descricao: str, novo_valor: Decimal, nova_duracao:str, ativo:str):
-
-        # Validação inicial simples
-        rota_erro = 'gestor.gestorServicoEditarPagina'
+        
+    @classmethod
+    def editarServico(cls, id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo):
         
         try:
-           
-            id_servico = int(id)
-            status_ativo = int(ativo)
-
-            if not nova_descricao.strip() or  novo_valor <= Decimal('0') or not nova_duracao.strip() or id_servico < 1:
-                flash("Campos vazios! Verifique se os campos estão vazios!", EnumStatusMensagens.AVISO.value)
-                return  redirect(url_for('gestor.gestorServicoCadastrar'))
-          
-            servico = Servicos().consultarIdServicoValido(id_servico)
-
-
-            if servico is None:
-                flash("Aviso: edição não efetuada, servico inexistente!", EnumStatusMensagens.AVISO.value)
-                return redirect(url_for("gestor.gestorAbaServicos"))
-                        
-            duracao = int(nova_duracao)
-          
-            if (duracao < 0):
-                flash("A duração devem ser maior que zero!", EnumStatusMensagens.AVISO.value)
-                return  redirect(url_for(rota_erro))
-
-            # atualizando os dados na sessão do Flask
-            servicos = Servicos()
+         
+            cls.__servicos_barbearia_service_mvc.editar_servico_barbearia(id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo)
             
-            servicos.id = id_servico
-            servicos.descricao = nova_descricao
-            servicos.valor = novo_valor
-            servicos.duracao = duracao
-            servicos.foto_nome = novo_foto_nome
-            servicos.ativo = status_ativo         
-            servicos.data_atualizacao = servicos.dataFormatada()
-                        
-            resultado_servico = servicos.atualizarServico()
-    
-            if resultado_servico.rowcount == 0:
-                flash( 'Erro ao criar o serviço',EnumStatusMensagens.ERRO.value)
-                return redirect(url_for(rota_erro,id_servico=id_servico))
+        except Exception as erros:
+            flash(f"{erros}")
+            
+        return redirect(url_for("gestor.gestorAbaServicos")) 
+         
+          
                 
-            db.session.commit()
 
-            flash( 'Servico atualizado com sucesso!',EnumStatusMensagens.SUCESSO.value)
-            return redirect(url_for('gestor.gestorAbaServicos'))
-           
-        except IntegrityError as i:
-            db.session.rollback()
-            print(f"{i}")
-            flash( "Erro ao cadastrar o serviço!" )
-            return redirect(url_for(rota_erro,id_servico=id_servico))
         
-        except (ValueError, TypeError) as error:
-            print(f" error de tipo {error}")
-            flash("Os campos Preço e duração só aceitam números!" )
-            return redirect(url_for(rota_erro,id_servico=id_servico))
             
-        except Exception as erro:
-            print(f"{erro}")
-            db.session.rollback()
-            flash("Confira se digitou o campo ")
-            return redirect(url_for(rota_erro,id_servico=id_servico))
-            
-    def consultar_servicos(self):
-        return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = self.servicos_barbearia_service_mvc.consultar_todos_servicos(), mensagens_status=EnumStatusMensagens)
+    @classmethod
+    def consultar_servicos(cls):
+        return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = cls.__servicos_barbearia_service_mvc.consultar_todos_servicos(), mensagens_status=EnumStatusMensagens)
              

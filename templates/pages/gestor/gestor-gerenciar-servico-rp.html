@@ -51,7 +51,7 @@
                 {% set valor = servico['valor'] %}
                 {% set duracao = servico['duracao'] %}
                 {% set foto_nome = servico['foto_nome'] %}
-                {% set ativo = servico['ativo'] %}
+                {% set ativo = servico['status_servico'] %}
  
 
                 <input class="hidden w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-brand-gold-hover focus:ring-2 focus:ring-brand-gold"
@@ -75,7 +75,7 @@
                         class="relative w-32 h-32 rounded-2xl border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-brand-gold-hover overflow-hidden group">
                         <img id="img_srv-preview"
                             class=" {{ 'hidden'  if not servico else ''}} absolute inset-0 w-full h-full object-contain"
-                            src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome)) if servico else ''}}"
+                            src="{{ url_for('static', filename='assets/dados/servicos-imagens/{}'.format(servico.foto_nome)) if servico else ''}}"
                             alt="Pré-visualização da imagem">
 
                         <span class="text-2xl text-[#888780] group-hover:text-brand-gold leading-none mb-1">
@@ -135,11 +135,11 @@
 
                             <select id="cars" name="srv-status" class="text-[12px] text-amber">
                                 
-                                <option value="1" class="text-[12px] text-gray-700" {{ 'selected' if ativo==1 else '' }}>
+                                <option value="1" class="text-[12px] text-gray-700" {{ 'selected' if ativo == 1 else '' }}>
                                     Ativado
                                 </option>
 
-                                <option value="0" class="text-[12px] text-gray-700" {{ 'selected' if ativo==0 else '' }}>
+                                <option value="0" class="text-[12px] text-gray-700" {{ 'selected' if ativo == 0 else '' }}>
                                     Desativado
                                 </option>
                                 

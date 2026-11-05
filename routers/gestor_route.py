@@ -31,9 +31,7 @@ def gestorLogin():
     email_digitado = request.form.get('manager-email-2')
     senha_digitada = request.form.get('manager-password')
     
-    contolador_gestor = ControladorGestor()
-    
-    return contolador_gestor.login(email_digitado,senha_digitada)
+    return ControladorGestor.login(email_digitado,senha_digitada)
 
 
 # Logout Gestor - Encerramento da sessão do Gestor
@@ -57,10 +55,8 @@ def gestorAbaAgenda():
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados
 @gestor.route('/painel/servicos')
-def gestorAbaServicos(): 
-    controlador_gestor = ControladorGestor()
-    
-    return controlador_gestor.consultar_servicos()
+def gestorAbaServicos():     
+    return ControladorGestor.consultar_servicos()
 
 # SERVIÇOS - pagina para cadastrar o Serviço
 @gestor.route('/painel/servicos/cadastrar', methods=['GET'])
@@ -76,38 +72,29 @@ def gestorServicoCadastrar():
     descricao_servico = request.form.get('srv-nome').strip()
     valor = request.form.get('srv-preco').strip()
     duracao = request.form.get('srv-duracao').strip()
-    
-    controlador_gestor = ControladorGestor() 
-     
-    return controlador_gestor.cadastrarServico(imagem, descricao_servico, valor, duracao)
+         
+    return ControladorGestor.cadastrarServico(imagem, descricao_servico, valor, duracao)
 
 # SERVIÇOS - REMOVER
 @gestor.route('/painel/servicos/deletar', methods=['POST'])
-def gestorServicoDeletar(): 
-    id_servico = request.form.get('srv-id-deletar')
-    
-    servico = Servicos().consultarIdServico(id_servico)
-
-    if servico is None:
-        flash("Aviso: Serviço não deletado, serviço inexistente ", EnumStatusMensagens.AVISO.value)
-        return redirect(url_for("gestor.gestorAbaServicos"))
-
-    controladorDeImagens = ValidadorDeImagens()
-    controladorDeImagens.removerImagem(servico["foto_nome"], EnumNomesPastaImagem.IMAGEMS_SERVICOS)
-    
+def gestor_excluir_servico(): 
+    id_servico = request.form.get('srv-id-deletar')   
     return ControladorGestor.deletarServico(id_servico)
 
 # SERVIÇOS - Editar servico
-@gestor.route('/painel/servicos/editar/<int:id_servico>', methods=['GET'])
-def gestorServicoEditarPagina(id_servico:int):
-
-    servico = Servicos().consultarIdServico(id_servico)
-            
-    if servico is None:
-        flash("Edição não efetuado, serviço inexistente", EnumStatusMensagens.AVISO.value)
-        return redirect(url_for("gestor.gestorAbaServicos"))
+@gestor.route('/painel/servicos/editar/<int:id_servico>/<string:nome_produto>/<int:duracao>/<float:valor>/<string:foto_nome>/<int:ativo>', methods=['GET'])
+def gestorServicoEditarPagina(id_servico:int, nome_produto, duracao, valor, foto_nome, ativo):
+    
+    servico = Servico()
+    servico.id=id_servico
+    servico.descricao=nome_produto
+    servico.duracao=duracao
+    servico.valor= Decimal(valor)
+    servico.foto_nome=foto_nome
+    servico.status_servico = ativo
     
     return render_template('pages/gestor/gestor-gerenciar-servico-rp.html', servico = servico, mensagens_status=EnumStatusMensagens)
+    
 
 # SERVIÇOS - Salvar edição do serviço no banco de dados
 @gestor.route('/painel/servicos/editar', methods=['POST'])
@@ -116,22 +103,14 @@ def gestorServicoEditar():
     imagem_form = request.files.get('srv-imagem')
     img_padrao = request.form.get('imagem-padrao', None)
     imagem_anterior = request.form.get('srv-foto_nome_anterior')
-
-    enviarImagem = ValidadorDeImagens()    
-    foto_nome = enviarImagem.editarImagem(imagem_anterior, imagem_form, EnumNomesPastaImagem.IMAGEMS_SERVICOS,img_padrao)
-    
-    if foto_nome is None:
-        flash("Atenção: a imagem não é suportada pelo sistema.", EnumStatusMensagens.AVISO.value)
-        return redirect(url_for('gestor.gestorServicoEditarPagina'))
-     
+  
     descricao_servico = request.form.get('srv-nome')
-    valor = Decimal(request.form.get('srv-preco').strip())
+    valor = request.form.get('srv-preco').strip()
     duracao = request.form.get('srv-duracao').strip()
     ativo = request.form.get('srv-status', type=int)
     id = request.form.get('srv-id')
-
-
-    return ControladorGestor.editarServico(id, foto_nome, descricao_servico, valor, duracao, ativo)
+  
+    return ControladorGestor.editarServico(id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo)
 
 
 ##################################################################################

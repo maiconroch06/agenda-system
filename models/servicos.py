@@ -5,14 +5,14 @@ class Servico:
 
     def __init__(
         self,
-        id: int,
-        descricao: str,
-        valor: Decimal,
-        duracao: int,
-        foto_nome: str,
-        status_servico: bool,
-        data_cadastro: datetime,
-        data_atualizacao: datetime
+        id: int | None = None,
+        descricao: str | None = None,
+        valor: Decimal | None = None,
+        duracao: int | None = None,
+        foto_nome: str | None = None,
+        status_servico: bool | None = None,
+        data_cadastro: datetime | None = None,
+        data_atualizacao: datetime | None = None
     ):
         self.id = id
         self.descricao = descricao

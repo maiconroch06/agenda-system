@@ -47,9 +47,36 @@ class ServicoBarbearia:
             raise Exception("Campos duração e valor só aceitam números.")
         
         
+    def editar_servico_barbearia(self, id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo):
+        
+        try:
+            id_servico = int(id)
+            status_ativo = int(ativo)
+            
+            servico = Servico(
+                id=id_servico,
+                descricao=descricao_servico,
+                valor=Decimal(valor),
+                duracao=int(duracao),
+                data_atualizacao=datetime.now(timezone.utc),
+                status_servico=status_ativo  
+            )
+            
+            servico.foto_nome = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao)
+            
+            if not self.servico_repositorio.atualizar(servico):
+                raise Exception("Error ao tentar atualizar o serviço, tente novamente!")
+             
+        except (IntegrityError, ValueError, TypeError, ArithmeticError) :
+            raise Exception("Os campos Preço e duração só aceitam números!")
         
         
+    def excluir_servico_barbearia(self, id_servico):
+        if self.servico_repositorio.excluir(id_servico):
+            return
         
+        raise Exception("O serviço não foi excluido.")
+           
         
         
         

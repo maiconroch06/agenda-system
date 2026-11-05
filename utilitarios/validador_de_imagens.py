@@ -70,14 +70,13 @@ class ValidadorDeImagens:
             imagemTemp = secure_filename(nova_imagem.filename)
             extensao = os.path.splitext(imagemTemp)[1]
                 
-            if self.imgemGExtensaoValida(extensao) is None:
-                return None 
-
+            cls.imgem_extensao_valida(extensao) 
+               
             #excluir a imagem anterior, desde que ela não seja a default
             if nome_imagem_anterior != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
-                self.removerImagem(nome_imagem_anterior, nome_pasta)
+                cls.removerImagem(nome_imagem_anterior, nome_pasta)
 
-            return self.salvarImagem(nova_imagem, nome_pasta, extensao)
+            return cls.salvarImagem(nova_imagem, nome_pasta)
 
         # manter a mesma imagem
         elif not nova_imagem and not imagem_padrao: 
@@ -87,7 +86,7 @@ class ValidadorDeImagens:
         else:
             #preciso remover a imagem associada caso exista
             if nome_imagem_anterior != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
-                self.removerImagem(nome_imagem_anterior, nome_pasta)
+                cls.removerImagem(nome_imagem_anterior, nome_pasta)
 
             return EnumNomesPastaImagem.IMAGEM_PADRAO.value
 

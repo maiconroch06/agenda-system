@@ -14,7 +14,6 @@ form_remover_servico.forEach(
     formulario.addEventListener('submit', (event) => {
 
         formSelecionado = formulario;
-
         event.preventDefault();
         modal.showModal();
     });
