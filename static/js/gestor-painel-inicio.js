@@ -98,9 +98,6 @@ function cardAtendimentoHojeHTML(item) {
 
 function carregarDashboardInicio() {
     const hoje = hojeISO();
-    const dataFormatted = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
-    const elData = document.getElementById("data-atual-str");
-    if (elData) elData.textContent = dataFormatted.charAt(0).toUpperCase() + dataFormatted.slice(1);
 
     const doDia = agendamentos.filter(a => a.data === hoje).sort((a, b) => a.hora.localeCompare(b.hora));
 
@@ -190,6 +187,9 @@ function iniciar() {
     carregarDashboardInicio();
     renderizarFinanceiro();
 
+    // Utilitario
+    carregarData();
+    
     if (els.bloqData) els.bloqData.value = hojeISO();
 }
 

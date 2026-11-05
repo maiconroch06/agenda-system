@@ -14,7 +14,7 @@
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
     <!-- HEADER (Exibe apenas para o mobile)-->
-    {% include "componetizacao/Header/header-gestor.html" %}
+    {% include "componetizacao/Header/header-painel.html" %}
 
     <div class="flex flex-col min-h-screen">
 
@@ -31,7 +31,7 @@
                     <div class="hidden lg:flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
                         <div>
                             <h1 class="text-xl font-semibold">Resumo de Hoje</h1>
-                            <p class="text-xs text-[#888780] data-atual-str"></p>
+                            <p class="text-xs text-[#888780]" id="data-atual-str"></p>
                         </div>
                     </div>
 

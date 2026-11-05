@@ -87,6 +87,10 @@ function filtrarClientes() {
 
 function iniciar() {
     renderizarClientes();
+
+    // Utilitario
+    carregarData();
+    
 }
 
 iniciar();

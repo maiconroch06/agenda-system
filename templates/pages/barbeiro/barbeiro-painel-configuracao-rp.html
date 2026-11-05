@@ -13,6 +13,9 @@
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
+    <!-- HEADER (Exibe apenas para o mobile)-->
+    {% include "componetizacao/Header/header-painel.html" %}
+    
     <div class="flex flex-col min-h-screen">
 
         <!-- CONTAINER PRINCIPAL COM ESPAÇAMENTO PARA O BOTTOM-NAV -->
@@ -139,28 +142,6 @@
         </div>
     </div>
 
-    <!-- MODAL: MAIS OPÇÕES -->
-    <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-mais" onclick="fecharMenuMais()"></div>
-    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-mais"
-        onclick="if(event.target===this) fecharMenuMais()">
-        <div
-            class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-base font-medium">Mais opções</h2>
-                <button
-                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
-                    onclick="fecharMenuMais()">{% include "componetizacao/icones/icone-X.html" %}</button>
-            </div>
-            <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden">
-                <div class="flex items-center justify-between p-3.5 px-4 cursor-pointer hover:bg-[#2a2825] transition-colors"
-                    onclick="irParaAba('configuracoes'); fecharMenuMais()">
-                    <span class="text-sm">{% include "componetizacao/icones/icone-configuracao.html" %} Configurações</span>
-                    <span class="text-[#6b6963]">›</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <input type="file" id="inp-nova-foto" accept="image/*" class="hidden">
 
     <div
@@ -168,6 +149,7 @@
         id="aviso">
     </div>
 
+    <script src="{{ url_for('static', filename='js/barbeiro-painel-utilitarios.js') }}"></script>
     <script src="{{ url_for('static', filename='js/barbeiro-painel-configuracao.js') }}"></script>
 
 </body>

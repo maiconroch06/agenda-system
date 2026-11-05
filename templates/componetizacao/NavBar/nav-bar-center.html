@@ -3,7 +3,7 @@
    id="site-nav" aria-label="Navegação principal">
     
     {# Itens comuns (exibidos tanto no mobile quanto no desktop) #}
-    {% for href, label in [('/#home', 'Home'), ('/#equipe', 'Quem Somos'), ('/#servicos', 'Serviços'), ('/#planos', 'Planos'), ('/#faq', 'FAQ')] %}
+    {% for href, label in [('/#home', 'Home'), ('/#equipe', 'Quem Somos'), ('/#servicos', 'Serviços'), ('/#faq', 'FAQ')] %} <!-- Saiu da lista ('/#planos', 'Planos') -->
         <a href="{{ href }}"
            class="relative block py-3 transition-colors hover:text-brand-gold lg:py-1 lg:after:absolute lg:after:-bottom-0.5 lg:after:left-0 lg:after:h-px lg:after:w-0 lg:after:bg-brand-gold lg:after:transition-all lg:after:duration-300 lg:hover:after:w-full">{{ label }}</a>
     {% endfor %}

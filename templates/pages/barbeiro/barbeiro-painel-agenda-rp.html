@@ -13,6 +13,9 @@
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
+    <!-- HEADER (Exibe apenas para o mobile)-->
+    {% include "componetizacao/Header/header-painel.html" %}
+
     <div class="flex flex-col min-h-screen">
 
         <!-- CONTAINER PRINCIPAL COM ESPAÇAMENTO PARA O BOTTOM-NAV -->
@@ -87,6 +90,7 @@
         id="aviso">
     </div>
 
+    <script src="{{ url_for('static', filename='js/barbeiro-painel-utilitarios.js') }}"></script>
     <script src="{{ url_for('static', filename='js/barbeiro-painel-agenda.js') }}"></script>
 
 </body>

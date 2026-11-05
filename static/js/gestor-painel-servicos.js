@@ -140,6 +140,9 @@ function excluirServico(id) {
 function iniciar() {
     renderizarServicos();
 
+    // Utilitario
+    carregarData();
+    
     if (els.bloqData) els.bloqData.value = hojeISO();
 }
 
