@@ -3,27 +3,18 @@ from DAO.gestor_dao import GestorDAO
 
 
 class GestorRepositorio:
+    
+    def __init__(self):
+        self.gestor_dao = GestorDAO()
+  
+    def consultar_gestor(self, email):
+        return self.gestor_dao.consultarGestorBarbearia(email)
 
-    @staticmethod
-    def salvar(gestor):
-        return GestorDAO.salvar(gestor)
-
-    @staticmethod
-    def buscar_por_id(id_gestor):
-        return GestorDAO.buscar_por_id(id_gestor)
-
-    @staticmethod
-    def listar_todos():
-        return GestorDAO.listar_todos()
-
-    @staticmethod
-    def listar_por_barbearia(cnpj):
-        return GestorDAO.listar_por_barbearia(cnpj)
-
-    @staticmethod
-    def atualizar(gestor):
-        return GestorDAO.atualizar(gestor)
-
-    @staticmethod
-    def excluir(id_gestor):
-        return GestorDAO.excluir(id_gestor)
+    def listar_todos(self):
+        return self.gestor_dao.consultarGestores()
+          
+    def atualizar(self, gestor):
+        return self.gestor_dao.atualizar(gestor)
+    
+    def excluir(self, id_gestor):
+        return self.gestor_dao.excluir(id_gestor)

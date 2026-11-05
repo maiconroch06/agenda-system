@@ -1,5 +1,5 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
-from controladores.autenticador_gestor_controller import AutenticadorGestor
+from controladores.controlador_gestor import ControladorGestor
 from models.cliente import Cliente
 from models.servicos import Servico
 from models.barbeiros import Barbeiro
@@ -20,17 +20,20 @@ def gestorSource():
 @gestor.route('/login', methods=['GET'])
 def gestorLoginPagina():
     if session.get('dados_gestor') is None:
-        return render_template('pages/gestor/gestor-login.html')
+        return render_template('pages/gestor/gestor-login.html', mensagens_status=EnumStatusMensagens)
         
     return redirect(url_for('gestor.gestorPainel'))
 
 
-# Tela de Login - ?
+# Envio dos dados a partid da Tela de Login
 @gestor.route('/login', methods=["POST"])
 def gestorLogin():
     email_digitado = request.form.get('manager-email-2')
     senha_digitada = request.form.get('manager-password')
-    return AutenticadorGestor.login(email_digitado,senha_digitada)
+    
+    contolador_gestor = ControladorGestor()
+    
+    return contolador_gestor.login(email_digitado,senha_digitada)
 
 
 # Logout Gestor - Encerramento da sessão do Gestor
@@ -54,10 +57,10 @@ def gestorAbaAgenda():
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados
 @gestor.route('/painel/servicos')
-def gestorAbaServicos():
-    # consulta no banco, 
-    servicos = Servicos().consultarTodosOsServicos()
-    return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = servicos, mensagens_status=EnumStatusMensagens)
+def gestorAbaServicos(): 
+    controlador_gestor = ControladorGestor()
+    
+    return controlador_gestor.consultar_servicos()
 
 # SERVIÇOS - pagina para cadastrar o Serviço
 @gestor.route('/painel/servicos/cadastrar', methods=['GET'])
@@ -69,18 +72,14 @@ def gestorServicoPageCadastrar():
 def gestorServicoCadastrar():
     
     imagem = request.files.get('srv-imagem')
-
-    enviarImagem = ValidadorDeImagens() 
-    foto_nome = enviarImagem.enviarImagem(imagem, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
-
-    if foto_nome is None:
-        return redirect(url_for('gestor.gestorServicoPageCadastrar'))
-   
+    
     descricao_servico = request.form.get('srv-nome').strip()
     valor = request.form.get('srv-preco').strip()
     duracao = request.form.get('srv-duracao').strip()
+    
+    controlador_gestor = ControladorGestor() 
      
-    return AutenticadorGestor.cadastrarServico(foto_nome, descricao_servico, valor, duracao)
+    return controlador_gestor.cadastrarServico(imagem, descricao_servico, valor, duracao)
 
 # SERVIÇOS - REMOVER
 @gestor.route('/painel/servicos/deletar', methods=['POST'])
@@ -96,7 +95,7 @@ def gestorServicoDeletar():
     controladorDeImagens = ValidadorDeImagens()
     controladorDeImagens.removerImagem(servico["foto_nome"], EnumNomesPastaImagem.IMAGEMS_SERVICOS)
     
-    return AutenticadorGestor.deletarServico(id_servico)
+    return ControladorGestor.deletarServico(id_servico)
 
 # SERVIÇOS - Editar servico
 @gestor.route('/painel/servicos/editar/<int:id_servico>', methods=['GET'])
@@ -132,11 +131,8 @@ def gestorServicoEditar():
     id = request.form.get('srv-id')
 
 
-    return AutenticadorGestor.editarServico(id, foto_nome, descricao_servico, valor, duracao, ativo)
+    return ControladorGestor.editarServico(id, foto_nome, descricao_servico, valor, duracao, ativo)
 
-    
-
-    
 
 ##################################################################################
 # BARBEIROS - Aba de visualização dos Barbeiros cadastrados

@@ -15,8 +15,8 @@ class ClienteRepositorio:
     def consultarClienteId(self,id_cliente):
         return self.clienteDao.consultarClienteId(id_cliente)
 
-    def loginClienteEmailSenha(self,email,senha):
-           return self.clienteDao.loginClienteEmailSenha(email,senha)
+    def loginClienteEmailSenha(self,email):
+           return self.clienteDao.loginClienteEmailSenha(email)
        
        
     def listar_todos(self):

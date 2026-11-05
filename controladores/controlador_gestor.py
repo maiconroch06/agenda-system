@@ -1,49 +1,27 @@
-from models.gestor import Gestor
-from models import Servico, Barbearia
-from flask import Blueprint, session, redirect, url_for, flash
+from flask import session, redirect, url_for, flash, render_template
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 from database import db
 from enums import EnumStatusMensagens
 from decimal import Decimal, InvalidOperation
+from services_mvc import GestorServiceMVC, ServicoBarbearia
+from execoes import ImagemErrorExcecao 
 
-class AutenticadorGestor():
+class ControladorGestor():
     
-    def login(email:str, senha:str):
-        # Validação inicial simples
-        if not email or not senha:
-            session['erro'] = "Por favor, preencha todos os campos."
-            return redirect(url_for('gestor.gestorLoginPagina'))
-            
-        # 3. Busca o usuário no MySQL através do método que você já criou na sua classe Usuario
-        try:
-            gestor = Gestor.consultarGestorEmail(email,Barbearia.getCNPJ())
-            
-        except Exception as erro :
-            print(f"{erro}")
-            session['erro'] = "Erro ao tentar se comunicar com o banco de dados.\nContate o suporte"
-            return  redirect(url_for('gestor.gestorLoginPagina'))
-
-        # 4. Verifica se o usuário existe e se a senha confere
-        # (Nota: Se futuramente usar criptografia com werkzeug, use check_password_hash aqui)
+    def __init__(self):
+        self.gestor_service_mvc = GestorServiceMVC()
+        self.servicos_barbearia_service_mvc = ServicoBarbearia()
+    
+    def login(self, email:str, senha:str):
         
-        if gestor:
-            if check_password_hash(gestor["senha_hash"], senha):
-                # 5. Salva o ID e os dados completos na sessão (Agora incluindo o ID gerado pelo banco!)
-                session['dados_gestor'] = dict(gestor)
-                # to_dict para dados salvos via ORM
-                # session['dados_usuario'] = user.to_dict()
-                # Redireciona o cliente logado diretamente para a página de agendamentos
+            try: 
+                self.gestor_service_mvc.gestorRealizarLoginService(email,senha)   
                 return redirect(url_for('gestor.gestorPainel'))
-            else:
-                session['erro'] = "ATENÇÃO: e-mail ou senha incorretos." 
-                        
-                return redirect(url_for('gestor.gestorLoginPagina'))
-                    
-        else:
-            # Se o email não estiver cadastrado                  
-            session['erro'] = "ATENÇÃO: usuário não cadastrado.\nRealize o seu cadastro"
-            return redirect(url_for('gestor.gestorLoginPagina'))
+            
+            except Exception as error:
+                flash(f"{error}")
+                return  redirect(url_for('gestor.gestorLoginPagina'))
 
     def cadastrarBarbeiro(photo:str, cpf:str, name:str, email:str, telephone:str, address:str, description:str):
         # Validação inicial simples
@@ -52,60 +30,23 @@ class AutenticadorGestor():
             return redirect(url_for('gestor.gestorBarbeiroCadastro'))
         return "<h1>Deu Certo</h1>"
 
-    def cadastrarServico(novo_foto_nome:str, novo_descricao: str, novo_valor: str, novo_duracao:str ):
-        # Validação inicial simples
-        if not novo_descricao.strip() or not novo_valor.strip() or not novo_duracao.strip():
-            flash("Campos vazios! Verifique se os campos estão vazios!", EnumStatusMensagens.AVISO.value)
-            return  redirect(url_for('gestor.gestorServicoCadastrar'))
-
-           
-        try:
-            valor = Decimal(novo_valor)
-            duracao = int(novo_duracao)
-
-            if (duracao < -1 and valor<=Decimal("0")):
-                flash("O valor de duração devem ser maiores que zero!", EnumStatusMensagens.AVISO.value)
-                return  redirect(url_for('gestor.gestorServicoCadastrar'))
-         
-            # Salvando os dados na sessão do Flask
+    def cadastrarServico(self, foto, novo_descricao: str, novo_valor: str, novo_duracao:str ):
         
-            servicos = Servicos()
-            servicos.descricao = novo_descricao
-            servicos.foto_nome = novo_foto_nome
-            servicos.valor = valor
-            servicos.duracao = duracao
-                
-            resultado_servico = servicos.salvarServico()
-
-            if not resultado_servico:
-                flash( 'Erro ao criar o serviço', EnumStatusMensagens.ERRO.value)
-                return redirect(url_for('gestor.gestorServicoCadastrar'))
-            
-            db.session.commit()
-
-            flash( 'Serviço cadastrado com sucesso', EnumStatusMensagens.SUCESSO.value)
+        try:
+            self.servicos_barbearia_service_mvc.cadastrar_servico_barbearia(foto, novo_descricao, novo_valor, novo_duracao)
             return redirect(url_for('gestor.gestorAbaServicos'))
         
-        except IntegrityError as i:
-            db.session.rollback()
-            
-
-            print(f"{i}")
-            flash( "Erro ao cadastrar o serviço!", EnumStatusMensagens.ERRO.value )
-            return redirect(url_for('gestor.gestorServicoCadastrar'))
-        except (ValueError, TypeError, InvalidOperation):
-            flash("Os campos Preço e duração só aceitam números!", EnumStatusMensagens.AVISO.value )
+        except ImagemErrorExcecao as erros:
+            flash(f"{erros}", EnumStatusMensagens.AVISO.value)
             return redirect(url_for('gestor.gestorServicoCadastrar'))
         
-        except Exception as erro:
-            print(f"o erro foi de {erro}")
-            db.session.rollback()
-
-            flash("Confira se digitou o campo ", EnumStatusMensagens.ERRO.value)
+        except Exception as erros:
+            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
             return redirect(url_for('gestor.gestorServicoCadastrar'))
         
         
-
+        
+             
     def deletarServico(id_servico):
         try:
             servicos = Servicos()
@@ -190,4 +131,6 @@ class AutenticadorGestor():
             flash("Confira se digitou o campo ")
             return redirect(url_for(rota_erro,id_servico=id_servico))
             
-         
+    def consultar_servicos(self):
+        return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = self.servicos_barbearia_service_mvc.consultar_todos_servicos(), mensagens_status=EnumStatusMensagens)
+             

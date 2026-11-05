@@ -1,41 +1,35 @@
-
 from DAO.servicos_dao import ServicoDAO
 
-
 class ServicoRepositorio:
+    
+    def __init__(self):
+        self.servico_dao = ServicoDAO()
 
-    @staticmethod
-    def salvar(servico):
-        return ServicoDAO.salvar(servico)
+    def cadastrar_servico(self, servico):
+        return self.servico_dao.cadastrar_servico(servico)
+    
+    def buscar_por_id(self, id_servico):
+        return self.servico_dao.consultar_servico_id(id_servico)
 
-    @staticmethod
-    def buscar_por_id(id_servico):
-        return ServicoDAO.buscar_por_id(id_servico)
+    def consultar_todos_servicos(self):
+        return self.servico_dao.consultar_todos_os_servicos()
+    
+    def listar_ativos(self):
+        return self.servico_dao.consultar_servicos_status()
 
-    @staticmethod
-    def listar_todos():
-        return ServicoDAO.listar_todos()
+    def atualizar(self, servico):
+        return self.servico_dao.atualizar(servico)
 
-    @staticmethod
-    def listar_ativos():
-        return ServicoDAO.listar_ativos()
-
-    @staticmethod
-    def atualizar(servico):
-        return ServicoDAO.atualizar(servico)
-
-    @staticmethod
-    def ativar(id_servico, data_atualizacao):
-        return ServicoDAO.ativar(
+   
+    def ativar(self, id_servico, data_atualizacao):
+        return self.servico_dao.ativar(
             id_servico, data_atualizacao
         )
 
-    @staticmethod
-    def desativar(id_servico, data_atualizacao):
-        return ServicoDAO.desativar(
+    def desativar(self, id_servico, data_atualizacao):
+        return self.servico_dao.desativar(
             id_servico, data_atualizacao
         )
 
-    @staticmethod
-    def excluir(id_servico):
-        return ServicoDAO.excluir(id_servico)
+    def excluir(self, id_servico):
+        return self.servico_dao.excluir(id_servico)

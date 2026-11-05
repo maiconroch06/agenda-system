@@ -6,11 +6,10 @@ from models import Servico
 
 class ServicoDAO:
 
-    @staticmethod
-    def salvar(servico: Servico):
+    
+    def cadastrar_servico(self, servico: Servico):
         sql = text("""
             INSERT INTO servicos (
-                id,
                 descricao,
                 valor,
                 duracao,
@@ -19,7 +18,6 @@ class ServicoDAO:
                 data_cadastro,
                 data_atualizacao
             ) VALUES (
-                :id,
                 :descricao,
                 :valor,
                 :duracao,
@@ -30,7 +28,7 @@ class ServicoDAO:
             )
         """)
 
-        db.session.execute(sql, {
+        resposta = db.session.execute(sql, {
             "id": servico.id,
             "descricao": servico.descricao,
             "valor": servico.valor,
@@ -41,12 +39,12 @@ class ServicoDAO:
             "data_atualizacao": servico.data_atualizacao
         })
 
-        db.session.flush()
+        db.session.commit()
 
-        return servico.id
+        return resposta.lastrowid
 
-    @staticmethod
-    def buscar_por_id(id_servico: int):
+   
+    def consultar_servico_id(self,id_servico: int):
         sql = text("""
             SELECT
                 id,
@@ -66,13 +64,12 @@ class ServicoDAO:
             {"id": id_servico}
         ).mappings().first()
 
-        if registro is None:
-            return None
+        
 
-        return ServicoDAO._mapear(registro)
+        return dict(registro) if registro else None
 
-    @staticmethod
-    def listar_todos():
+    
+    def consultar_todos_os_servicos(self):
         sql = text("""
             SELECT
                 id,
@@ -89,13 +86,10 @@ class ServicoDAO:
 
         registros = db.session.execute(sql).mappings().all()
 
-        return [
-            ServicoDAO._mapear(registro)
-            for registro in registros
-        ]
+        return registros
 
-    @staticmethod
-    def listar_ativos():
+    
+    def consultar_servicos_status(self, status_servicos:bool):
         sql = text("""
             SELECT
                 id,
@@ -113,16 +107,13 @@ class ServicoDAO:
 
         registros = db.session.execute(
             sql,
-            {"status": True}
+            {"status": status_servicos}
         ).mappings().all()
 
-        return [
-            ServicoDAO._mapear(registro)
-            for registro in registros
-        ]
+        return dict(registros) if registros else None
 
-    @staticmethod
-    def atualizar(servico: Servico):
+   
+    def atualizar(self, servico: Servico):
         sql = text("""
             UPDATE servicos
             SET
@@ -145,12 +136,12 @@ class ServicoDAO:
             "data_atualizacao": servico.data_atualizacao
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
-    @staticmethod
-    def ativar(id_servico: int, data_atualizacao):
+  
+    def ativar(self, id_servico: int, data_atualizacao):
         sql = text("""
             UPDATE servicos
             SET
@@ -165,12 +156,12 @@ class ServicoDAO:
             "data_atualizacao": data_atualizacao
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
-    @staticmethod
-    def desativar(id_servico: int, data_atualizacao):
+    
+    def desativar(self, id_servico: int, data_atualizacao):
         sql = text("""
             UPDATE servicos
             SET
@@ -185,12 +176,12 @@ class ServicoDAO:
             "data_atualizacao": data_atualizacao
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
-    @staticmethod
-    def excluir(id_servico: int):
+  
+    def excluir(self, id_servico: int):
         sql = text("""
             DELETE FROM servicos
             WHERE id = :id
@@ -201,19 +192,6 @@ class ServicoDAO:
             {"id": id_servico}
         )
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
-
-    @staticmethod
-    def _mapear(registro):
-        return Servico(
-            id=registro["id"],
-            descricao=registro["descricao"],
-            valor=registro["valor"],
-            duracao=registro["duracao"],
-            foto_nome=registro["foto_nome"],
-            status_servico=bool(registro["status_servico"]),
-            data_cadastro=registro["data_cadastro"],
-            data_atualizacao=registro["data_atualizacao"]
-        )

@@ -4,9 +4,9 @@ from models import Cliente
 from datetime import datetime, timezone
 from enums import EnumStatusMensagens
 
-
-
 cliente = Blueprint('cliente', __name__, template_folder='templates')
+
+
 
 @cliente.route('/')
 def clientSource():

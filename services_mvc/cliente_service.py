@@ -1,7 +1,8 @@
 from repositorio import ClienteRepositorio
-from services.usuario_service import UsuarioService
+from services_mvc.usuario_service import UsuarioService
 from flask import flash, session
 from werkzeug.security import check_password_hash
+from utilitarios import Senha
 
 
 class ClienteService(UsuarioService):
@@ -20,17 +21,19 @@ class ClienteService(UsuarioService):
               flash(f"Erro o salvar o cliente {error}")
 
       def realizarLoginService(self, email, senha):
-              if not email or not senha:
+            if not email or not senha:
                 raise Exception("Por favor, preencha todos os campos!")
                           
-              session.permanent = True
-              cliente = self.clienteRepositorio.loginClienteEmailSenha(email, senha)
+              
+            cliente = self.clienteRepositorio.loginClienteEmailSenha(email)
                 
-              if  not check_password_hash(cliente['senha'], senha):
-                  flash(f"Senha invalida, tente novamente!")
-                  raise Exception()
-                  
-              session['dados_cliente'] =  cliente
+            if cliente is not None:                 
+                Senha.validar_senha(cliente['senha'], senha)
+                session.permanent = True
+                session['dados_cliente'] =  cliente
+                return
+                
+            raise Exception("E-mail inexistente. Verifique o email e tente novamente!")
                 
 
      

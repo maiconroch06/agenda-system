@@ -2,8 +2,8 @@ from models import Cliente
 from flask import  session, redirect, url_for, flash
 from models.cliente import Cliente
 from database import db
-from services import ClienteService
-from enums import  EnumStatusMensagens
+from services_mvc import ClienteService
+from enums import EnumStatusMensagens
 
 class ControladorCliente():
 
@@ -11,17 +11,15 @@ class ControladorCliente():
         self.clienteService = ClienteService()
     
     def login(self, email:str, senha:str):
-       
-       try:
+        try:
             self.clienteService.realizarLoginService(email,senha)
             return redirect(url_for('cliente.clientAgendamentoServicos'))
        
-       except Exception:
+        except Exception as erros:
+           flash(f"{erros}", EnumStatusMensagens.ERRO.value) 
            return  redirect(url_for('cliente.clientLoginPage'))
               
-    def cadastrarCliente(self, cliente:Cliente, fotoTemp):
-        # Salvando os dados na sessão do Flask 
-        
+    def cadastrarCliente(self, cliente:Cliente, fotoTemp):      
         try:
             cliente_id_usuario_cadastrado =  self.clienteService.cadastrarUsuarioService(cliente, fotoTemp)
             self.clienteService.salvar_dados_especificos(cliente_id_usuario_cadastrado)

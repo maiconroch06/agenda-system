@@ -62,7 +62,7 @@ class ClienteDAO:
 
         return dict(registro)
 
-    def loginClienteEmailSenha(self, email, senha):
+    def loginClienteEmailSenha(self, email):
         sql = text("""
             SELECT
                 u.id,

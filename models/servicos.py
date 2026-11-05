@@ -49,7 +49,7 @@ class Servico:
 
     def consultarStatus(self):
         return self.status_servico
-
+    
     def ativarServico(self):
         self.status_servico = True
 
@@ -73,3 +73,12 @@ class Servico:
             f"duracao={self.duracao} minutos, "
             f"status={self.status_servico})"
         )
+        
+    def valoresValidos(self):
+        if self.valor <= Decimal("0") or self.duracao < -1 :
+            raise Exception("Verifique se foi informado algum valor negativo!")
+        
+    def valoresVazios(self):
+        if not self.descricao.strip() or  self.valor <= Decimal("0") or  self.duracao < -1:
+           raise Exception("Campos vazios! Verifique se os campos estão vazios!")
+               

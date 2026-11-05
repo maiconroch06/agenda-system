@@ -1,66 +1,66 @@
 from flask import current_app, flash
-from enums import EnumStatusMensagens, EnumNomesPastaImagem
+from enums import EnumNomesPastaImagem
 import time
 import os
 from werkzeug.utils import secure_filename
+from execoes import ImagemErrorExcecao
 
 class ValidadorDeImagens:
 
     # Função verifica a extensão do arquivo
-    def imgemGExtensaoValida(self, extensao:str):
+    @staticmethod
+    def imgem_extensao_valida(extensao:str):
         # valida a imagem
-        if (extensao != '.png' and extensao!='.jpg' and extensao!='.jpeg'):
-            flash("O sistema só aceita imagens em formato png ou jpg", EnumStatusMensagens.AVISO.value)
-            return False
-        return True
-    # Função para salvar a imagem
-    def salvarImagem(self, imagem, nomePasta, extensao):
-        # O nome pode ser criptografado, mas deixei assim para acompanhar as imagems enviadas
-        # nesse caso ele esta pegando o tempo em nanoSegundos;
-        try:
-            foto_nome = f"servicos_{int(time.time_ns())}{extensao}"
-                    
-            # crio o caminho da pasta
-            pasta = os.path.join(
-                current_app.root_path,
-                current_app.config['UPLOAD_FILES'] ,
-                nomePasta.value) 
-                    
-            # crio automaticamente a pasta caso não exista!
-            os.makedirs(pasta,exist_ok=True)
-                    
-            #crio o caminho da pasta com o nome
-            caminho = os.path.join(pasta, foto_nome)
-                    
-            #salvo a imagem no caminho
-            imagem.save(caminho)
-
-            return foto_nome
-        
-        except (OSError, FileNotFoundError, IsADirectoryError) as error:
-            print(f"Ocorreu o error: {error}")
-            flash("Error ao tentar salvar a imagem no servidor")
-            return  EnumNomesPastaImagem.IMAGEM_PADRAO.value
-
+        if (extensao != '.png' and extensao!='.jpg' and extensao!='.jpeg' and extensao != EnumNomesPastaImagem.IMAGEM_PADRAO.value):
+            raise ImagemErrorExcecao("O sistema só aceita imagens em formato png ou jpg")
     
-    # Função para validar a imagem e enviar
-    def enviarImagem(self, imagem, nomePasta:EnumNomesPastaImagem):
-        
-        foto_nome = EnumNomesPastaImagem.IMAGEM_PADRAO.value
-                    
+    @staticmethod
+    def extensao_foto_servico(imagem):
+                                           
         if imagem and imagem.filename:
             # pega a extensao
             imagemTemp = secure_filename(imagem.filename)
             extensao = os.path.splitext(imagemTemp)[1]
+            return extensao
+            
+        return EnumNomesPastaImagem.IMAGEM_PADRAO.value        
+    
+    
+    
+    # Função para salvar a imagem
+    @staticmethod
+    def salvarImagem(imagem, nomePasta, extensao_foto_nome):
+        # O nome pode ser criptografado, mas deixei assim para acompanhar as imagems enviadas
+        # nesse caso ele esta pegando o tempo em nanoSegundos;
+        try:
+           
+            if extensao_foto_nome != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
+                foto_nome = f"servicos_{int(time.time_ns())}{extensao_foto_nome}"        
+                # crio o caminho da pasta
+                pasta = os.path.join(
+                    current_app.root_path,
+                    current_app.config['UPLOAD_FILES'] ,
+                    nomePasta.value) 
+                        
+                # crio automaticamente a pasta caso não exista!
+                os.makedirs(pasta,exist_ok=True)
+                        
+                #crio o caminho da pasta com o nome
+                caminho = os.path.join(pasta, foto_nome)
+                        
+                #salvo a imagem no caminho
+                imagem.save(caminho)
+                
+                return foto_nome
 
-            if self.imgemGExtensaoValida(extensao) is False:
-                return None
+            return extensao_foto_nome
+        
+        except (OSError, FileNotFoundError, IsADirectoryError):
+            raise Exception("Error ao tentar salvar a imagem no servidor")
 
-            foto_nome = self.salvarImagem(imagem, nomePasta, extensao)
-
-        return foto_nome
 
     # Função para editar uma imagem
+    @staticmethod
     def editarImagem(self, nome_imagem_anterior: str, nova_imagem, nome_pasta:EnumNomesPastaImagem, imagem_padrao): 
         # Imagem nova
         if nova_imagem and nova_imagem.filename:
@@ -88,7 +88,8 @@ class ValidadorDeImagens:
 
             return EnumNomesPastaImagem.IMAGEM_PADRAO.value
 
-   # Função remover imagem
+    # Função remover imagem
+    @staticmethod
     def removerImagem(self, nome_da_imagem, nome_pasta):
         try:
             if nome_da_imagem!=EnumNomesPastaImagem.IMAGEM_PADRAO.value:

@@ -48,14 +48,9 @@
                 <form id="manager-form-login" action="/gestor/login" method="POST" novalidate
                     class="flex flex-col gap-4 md:gap-5 shrink-0">
 
-                    <!-- Mensagem de erros -->
-                    {% if session.get('erro') %}
-                    <div
-                        class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
-                        {{ session.pop('erro')|replace('\n', '<br>')|safe }}
-                    </div>
-                    {% endif %}
-
+                    <!-- Mensagem de Erro -->
+                    {% set mensagens =  mensagens_status %}
+                    {% include "componetizacao/mensagens/mensagens.html" %}
 
                     <!-- E-mail / Usuário -->
                     <div class="flex flex-col">
@@ -65,7 +60,7 @@
                         </label>
                         <input type="text" id="manager-email" name="manager-email-2"
                             placeholder="Digite seu usuário ou e-mail" autocomplete="off"
-                            value='samuelmaicon.gestor@gmail.com'
+                            value='gestor.barbearia@gmail.com'
                             class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm">
                         <span class="campo__erro text-[11px] sm:text-xs text-red-500 mt-1 block"
                             id="erro-login-usuario"></span>

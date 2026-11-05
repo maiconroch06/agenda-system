@@ -17,7 +17,7 @@ class Database_create:
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'teste321'
-
+    
 
 def create_database(app):
     # Carrega as configurações no Flask
