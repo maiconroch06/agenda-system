@@ -56,14 +56,15 @@ class ControladorGestor():
         
     @classmethod
     def editarServico(cls, id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo):
-        
+       
         try:
          
             cls.__servicos_barbearia_service_mvc.editar_servico_barbearia(id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo)
-            
+            flash(f"Servico {descricao_servico} atualizado com sucesso.", EnumStatusMensagens.SUCESSO.value)
         except Exception as erros:
-            flash(f"{erros}")
+            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
             
+        
         return redirect(url_for("gestor.gestorAbaServicos")) 
          
           

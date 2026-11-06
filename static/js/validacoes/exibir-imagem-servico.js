@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-function ocultarExibirBotaoRemoverImagem(visivel) {
+export function ocultarExibirBotaoRemoverImagem(visivel) {
 
     if (visivel) {
         const botaoRemoverImagem = document.createElement('button');
@@ -69,7 +69,6 @@ function criarInputDefault(visivel){
 
 input.addEventListener('change', () => {
     const arquivo = input.files[0];
-
 
     if (arquivo && arquivo.type.startsWith('image/')) {
         img_preview.src = URL.createObjectURL(arquivo);

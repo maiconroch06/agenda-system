@@ -80,21 +80,7 @@ def gestorServicoCadastrar():
 def gestor_excluir_servico(): 
     id_servico = request.form.get('srv-id-deletar')   
     return ControladorGestor.deletarServico(id_servico)
-
-# SERVIÇOS - Editar servico
-@gestor.route('/painel/servicos/editar/<int:id_servico>/<string:nome_produto>/<int:duracao>/<float:valor>/<string:foto_nome>/<int:ativo>', methods=['GET'])
-def gestorServicoEditarPagina(id_servico:int, nome_produto, duracao, valor, foto_nome, ativo):
-    
-    servico = Servico()
-    servico.id=id_servico
-    servico.descricao=nome_produto
-    servico.duracao=duracao
-    servico.valor= Decimal(valor)
-    servico.foto_nome=foto_nome
-    servico.status_servico = ativo
-    
-    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html', servico = servico, mensagens_status=EnumStatusMensagens)
-    
+  
 
 # SERVIÇOS - Salvar edição do serviço no banco de dados
 @gestor.route('/painel/servicos/editar', methods=['POST'])
@@ -104,8 +90,8 @@ def gestorServicoEditar():
     img_padrao = request.form.get('imagem-padrao', None)
     imagem_anterior = request.form.get('srv-foto_nome_anterior')
   
-    descricao_servico = request.form.get('srv-nome')
-    valor = request.form.get('srv-preco').strip()
+    descricao_servico = request.form.get('srv-descricao-servico')
+    valor = request.form.get('srv-valor').strip()
     duracao = request.form.get('srv-duracao').strip()
     ativo = request.form.get('srv-status', type=int)
     id = request.form.get('srv-id')
