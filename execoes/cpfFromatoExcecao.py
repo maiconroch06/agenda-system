@@ -1,0 +1,2 @@
+class CPFFormatExcecao(Exception):
+    pass

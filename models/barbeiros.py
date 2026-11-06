@@ -1,12 +1,11 @@
 from datetime import datetime
-from models.usuarios import Usuario
+from models import Usuario, Endereco
 
 
 class Barbeiro(Usuario):
 
     def __init__(
         self,
-        id: int,
         nome_completo: str,
         telefone: str,
         cpf: str,
@@ -20,7 +19,8 @@ class Barbeiro(Usuario):
         descricao: str,
         status_barbeiro: bool,
         fk_id_agenda: int,
-        fk_id_endereco: int = None
+        id: int | None = None,
+        endereco: Endereco = None
     ):
         super().__init__(
             id=id,
@@ -33,7 +33,7 @@ class Barbeiro(Usuario):
             status_usuario=status_usuario,
             data_cadastro=data_cadastro,
             data_atualizacao=data_atualizacao,
-            fk_id_endereco=fk_id_endereco
+            endereco=endereco
         )
 
         self.data_liberacao = data_liberacao

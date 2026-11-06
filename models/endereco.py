@@ -2,13 +2,13 @@ class Endereco:
 
     def __init__(
         self,
-        id: int,
         cep: str,
         cidade: str,
         estados_br_sigla: str,
         logradouro: str,
         numero: int,
         bairro: str,
+        id: int | None = None,
         sequencia: int = None,
         complemento: str = None
     ):

@@ -1,11 +1,10 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
 from controladores.controlador_gestor import ControladorGestor
-from models.cliente import Cliente
-from models.servicos import Servico
-from models.barbeiros import Barbeiro
-from  controladores import ControladorBarbeiro
+from models import Cliente, Barbeiro, Servico, Endereco
+from controladores import ControladorBarbeiro
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
+from datetime import datetime, timezone
 
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
@@ -138,8 +137,8 @@ def gestorServicoEditar():
 # BARBEIROS - Aba de visualização dos Barbeiros cadastrados
 @gestor.route('/painel/barbeiros', methods=['GET'])
 def gestorAbaBarbeiros():
-    barbeiros = Barbeiro()
-    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = barbeiros.consultarBarbeiros(), mensagens_status=EnumStatusMensagens)
+    controladorBarbeiro = ControladorBarbeiro()
+    return controladorBarbeiro.gerenciarBarbeiro()
 
 
 # Gerenciar Barbeiro  - Validando dados informados no cadastro do Barbeiro
@@ -152,21 +151,41 @@ def gestorBarbeiroPage():
 @gestor.route('painel/barbeiro/cadastrar', methods=['POST'])
 def gestorBarbeiroValidar():
 
-    imagem = request.files.get('foto')
+    #remove a pontuação do telefone      
+    telefone_temp = ''.join(filter(str.isdigit,request.form.get('telefone')))
+    fotoTemp = request.files.get('foto' , None) 
 
-    enviarImagem = ValidadorDeImagens() 
-    foto_nome = enviarImagem.enviarImagem(imagem, EnumNomesPastaImagem.IMAGENS_BARBEIRO)
-
-    if foto_nome is None:
-            flash("Atenção: a imagem não é suportada pelo sistema.", EnumStatusMensagens.AVISO.value)
-            return redirect(url_for('gestor.gestorServicoEditarPagina'))
-    
-    return ValidarBarbeiro.validarFormularioCriarEditarBarbeiro(
-        request,
-        'pages/gestor/gestor-gerenciar-barbeiro-rp.html',
-        'gestor.gestorAbaBarbeiros',
-        id_barbeiro = None
+    endereco = Endereco(
+        cep=request.form.get('cep'),
+        cidade=request.form.get('cidade'),
+        uf=request.form.get('unidade-federativa'),
+        bairro=request.form.get('bairro'),
+        logradouro=request.form.get('logradouro'),
+        numero=request.form.get('numero'),
+        sequencia=request.form.get('sequencia'),
+        complemento=request.form.get('complemento')
     )
+
+    # Inicializando o objeto Barbeiro
+    barbeiro = Barbeiro(
+        id=None,
+        nome_completo=request.form.get('nome'),
+        telefone=telefone_temp,
+        cpf=request.form.get('cpf'),
+        email=request.form.get('email'),
+        senha=request.form.get('senha'),
+        foto_nome=None,
+        status_usuario=True,
+        data_cadastro=datetime.now(timezone.utc),
+        data_atualizacao=datetime.now(timezone.utc),
+        data_liberacao=datetime.now(timezone.utc),
+        descricao=request.form.get('descricao'),
+        status_barbeiro=True,
+        fk_id_agenda=None,
+        endereco=endereco
+    )
+    
+    return 
 
 @gestor.route('painel/barbeiro/editar/<int:id_barbeiro>', methods=['GET'])
 def gestorBarbeiroPageEdit(id_barbeiro:int):

@@ -38,6 +38,8 @@ function init() {
     aplicarMascaras();
     configurarEventosWizard();
     configurarUploadImagem();
+
+    renderizarEtapa();
 }
 
 /* ============================================================
@@ -63,19 +65,19 @@ function alterarEtapa(direcao) {
 function renderizarEtapa() {
     // Alterna a exibição das etapas
     if (state.etapaAtual === 1) {
-        els.step1.classList.remove("hidden");
-        els.step2.classList.add("hidden");
+        els.step1.classList.remove("hidden-step");
+        els.step2.classList.add("hidden-step");
         
         els.btnVoltar.textContent = "Cancelar"; // Muda o texto para dar sentido de voltar ao painel
-        els.btnProximo.classList.remove("hidden");
-        els.btnSubmit.classList.add("hidden");
+        els.btnProximo.classList.remove("hidden-step");
+        els.btnSubmit.classList.add("hidden-step");
     } else {
-        els.step1.classList.add("hidden");
-        els.step2.classList.remove("hidden");
+        els.step1.classList.add("hidden-step");
+        els.step2.classList.remove("hidden-step");
         
         els.btnVoltar.textContent = "Voltar"; // Muda o texto de volta para o padrão da etapa
-        els.btnProximo.classList.add("hidden");
-        els.btnSubmit.classList.remove("hidden");
+        els.btnProximo.classList.add("hidden-step");
+        els.btnSubmit.classList.remove("hidden-step");
     }
 
     atualizarEstiloIndicador();

@@ -7,13 +7,26 @@ from werkzeug.utils import secure_filename
 from database import db
 from datetime import datetime, timezone
 
-from models.usuarios import Usuario
-from models.endereco import Endereco
-from models.barbeiros import Barbeiro
+from models import Usuario
+from models import Endereco
+from models import Barbeiro
+from services_mvc import BarbeiroService
 from enums import EnumStatusMensagens
 
 
 class ControladorBarbeiro:
+
+    def __init__(self):
+            self.barbeiroService = BarbeiroService()
+
+    def gerenciarBarbeiro(self):
+        return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = self.barbeiroService.consultar_barbeiros(), mensagens_status=EnumStatusMensagens)
+
+    # def cadastrarBarbeiro(self, barbeiro: Barbeiro, fotoTemp):
+    #     try:
+
+    #         barbeiro_id_usuario_cadastrado = self.barbeiroService.cadastrarUsuarioService(barbeiro, fotoTemp)
+    #         self.barbeiroService.salvar_dados_especificos(cliente_id_usuario_cadastrado)
 
     @staticmethod
     def validarFormularioCriarEditarBarbeiro(request, rota_erro: str, rota_certa: str, id_barbeiro:int):

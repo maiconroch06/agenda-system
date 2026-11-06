@@ -24,11 +24,7 @@ class ControladorGestor():
                 return  redirect(url_for('gestor.gestorLoginPagina'))
 
     def cadastrarBarbeiro(photo:str, cpf:str, name:str, email:str, telephone:str, address:str, description:str):
-        # Validação inicial simples
-        if not photo or not cpf or not name or not email or not telephone or not address or not description:
-            session['erro'] = "Por favor, preencha todos os campos."
-            return redirect(url_for('gestor.gestorBarbeiroCadastro'))
-        return "<h1>Deu Certo</h1>"
+        
 
     def cadastrarServico(self, foto, novo_descricao: str, novo_valor: str, novo_duracao:str ):
         
