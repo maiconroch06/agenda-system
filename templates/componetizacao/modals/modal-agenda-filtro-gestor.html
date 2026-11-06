@@ -1,0 +1,55 @@
+<!-- MODAL: FILTRO DA AGENDA -->
+<div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-filtro" onclick="fecharModalFiltro()"></div>
+<div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-filtro"
+    onclick="if(event.target===this) fecharModalFiltro()">
+    
+    <div class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-base font-semibold">Filtrar Agenda</h2>
+            <button
+                class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
+                onclick="fecharModalFiltro()">{% include "componetizacao/icones/icone-X.html" %}</button>
+        </div>
+        
+        <form class="flex flex-col gap-3" novalidate>
+            <!-- Filtro: Barbeiro -->
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="filtro-barbeiro">Barbeiro</label>
+                <select id="filtro-barbeiro"
+                    class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                    <option value="todos">Todos os Barbeiros</option>
+                    <!-- As options de barbeiros devem ser injetadas via JS -->
+                </select>
+            </div>
+
+            <!-- Filtro: Serviço -->
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="filtro-servico">Serviço</label>
+                <select id="filtro-servico"
+                    class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                    <option value="todos">Todos os Serviços</option>
+                    <option value="Corte Social">Corte Social</option>
+                    <option value="Degradê">Degradê</option>
+                    <option value="Barba">Barba</option>
+                    <!-- As options de serviços podem ser injetadas via JS ou colocadas fixas aqui -->
+                </select>
+            </div>
+
+            <!-- Filtro: Status -->
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-medium text-[#888780]" for="filtro-status">Status</label>
+                <select id="filtro-status"
+                    class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
+                    <option value="todos">Todos os Status</option>
+                    <option value="concluido">Concluído</option>
+                    <option value="aguardando">Aguendado</option>
+                    <option value="cancelado">Cancelado</option>
+                </select>
+            </div>
+
+            <button type="button"
+                class="w-full h-10 px-4 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm cursor-pointer mt-2"
+                onclick="confirmarFiltro()">Aplicar Filtros</button>
+        </form>
+    </div>
+</div>

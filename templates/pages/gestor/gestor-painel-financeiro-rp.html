@@ -38,58 +38,82 @@
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-6">
                         <div
                             class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
-                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Receita do
-                                Mês</div>
-                            <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-receita-mes">R$ 0,00</div>
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                                Receita do Mês
+                            </div>
+                            <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-receita-mes">
+                                R$ 0,00
+                            </div>
                         </div>
                         <div
                             class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
-                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Total
-                                Atendimentos</div>
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                                Total Atendimentos
+                            </div>
                             <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-total-cortes">0</div>
                         </div>
                         <div
                             class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
-                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Valor Médio ao Mês
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                                Valor Médio ao Mês
                             </div>
-                            <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-ticket-medio">R$ 0,00</div>
+                            <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-ticket-medio">
+                                R$ 0,00
+                            </div>
                         </div>
                         <div
                             class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
-                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Serviço Mais
-                                Realizado</div>
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                                Serviço Mais Realizado
+                            </div>
                             <div class="text-lg font-semibold text-[#f1efe8] truncate" id="fin-mais-realizado">—</div>
                         </div>
                     </div>
 
-                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden">
-                        <div
-                            class="p-3 px-4 border-b border-[#38362f] text-xs font-medium text-[#888780] uppercase tracking-wider">
-                            Histórico de Atendimentos</div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr
-                                        class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
-                                        <th class="p-3 px-4">Data</th>
-                                        <th class="p-3 px-4">Cliente</th>
-                                        <th class="p-3 px-4">Serviço(s)</th>
-                                        <th class="p-3 px-4">Barbeiro</th>
-                                        <th class="p-3 px-4">Valor</th>
-                                        <th class="p-3 px-4">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="fin-tabela-corpo" class="text-xs text-[#f1efe8]">
-                                    <tr>
-                                        <td colspan="6" class="p-6 text-center text-[#888780]">Nenhum atendimento
-                                            registrado ainda.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="mb-6">
+
+                        <div class="flex justify-between items-center mb-3">
+                            <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">
+                                Histórico de Agendamento
+                            </h2>
+                        </div>
+
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
+                                            <th class="p-3.5 px-4">Data</th>
+                                            <th class="p-3.5 px-4">Cliente</th>
+                                            <th class="p-3.5 px-4">Serviço(s)</th>
+                                            <th class="p-3.5 px-4">Barbeiro</th>
+                                            <th class="p-3.5 px-4">Valor</th>
+                                            <th class="p-3.5 px-4">Status</th>
+                                        </tr>
+                                        <!-- { for agendamento in agendamentos%} Falta a % aqui, nos demais falta uma { no lado direito
+                                            <tr class="border-b border-[#38362f] text-[13px] tracking-wider text-[#888780]">
+                                                <td class="p-3.5 px-4 text-white">{agendamento.dataHoraAgendamento}}</td>
+                                                <td class="p-3.5 px-4 text-white">{agendamento.nomeCliente}}</td>
+                                                <td class="p-3.5 px-4">{agendamento.nomeServico}}</td>
+                                                <td class="p-3.5 px-4">{agendamento.nomeBarbeiro}}</td>
+                                                <td class="p-3.5 px-4 text-white">{agendamento.valorServico}}</td>
+                                                <td class="p-3 px-4">${badgeStatusHTML(agendamento.status)}</td>
+                                                status agendamento
+                                            </tr>
+                                        { endfor %} -->
+                                    </thead>
+                                    <tbody id="fin-tabela-corpo" class="text-xs text-[#f1efe8]">
+                                        <tr>
+                                            <td colspan="6" class="p-6 text-center text-[#888780]">
+                                                Nenhum agendamento registrado ainda.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </section>
-
             </main>
         </div>
 

@@ -41,13 +41,66 @@ function carregarData() {
 }
 
 /* ============================================================
+   MODAL BLOQUEAR HORÁRIO
+   ============================================================ */
+
+   function abrirModalBloquear() {
+    els.overlayBloquear.classList.remove("hidden");
+    els.modalBloquear.classList.remove("hidden");
+}
+
+function fecharModalBloquear() {
+    els.overlayBloquear.classList.add("hidden");
+    els.modalBloquear.classList.add("hidden");
+}
+
+function confirmarBloqueio() {
+    const barbeiro = els.bloqBarbeiro ? els.bloqBarbeiro.value : "";
+    const data = els.bloqData.value;
+    const inicio = els.bloqInicio.value;
+    const fim = els.bloqFim.value;
+    const motivo = els.bloqMotivo.value.trim();
+
+    if (!data || !inicio || !fim || !barbeiro) { mostrarAviso("Preencha todos os campos do bloqueio"); return; }
+    if (fim <= inicio) { mostrarAviso("O horário final deve ser maior que o inicial"); return; }
+
+    bloqueios.push({ barbeiro, data, inicio, fim, motivo: motivo || "Horário bloqueado" });
+    salvarBloqueios();
+    mostrarAviso(`Horário bloqueado para ${barbeiro}!`);
+    fecharModalBloquear();
+}
+
+/* ============================================================
+   MODAL FILTRAR AGENDA
+   ============================================================ */
+
+function abrirModalFiltro() {
+    if (els.overlayFiltro && els.modalFiltro) {
+        els.overlayFiltro.classList.remove("hidden");
+        els.modalFiltro.classList.remove("hidden");
+    }
+}
+
+function fecharModalFiltro() {
+    if (els.overlayFiltro && els.modalFiltro) {
+        els.overlayFiltro.classList.add("hidden");
+        els.modalFiltro.classList.add("hidden");
+    }
+}
+
+function confirmarFiltro() {
+
+    fecharModalFiltro();
+}
+
+/* ============================================================
    DADOS MOCK — AGENDAMENTOS
    ============================================================ */
 
 const AGENDAMENTOS_PADRAO = [
     { id: "a1",  data: diasAPartirDeHoje(0), hora: "09:00", cliente: "Carlos Eduardo",  telefone: "(11) 98765-4321", servico: "Corte Social",       valor: 18, status: "concluido",  observacoes: "" },
     { id: "a2",  data: diasAPartirDeHoje(0), hora: "10:00", cliente: "Bruno Alves",      telefone: "(11) 91234-5678", servico: "Degradê & Barba",    valor: 30, status: "concluido",  observacoes: "Cliente prefere degradê baixo" },
-    { id: "a3",  data: diasAPartirDeHoje(0), hora: "11:30", cliente: "Rafael Souza",     telefone: "(11) 99887-6655", servico: "Barba",              valor: 15, status: "confirmado", observacoes: "" },
+    { id: "a3",  data: diasAPartirDeHoje(0), hora: "11:30", cliente: "Rafael Souza",     telefone: "(11) 99887-6655", servico: "Barba",              valor: 15, status: "aguardando", observacoes: "" },
     { id: "a4",  data: diasAPartirDeHoje(0), hora: "14:00", cliente: "Diego Martins",    telefone: "(11) 98111-2233", servico: "Corte Infantil",      valor: 20, status: "aguardando", observacoes: "Primeira vez, criança de 6 anos" },
     { id: "a5",  data: diasAPartirDeHoje(0), hora: "15:30", cliente: "Felipe Costa",     telefone: "(11) 97222-3344", servico: "Corte Militar",       valor: 15, status: "aguardando", observacoes: "" },
     { id: "a6",  data: diasAPartirDeHoje(0), hora: "16:30", cliente: "Gustavo Lima",     telefone: "(11) 96333-4455", servico: "Social & Barba",      valor: 30, status: "cancelado",  observacoes: "Cliente cancelou por telefone" },

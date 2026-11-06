@@ -29,23 +29,47 @@
 
                 <!-- ABA AGENDA -->
                 <section class="" id="aba-agenda">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-3">
                         <div>
                             <h1 class="text-lg lg:text-xl font-semibold">Agenda</h1>
                             <p class="text-xs text-[#888780]" id="data-atual-str"></p>
                         </div>
+
+                        <div class="flex flex-1 justify-end gap-2">
+                            <!-- Não tem JS atualizado -->
+                            <div class="hidden md:flex items-center gap-2">
+                                <label for="filtro-status-agenda" class="text-xs text-[#888780]">Status:</label>
+                                <select id="filtro-status-agenda"
+                                    class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer"
+                                    onchange="filtrarPorStatus(this.value)">
+                                    <option value="todos">Todos os Status</option>
+                                </select>
+                            </div>
+                            <!-- Não tem JS atualizado -->
+                            <div class="hidden md:flex items-center gap-2">
+                                <label for="filtro-status-agenda" class="text-xs text-[#888780]">Serviços:</label>
+                                <select id="filtro-status-agenda"
+                                    class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer"
+                                    onchange="filtrarPorServico(this.value)">
+                                    <option value="todos">Todos os Serviços</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="flex gap-1.5 mb-4 flex-wrap">
-                        <button
-                            class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#f1efe8] bg-[#f1efe8] text-[#161513] text-xs font-medium cursor-pointer transition-all"
-                            data-filtro="dia" onclick="mudarVisaoAgenda('dia')">Dia</button>
-                        <button
-                            class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all"
-                            data-filtro="semana" onclick="mudarVisaoAgenda('semana')">Semana</button>
-                        <button
-                            class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all"
-                            data-filtro="mes" onclick="mudarVisaoAgenda('mes')">Mês</button>
+                    <div class="flex justify-between">
+                        <div class="flex gap-1.5 mb-4 flex-wrap">
+                            <button class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#f1efe8] bg-[#f1efe8] text-[#161513] text-xs font-medium cursor-pointer transition-all"
+                                data-filtro="dia" onclick="mudarVisaoAgenda('dia')">Dia</button>
+                            <button class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all"
+                                data-filtro="semana" onclick="mudarVisaoAgenda('semana')">Semana</button>
+                            <button class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all"
+                                data-filtro="mes" onclick="mudarVisaoAgenda('mes')">Mês</button>
+                        </div>
+                        <div class="flex gap-1.5 mb-4 flex-wrap">
+                            <button class="md:hidden filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all"
+                               onclick="abrirModalFiltro()">{% include "componetizacao/icones/icone-filtro.html" %}</button>
+                        </div>
                     </div>
 
                     <div id="agenda-visao-dia">
@@ -85,6 +109,9 @@
     </div>
 
     <input type="file" id="inp-nova-foto" accept="image/*" class="hidden">
+
+    <!-- MODAL: * FILTRA AGENDA * Deve ser implementado -->
+    {% include "componetizacao/modals/modal-agenda-filtro-barbeiro.html" %} 
 
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso">

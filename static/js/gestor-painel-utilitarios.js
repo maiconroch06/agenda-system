@@ -122,6 +122,10 @@ const els = {
     bloqFim: document.getElementById("bloq-fim"),
     bloqMotivo: document.getElementById("bloq-motivo"),
 
+    // Modal Bloquear
+    overlayFiltro: document.getElementById("overlay-filtro"),
+    modalFiltro: document.getElementById("modal-filtro"),
+
     // Modal: Menu Mais
     overlayMais: document.getElementById("overlay-mais"),
     modalMais: document.getElementById("modal-mais"),
@@ -302,20 +306,100 @@ function atualizarStatus(id, novoStatus) {
 }
 
 /* ============================================================
+   MODAL: DETALHES DO ATENDIMENTO
+   ============================================================ */
+
+   function abrirModalDetalhe(id) {
+    const a = agendamentos.find(a => a.id === id);
+    if (!a) return;
+
+    els.detalheStatusBadge.innerHTML = badgeStatusHTML(a.status);
+    els.detalheCliente.textContent = a.cliente;
+    els.detalheServico.textContent = a.servico;
+    els.detalheHorario.textContent = `${formatarDataExtenso(a.data)} às ${a.hora}`;
+    els.detalheValor.textContent = formatarMoeda(a.valor);
+    els.detalheTelefone.textContent = a.telefone;
+    els.detalheObs.textContent = a.observacoes || "Nenhuma observação";
+
+    let html = "";
+    if (a.status === "aguardando") {
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="confirmarPresenca('${a.id}')">Confirmar presença</button>`;
+    }
+    if (a.status === "confirmado") {
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="iniciarAtendimento('${a.id}')">Iniciar atendimento</button>`;
+    }
+    if (a.status === "aguardando" || a.status === "confirmado") {
+        html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="concluirAtendimento('${a.id}')">Concluir atendimento</button>`;
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors" onclick="cancelarAtendimento('${a.id}')">Cancelar</button>`;
+    }
+    if (a.status === "concluido") {
+        html = `<p class="text-center text-[#888780] text-xs">Atendimento já concluído</p>`;
+    }
+    if (a.status === "cancelado") {
+        html = `<p class="text-center text-[#888780] text-xs">Este atendimento foi cancelado</p>`;
+    }
+    els.detalheAcoes.innerHTML = html;
+
+    els.overlayDetalhe.classList.remove("hidden");
+    els.modalDetalhe.classList.remove("hidden");
+}
+
+function fecharModalDetalhe() {
+    els.overlayDetalhe.classList.add("hidden");
+    els.modalDetalhe.classList.add("hidden");
+}
+
+function confirmarPresenca(id) {
+    atualizarStatus(id, "confirmado");
+    mostrarAviso("Presença confirmada!");
+}
+
+function iniciarAtendimento(id) {
+    mostrarAviso("Atendimento iniciado!");
+    fecharModalDetalhe();
+}
+
+function concluirAtendimento(id) {
+    atualizarStatus(id, "concluido");
+    mostrarAviso("Atendimento concluído!");
+}
+
+function cancelarAtendimento(id) {
+    if (!confirm("Deseja realmente cancelar este atendimento?")) return;
+    atualizarStatus(id, "cancelado");
+    mostrarAviso("Atendimento cancelado");
+}
+
+function atualizarStatus(id, novoStatus) {
+    const a = agendamentos.find(a => a.id === id);
+    if (a) a.status = novoStatus;
+    salvarAgendamentos();
+    fecharModalDetalhe();
+    atualizarTudo();
+}
+
+function atualizarTudo() {
+    renderizarInicio();
+    if (estado.visaoAgenda === "dia") renderizarAgendaDia();
+    if (estado.visaoAgenda === "semana") renderizarAgendaSemana();
+    if (estado.visaoAgenda === "mes") renderizarAgendaMes();
+}
+
+/* ============================================================
    MODAL BLOQUEAR HORÁRIO
    ============================================================ */
 
-function abrirFiltro() {
+function abrirModalBloquear() {
     els.overlayBloquear.classList.remove("hidden");
     els.modalBloquear.classList.remove("hidden");
 }
 
-function fecharFiltro() {
+function fecharModalBloquear() {
     els.overlayBloquear.classList.add("hidden");
     els.modalBloquear.classList.add("hidden");
 }
 
-function confirmarFiltro() {
+function confirmarBloqueio() {
     const barbeiro = els.bloqBarbeiro ? els.bloqBarbeiro.value : "";
     const data = els.bloqData.value;
     const inicio = els.bloqInicio.value;
@@ -328,13 +412,30 @@ function confirmarFiltro() {
     bloqueios.push({ barbeiro, data, inicio, fim, motivo: motivo || "Horário bloqueado" });
     salvarBloqueios();
     mostrarAviso(`Horário bloqueado para ${barbeiro}!`);
-    fecharFiltro();
+    fecharModalBloquear();
 }
 
-function sairDaConta() {
-    if (confirm("Deseja realmente sair do painel administrativo?")) {
-        mostrarAviso("Saindo...");
+/* ============================================================
+   MODAL FILTRAR AGENDA
+   ============================================================ */
+
+function abrirModalFiltro() {
+    if (els.overlayFiltro && els.modalFiltro) {
+        els.overlayFiltro.classList.remove("hidden");
+        els.modalFiltro.classList.remove("hidden");
     }
+}
+
+function fecharModalFiltro() {
+    if (els.overlayFiltro && els.modalFiltro) {
+        els.overlayFiltro.classList.add("hidden");
+        els.modalFiltro.classList.add("hidden");
+    }
+}
+
+function confirmarFiltro() {
+
+    fecharModalFiltro();
 }
 
 /* ============================================================
@@ -357,18 +458,5 @@ function carregarData() {
     const elData = document.getElementById("data-atual-str");
     if (elData) elData.textContent = dataFormatted.charAt(0).toUpperCase() + dataFormatted.slice(1);
 }
-
-/*
-function carregarData() {
-    // Data debaixo do titulo
-    const dataFormatted = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
-    const dataCapitalizada = dataFormatted.charAt(0).toUpperCase() + dataFormatted.slice(1);
-    
-    // Atualiza TODOS os elementos na tela que tenham a classe 'data-atual-str'
-    document.querySelectorAll(".data-atual-str").forEach(el => {
-        el.textContent = dataCapitalizada;
-    });
-}
-*/
 
 carregarData();

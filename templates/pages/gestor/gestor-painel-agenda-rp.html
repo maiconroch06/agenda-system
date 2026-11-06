@@ -28,7 +28,7 @@
 
                 <!-- ABA AGENDA -->
                 <section id="aba-agenda">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-3">
                         <div>
                             <h1 class="text-lg lg:text-xl font-semibold">Agenda Geral</h1>
                             <p class="text-xs text-[#888780]" id="data-atual-str"></p>
@@ -45,7 +45,7 @@
                                 </select>
                             </div>
                             
-                            <!-- Não tem JS -->
+                            <!-- Não tem JS atualizado -->
                             <div class="hidden md:flex items-center gap-2">
                                 <label for="filtro-status-agenda" class="text-xs text-[#888780]">Status:</label>
                                 <select id="filtro-status-agenda"
@@ -54,7 +54,7 @@
                                     <option value="todos">Todos os Status</option>
                                 </select>
                             </div>
-                            <!-- Não tem JS -->
+                            <!-- Não tem JS atualizado -->
                             <div class="hidden md:flex items-center gap-2">
                                 <label for="filtro-status-agenda" class="text-xs text-[#888780]">Serviços:</label>
                                 <select id="filtro-status-agenda"
@@ -79,19 +79,21 @@
                         </div>
                         <div class="flex gap-1.5 mb-4 flex-wrap">
                             <button class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all inline-flex items-center gap-2"
-                                    onclick="abrirModalBloquear()">
-                                <span class="hidden md:flex">Bloquer horário</span>
-                                {% include "componetizacao/icones/icone-cadeado.html" %}
+                               onclick="abrirModalBloquear()">
+                                    <span class="hidden md:flex">Bloquer horário</span>
+                                    {% include "componetizacao/icones/icone-cadeado.html" %}
                             </button>
                             <button class="md:hidden filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all"
-                               onclick="abrirFiltro()">{% include "componetizacao/icones/icone-filtro.html" %}</button>
+                               onclick="abrirModalFiltro()">{% include "componetizacao/icones/icone-filtro.html" %}</button>
                         </div>
                     </div>
-
+                    
                     <div id="agenda-visao-dia">
-                        <span class="text-xs font-medium text-[#888780] uppercase tracking-wider mt-5 mb-3">
-                            Sexta-feira, 06 de novembro de 2026</span>
-                        <div class="flex flex-col gap-2" id="lista-agenda-dia"></div>
+                        <span class="text-sx font-semibold uppercase tracking-wider text-[#888780] tracking-wider">
+                            Sexta-feira, 06 de novembro de 2026
+                        </span>
+                        
+                            <div class="flex flex-col gap-2" id="lista-agenda-dia"></div>
                     </div>
 
                     <div id="agenda-visao-semana" class="hidden">
@@ -129,7 +131,10 @@
     {% include "componetizacao/modals/modal-detalhes-atendimento.html" %}
 
     <!-- MODAL: * FILTRA AGENDA * Deve ser implementado -->
-    {% include "componetizacao/modals/modal-filtrar-agenda.html" %}
+    {% include "componetizacao/modals/modal-agenda-filtro-gestor.html" %} 
+    
+    <!-- MODAL: BLOQUEIO DE HORÁRIO * -->
+    {% include "componetizacao/modals/modal-bloqueio-horario.html" %}
 
     <!-- TOAST AVISO -->
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"

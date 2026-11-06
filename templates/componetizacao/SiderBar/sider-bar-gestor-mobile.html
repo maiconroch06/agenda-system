@@ -81,6 +81,17 @@
                    <!--span class="text-[#f34747]">{% include "componetizacao/icones/icone-seta-direita.html" %}</span-->
                 </a>
             </div>
+            
+            <!-- Financeiro -->
+            <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/financeiro') else 'text-[#888780] hover:text-[#f1efe8]' }}">
+                <a href="/gestor/painel/financeiro" 
+                    class="flex items-center justify-between p-3.5 px-4 cursor-pointer hover:bg-[#2a2825] transition-colors"
+                    onclick="fecharMenuMais()">
+                    <span class="text-sm">{% include "componetizacao/icones/icone-financeiro.html" %}</span>
+                    <span class="truncate w-full">Financeiro</span>
+                    <!--span class="text-[#6b6963]">{% include "componetizacao/icones/icone-seta-direita.html" %}</span-->
+                </a>
+            </div>
 
             <!-- Clientes -->
             <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/cliente') else 'text-[#888780] hover:text-[#f1efe8]' }}">
@@ -89,17 +100,6 @@
                    onclick="fecharMenuMais()">
                     <span class="text-sm">{% include "componetizacao/icones/icone-clientes.html" %}</span>
                     <span class="truncate w-full">Clientes</span>
-                    <!--span class="text-[#6b6963]">{% include "componetizacao/icones/icone-seta-direita.html" %}</span-->
-                </a>
-            </div>
-
-            <!-- Financeiro -->
-            <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path.startswith('/gestor/painel/financeiro') else 'text-[#888780] hover:text-[#f1efe8]' }}">
-                <a href="/gestor/painel/financeiro" 
-                   class="flex items-center justify-between p-3.5 px-4 cursor-pointer hover:bg-[#2a2825] transition-colors"
-                   onclick="fecharMenuMais()">
-                    <span class="text-sm">{% include "componetizacao/icones/icone-financeiro.html" %}</span>
-                    <span class="truncate w-full">Financeiro</span>
                     <!--span class="text-[#6b6963]">{% include "componetizacao/icones/icone-seta-direita.html" %}</span-->
                 </a>
             </div>

@@ -34,38 +34,48 @@
                             <p class="text-xs text-[#888780]" id="data-atual-str"></p>
                         </div>
 
-                        <input type="text" id="busca-cliente" placeholder="Buscar por nome ou telefone..."
-                            class="h-10 px-3 w-64 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none">
+                        <input class="h-9 md:h-10 px-3 w-32 md:w-64 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none"
+                            id="busca-cliente" type="text" placeholder="Buscar por nome ou telefone...">
                     </div>
 
-                    <div class="bg-[#232220] border border-[#38362f] rounded-2xl">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="border-b border-[#38362f] text-[16px] uppercase tracking-wider text-[#888780]">
-                                        <th class="p-3.5 px-4">Cliente</th>
-                                        <th class="p-3.5 px-4">Telefone</th>
-                                        <th class="p-3.5 px-4">Última Visita</th>
-                                        <th class="p-3.5 px-4">Total Visitas</th>
-                                        <th class="p-3.5 px-4">Total Gasto</th>
-                                    </tr>
-                                    {% for usuario in usuarios%}
-                                        <tr class="border-b border-[#38362f] text-[13px] tracking-wider text-[#888780]">
-                                            <td class="p-3.5 px-4 text-white">{{usuario.nome_completo}}</td>
-                                            <td class="p-3.5 px-4">({{ usuario.telefone[:2] }}) {{ usuario.telefone[2:7] }}-{{ usuario.telefone[7:] }}</td>
-                                            <td class="p-3.5 px-4">{{ usuario.data_ultimo_servico | default('-', true)}}</td>
-                                            <td class="p-3.5 px-4 text-white">0 visita(s)</td>
-                                            <td class="p-3.5 px-4 text-[#9FE1CB]">R$ 0</td>
+                    <div class="mb-6">
+
+                        <div class="flex justify-between items-center mb-3">
+                            <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">
+                                Clientes Cadastrados
+                            </h2>
+                        </div>
+
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
+                                            <th class="p-3.5 px-4">Cliente</th>
+                                            <th class="p-3.5 px-4">Telefone</th>
+                                            <th class="p-3.5 px-4">Última Visita</th>
+                                            <th class="p-3.5 px-4">Total Visitas</th>
+                                            <th class="p-3.5 px-4">Total Gasto</th>
                                         </tr>
-                                    {% endfor %}
-                                </thead>
-                                <tbody id="tabela-clientes-corpo" class="text-xs text-[#f1efe8]">
-                                    <tr>
-                                        <td colspan="5" class="p-6 text-center text-[#888780]">
-                                            Nenhum cliente cadastrado.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        {% for usuario in usuarios%}
+                                            <tr class="border-b border-[#38362f] hover:bg-[#2a2825]/50 transition-colors">
+                                                <td class="p-3.5 px-4 text-white">{{usuario.nome_completo}}</td>
+                                                <td class="p-3.5 px-4">({{ usuario.telefone[:2] }}) {{ usuario.telefone[2:7] }}-{{ usuario.telefone[7:] }}</td>
+                                                <td class="p-3.5 px-4">{{ usuario.data_ultimo_servico | default('-', true)}}</td>
+                                                <td class="p-3.5 px-4">0 visita(s)</td>
+                                                <td class="p-3.5 px-4 text-white">R$ 0,00</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </thead>
+                                    <tbody id="tabela-clientes-corpo" class="text-xs text-[#f1efe8]">
+                                        <tr>
+                                            <td colspan="5" class="p-6 text-center text-[#888780]">
+                                                Nenhum cliente cadastrado.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </section>
