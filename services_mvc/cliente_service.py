@@ -3,38 +3,40 @@ from services_mvc.usuario_service import UsuarioService
 from flask import flash, session
 from werkzeug.security import check_password_hash
 from utilitarios import Senha
-
+from enums import EnumNomesPastaImagem
 
 class ClienteService(UsuarioService):
 
-      def __init__(self):
-          super().__init__()
-          self.clienteRepositorio = ClienteRepositorio()
+    def __init__(self):
+        super().__init__()
+        self.clienteRepositorio = ClienteRepositorio()
        
-      def salvar_dados_especificos(self, id_usuario):
-          try:
-              self.clienteRepositorio.salvar(id_usuario, None)
-              session.permanent = True
-              session['dados_cliente'] =  self.clienteRepositorio.consultarClienteId(id_usuario)
+    def salvar_dados_especificos(self, usuario):
+        try:
+            self.clienteRepositorio.salvar(usuario.id, None)
+            session.permanent = True
+            session['dados_cliente'] =  self.clienteRepositorio.consultarClienteId(usuario.id)
           
-          except Exception as error:
-              flash(f"Erro o salvar o cliente {error}")
+        except Exception as error:
+            flash(f"Erro o salvar o cliente {error}")
 
-      def realizarLoginService(self, email, senha):
-            if not email or not senha:
-                raise Exception("Por favor, preencha todos os campos!")
-                          
-              
-            cliente = self.clienteRepositorio.loginClienteEmailSenha(email)
-                
-            if cliente is not None:                 
-                Senha.validar_senha(cliente['senha'], senha)
-                session.permanent = True
-                session['dados_cliente'] =  cliente
-                return
-                
-            raise Exception("E-mail inexistente. Verifique o email e tente novamente!")
-                
+    def realizarLoginService(self, email, senha):
+        if not email or not senha:
+            raise Exception("Por favor, preencha todos os campos!")
+                        
+            
+        cliente = self.clienteRepositorio.loginClienteEmailSenha(email)
+            
+        if cliente is not None:                 
+            Senha.validar_senha(cliente['senha'], senha)
+            session.permanent = True
+            session['dados_cliente'] =  cliente
+            return
+            
+        raise Exception("E-mail inexistente. Verifique o email e tente novamente!")
+
+    def escolherPastaImagemUsuario(self):
+            return EnumNomesPastaImagem.IMAGENS_CLIENTE
 
      
 

@@ -40,13 +40,10 @@ class EnderecoDAO:
             "sequencia": endereco.sequencia,
             "complemento": endereco.complemento
         })
+        db.session.commit()
 
         # O ID é gerado pelo AUTO_INCREMENT da tabela.
-        endereco.id = resultado.lastrowid
-
-        db.session.flush()
-
-        return endereco.id
+        return resultado.lastrowid
 
     @staticmethod
     def buscar_por_id(id_endereco: int):

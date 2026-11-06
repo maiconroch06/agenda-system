@@ -22,11 +22,13 @@ class ControladorCliente():
     def cadastrarCliente(self, cliente:Cliente, fotoTemp):      
         try:
             cliente_id_usuario_cadastrado =  self.clienteService.cadastrarUsuarioService(cliente, fotoTemp)
-            self.clienteService.salvar_dados_especificos(cliente_id_usuario_cadastrado)
+            cliente.id = cliente_id_usuario_cadastrado
+            self.clienteService.salvar_dados_especificos(cliente)
                                       
             return redirect(url_for('cliente.cadastroSucesso'))
         
-        except Exception:
+        except Exception as erros:
+            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
             return redirect(url_for('cliente.clientRegisterPage'))
         
     

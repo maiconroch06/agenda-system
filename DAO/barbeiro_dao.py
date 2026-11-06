@@ -8,49 +8,6 @@ class BarbeiroDAO:
 
     @staticmethod
     def salvar(barbeiro: Barbeiro):
-        # Insere os dados gerais do usuário
-        sql_usuario = text("""
-            INSERT INTO usuarios (
-                id,
-                nome_completo,
-                telefone,
-                cpf,
-                email,
-                senha,
-                foto_nome,
-                status_usuario,
-                data_cadastro,
-                data_atualizacao,
-                fk_id_endereco
-            ) VALUES (
-                :id,
-                :nome_completo,
-                :telefone,
-                :cpf,
-                :email,
-                :senha,
-                :foto_nome,
-                :status_usuario,
-                :data_cadastro,
-                :data_atualizacao,
-                :fk_id_endereco
-            )
-        """)
-
-        db.session.execute(sql_usuario, {
-            "id": barbeiro.id,
-            "nome_completo": barbeiro.nome_completo,
-            "telefone": barbeiro.telefone,
-            "cpf": barbeiro.cpf,
-            "email": barbeiro.email,
-            "senha": barbeiro.senha,
-            "foto_nome": barbeiro.foto_nome,
-            "status_usuario": barbeiro.status_usuario,
-            "data_cadastro": barbeiro.data_cadastro,
-            "data_atualizacao": barbeiro.data_atualizacao,
-            "fk_id_endereco": barbeiro.fk_id_endereco
-        })
-
         # Insere os dados específicos do barbeiro
         sql_barbeiro = text("""
             INSERT INTO barbeiros (

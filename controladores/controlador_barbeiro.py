@@ -11,12 +11,19 @@ from models.usuarios import Usuario
 from models.endereco import Endereco
 from models.barbeiros import Barbeiro
 from enums import EnumStatusMensagens
+from services_mvc import BarbeiroService
 
 
 class ControladorBarbeiro:
 
-    @staticmethod
-    def validarFormularioCriarEditarBarbeiro(request, rota_erro: str, rota_certa: str, id_barbeiro:int):
+    __barbeiroService = BarbeiroService()
+
+    @classmethod
+    def gerenciarBarbeiro(cls):
+        return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = cls.__barbeiroService.consultar_barbeiros(), mensagens_status=EnumStatusMensagens)
+
+    # @staticmethod
+    # def validarFormularioCriarEditarBarbeiro(request, rota_erro: str, rota_certa: str, id_barbeiro:int):
 
         try:
             # ==========================================================
@@ -470,298 +477,298 @@ class ControladorBarbeiro:
                 dados_preenchidos=request.form
             )
 
-    @staticmethod
-    def criarBarbeiro(
-        cpf,
-        nome,
-        email,
-        senha,
-        telefone,
-        foto,
-        descricao,
-        cep,
-        cidade,
-        uf,
-        bairro,
-        logradouro,
-        numero,
-        complemento,
-        sequencia
-    ):
-
-        try:
-
-            print("======================================")
-            print("INICIANDO CADASTRO DO BARBEIRO")
-            print("======================================")
-
-
-            # ==========================================================
-            # 1. BUSCAR O ESTADO
-            # ==========================================================
-
-            estado = db.session.execute(
-                db.text("""
-                    SELECT id
-                    FROM estados
-                    WHERE sigla_estado = :uf
-                """),
-                {
-                    "uf": uf
-                }
-            ).scalar()
+    # @staticmethod
+    # def criarBarbeiro(
+    #     cpf,
+    #     nome,
+    #     email,
+    #     senha,
+    #     telefone,
+    #     foto,
+    #     descricao,
+    #     cep,
+    #     cidade,
+    #     uf,
+    #     bairro,
+    #     logradouro,
+    #     numero,
+    #     complemento,
+    #     sequencia
+    # ):
+
+    #     try:
+
+    #         print("======================================")
+    #         print("INICIANDO CADASTRO DO BARBEIRO")
+    #         print("======================================")
+
+
+    #         # ==========================================================
+    #         # 1. BUSCAR O ESTADO
+    #         # ==========================================================
+
+    #         estado = db.session.execute(
+    #             db.text("""
+    #                 SELECT id
+    #                 FROM estados
+    #                 WHERE sigla_estado = :uf
+    #             """),
+    #             {
+    #                 "uf": uf
+    #             }
+    #         ).scalar()
 
-            print("ID DO ESTADO:", estado)
+    #         print("ID DO ESTADO:", estado)
 
-            if not estado:
-                raise Exception(
-                    f"Estado não encontrado para a UF: {uf}"
-                )
+    #         if not estado:
+    #             raise Exception(
+    #                 f"Estado não encontrado para a UF: {uf}"
+    #             )
 
 
-            # ==========================================================
-            # 2. CRIAR ENDEREÇO
-            # ==========================================================
+    #         # ==========================================================
+    #         # 2. CRIAR ENDEREÇO
+    #         # ==========================================================
 
-            endereco = Endereco(
-                cep=cep,
-                cidade=cidade,
-                numero=int(numero),
-                bairro=bairro,
-                estado=estado,
-                sequencia=sequencia if sequencia else None,
-                complemento=complemento if complemento else None
-            )
-            print("OBJETO ENDEREÇO CRIADO")
+    #         endereco = Endereco(
+    #             cep=cep,
+    #             cidade=cidade,
+    #             numero=int(numero),
+    #             bairro=bairro,
+    #             estado=estado,
+    #             sequencia=sequencia if sequencia else None,
+    #             complemento=complemento if complemento else None
+    #         )
+    #         print("OBJETO ENDEREÇO CRIADO")
 
-            id_endereco = endereco.inserirEndereco()
+    #         id_endereco = endereco.inserirEndereco()
 
-            print("ID DO ENDEREÇO:", id_endereco)
+    #         print("ID DO ENDEREÇO:", id_endereco)
 
-            if not id_endereco:
-                raise Exception(
-                    "O endereço não retornou um ID."
-                )
-
-
-            # ==========================================================
-            # 3. CRIAR USUÁRIO
-            # ==========================================================
-
-            agora = datetime.now(timezone.utc)
-
-            usuario = Usuario(
-                nome_completo=nome,
-                telefone=re.sub(r"\D", "", telefone),
-                email=email,
-                senha=senha,
-                foto=foto,
-                id_endereco=id_endereco,
-                ativo=1,
-                data_cadastro=agora,
-                data_atualizacao=agora,
-                cpf=re.sub(r"\D", "", cpf)
-            )
-
-            print("OBJETO USUÁRIO CRIADO")
-
-            id_usuario = usuario.salvar()
+    #         if not id_endereco:
+    #             raise Exception(
+    #                 "O endereço não retornou um ID."
+    #             )
+
+
+    #         # ==========================================================
+    #         # 3. CRIAR USUÁRIO
+    #         # ==========================================================
+
+    #         agora = datetime.now(timezone.utc)
+
+    #         usuario = Usuario(
+    #             nome_completo=nome,
+    #             telefone=re.sub(r"\D", "", telefone),
+    #             email=email,
+    #             senha=senha,
+    #             foto=foto,
+    #             id_endereco=id_endereco,
+    #             ativo=1,
+    #             data_cadastro=agora,
+    #             data_atualizacao=agora,
+    #             cpf=re.sub(r"\D", "", cpf)
+    #         )
+
+    #         print("OBJETO USUÁRIO CRIADO")
+
+    #         id_usuario = usuario.salvar()
 
-            print("ID DO USUÁRIO:", id_usuario)
-
-            if not id_usuario:
-                raise Exception(
-                    "O usuário não retornou um ID."
-                )
+    #         print("ID DO USUÁRIO:", id_usuario)
+
+    #         if not id_usuario:
+    #             raise Exception(
+    #                 "O usuário não retornou um ID."
+    #             )
 
 
-            # ==========================================================
-            # 4. CRIAR BARBEIRO
-            # ==========================================================
+    #         # ==========================================================
+    #         # 4. CRIAR BARBEIRO
+    #         # ==========================================================
 
-            barbeiro = Barbeiro()
+    #         barbeiro = Barbeiro()
 
-            barbeiro.id = id_usuario
-            barbeiro.data_liberacao = None
-            barbeiro.ativo = 1
-            barbeiro.descricao = descricao
+    #         barbeiro.id = id_usuario
+    #         barbeiro.data_liberacao = None
+    #         barbeiro.ativo = 1
+    #         barbeiro.descricao = descricao
 
-            print("OBJETO BARBEIRO CRIADO")
+    #         print("OBJETO BARBEIRO CRIADO")
 
-            barbeiro.salvar()
+    #         barbeiro.salvar()
 
-            print("BARBEIRO INSERIDO")
+    #         print("BARBEIRO INSERIDO")
 
 
-            # ==========================================================
-            # 5. COMMIT
-            # ==========================================================
+    #         # ==========================================================
+    #         # 5. COMMIT
+    #         # ==========================================================
 
-            db.session.commit()
+    #         db.session.commit()
 
-            print("======================================")
-            print("CADASTRO CONCLUÍDO COM SUCESSO")
-            print("======================================")
+    #         print("======================================")
+    #         print("CADASTRO CONCLUÍDO COM SUCESSO")
+    #         print("======================================")
 
-            return id_usuario
+    #         return id_usuario
 
 
-        except Exception as erro:
+    #     except Exception as erro:
 
-            db.session.rollback()
+    #         db.session.rollback()
 
-            import traceback
+    #         import traceback
 
-            print("======================================")
-            print("ERRO AO SALVAR BARBEIRO")
-            print("======================================")
-            print(f"ERRO: {erro}")
+    #         print("======================================")
+    #         print("ERRO AO SALVAR BARBEIRO")
+    #         print("======================================")
+    #         print(f"ERRO: {erro}")
 
-            traceback.print_exc()
+    #         traceback.print_exc()
 
-            print("======================================")
+    #         print("======================================")
 
-            return None
+    #         return None
 
-    @staticmethod
-    def editarBarbeiro(
-        id_barbeiro,
-        cpf,
-        nome,
-        email,
-        senha,
-        telefone,
-        foto,
-        descricao,
-        cep,
-        cidade,
-        uf,
-        bairro,
-        logradouro,
-        numero,
-        complemento,
-        sequencia
-    ):
-        try:
-            print("======================================")
-            print("INICIANDO EDIÇÃO DO BARBEIRO")
-            print("ID:", id_barbeiro)
-            print("======================================")
+    # @staticmethod
+    # def editarBarbeiro(
+    #     id_barbeiro,
+    #     cpf,
+    #     nome,
+    #     email,
+    #     senha,
+    #     telefone,
+    #     foto,
+    #     descricao,
+    #     cep,
+    #     cidade,
+    #     uf,
+    #     bairro,
+    #     logradouro,
+    #     numero,
+    #     complemento,
+    #     sequencia
+    # ):
+    #     try:
+    #         print("======================================")
+    #         print("INICIANDO EDIÇÃO DO BARBEIRO")
+    #         print("ID:", id_barbeiro)
+    #         print("======================================")
 
-            # ==========================================================
-            # 1. BUSCAR O BARBEIRO EXISTENTE
-            # ==========================================================
+    #         # ==========================================================
+    #         # 1. BUSCAR O BARBEIRO EXISTENTE
+    #         # ==========================================================
 
-            barbeiro = db.session.get(Barbeiro, id_barbeiro)
+    #         barbeiro = db.session.get(Barbeiro, id_barbeiro)
 
-            if barbeiro is None:
-                raise Exception("Barbeiro não encontrado.")
+    #         if barbeiro is None:
+    #             raise Exception("Barbeiro não encontrado.")
 
-            # ==========================================================
-            # 2. BUSCAR O USUÁRIO ASSOCIADO
-            # ==========================================================
+    #         # ==========================================================
+    #         # 2. BUSCAR O USUÁRIO ASSOCIADO
+    #         # ==========================================================
 
-            usuario = db.session.get(Usuario, id_barbeiro)
+    #         usuario = db.session.get(Usuario, id_barbeiro)
 
-            if usuario is None:
-                raise Exception("Usuário do barbeiro não encontrado.")
+    #         if usuario is None:
+    #             raise Exception("Usuário do barbeiro não encontrado.")
 
-            # ==========================================================
-            # 3. BUSCAR O ENDEREÇO ASSOCIADO
-            # ==========================================================
+    #         # ==========================================================
+    #         # 3. BUSCAR O ENDEREÇO ASSOCIADO
+    #         # ==========================================================
 
-            endereco = db.session.get(
-                Endereco,
-                usuario.fk_id_endereco
-            )
+    #         endereco = db.session.get(
+    #             Endereco,
+    #             usuario.fk_id_endereco
+    #         )
 
-            if endereco is None:
-                raise Exception("Endereço do barbeiro não encontrado.")
+    #         if endereco is None:
+    #             raise Exception("Endereço do barbeiro não encontrado.")
 
-            # ==========================================================
-            # 4. BUSCAR O ESTADO PELA UF
-            # ==========================================================
+    #         # ==========================================================
+    #         # 4. BUSCAR O ESTADO PELA UF
+    #         # ==========================================================
 
-            estado = db.session.execute(
-                db.text("""
-                    SELECT id
-                    FROM estados
-                    WHERE sigla_estado = :uf
-                """),
-                {"uf": uf}
-            ).scalar()
+    #         estado = db.session.execute(
+    #             db.text("""
+    #                 SELECT id
+    #                 FROM estados
+    #                 WHERE sigla_estado = :uf
+    #             """),
+    #             {"uf": uf}
+    #         ).scalar()
 
-            if estado is None:
-                raise Exception(f"Estado não encontrado para a UF: {uf}")
+    #         if estado is None:
+    #             raise Exception(f"Estado não encontrado para a UF: {uf}")
 
-            # ==========================================================
-            # 5. ATUALIZAR O ENDEREÇO EXISTENTE
-            # ==========================================================
+    #         # ==========================================================
+    #         # 5. ATUALIZAR O ENDEREÇO EXISTENTE
+    #         # ==========================================================
 
-            endereco.cep = cep
-            endereco.cidade = cidade
-            endereco.numero = int(numero)
-            endereco.bairro = bairro
-            endereco.fk_estado = estado
-            endereco.sequencia = sequencia if sequencia else None
-            endereco.complemento = complemento if complemento else None
+    #         endereco.cep = cep
+    #         endereco.cidade = cidade
+    #         endereco.numero = int(numero)
+    #         endereco.bairro = bairro
+    #         endereco.fk_estado = estado
+    #         endereco.sequencia = sequencia if sequencia else None
+    #         endereco.complemento = complemento if complemento else None
 
-            # ==========================================================
-            # 6. ATUALIZAR OS DADOS DO USUÁRIO
-            # ==========================================================
+    #         # ==========================================================
+    #         # 6. ATUALIZAR OS DADOS DO USUÁRIO
+    #         # ==========================================================
 
-            usuario.cpf = re.sub(r"\D", "", cpf)
-            usuario.nome_completo = nome
-            usuario.email = email
-            usuario.telefone = re.sub(r"\D", "", telefone)
-            usuario.data_atualizacao = datetime.now(timezone.utc)
+    #         usuario.cpf = re.sub(r"\D", "", cpf)
+    #         usuario.nome_completo = nome
+    #         usuario.email = email
+    #         usuario.telefone = re.sub(r"\D", "", telefone)
+    #         usuario.data_atualizacao = datetime.now(timezone.utc)
 
-            # Só altera a senha se o usuário informou uma nova.
-            if senha and senha.strip():
-                from werkzeug.security import generate_password_hash
+    #         # Só altera a senha se o usuário informou uma nova.
+    #         if senha and senha.strip():
+    #             from werkzeug.security import generate_password_hash
 
-                usuario.senha_hash = generate_password_hash(senha)
+    #             usuario.senha_hash = generate_password_hash(senha)
 
-            # Só substitui a foto se uma nova foto foi enviada.
-            if foto:
-                usuario.foto_nome = foto
+    #         # Só substitui a foto se uma nova foto foi enviada.
+    #         if foto:
+    #             usuario.foto_nome = foto
 
-            # ==========================================================
-            # 7. ATUALIZAR OS DADOS DO BARBEIRO
-            # ==========================================================
+    #         # ==========================================================
+    #         # 7. ATUALIZAR OS DADOS DO BARBEIRO
+    #         # ==========================================================
 
-            barbeiro.descricao = descricao
+    #         barbeiro.descricao = descricao
 
-            # ==========================================================
-            # 8. SALVAR TODAS AS ALTERAÇÕES
-            # ==========================================================
+    #         # ==========================================================
+    #         # 8. SALVAR TODAS AS ALTERAÇÕES
+    #         # ==========================================================
 
-            db.session.commit()
+    #         db.session.commit()
 
-            print("======================================")
-            print("BARBEIRO ATUALIZADO COM SUCESSO")
-            print("======================================")
+    #         print("======================================")
+    #         print("BARBEIRO ATUALIZADO COM SUCESSO")
+    #         print("======================================")
 
-            return id_barbeiro
+    #         return id_barbeiro
 
-        except Exception as erro:
-            db.session.rollback()
+    #     except Exception as erro:
+    #         db.session.rollback()
 
-            import traceback
+    #         import traceback
 
-            print("======================================")
-            print("ERRO AO EDITAR BARBEIRO")
-            print("======================================")
-            print(f"ERRO: {erro}")
+    #         print("======================================")
+    #         print("ERRO AO EDITAR BARBEIRO")
+    #         print("======================================")
+    #         print(f"ERRO: {erro}")
 
-            traceback.print_exc()
+    #         traceback.print_exc()
 
-            print("======================================")
+    #         print("======================================")
 
-            return None
+    #         return None
 
-    @staticmethod
-    def verificarDadosUnicos(cpf, email, telefone, id_barbeiro=None):
+    # @staticmethod
+    # def verificarDadosUnicos(cpf, email, telefone, id_barbeiro=None):
         cpf = re.sub(r"\D", "", cpf)
         telefone = re.sub(r"\D", "", telefone)
         email = email.strip()

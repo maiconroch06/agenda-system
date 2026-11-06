@@ -4,12 +4,14 @@ from werkzeug.security import check_password_hash
 from database import db
 from enums import EnumStatusMensagens
 from decimal import Decimal, InvalidOperation
-from services_mvc import GestorServiceMVC, ServicoBarbearia
+from services_mvc import GestorServiceMVC, ServicoBarbearia, BarbeiroService
 from execoes import ImagemErrorExcecao 
+from models import Barbeiro
 
 class ControladorGestor():
     __gestor_service_mvc = GestorServiceMVC()
     __servicos_barbearia_service_mvc = ServicoBarbearia()
+    __barbeiro_service_mvc = BarbeiroService()
     
     @classmethod
     def login(cls, email:str, senha:str):
@@ -22,12 +24,16 @@ class ControladorGestor():
                 flash(f"{error}")
                 return  redirect(url_for('gestor.gestorLoginPagina'))
 
-    def cadastrarBarbeiro(photo:str, cpf:str, name:str, email:str, telephone:str, address:str, description:str):
-        # Validação inicial simples
-        if not photo or not cpf or not name or not email or not telephone or not address or not description:
-            session['erro'] = "Por favor, preencha todos os campos."
-            return redirect(url_for('gestor.gestorBarbeiroCadastro'))
-        return "<h1>Deu Certo</h1>"
+    @classmethod
+    def cadastrarBarbeiro(cls, barbeiro: Barbeiro, fotoTemp):
+        try:
+            barbeiro_id_usuario_cadastrado = cls.__barbeiro_service_mvc.cadastrarUsuarioService(barbeiro, fotoTemp)
+            barbeiro.id = barbeiro_id_usuario_cadastrado
+            cls.__barbeiro_service_mvc.salvar_dados_especificos(barbeiro)
+            return redirect(url_for('gestor.gestorAbaBarbeiros'))
+        except Exception as erros:
+            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
+        return redirect(url_for('gestor.gestorBarbeiroPage'))
 
     @classmethod
     def cadastrarServico(cls, foto, novo_descricao: str, novo_valor: str, novo_duracao:str ):
