@@ -68,11 +68,12 @@ const PROFISSIONAIS_PADRAO = [
 const AGENDAMENTOS_PADRAO = [
     { id: "a1", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(0), hora: "09:00", cliente: "Carlos Eduardo",  telefone: "(11) 98765-4321", servico: "Corte Social",       valor: 45, status: "concluido",  observacoes: "" },
     { id: "a2", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(0), hora: "10:00", cliente: "Bruno Alves",      telefone: "(11) 91234-5678", servico: "Degradê & Barba",    valor: 70, status: "concluido",  observacoes: "Cliente prefere degradê baixo" },
-    { id: "a3", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(0), hora: "11:30", cliente: "Rafael Souza",     telefone: "(11) 99887-6655", servico: "Barba",              valor: 35, status: "confirmado", observacoes: "" },
+    { id: "a3", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(0), hora: "11:30", cliente: "Rafael Souza",     telefone: "(11) 99887-6655", servico: "Barba",              valor: 35, status: "aguardando", observacoes: "" },
     { id: "a4", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(0), hora: "14:00", cliente: "Diego Martins",    telefone: "(11) 98111-2233", servico: "Corte Infantil",      valor: 40, status: "aguardando", observacoes: "Primeira vez" },
     { id: "a5", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(0), hora: "15:30", cliente: "Felipe Costa",     telefone: "(11) 97222-3344", servico: "Corte Militar",       valor: 45, status: "aguardando", observacoes: "" },
     { id: "a6", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(0), hora: "16:30", cliente: "Gustavo Lima",     telefone: "(11) 96333-4455", servico: "Social & Barba",      valor: 70, status: "cancelado",  observacoes: "Cliente cancelou" },
     { id: "a7", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(1), hora: "09:30", cliente: "Henrique Dias",    telefone: "(11) 95444-5566", servico: "Degradê",              valor: 50, status: "aguardando", observacoes: "" },
+    { id: "a9", barbeiro: "Mendes",        data: diasAPartirDeHoje(1), hora: "14:00", cliente: "Igor Pereira",     telefone: "(11) 94555-6677", servico: "Corte Social",         valor: 45, status: "aguardando", observacoes: "" },
     { id: "a8", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(1), hora: "13:00", cliente: "Igor Pereira",     telefone: "(11) 94555-6677", servico: "Corte Social",         valor: 45, status: "aguardando", observacoes: "" }
 ];
 
@@ -304,17 +305,17 @@ function atualizarStatus(id, novoStatus) {
    MODAL BLOQUEAR HORÁRIO
    ============================================================ */
 
-function abrirModalBloquear() {
+function abrirFiltro() {
     els.overlayBloquear.classList.remove("hidden");
     els.modalBloquear.classList.remove("hidden");
 }
 
-function fecharModalBloquear() {
+function fecharFiltro() {
     els.overlayBloquear.classList.add("hidden");
     els.modalBloquear.classList.add("hidden");
 }
 
-function confirmarBloqueio() {
+function confirmarFiltro() {
     const barbeiro = els.bloqBarbeiro ? els.bloqBarbeiro.value : "";
     const data = els.bloqData.value;
     const inicio = els.bloqInicio.value;
@@ -327,7 +328,7 @@ function confirmarBloqueio() {
     bloqueios.push({ barbeiro, data, inicio, fim, motivo: motivo || "Horário bloqueado" });
     salvarBloqueios();
     mostrarAviso(`Horário bloqueado para ${barbeiro}!`);
-    fecharModalBloquear();
+    fecharFiltro();
 }
 
 function sairDaConta() {
@@ -356,5 +357,18 @@ function carregarData() {
     const elData = document.getElementById("data-atual-str");
     if (elData) elData.textContent = dataFormatted.charAt(0).toUpperCase() + dataFormatted.slice(1);
 }
+
+/*
+function carregarData() {
+    // Data debaixo do titulo
+    const dataFormatted = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
+    const dataCapitalizada = dataFormatted.charAt(0).toUpperCase() + dataFormatted.slice(1);
+    
+    // Atualiza TODOS os elementos na tela que tenham a classe 'data-atual-str'
+    document.querySelectorAll(".data-atual-str").forEach(el => {
+        el.textContent = dataCapitalizada;
+    });
+}
+*/
 
 carregarData();

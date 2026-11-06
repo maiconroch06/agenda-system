@@ -35,51 +35,35 @@
                         </div>
                     </div>
 
-                    <!-- CARDS KPIS RESPONSIVOS -->
+                    <!-- CARDS KPIS RESPONSIVOS 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                        <div
-                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
-                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
-                                Agendamentos hoje</div>
-                            <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8]"
-                                id="kpi-total-hoje">0</div>
-                            <div class="text-[11px] sm:text-xs text-[#888780] mt-1 truncate" id="kpi-total-hoje-sub">—
-                            </div>
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
+                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Agendamentos hoje</div>
+                            <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8]" id="kpi-total-hoje">0</div>
+                            <!--div class="text-[11px] sm:text-xs text-[#888780] mt-1 truncate" id="kpi-total-hoje-sub">—</div--
                         </div>
-                        <div
-                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
-                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
-                                Próximo</div>
-                            <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8] truncate"
-                                id="kpi-proximo">—</div>
-                            <div class="text-[11px] sm:text-xs text-[#888780] mt-1 truncate" id="kpi-proximo-sub">—
-                            </div>
+                        <!--div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
+                        <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Ganhos hoje</div>
+                        <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8] truncate" id="kpi-ganhos-hoje">R$ 0,00</div>
+                        </div--
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faltas / Cancelados</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faltas-hoje">0</div>
                         </div>
-                        <div
-                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
-                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
-                                Ganhos hoje</div>
-                            <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8] truncate"
-                                id="kpi-ganhos-hoje">R$ 0,00</div>
-                            <div class="text-[11px] sm:text-xs text-[#888780] mt-1">—</div>
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
+                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Avaliação</div>
+                            <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8]"id="kpi-avaliacao">—</div>
                         </div>
-                        <div
-                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
-                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
-                                Avaliação</div>
-                            <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8]"
-                                id="kpi-avaliacao">—</div>
-                            <div class="text-[11px] sm:text-xs text-[#888780] mt-1 truncate" id="kpi-avaliacao-sub">—
-                            </div>
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between">
+                            <div class="text-[10px] sm:text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">Próximo Horário</div>
+                            <div class="text-lg sm:text-2xl font-semibold leading-tight text-[#f1efe8] truncate" id="kpi-proximo">—</div>
                         </div>
-                    </div>
+                    </div>-->
 
                     <!-- Card de Progresso de Conclusão dos Agendamentos -->
                     {% include "componetizacao/Cards/card-progresso-agendamentos.html" %}
 
-                    <div class="text-xs font-medium text-[#888780] uppercase tracking-wider mb-3">
-                        Atendimentos de hoje
-                    </div>
+                    <div class="text-xs font-medium text-[#888780] uppercase tracking-wider mb-3">Atendimentos de hoje</div>
 
                     <!-- Listagem dos agendamentos de hoje -->
                     <div class="flex flex-col gap-2" id="lista-inicio-hoje"></div>

@@ -14,8 +14,10 @@ Object.assign(els, {
     kpiAtendimentosHoje: document.getElementById("kpi-atendimentos-hoje"),
     kpiOcupacaoHoje: document.getElementById("kpi-ocupacao-hoje"),
     kpiFaltasHoje: document.getElementById("kpi-faltas-hoje"),
-    progressoFill: document.getElementById("progresso-fill"),
     progressoTexto: document.getElementById("progresso-texto"),
+    progressoFill: document.getElementById("progresso-fill"),
+    progressoCancelados: document.getElementById("progresso-cancelados"),
+    progressoPendentes: document.getElementById("progresso-pendente"),
     totalAgendamentosHoje: document.getElementById("total-agendamentos-hoje"),
     listaHojeCards: document.getElementById("lista-hoje-cards"),
 
@@ -54,35 +56,51 @@ function cardAtendimentoHojeHTML(item) {
 function carregarDashboardInicio() {
     const hoje = hojeISO();
 
-    const doDia = agendamentos.filter(a => a.data === hoje).sort((a, b) => a.hora.localeCompare(b.hora));
+    const doDia = agendamentos.filter(a => a.data === hoje).sort((a, b) => (a.hora || "").localeCompare(b.hora || ""));
 
+    // Cálculos de faturamento e contagens
     const faturamento = doDia
         .filter(a => a.status === "concluido" || a.status === "confirmado")
         .reduce((acc, a) => acc + Number(a.valor), 0);
 
     const concluidos = doDia.filter(a => a.status === "concluido").length;
-    const total = doDia.length;
-    const ocupacao = total > 0 ? Math.round((concluidos / total) * 100) : 0;
-    const faltas = doDia.filter(a => a.status === "cancelado").length;
+    const cancelados = doDia.filter(a => a.status === "cancelado").length;
+    const pendentes = doDia.filter(a => a.status === "aguardando").length;
+    const totalGeral = doDia.length;
+    
+    // Total válido decrementando os cancelados
+    const totalValidos = totalGeral - cancelados;
+    const ocupacao = totalValidos > 0 ? Math.round((concluidos / totalValidos) * 100) : 0;
 
+    // Atualização dos KPIs principais
     if (els.kpiFaturamentoHoje) els.kpiFaturamentoHoje.textContent = formatarMoeda(faturamento);
-    if (els.kpiAtendimentosHoje) els.kpiAtendimentosHoje.textContent = `${concluidos} / ${total}`;
+    if (els.kpiAtendimentosHoje) els.kpiAtendimentosHoje.textContent = `${concluidos} / ${totalValidos}`;
     if (els.kpiOcupacaoHoje) els.kpiOcupacaoHoje.textContent = `${ocupacao}%`;
-    if (els.kpiFaltasHoje) els.kpiFaltasHoje.textContent = faltas;
-    if (els.totalAgendamentosHoje) els.totalAgendamentosHoje.textContent = `${total} agendamentos`;
+    if (els.kpiFaltasHoje) els.kpiFaltasHoje.textContent = cancelados;
+    if (els.totalAgendamentosHoje) els.totalAgendamentosHoje.textContent = `${totalGeral} agendamentos`;
 
+    // Atualização do texto e das barras de progresso (Verde e Vermelha)
+    if (els.progressoTexto) {
+        els.progressoTexto.textContent = `${concluidos} de ${totalValidos} concluídos`;
+    }
+
+    const pctConcluidos = totalGeral ? (concluidos / totalGeral) * 100 : 0;
+    const pctCancelados = totalGeral ? (cancelados / totalGeral) * 100 : 0;
+    const pctPendentes = totalGeral ? (pendentes / totalGeral) * 100 : 0;
+
+    if (els.progressoFill) els.progressoFill.style.width = `${pctConcluidos}%`;
+    if (els.progressoCancelados) els.progressoCancelados.style.width = `${pctCancelados}%`;
+    if (els.progressoPendentes) els.progressoPendentes.style.width = `${pctPendentes}%`;
+
+    // Renderização da lista de cards
     if (!els.listaHojeCards) return;
 
-    if (doDia.length === 0) {
+    if (totalGeral === 0) {
         els.listaHojeCards.innerHTML = `<div class="col-span-full p-8 text-center text-[#888780] bg-[#232220] border border-[#38362f] rounded-2xl">Nenhum agendamento para hoje.</div>`;
         return;
     }
 
-    els.progressoFill.style.width = pct + "%";
-    els.progressoTexto.textContent = `${concluidos.length} de ${total} concluídos`;
-
     els.listaHojeCards.innerHTML = doDia.map(cardAtendimentoHojeHTML).join("");
-
 }
 
 /* ============================================================
@@ -143,6 +161,8 @@ function renderizarFinanceiro() {
    ============================================================ */
 
 function iniciar() {
+    localStorage.clear();
+    
     carregarDashboardInicio();
     renderizarFinanceiro();
 
