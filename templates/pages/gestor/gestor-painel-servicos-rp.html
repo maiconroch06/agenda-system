@@ -31,12 +31,12 @@
                     <div class="flex items-center justify-between mb-5 gap-3">
                         <h1 class="text-lg lg:text-xl font-medium">Catálogo de Serviços</h1>
                         
-                    <a href="/gestor/painel/servicos/cadastrar">
-                            <button
-                            class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
-                            + Novo serviço
-                            </button>
-                    </a>
+                    
+                    <button type="button" id="cadastrar-servico"
+                        class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
+                        + Novo serviço
+                    </button>
+                    
                     </div>
 
                     <!--
@@ -72,7 +72,7 @@
                         {% endfor %}
 
                         {% include "componetizacao/janela_modal/modal_confimacao_excluir_servico.html" %}
-                        {% include "componetizacao/janela_modal/modal_editar_servico.html" %}
+                        {% include "componetizacao/janela_modal/modal_cadastrar_editar_servico.html" %}
                     </div>
                 </section>
 
@@ -92,7 +92,7 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_servico.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/janelas_modais/js_editar_servico.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/janelas_modais/js_cadastrar_editar_servico.js') }}"></script>
 </body>
 
 </html>

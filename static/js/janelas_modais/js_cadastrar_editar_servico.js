@@ -1,7 +1,9 @@
 const modal_editar_servico = document.querySelector("#janela_modal_editar_servico");
 const botao_editar = document.querySelectorAll("#editar-servico");
 const botao_cancelar_modal_servico = document.querySelector("#fechar-modal-editar");
-const botao_salvar_cadastrar = document.querySelector("#botao-cadastrar-editar");
+const botao_cadastrar_editar = document.querySelector("#botao-cadastrar-editar");
+const botao_cadastrar_servico = document.getElementById("cadastrar-servico");
+
 
 // campos do formulario
 const campo_descrico_servico = document.querySelector("#srv-nome");
@@ -19,6 +21,27 @@ const imagem_preview = document.querySelector('#img_srv-preview');
 
 let tipo_dados = -1;
 
+botao_cadastrar_servico.addEventListener("click", ()=>{
+    document.getElementById("div-seletor-status").classList.add("hidden");
+
+    formulario.action ="/gestor/painel/servicos/cadastrar";
+    document.getElementById("form-title").textContent = "Cadastrar Serviço";
+    botao_cadastrar_editar.textContent="Cadastrar Serviço";
+
+    descricao_servico.value="";
+    duracao_servico.value="";
+    valor_servico.value="";
+    imagem_preview.src="";
+
+    campo_imagem_anterior.value="";
+    imagem_preview.classList.add("hidden");
+
+    verificarOcultarBotao();
+
+    modal_editar_servico.showModal();
+});
+
+
 // trabalahdno com multiplos formularios
 // preciso selecionar qual formulario disparou o evento
 // por que não var? Porque let possui um escopo mais previsível e é a escolha recomendada para variáveis que precisam mudar de valor.
@@ -27,7 +50,8 @@ botao_editar.forEach(
         botao.addEventListener("click", (event) => {
         event.preventDefault();
         //preencher as informações
-        
+        document.getElementById("div-seletor-status").classList.remove("hidden");
+
         const dados_servicos = botao.value.split('&');
 
         if (dados_servicos.length === 0){
@@ -36,16 +60,13 @@ botao_editar.forEach(
 
         tipo_dados = dados_servicos[6];
 
-        if(tipo_dados===0){
-            document.getElementById("form-title").textContent = "Cadastrar Serviço";
-            botao_salvar_cadastrar.textContent = "Cadastrar";
-            formulario.action = "/gestor/painel/servicos/cadastrar";
-        }else{
-            document.getElementById("form-title").textContent = "Editar Serviço";
-            botao_salvar_cadastrar.textContent = "Editar";
-            imagem_preview.classList.remove("hidden");
-            formulario.action ="/gestor/painel/servicos/editar";
-        }
+        
+        
+        document.getElementById("form-title").textContent = "Editar Serviço";
+        botao_cadastrar_editar.textContent = "Editar Serviço";
+        imagem_preview.classList.remove("hidden");
+        formulario.action ="/gestor/painel/servicos/editar";
+        
         
         document.getElementById("srv-id").value = dados_servicos[0];
         descricao_servico.value  = dados_servicos[1];
@@ -77,7 +98,6 @@ botao_cancelar_modal_servico.addEventListener("click", ()=>{
 });
 
 modal_editar_servico.addEventListener("close", () => {
-    console.log("valores: " + duracao_servico.value);
     document.getElementById("div-validation-message").classList.add("hidden");
 });
 

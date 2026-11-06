@@ -69,8 +69,8 @@ def gestorServicoCadastrar():
     
     imagem = request.files.get('srv-imagem')
     
-    descricao_servico = request.form.get('srv-nome').strip()
-    valor = request.form.get('srv-preco').strip()
+    descricao_servico = request.form.get('srv-descricao-servico').strip()
+    valor = request.form.get('srv-valor').strip()
     duracao = request.form.get('srv-duracao').strip()
          
     return ControladorGestor.cadastrarServico(imagem, descricao_servico, valor, duracao)
