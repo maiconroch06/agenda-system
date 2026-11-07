@@ -40,7 +40,7 @@ class EnderecoDAO:
             "sequencia": endereco.sequencia,
             "complemento": endereco.complemento
         })
-        db.session.commit()
+        db.session.flush()
 
         # O ID é gerado pelo AUTO_INCREMENT da tabela.
         return resultado.lastrowid

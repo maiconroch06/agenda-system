@@ -176,8 +176,7 @@ def gestorBarbeiroPageUpdate(id_barbeiro:int):
 #  CLIENTES
 @gestor.route('/painel/clientes')
 def gestorExibirClientes():
-    usuario = Cliente()
-    return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios=usuario.buscarTodosCLientes())
+    return ControladorGestor.consultar_clientes()
 
 ##################################################################################
 # FINANCEIRO

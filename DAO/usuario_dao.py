@@ -50,7 +50,7 @@ class UsuarioDAO:
             "fk_id_endereco": usuario.endereco.id if usuario.endereco is not None else None
         })
 
-        db.session.commit()
+        db.session.flush()
         
         #retorna o ultimo id inserido no banco;
         return resposta_id_usuario.lastrowid 

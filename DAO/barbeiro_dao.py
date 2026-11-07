@@ -25,7 +25,7 @@ class BarbeiroDAO:
             )
         """)
 
-        db.session.execute(sql_barbeiro, {
+        reposta = db.session.execute(sql_barbeiro, {
             "id": barbeiro.id,
             "data_liberacao": barbeiro.data_liberacao,
             "descricao": barbeiro.descricao,
@@ -34,7 +34,8 @@ class BarbeiroDAO:
         })
 
         db.session.flush()
-        return barbeiro.id
+            
+        return reposta.rowcount > 0
 
     @staticmethod
     def buscar_por_id(id_barbeiro: int):
@@ -96,10 +97,7 @@ class BarbeiroDAO:
 
         registros = db.session.execute(sql).mappings().all()
 
-        return [
-            BarbeiroDAO._mapear_barbeiro(registro)
-            for registro in registros
-        ]
+        return registros
 
     @staticmethod
     def atualizar(barbeiro: Barbeiro):

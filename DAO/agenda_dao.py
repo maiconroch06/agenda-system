@@ -26,11 +26,9 @@ class AgendaDAO:
             "ativo": agenda.ativo
         })
 
-        agenda.id = resultado.lastrowid
-
         db.session.flush()
 
-        return agenda.id
+        return resultado.lastrowid
 
     @staticmethod
     def buscar_por_id(id_agenda: int):

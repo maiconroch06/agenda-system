@@ -5,6 +5,7 @@ from enums import EnumNomesPastaImagem
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from utilitarios import ValidadorDeImagens
+from werkzeug.utils import secure_filename
 
 
 class ServicoBarbearia:
@@ -36,9 +37,13 @@ class ServicoBarbearia:
             #salvar a imagem na pasta
             #extensão | validar extensao | pegar o novo nome da imagem
             
-            servico.foto_nome = ValidadorDeImagens.salvarImagem(foto_servico, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
+            servico.foto_nome = ValidadorDeImagens.nomeImagem(secure_filename(foto_servico.filename), "servicos") 
             
-            self.servico_repositorio.cadastrar_servico(servico)
+            resposta_repositorio = self.servico_repositorio.cadastrar_servico(servico)
+            
+            ValidadorDeImagens.salvarImagem(foto_servico, EnumNomesPastaImagem.IMAGEMS_SERVICOS, servico.foto_nome)
+            
+            return resposta_repositorio
             
         except IntegrityError as error:
             raise Exception("Erro ao cadastrar o serviço!")

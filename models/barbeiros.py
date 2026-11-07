@@ -18,7 +18,7 @@ class Barbeiro(Usuario):
         data_liberacao: datetime,
         descricao: str,
         status_barbeiro: bool,
-        fk_id_agenda: int,
+        fk_id_agenda: int | None = None,
         id: int | None = None,
         endereco: Endereco = None,
     ):

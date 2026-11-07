@@ -1,15 +1,15 @@
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class Agenda:
 
     def __init__(
         self,
-        id: int,
-        descricao: str,
-        data_criacao: datetime,
-        ativo: bool
+        id: int | None = None,
+        descricao: str | None = None,
+        data_criacao: datetime = datetime.now(timezone.utc),
+        ativo: bool = True
     ):
         self.id = id
         self.descricao = descricao

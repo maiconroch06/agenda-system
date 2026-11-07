@@ -4,6 +4,7 @@ from flask import flash, session
 from werkzeug.security import check_password_hash
 from utilitarios import Senha
 from enums import EnumNomesPastaImagem
+from database import db
 
 class ClienteService(UsuarioService):
 
@@ -13,11 +14,18 @@ class ClienteService(UsuarioService):
        
     def salvar_dados_especificos(self, usuario):
         try:
-            self.clienteRepositorio.salvar(usuario.id, None)
+            print("Passou aqui")
+            resposta_repositorio = self.clienteRepositorio.salvar(usuario.id, None)
+            
             session.permanent = True
             session['dados_cliente'] =  self.clienteRepositorio.consultarClienteId(usuario.id)
-          
+            
+            db.session.commit()
+            print(str(resposta_repositorio))
+            return resposta_repositorio
+            
         except Exception as error:
+        
             flash(f"Erro o salvar o cliente {error}")
 
     def realizarLoginService(self, email, senha):
@@ -38,7 +46,8 @@ class ClienteService(UsuarioService):
     def escolherPastaImagemUsuario(self):
             return EnumNomesPastaImagem.IMAGENS_CLIENTE
 
-     
+    def consultar_clientes_services(self):
+           return self.clienteRepositorio.listar_todos()  
 
       
 

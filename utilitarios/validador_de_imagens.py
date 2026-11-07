@@ -11,34 +11,45 @@ class ValidadorDeImagens:
     @classmethod
     def imgem_extensao_valida(cls, extensao:str):
         # valida a imagem
-        if (extensao != '.png' and extensao!='.jpg' and extensao!='.jpeg' and extensao != EnumNomesPastaImagem.IMAGEM_PADRAO.value):
+        if (extensao != 'png' and extensao!='jpg' and extensao!='jpeg' and extensao != EnumNomesPastaImagem.IMAGEM_PADRAO.value):
             raise ImagemErrorExcecao("O sistema só aceita imagens em formato png ou jpg")
     
+     
     @classmethod
-    def extensao_foto_servico(cls, imagem):
-                                           
-        if imagem and imagem.filename:
+    def extensao_foto_servico(cls, nome_imagem:str):
+                                               
+        if nome_imagem and nome_imagem.strip():
             # pega a extensao
-            imagemTemp = secure_filename(imagem.filename)
-            extensao = os.path.splitext(imagemTemp)[1]
-            return extensao
-            
-        return EnumNomesPastaImagem.IMAGEM_PADRAO.value        
+            extensao = nome_imagem.split(".")
+                        
+            if len(extensao) == 2:
+                return extensao[1]
+                
+        return EnumNomesPastaImagem.IMAGEM_PADRAO.value       
     
-    
+    @classmethod
+    def nomeImagem(cls, nome_imagem, prefixo_nome_imagem):
+   
+        extensao_ou_default_imagem = cls.extensao_foto_servico(nome_imagem)  
+        cls.imgem_extensao_valida(extensao_ou_default_imagem)
+        
+        if extensao_ou_default_imagem != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
+            foto_nome = f"{prefixo_nome_imagem}_{int(time.time_ns())}.{extensao_ou_default_imagem}" 
+            return foto_nome
+        
+        return extensao_ou_default_imagem
     
     # Função para salvar a imagem
     @classmethod
-    def salvarImagem(cls, imagem, nomePasta):
+    def salvarImagem(cls, imagem, nomePasta, nome_imagem):
         # O nome pode ser criptografado, mas deixei assim para acompanhar as imagems enviadas
         # nesse caso ele esta pegando o tempo em nanoSegundos;
         
-        extensao_ou_default_imagem = cls.extensao_foto_servico(imagem)
-        cls.imgem_extensao_valida(extensao_ou_default_imagem) 
-        
+        extensao_ou_default_imagem = nome_imagem
+                
         try:
             if extensao_ou_default_imagem != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
-                foto_nome = f"servicos_{int(time.time_ns())}{extensao_ou_default_imagem}"        
+                  
                 # crio o caminho da pasta
                 pasta = os.path.join(
                     current_app.root_path,
@@ -49,15 +60,13 @@ class ValidadorDeImagens:
                 os.makedirs(pasta,exist_ok=True)
                         
                 #crio o caminho da pasta com o nome
-                caminho = os.path.join(pasta, foto_nome)
+                caminho = os.path.join(pasta, extensao_ou_default_imagem)
                         
                 #salvo a imagem no caminho
                 imagem.save(caminho)
                 
-                return foto_nome
-
-            return extensao_ou_default_imagem
-        
+                return True 
+            
         except (OSError, FileNotFoundError, IsADirectoryError):
             raise Exception("Error ao tentar salvar a imagem no servidor")
 

@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, session, request, redirect, url_fo
 from controladores import ControladorCliente
 from models import Cliente
 from datetime import datetime, timezone
-from enums import EnumStatusMensagens
+from enums import EnumStatusMensagens, EnumNomesPastaImagem
 
 cliente = Blueprint('cliente', __name__, template_folder='templates')
 
@@ -46,8 +46,7 @@ def clientRegister():
         
     #remove a pontuação do telefone      
     telefone_temp = ''.join(filter(str.isdigit,request.form.get('telefone')))
-    fotoTemp = request.files.get('foto' , None) 
-       
+           
     # Instancia o objeto Usuario com os dados do formulário
     cliente = Cliente(
             nome_completo=request.form.get('nome'),
@@ -64,7 +63,7 @@ def clientRegister():
     
     controladorCliente = ControladorCliente()
     
-    return controladorCliente.cadastrarCliente(cliente, fotoTemp)
+    return controladorCliente.cadastrarCliente(cliente)
             
    
 @cliente.route('/agendamento/servicos', methods=['GET','POST'])

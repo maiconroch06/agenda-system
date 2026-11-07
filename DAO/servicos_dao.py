@@ -41,7 +41,7 @@ class ServicoDAO:
 
         db.session.commit()
 
-        return resposta.lastrowid
+        return resposta.lastrowid > 0
 
    
     def consultar_servico_id(self,id_servico: int):
