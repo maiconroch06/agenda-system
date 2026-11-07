@@ -19,7 +19,7 @@ class ControladorBarbeiro:
     __barbeiroService = BarbeiroService()
 
     @classmethod
-    def gerenciarBarbeiro(cls):
+    def consultar_todos_barbeiros(cls):
         return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = cls.__barbeiroService.consultar_barbeiros(), mensagens_status=EnumStatusMensagens)
 
     # @staticmethod

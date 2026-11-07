@@ -1,13 +1,13 @@
-<dialog id="modal" class="w-full max-w-md rounded-xl p-0 shadow-xl backdrop:bg-black/50">
+<dialog id="modal" class="w-full max-w-md rounded-xl p-0  m-auto shadow-xl backdrop:bg-black/50">
 
     <div class="p-6">
 
         <!-- Cabeçalho -->
         <div class="flex items-center justify-between mb-4">
 
-            <h1 class="text-lg font-semibold text-gray-800">
-                Remover serviço
-            </h1>
+            <h3 id="titulo-janela-modal"class="text-lg font-semibold text-gray-800">
+               
+            </h3>
 
             <!-- Botão fechar -->
             <button
@@ -21,10 +21,9 @@
         </div>
 
         <!-- Mensagem -->
-        <p class="text-sm text-gray-600 mb-6">
-            Tem certeza de que deseja remover este serviço?
-            Essa ação poderá ser irreversível.
-        </p>
+         
+        <div id="mensagem_modal_servico_excluir" class="text-sm text-gray-600 mb-6">
+        </div>
 
         <!-- Botões de ação -->
         <div class="flex justify-end gap-3">

@@ -5,9 +5,8 @@ from models import Barbeiro
 
 
 class BarbeiroDAO:
-
-    @staticmethod
-    def salvar(barbeiro: Barbeiro):
+    
+    def cadastrar(self, barbeiro: Barbeiro):
         # Insere os dados específicos do barbeiro
         sql_barbeiro = text("""
             INSERT INTO barbeiros (
@@ -30,15 +29,15 @@ class BarbeiroDAO:
             "data_liberacao": barbeiro.data_liberacao,
             "descricao": barbeiro.descricao,
             "status_barbeiro": barbeiro.status_barbeiro,
-            "fk_id_agenda": barbeiro.fk_id_agenda
+            "fk_id_agenda": barbeiro.agenda.id
         })
 
         db.session.flush()
             
         return reposta.rowcount > 0
 
-    @staticmethod
-    def buscar_por_id(id_barbeiro: int):
+    
+    def buscar_por_id(self, id_barbeiro: int):
         sql = text("""
             SELECT
                 u.id,
@@ -71,8 +70,8 @@ class BarbeiroDAO:
 
         return BarbeiroDAO._mapear_barbeiro(registro)
 
-    @staticmethod
-    def listar_todos():
+    
+    def consultar_todos(self):
         sql = text("""
             SELECT
                 u.id,
@@ -99,59 +98,26 @@ class BarbeiroDAO:
 
         return registros
 
-    @staticmethod
-    def atualizar(barbeiro: Barbeiro):
-        sql_usuario = text("""
-            UPDATE usuarios
-            SET
-                nome_completo = :nome_completo,
-                telefone = :telefone,
-                cpf = :cpf,
-                email = :email,
-                senha = :senha,
-                foto_nome = :foto_nome,
-                status_usuario = :status_usuario,
-                data_atualizacao = :data_atualizacao,
-                fk_id_endereco = :fk_id_endereco
-            WHERE id = :id
-        """)
+   
+    def atualizar_status_barbeiro(self,barbeiro:Barbeiro):
+            sql_usuario = text("""
+                UPDATE barbeiros
+                SET
+                descricao=:descricao,
+                status_barbeiro=:status_barbeiro,
+                WHERE id = :id
+            """)
+    
+            resultado = db.session.execute(sql_usuario, {
+                "id": barbeiro.id,
+                "descricao": barbeiro.descricao,
+                "status_barbeiro": barbeiro.status_barbeiro,
+            })
+    
+            db.session.commit()
+            return resultado.rowcount > 0
 
-        db.session.execute(sql_usuario, {
-            "id": barbeiro.id,
-            "nome_completo": barbeiro.nome_completo,
-            "telefone": barbeiro.telefone,
-            "cpf": barbeiro.cpf,
-            "email": barbeiro.email,
-            "senha": barbeiro.senha,
-            "foto_nome": barbeiro.foto_nome,
-            "status_usuario": barbeiro.status_usuario,
-            "data_atualizacao": barbeiro.data_atualizacao,
-            "fk_id_endereco": barbeiro.fk_id_endereco
-        })
-
-        sql_barbeiro = text("""
-            UPDATE barbeiros
-            SET
-                data_liberacao = :data_liberacao,
-                descricao = :descricao,
-                status_barbeiro = :status_barbeiro,
-                fk_id_agenda = :fk_id_agenda
-            WHERE id = :id
-        """)
-
-        resultado = db.session.execute(sql_barbeiro, {
-            "id": barbeiro.id,
-            "data_liberacao": barbeiro.data_liberacao,
-            "descricao": barbeiro.descricao,
-            "status_barbeiro": barbeiro.status_barbeiro,
-            "fk_id_agenda": barbeiro.fk_id_agenda
-        })
-
-        db.session.flush()
-        return resultado.rowcount > 0
-
-    @staticmethod
-    def excluir(id_barbeiro: int):
+    def excluir_barbeiro(self, id_barbeiro: int):
         sql = text("""
             DELETE FROM barbeiros
             WHERE id = :id
@@ -179,8 +145,7 @@ class BarbeiroDAO:
         db.session.flush()
         return True
 
-    @staticmethod
-    def _mapear_barbeiro(registro):
+    def _mapear_barbeiros(self, registro):
         return Barbeiro(
             id=registro["id"],
             nome_completo=registro["nome_completo"],

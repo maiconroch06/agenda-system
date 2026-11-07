@@ -26,10 +26,11 @@
                 {% set mensagens=mensagens_status %}
                 {% include "componetizacao/mensagens/mensagens.html" %}
  
+                <p id="titulo-modal" class="hidden">Serviço</p>
                 <!-- ABA 3: SERVIÇOS -->
                 <section id="aba-servicos">
                     <div class="flex items-center justify-between mb-5 gap-3">
-                        <h1 class="text-lg lg:text-xl font-medium">Catálogo de Serviços</h1>
+                        <h1  class="text-lg lg:text-xl font-medium">Catálogo de Serviços</h1>
                         
                     
                     <button type="button" id="cadastrar-servico"
@@ -54,7 +55,7 @@
                                     
                                     <img id="imagem-servico" class="w-20 h-20 rounded-full aspect-[3/4] object-cover mb-3 shadow-sm" src="{{ url_for('static', filename='assets/dados/servicos-imagens/{}'.format(servico.foto_nome))}}" >
                     
-                                    <h3 class="font-bold text-base mb-1 text-center">{{servico.descricao}}</h3>
+                                    <h3 id="campo-padrao" class="font-bold text-base mb-1 text-center">{{servico.descricao}}</h3>
                                     <p class="text-xs text-center mb-3 line-clamp-2">Valor R$ {{servico.valor}} | duracao {{servico.duracao}} minutos</p>
                                 
                                 </div>
@@ -62,8 +63,9 @@
                      
                                     <button type="button" id="editar-servico" value="{{servico.id}}&{{servico.descricao}}&{{servico.valor}}&{{servico.duracao}}&{{servico.foto_nome}}&{{servico.status_servico}}&1&{{ url_for('static', filename='assets/dados/servicos-imagens/{}'.format(servico.foto_nome))}}"
                                      class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center"> Editar </button> 
-                                    <form action="/gestor/painel/servicos/deletar" id="form-confirmar-exclusao" method="POST" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">
+                                    <form action="/gestor/painel/servicos/excluir" id="form-confirmar-exclusao" method="POST" class="py-1.5 bg-red-800 rounded-lg border border-[#38362f]  text-white hover:bg-red-700  text-xs font-medium transition-colors cursor-pointer text-center">
                                         <input class="hidden" type="number" name="srv-id-deletar" value="{{servico.id}}">
+                                        <input class="hidden" type="text" name="srv-foto_nome" value="{{servico.foto_nome}}">
                                         <button  type="submit"> Remover </button> 
                                     </form>
                                 
@@ -71,7 +73,7 @@
                             </div>
                         {% endfor %}
 
-                        {% include "componetizacao/janela_modal/modal_confimacao_excluir_servico.html" %}
+                        {% include "componetizacao/janela_modal/modal_confimacao_excluir_padrao.html" %}
                         {% include "componetizacao/janela_modal/modal_cadastrar_editar_servico.html" %}
                     </div>
                 </section>
@@ -91,7 +93,7 @@
         id="aviso">
     </div>
 
-    <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_servico.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/janelas_modais/js_cadastrar_editar_servico.js') }}"></script>
 </body>
 

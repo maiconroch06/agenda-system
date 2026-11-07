@@ -8,11 +8,11 @@ from enums import EnumStatusMensagens
 class ControladorCliente():
 
     def __init__(self):
-        self.clienteService = ClienteService()
+        self.__clienteService = ClienteService()
     
     def login(self, email:str, senha:str):
         try:
-            self.clienteService.realizarLoginService(email,senha)
+            self.__clienteService.realizarLoginService(email,senha)
             return redirect(url_for('cliente.clientAgendamentoServicos'))
        
         except Exception as erros:
@@ -21,9 +21,9 @@ class ControladorCliente():
               
     def cadastrarCliente(self, cliente:Cliente):      
         try:
-            cliente.id  =  self.clienteService.cadastrarUsuarioService(cliente, cliente.foto_nome)
+            cliente.id  =  self.__clienteService.cadastrarUsuarioService(cliente, cliente.foto_nome)
                      
-            if self.clienteService.salvar_dados_especificos(cliente):                                      
+            if self.__clienteService.salvar_dados_especificos(cliente):                                      
                 return redirect(url_for('cliente.cadastroSucesso'))
         
         except Exception as erros:
@@ -32,5 +32,5 @@ class ControladorCliente():
         
    
     def consultar_todos_clientes(self):
-        return self.clienteService.consultar_clientes_services()
+        return self.__clienteService.consultar_clientes_services()
    

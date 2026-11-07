@@ -3,51 +3,43 @@ from DAO.usuario_dao import UsuarioDAO
 
 
 class UsuarioRepositorio:
+    
+    def __init__(self):
+        self.__usuarioDao = UsuarioDAO()
+    
+    def salvar(self, usuario):
+        return self.__usuarioDao.cadastrar(usuario)
+    
+    def buscar_por_id(self,id_usuario):
+        return self.__usuarioDao.buscar_por_id(id_usuario)
 
-    @staticmethod
-    def salvar(usuario):
-        return UsuarioDAO.salvar(usuario)
+    def buscar_por_email(self, email):
+        return self.__usuarioDao.buscar_por_email(email)
 
-    @staticmethod
-    def buscar_por_id(id_usuario):
-        return UsuarioDAO.buscar_por_id(id_usuario)
+    def buscar_por_cpf(self, cpf):
+        return self.__usuarioDao.buscar_por_cpf(cpf)
 
-    @staticmethod
-    def buscar_por_email(email):
-        return UsuarioDAO.buscar_por_email(email)
+    def listar_todos(self):
+        return self.__usuarioDao.consultar_todos_usuarios()
 
-    @staticmethod
-    def buscar_por_cpf(cpf):
-        return UsuarioDAO.buscar_por_cpf(cpf)
+    def listar_ativos(self):
+        return self.__usuarioDao.contultar_usuarios_ativos()
+    
+    def atualizar(self,usuario):
+        return self.__usuarioDao.atualizar_usuarios(usuario)
 
-    @staticmethod
-    def listar_todos():
-        return UsuarioDAO.listar_todos()
+    def alterar_status(self,id_usuario, status):
+        return self.__usuarioDao.alterar_status(id_usuario, status)
 
-    @staticmethod
-    def listar_ativos():
-        return UsuarioDAO.listar_ativos()
-
-    @staticmethod
-    def atualizar(usuario):
-        return UsuarioDAO.atualizar(usuario)
-
-    @staticmethod
-    def alterar_status(id_usuario, status):
-        return UsuarioDAO.alterar_status(id_usuario, status)
-
-    @staticmethod
-    def excluir(id_usuario):
-        return UsuarioDAO.excluir(id_usuario)
-
-    @staticmethod
-    def verificar_email_existente(email, id_ignorado=None):
-        return UsuarioDAO.verificar_email_existente(
+    def excluir(self,id_usuario):
+        return self.__usuarioDao.excluir(id_usuario)
+    
+    def verificar_email_existente(self,email, id_ignorado=None):
+        return self.__usuarioDao.verificar_email_existente(
             email, id_ignorado
         )
-
-    @staticmethod
-    def verificar_cpf_existente(cpf, id_ignorado=None):
-        return UsuarioDAO.verificar_cpf_existente(
+    
+    def verificar_cpf_existente(self,cpf, id_ignorado=None):
+        return self.__usuarioDao.verificar_cpf_existente(
             cpf, id_ignorado
         )

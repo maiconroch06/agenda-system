@@ -67,7 +67,7 @@ class ServicoBarbearia:
                 status_servico=status_ativo  
             )
             
-            servico.foto_nome = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao)
+            servico.foto_nome = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao, "servicos")
             
             if not self.servico_repositorio.atualizar(servico):
                 raise Exception("Error ao tentar atualizar o serviço, tente novamente!")
@@ -76,8 +76,9 @@ class ServicoBarbearia:
             raise Exception("Os campos Preço e duração só aceitam números!")
         
         
-    def excluir_servico_barbearia(self, id_servico):
+    def excluir_servico_barbearia(self, id_servico, foto_nome):
         if self.servico_repositorio.excluir(id_servico):
+            ValidadorDeImagens.removerImagem(foto_nome, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
             return
         
         raise Exception("O serviço não foi excluido.")

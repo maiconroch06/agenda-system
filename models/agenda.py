@@ -1,43 +1,57 @@
 
 from datetime import datetime, timezone
 
-
 class Agenda:
 
     def __init__(
         self,
-        id: int | None = None,
-        descricao: str | None = None,
-        data_criacao: datetime = datetime.now(timezone.utc),
-        ativo: bool = True
+        id = None,
+        descricao = None,
+        data_criacao = datetime.now(timezone.utc),
+        ativo = True
     ):
-        self.id = id
-        self.descricao = descricao
-        self.data_criacao = data_criacao
-        self.ativo = ativo
+        self.__id = id
+        self.__descricao = descricao
+        self.__data_criacao = data_criacao
+        self.__ativo = ativo
 
-    def consultarDescricao(self):
-        return self.descricao
+    @property
+    def id(self):
+        return self.__id
 
-    def atualizarDescricao(self, descricao: str):
-        self.descricao = descricao
+    @id.setter
+    def id(self, value):
+        self.__id = value
 
-    def consultarDataCriacao(self):
-        return self.data_criacao
+    @property
+    def descricao(self):
+        return self.__descricao
 
-    def consultarStatus(self):
-        return self.ativo
+    @descricao.setter
+    def descricao(self, value):
+        self.__descricao = value
 
-    def ativarAgenda(self):
-        self.ativo = True
+    @property
+    def data_criacao(self):
+        return self.__data_criacao
 
-    def desativarAgenda(self):
-        self.ativo = False
+    @data_criacao.setter
+    def data_criacao(self, value):
+        self.__data_criacao = value
+
+    @property
+    def ativo(self):
+        return self.__ativo
+
+    @ativo.setter
+    def ativo(self, value):
+        self.__ativo = value
+
 
     def __str__(self):
         return (
-            f"Agenda(id={self.id}, "
-            f"descricao='{self.descricao}', "
-            f"data_criacao={self.data_criacao}, "
-            f"ativo={self.ativo})"
+            f"Agenda(id={self.__id}, "
+            f"descricao='{self.__descricao}', "
+            f"data_criacao={self.__data_criacao}, "
+            f"ativo={self.__ativo})"
         )

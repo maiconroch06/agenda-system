@@ -22,6 +22,7 @@
 
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+                <p id="titulo-modal" class="hidden">Barbeiro</p>
                  <!-- ============================================================
                 COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
                 ============================================================ -->
@@ -49,27 +50,35 @@
                                     : `<div class="w-20 h-20 rounded-full bg-zinc-100  bg-zinc-700 border border-zinc-200  border-zinc-600 flex items-center justify-center text-3xl mb-3 text-zinc-400">👤</div>`
                                  -->
 
-                                    <h3 class="font-bold text-white   text-base mb-1 text-center">{{barbeiro.nome_completo}}</h3>
-                                    <p class="text-xs text-gray-300  text-center mb-3 line-clamp-2">{{barbeiro.descricao}}</p>
+                                    <h3 id="campo-padrao" class="font-bold text-white   text-base mb-1 text-center">{{barbeiro.nome_completo}}</h3>
+                                    <p class="text-xs text-gray-300  text-center mb-3 line-clamp-2"><strong>contato: </strong> ({{ barbeiro.telefone[:2] }}) {{ barbeiro.telefone[2:7] }}-{{ barbeiro.telefone[7:] }}</p>
 
                                     <div class="flex flex-col gap-1 w-full text-xs text-gray-300  mb-4 bg-zinc-50  bg-zinc-800/50 p-2.5 rounded-xl border border-zinc-100  border-zinc-700/40">
                                         <span class="truncate"><strong>E-mail:</strong> {{barbeiro.email}}</span>
-                                        <span><strong>Tel:</strong> {{barbeiro.telefone}}</span>
-                                        
+                                                                            
                                         <span class="truncate mt-1 border-t border-zinc-200  border-zinc-700 pt-1"><strong>End:</strong> {{barbeiro.fk_id_endereco}}</span>
                                     </div>
 
                                     <div class="flex gap-2 w-full mt-auto pt-3 border-t border-zinc-100  border-zinc-700/50">
                                         <a href="/gestor/painel/barbeiro/editar/{{barbeiro.id}}"  class="flex-1 py-1.5 px-3 rounded-lg border border-[#38362f] bg-transparent text-gray-300  hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Editar</a>
-                                        <a  class="flex-1 py-1.5 px-3 rounded-lg border border-[#38362f] bg-transparent text-gray-300  hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Desativar</a>
+                                        <form action="/gestor/painel/barbeiro/excluir" id="form-confirmar-exclusao" method="POST" class=" bg-red-800 flex-1 py-1.5 px-3 rounded-lg border border-[#38362f]  text-gray-300  hover:bg-red-700 hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">
+                                            <input class="hidden" type="number" name="srv-id-deletar" value="{{barbeiro.id}}">
+                                            <input class="hidden" type="text" name="srv-foto_nome" value="{{barbeiro.foto_nome}}">
+                                            <button  type="submit"> Excluir </button>
+                                             
+                                        </form>
+                                        
                                     </div>
                             </div>       
                         {%endfor%}
+                      
                     </div>
+                     {% include "componetizacao/janela_modal/modal_confimacao_excluir_padrao.html" %}
                 </section>
             </main>
         </div>
 
+       
         <!-- NAVEGAÇÃO INFERIOR MOBILE -->
         {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
 
@@ -125,7 +134,8 @@
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso"></div>
 
-    <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
+    
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
 </body>
 
 </html>

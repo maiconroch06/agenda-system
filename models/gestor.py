@@ -1,5 +1,6 @@
 from datetime import datetime
 from models.usuarios import Usuario
+from .endereco import Endereco
 
 
 class Gestor(Usuario):
@@ -17,7 +18,7 @@ class Gestor(Usuario):
         data_cadastro: datetime,
         data_atualizacao: datetime,
         fk_cnpj_barbearia: str,
-        fk_id_endereco: int = None
+        endereco: Endereco = None
     ):
         super().__init__(
             id=id,
@@ -30,13 +31,18 @@ class Gestor(Usuario):
             status_usuario=status_usuario,
             data_cadastro=data_cadastro,
             data_atualizacao=data_atualizacao,
-            fk_id_endereco=fk_id_endereco
+            endereco=endereco
         )
 
-        self.fk_cnpj_barbearia = fk_cnpj_barbearia
+        self.__fk_cnpj_barbearia = fk_cnpj_barbearia
 
-    def consultarCnpjBarbearia(self):
-        return self.fk_cnpj_barbearia
+    @property
+    def fk_cnpj_barbearia(self):
+        return self.__fk_cnpj_barbearia
 
-    def atualizarCnpjBarbearia(self, cnpj: str):
-        self.fk_cnpj_barbearia = cnpj
+    @fk_cnpj_barbearia.setter
+    def fk_cnpj_barbearia(self, value):
+        self.__fk_cnpj_barbearia = value
+
+
+   

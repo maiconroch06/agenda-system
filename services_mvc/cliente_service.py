@@ -10,22 +10,20 @@ class ClienteService(UsuarioService):
 
     def __init__(self):
         super().__init__()
-        self.clienteRepositorio = ClienteRepositorio()
+        self.__clienteRepositorio = ClienteRepositorio()
        
     def salvar_dados_especificos(self, usuario):
         try:
-            print("Passou aqui")
-            resposta_repositorio = self.clienteRepositorio.salvar(usuario.id, None)
+            resposta_repositorio = self.__clienteRepositorio.salvar(usuario.id, None)
             
             session.permanent = True
-            session['dados_cliente'] =  self.clienteRepositorio.consultarClienteId(usuario.id)
+            session['dados_cliente'] =  self.__clienteRepositorio.consultarClienteId(usuario.id)
             
             db.session.commit()
             print(str(resposta_repositorio))
             return resposta_repositorio
             
         except Exception as error:
-        
             flash(f"Erro o salvar o cliente {error}")
 
     def realizarLoginService(self, email, senha):
@@ -33,7 +31,7 @@ class ClienteService(UsuarioService):
             raise Exception("Por favor, preencha todos os campos!")
                         
             
-        cliente = self.clienteRepositorio.loginClienteEmailSenha(email)
+        cliente = self.__clienteRepositorio.loginClienteEmailSenha(email)
             
         if cliente is not None:                 
             Senha.validar_senha(cliente['senha'], senha)
@@ -47,7 +45,7 @@ class ClienteService(UsuarioService):
             return EnumNomesPastaImagem.IMAGENS_CLIENTE
 
     def consultar_clientes_services(self):
-           return self.clienteRepositorio.listar_todos()  
+           return self.__clienteRepositorio.listar_todos()  
 
       
 

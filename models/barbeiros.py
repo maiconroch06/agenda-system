@@ -1,5 +1,7 @@
 from datetime import datetime
-from models import Usuario, Endereco
+from .usuarios import Usuario
+from .endereco import Endereco
+from .agenda import Agenda
 
 
 class Barbeiro(Usuario):
@@ -18,9 +20,11 @@ class Barbeiro(Usuario):
         data_liberacao: datetime,
         descricao: str,
         status_barbeiro: bool,
-        fk_id_agenda: int | None = None,
-        id: int | None = None,
+        agenda: Agenda | None = None,
+        id = None,
         endereco: Endereco = None,
+        
+        
     ):
         super().__init__(
             id=id,
@@ -36,31 +40,42 @@ class Barbeiro(Usuario):
             endereco=endereco
         )
 
-        self.data_liberacao = data_liberacao
-        self.descricao = descricao
-        self.status_barbeiro = status_barbeiro
-        self.fk_id_agenda = fk_id_agenda
+        self.__data_liberacao = data_liberacao
+        self.__descricao = descricao
+        self.__status_barbeiro = status_barbeiro
+        self.__agenda = agenda
 
-    def consultarDataLiberacao(self):
-        return self.data_liberacao
+    @property
+    def data_liberacao(self):
+        return self.__data_liberacao
 
-    def atualizarDataLiberacao(self, data: datetime):
-        self.data_liberacao = data
+    @data_liberacao.setter
+    def data_liberacao(self, value):
+        self.__data_liberacao = value
 
-    def consultarDescricao(self):
-        return self.descricao
+    @property
+    def descricao(self):
+        return self.__descricao
 
-    def atualizarDescricao(self, descricao: str):
-        self.descricao = descricao
+    @descricao.setter
+    def descricao(self, value):
+        self.__descricao = value
 
-    def consultarStatusBarbeiro(self):
-        return self.status_barbeiro
+    @property
+    def status_barbeiro(self):
+        return self.__status_barbeiro
 
-    def atualizarStatusBarbeiro(self, status: bool):
-        self.status_barbeiro = status
+    @status_barbeiro.setter
+    def status_barbeiro(self, value):
+        self.__status_barbeiro = value
 
-    def consultarIdAgenda(self):
-        return self.fk_id_agenda
+    @property
+    def agenda(self):
+        return self.__agenda
 
-    def atualizarIdAgenda(self, id_agenda: int):
-        self.fk_id_agenda = id_agenda
+    @agenda.setter
+    def agenda(self, value):
+        self.__agenda = value
+
+
+    

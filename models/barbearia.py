@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from .endereco import Endereco
 
 
 class Barbearia:
@@ -12,64 +13,80 @@ class Barbearia:
         email_empresa: str,
         logo_barbearia: str,
         data_cadastro: datetime,
-        fk_id_endereco: int,
-        fk_id_agenda: int
+        endereco: Endereco,
     ):
-        self.cnpj = cnpj
-        self.nome_barbearia = nome_barbearia
-        self.telefone = telefone
-        self.email_empresa = email_empresa
-        self.logo_barbearia = logo_barbearia
-        self.data_cadastro = data_cadastro
-        self.fk_id_endereco = fk_id_endereco
-        self.fk_id_agenda = fk_id_agenda
+        self.__cnpj = cnpj
+        self.__nome_barbearia = nome_barbearia
+        self.__telefone = telefone
+        self.__email_empresa = email_empresa
+        self.__logo_barbearia = logo_barbearia
+        self.__data_cadastro = data_cadastro
+        self.__endereco = endereco
 
-    def consultarCnpj(self):
-        return self.cnpj
+    @property
+    def cnpj(self):
+        return self.__cnpj
 
-    def consultarNome(self):
-        return self.nome_barbearia
+    @cnpj.setter
+    def cnpj(self, value):
+        self.__cnpj = value
 
-    def atualizarNome(self, nome: str):
-        self.nome_barbearia = nome
+    @property
+    def nome_barbearia(self):
+        return self.__nome_barbearia
 
-    def consultarTelefone(self):
-        return self.telefone
+    @nome_barbearia.setter
+    def nome_barbearia(self, value):
+        self.__nome_barbearia = value
 
-    def atualizarTelefone(self, telefone: str):
-        self.telefone = telefone
+    @property
+    def telefone(self):
+        return self.__telefone
 
-    def consultarEmail(self):
-        return self.email_empresa
+    @telefone.setter
+    def telefone(self, value):
+        self.__telefone = value
 
-    def atualizarEmail(self, email: str):
-        self.email_empresa = email
+    @property
+    def email_empresa(self):
+        return self.__email_empresa
 
-    def consultarLogo(self):
-        return self.logo_barbearia
+    @email_empresa.setter
+    def email_empresa(self, value):
+        self.__email_empresa = value
 
-    def atualizarLogo(self, logo: str):
-        self.logo_barbearia = logo
+    @property
+    def logo_barbearia(self):
+        return self.__logo_barbearia
 
-    def consultarDataCadastro(self):
-        return self.data_cadastro
+    @logo_barbearia.setter
+    def logo_barbearia(self, value):
+        self.__logo_barbearia = value
 
-    def consultarIdEndereco(self):
-        return self.fk_id_endereco
+    @property
+    def data_cadastro(self):
+        return self.__data_cadastro
 
-    def atualizarIdEndereco(self, id_endereco: int):
-        self.fk_id_endereco = id_endereco
+    @data_cadastro.setter
+    def data_cadastro(self, value):
+        self.__data_cadastro = value
 
-    def consultarIdAgenda(self):
-        return self.fk_id_agenda
+    @property
+    def endereco(self):
+        return self.__endereco
 
-    def atualizarIdAgenda(self, id_agenda: int):
-        self.fk_id_agenda = id_agenda
+    @endereco.setter
+    def endereco(self, value):
+        self.__endereco = value
 
-    def __str__(self):
+        
+
+   
+
+    def _str__(self):
         return (
-            f"Barbearia(cnpj='{self.cnpj}', "
-            f"nome='{self.nome_barbearia}', "
-            f"telefone='{self.telefone}', "
-            f"email='{self.email_empresa}')"
+            f"Barbearia(cnpj='{self.__cnpj}', "
+            f"nome='{self.__nome_barbearia}', "
+            f"telefone='{self.__telefone}', "
+            f"email='{self.__email_empresa}')"
         )

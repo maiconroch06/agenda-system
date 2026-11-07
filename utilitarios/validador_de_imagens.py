@@ -65,7 +65,9 @@ class ValidadorDeImagens:
                 #salvo a imagem no caminho
                 imagem.save(caminho)
                 
-                return True 
+                #se ocorrrer algum erro, dispara uma excecão
+                
+            return True 
             
         except (OSError, FileNotFoundError, IsADirectoryError):
             raise Exception("Error ao tentar salvar a imagem no servidor")
@@ -73,25 +75,26 @@ class ValidadorDeImagens:
 
     # Função para editar uma imagem
     @classmethod
-    def editarImagem(cls, nome_imagem_anterior: str, nova_imagem, nome_pasta:EnumNomesPastaImagem, imagem_padrao): 
+    def editarImagem(cls, nome_imagem_anterior: str, nova_imagem, nome_pasta:EnumNomesPastaImagem, imagem_padrao, prefixo_nome_imagem): 
+        
         # Imagem nova
         if nova_imagem and nova_imagem.filename:
-            imagemTemp = secure_filename(nova_imagem.filename)
-            extensao = os.path.splitext(imagemTemp)[1]
-                
-            cls.imgem_extensao_valida(extensao) 
-               
+            # devolvo o nome, e valido extensão
+            foto_nome =  cls.nomeImagem(secure_filename(nova_imagem.filename), prefixo_nome_imagem)
+              
             #excluir a imagem anterior, desde que ela não seja a default
             if nome_imagem_anterior != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
                 cls.removerImagem(nome_imagem_anterior, nome_pasta)
 
-            return cls.salvarImagem(nova_imagem, nome_pasta)
-
+            cls.salvarImagem(nova_imagem, nome_pasta, foto_nome )
+        
+            return foto_nome
+        
         # manter a mesma imagem
         elif not nova_imagem and not imagem_padrao: 
             return nome_imagem_anterior
         
-        # Deixar o produto sem imagem
+        # Deixar o servico sem imagem
         else:
             #preciso remover a imagem associada caso exista
             if nome_imagem_anterior != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
@@ -113,7 +116,7 @@ class ValidadorDeImagens:
                     os.remove(caminho_imagem)
 
         except Exception as error:
-            print(f"erro ao delatar a imagem {error}")
+            print(f"erro ao delatar a imagem{nome_da_imagem}, pois {error}")
             return False
        
            

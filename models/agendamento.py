@@ -1,78 +1,110 @@
 from datetime import date, time, datetime
+from .barbeiros import Barbeiro
+from .cliente import Cliente
+from .servicos import Servico
 
 
 class Agendamento:
 
     def __init__(
-        self,
-        id: int,
+        self,  
         data_agendamento: date,
         hora_inicio: time,
         hora_fim: time,
         status_agendamento: bool,
         data_atualizacao: datetime,
-        fk_id_servico: int,
-        fk_id_barbeiro: int,
-        fk_id_cliente: int
+        servico: Servico,
+        barbeiro: Barbeiro,
+        cliente: Cliente,
+        id = None,
     ):
-        self.id = id
-        self.data_agendamento = data_agendamento
-        self.hora_inicio = hora_inicio
-        self.hora_fim = hora_fim
-        self.status_agendamento = status_agendamento
-        self.data_atualizacao = data_atualizacao
-        self.fk_id_servico = fk_id_servico
-        self.fk_id_barbeiro = fk_id_barbeiro
-        self.fk_id_cliente = fk_id_cliente
+        self.__id = id
+        self.__data_agendamento = data_agendamento
+        self.__hora_inicio = hora_inicio
+        self.__hora_fim = hora_fim
+        self.__status_agendamento = status_agendamento
+        self.__data_atualizacao = data_atualizacao
+        self.__servico = servico
+        self.__barbeiro = barbeiro
+        self.__cliente = cliente
 
-    def consultarDataAgendamento(self):
-        return self.data_agendamento
+    @property
+    def id(self):
+        return self.__id
 
-    def atualizarDataAgendamento(self, data: date):
-        self.data_agendamento = data
+    @id.setter
+    def id(self, value):
+        self.__id = value
 
-    def consultarHoraInicio(self):
-        return self.hora_inicio
+    @property
+    def data_agendamento(self):
+        return self.__data_agendamento
 
-    def atualizarHoraInicio(self, hora: time):
-        self.hora_inicio = hora
+    @data_agendamento.setter
+    def data_agendamento(self, value):
+        self.__data_agendamento = value
 
-    def consultarHoraFim(self):
-        return self.hora_fim
+    @property
+    def hora_inicio(self):
+        return self.__hora_inicio
 
-    def atualizarHoraFim(self, hora: time):
-        self.hora_fim = hora
+    @hora_inicio.setter
+    def hora_inicio(self, value):
+        self.__hora_inicio = value
 
-    def consultarStatusAgendamento(self):
-        return self.status_agendamento
+    @property
+    def hora_fim(self):
+        return self.__hora_fim
 
-    def atualizarStatusAgendamento(self, status: bool):
-        self.status_agendamento = status
+    @hora_fim.setter
+    def hora_fim(self, value):
+        self.__hora_fim = value
 
-    def consultarDataAtualizacao(self):
-        return self.data_atualizacao
+    @property
+    def status_agendamento(self):
+        return self.__status_agendamento
 
-    def atualizarDataAtualizacao(self, data: datetime):
-        self.data_atualizacao = data
+    @status_agendamento.setter
+    def status_agendamento(self, value):
+        self.__status_agendamento = value
 
-    def consultarIdServico(self):
-        return self.fk_id_servico
+    @property
+    def data_atualizacao(self):
+        return self.__data_atualizacao
 
-    def consultarIdBarbeiro(self):
-        return self.fk_id_barbeiro
+    @data_atualizacao.setter
+    def data_atualizacao(self, value):
+        self.__data_atualizacao = value
 
-    def consultarIdCliente(self):
-        return self.fk_id_cliente
+    @property
+    def servico(self):
+        return self.__servico
 
-    def validarHorario(self):
-        return self.hora_inicio < self.hora_fim
+    @servico.setter
+    def servico(self, value):
+        self.__servico = value
 
-    def __str__(self):
+    @property
+    def barbeiro(self):
+        return self.__barbeiro
+
+    @barbeiro.setter
+    def barbeiro(self, value):
+        self.__barbeiro = value
+
+    @property
+    def cliente(self):
+        return self.__cliente
+
+    @cliente.setter
+    def cliente(self, value):
+        self.__cliente = value
+ 
+    def _str__(self):
         return (
-            f"Agendamento(id={self.id}, "
-            f"data={self.data_agendamento}, "
-            f"inicio={self.hora_inicio}, "
-            f"fim={self.hora_fim}, "
-            f"cliente={self.fk_id_cliente}, "
-            f"barbeiro={self.fk_id_barbeiro})"
+            f"Agendamento(id={self.__id}, "
+            f"data={self.__data_agendamento}, "
+            f"inicio={self.__hora_inicio}, "
+            f"fim={self.__hora_fim}, "
+            
         )

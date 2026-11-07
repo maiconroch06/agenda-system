@@ -3,23 +3,25 @@ from DAO.barbeiro_dao import BarbeiroDAO
 
 
 class BarbeiroRepositorio:
+    def __init__(self):
+        self.__barbeiroDao = BarbeiroDAO()
 
-    @staticmethod
-    def salvar(barbeiro):
-        return BarbeiroDAO.salvar(barbeiro)
+    
+    def salvar(self, barbeiro):
+        return self.__barbeiroDao.cadastrar(barbeiro)
 
-    @staticmethod
-    def buscar_por_id(id_barbeiro):
-        return BarbeiroDAO.buscar_por_id(id_barbeiro)
+    
+    def buscar_por_id(self, id_barbeiro):
+        return self.__barbeiroDao.buscar_por_id(id_barbeiro)
 
-    @staticmethod
-    def listar_todos():
-        return BarbeiroDAO.listar_todos()
+    
+    def listar_todos(self, ):
+        return self.__barbeiroDao.consultar_todos()
 
-    @staticmethod
-    def atualizar(barbeiro):
-        return BarbeiroDAO.atualizar(barbeiro)
+    
+    def atualizar(self, barbeiro):
+        return self.__barbeiroDao.atualizar_barbeiro(barbeiro)
 
-    @staticmethod
-    def excluir(id_barbeiro):
-        return BarbeiroDAO.excluir(id_barbeiro)
+    
+    def excluir(self, id_barbeiro):
+        return self.__barbeiroDao.excluir_barbeiro(id_barbeiro)

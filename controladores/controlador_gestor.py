@@ -2,7 +2,7 @@ from flask import session, redirect, url_for, flash, render_template
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 from database import db
-from enums import EnumStatusMensagens
+from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from services_mvc import GestorServiceMVC, ServicoBarbearia, BarbeiroService
 from execoes import ImagemErrorExcecao 
 from models import Barbeiro
@@ -17,7 +17,7 @@ class ControladorGestor():
   
     
     @classmethod
-    def login(cls, email:str, senha:str):
+    def login_gestor(cls, email:str, senha:str):
         
             try: 
                 cls.__gestor_service_mvc.gestorRealizarLoginService(email,senha)   
@@ -41,6 +41,16 @@ class ControladorGestor():
             flash(f"{erros}", EnumStatusMensagens.ERRO.value)
             
         return redirect(url_for('gestor.gestorBarbeiroPage'))
+    
+    
+    @classmethod
+    def excluir_barbeiro(cls, id_servico, foto_nome):
+            try:
+                cls.__barbeiro_service_mvc.excluir_usuario_barbearia(id_servico,foto_nome,EnumNomesPastaImagem.IMAGENS_BARBEIRO)   
+            except Exception as error:
+                flash(f"{error}")
+                
+            return redirect(url_for('gestor.gestorAbaBarbeiros'))  
 
     @classmethod
     def cadastrarServico(cls, foto, novo_descricao: str, novo_valor: str, novo_duracao:str ):
@@ -58,15 +68,14 @@ class ControladorGestor():
             return redirect(url_for('gestor.gestorServicoCadastrar'))
              
     @classmethod
-    def deletarServico(cls, id_servico):
+    def excluir_servico(cls, id_servico, foto_nome):
         try:
-            cls.__servicos_barbearia_service_mvc.excluir_servico_barbearia(id_servico)   
+            cls.__servicos_barbearia_service_mvc.excluir_servico_barbearia(id_servico,foto_nome )   
         except Exception as error:
             flash(f"{error}")
             
         return redirect(url_for('gestor.gestorAbaServicos'))  
-        
-        
+           
     @classmethod
     def editarServico(cls, id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo):
        
@@ -79,8 +88,7 @@ class ControladorGestor():
             
         
         return redirect(url_for("gestor.gestorAbaServicos")) 
-         
-        
+             
             
     @classmethod
     def consultar_servicos(cls):

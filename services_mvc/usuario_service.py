@@ -9,27 +9,29 @@ from werkzeug.security import generate_password_hash
 class UsuarioService:
 
     def __init__(self):
-        self.usuarioRepositorio = UsuarioRepositorio()
+        self.__usuarioRepositorio = UsuarioRepositorio()
 
     def cadastrarUsuarioService(self, usuario: Usuario, fotoTemp:str):
         try:
-            
-            
-            
+          
             usuario.nomeVazioUsuario()
             usuario.senha = generate_password_hash(usuario.senha)
             usuario.endereco = EnderecoService.cadastrar_endereco(usuario.endereco)
             
-            
             #usuario.foto_nome = ValidadorDeImagens.salvarImagem(fotoTemp, self.escolherPastaImagemUsuario())
-            usuario.foto_nome = ValidadorDeImagens.nomeImagem(fotoTemp, usuario.getTipo()) 
-            flash("Passou aqui")           
-            return self.usuarioRepositorio.salvar(usuario) 
+            usuario.foto_nome = ValidadorDeImagens.nomeImagem(fotoTemp, usuario.getTipo())            
+            return self.__usuarioRepositorio.salvar(usuario) 
 
         except IntegrityError as i:
             raise Exception("ATENÇÃO: e-mail ou telefone já cadastrados no sistema") 
         
     
+    def excluir_usuario_barbearia(self, id_usuario, foto_nome, nome_pasta):
+                if self.__usuarioRepositorio.excluir(id_usuario):
+                    ValidadorDeImagens.removerImagem(foto_nome, nome_pasta)
+                    return
+                
+                raise Exception("O serviço não foi excluido.")
         
    
     def salvar_dados_especificos(self, usuario: Usuario): 

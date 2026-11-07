@@ -12,73 +12,100 @@ class Endereco:
         sequencia: int = None,
         complemento: str = None
     ):
-        self.id = id
-        self.cep = cep
-        self.cidade = cidade
-        self.estados_br_sigla = estados_br_sigla
-        self.logradouro = logradouro
-        self.numero = numero
-        self.bairro = bairro
-        self.sequencia = sequencia
-        self.complemento = complemento
+        self.__id = id
+        self.__cep = cep
+        self.__cidade = cidade
+        self.__estados_br_sigla = estados_br_sigla
+        self.__logradouro = logradouro
+        self.__numero = numero
+        self.__bairro = bairro
+        self.__sequencia = sequencia
+        self.__complemento = complemento
 
-    def consultarCep(self):
-        return self.cep
+    @property
+    def id(self):
+        return self.__id
 
-    def atualizarCep(self, cep: str):
-        self.cep = cep
+    @id.setter
+    def id(self, value):
+        self.__id = value
 
-    def consultarCidade(self):
-        return self.cidade
+    @property
+    def cep(self):
+        return self.__cep
 
-    def atualizarCidade(self, cidade: str):
-        self.cidade = cidade
+    @cep.setter
+    def cep(self, value):
+        self.__cep = value
 
-    def consultarEstado(self):
-        return self.estados_br_sigla
+    @property
+    def cidade(self):
+        return self.__cidade
 
-    def atualizarEstado(self, estado: str):
-        self.estados_br_sigla = estado
+    @cidade.setter
+    def cidade(self, value):
+        self.__cidade = value
 
-    def consultarLogradouro(self):
-        return self.logradouro
+    @property
+    def estados_br_sigla(self):
+        return self.__estados_br_sigla
 
-    def atualizarLogradouro(self, logradouro: str):
-        self.logradouro = logradouro
+    @estados_br_sigla.setter
+    def estados_br_sigla(self, value):
+        self.__estados_br_sigla = value
 
-    def consultarNumero(self):
-        return self.numero
+    @property
+    def logradouro(self):
+        return self.__logradouro
 
-    def atualizarNumero(self, numero: int):
-        self.numero = numero
+    @logradouro.setter
+    def logradouro(self, value):
+        self.__logradouro = value
 
-    def consultarBairro(self):
-        return self.bairro
+    @property
+    def numero(self):
+        return self.__numero
 
-    def atualizarBairro(self, bairro: str):
-        self.bairro = bairro
+    @numero.setter
+    def numero(self, value):
+        self.__numero = value
 
-    def consultarSequencia(self):
-        return self.sequencia
+    @property
+    def bairro(self):
+        return self.__bairro
 
-    def atualizarSequencia(self, sequencia: int):
-        self.sequencia = sequencia
+    @bairro.setter
+    def bairro(self, value):
+        self.__bairro = value
 
-    def consultarComplemento(self):
-        return self.complemento
+    @property
+    def sequencia(self):
+        return self.__sequencia
 
-    def atualizarComplemento(self, complemento: str):
-        self.complemento = complemento
+    @sequencia.setter
+    def sequencia(self, value):
+        self.__sequencia = value
 
-    def __str__(self):
+    @property
+    def complemento(self):
+        return self.__complemento
+
+    @complemento.setter
+    def complemento(self, value):
+        self.__complemento = value
+
+
+   
+
+    def _str__(self):
         return (
-            f"Endereco(id={self.id}, "
-            f"cep='{self.cep}', "
-            f"cidade='{self.cidade}', "
-            f"estado='{self.estados_br_sigla}', "
-            f"logradouro='{self.logradouro}', "
-            f"numero={self.numero}, "
-            f"bairro='{self.bairro}', "
-            f"sequencia={self.sequencia}, "
-            f"complemento='{self.complemento}')"
+            f"Endereco(id={self.__id}, "
+            f"cep='{self.__cep}', "
+            f"cidade='{self.__cidade}', "
+            f"estado='{self.__estados_br_sigla}', "
+            f"logradouro='{self.__logradouro}', "
+            f"numero={self.__numero}, "
+            f"bairro='{self.__bairro}', "
+            f"sequencia={self.__sequencia}, "
+            f"complemento='{self.__complemento}')"
         )

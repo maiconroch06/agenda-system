@@ -164,7 +164,7 @@ class BarbeiroHasServicosDAO:
     @staticmethod
     def _mapear(registro):
         return BarbeiroHasServicos(
-            id_servico=registro["id_servico"],
-            id_barbeiro=registro["id_barbeiro"],
+            servico=registro["id_servico"],
+            barbeiro=registro["id_barbeiro"],
             data_cadastro=registro["data_cadastro"]
         )

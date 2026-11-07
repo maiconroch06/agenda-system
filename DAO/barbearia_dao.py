@@ -128,6 +128,6 @@ class BarbeariaDAO:
             email_empresa=registro["email_empresa"],
             logo_barbearia=registro["logo_barbearia"],
             data_cadastro=registro["data_cadastro"],
-            fk_id_endereco=registro["fk_id_endereco"],
+            endereco=registro["fk_id_endereco"],
             fk_id_agenda=registro["fk_id_agenda"]
         )

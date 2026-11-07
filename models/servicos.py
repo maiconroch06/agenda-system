@@ -14,71 +14,94 @@ class Servico:
         data_cadastro: datetime | None = None,
         data_atualizacao: datetime | None = None
     ):
-        self.id = id
-        self.descricao = descricao
-        self.valor = valor
-        self.duracao = duracao
-        self.foto_nome = foto_nome
-        self.status_servico = status_servico
-        self.data_cadastro = data_cadastro
-        self.data_atualizacao = data_atualizacao
+        self.__id = id
+        self.__descricao = descricao
+        self.__valor = valor
+        self.__duracao = duracao
+        self.__foto_nome = foto_nome
+        self.__status_servico = status_servico
+        self.__data_cadastro = data_cadastro
+        self.__data_atualizacao = data_atualizacao
 
-    def consultarDescricao(self):
-        return self.descricao
+    @property
+    def id(self):
+        return self.__id
 
-    def atualizarDescricao(self, descricao: str):
-        self.descricao = descricao
+    @id.setter
+    def id(self, value):
+        self.__id = value
 
-    def consultarValor(self):
-        return self.valor
+    @property
+    def descricao(self):
+        return self.__descricao
 
-    def atualizarValor(self, valor: Decimal):
-        self.valor = valor
+    @descricao.setter
+    def descricao(self, value):
+        self.__descricao = value
 
-    def consultarDuracao(self):
-        return self.duracao
+    @property
+    def valor(self):
+        return self.__valor
 
-    def atualizarDuracao(self, duracao: int):
-        self.duracao = duracao
+    @valor.setter
+    def valor(self, value):
+        self.__valor = value
 
-    def consultarFoto(self):
-        return self.foto_nome
+    @property
+    def duracao(self):
+        return self.__duracao
 
-    def atualizarFoto(self, foto_nome: str):
-        self.foto_nome = foto_nome
+    @duracao.setter
+    def duracao(self, value):
+        self.__duracao = value
 
-    def consultarStatus(self):
-        return self.status_servico
-    
-    def ativarServico(self):
-        self.status_servico = True
+    @property
+    def foto_nome(self):
+        return self.__foto_nome
 
-    def desativarServico(self):
-        self.status_servico = False
+    @foto_nome.setter
+    def foto_nome(self, value):
+        self.__foto_nome = value
 
-    def consultarDataCadastro(self):
-        return self.data_cadastro
+    @property
+    def status_servico(self):
+        return self.__status_servico
 
-    def consultarDataAtualizacao(self):
-        return self.data_atualizacao
+    @status_servico.setter
+    def status_servico(self, value):
+        self.__status_servico = value
 
-    def atualizarDataAtualizacao(self, data: datetime):
-        self.data_atualizacao = data
+    @property
+    def data_cadastro(self):
+        return self.__data_cadastro
 
-    def __str__(self):
+    @data_cadastro.setter
+    def data_cadastro(self, value):
+        self.__data_cadastro = value
+
+    @property
+    def data_atualizacao(self):
+        return self.__data_atualizacao
+
+    @data_atualizacao.setter
+    def data_atualizacao(self, value):
+        self.__data_atualizacao = value
+
+    def _str__(self):
         return (
-            f"Servico(id={self.id}, "
-            f"descricao='{self.descricao}', "
-            f"valor={self.valor}, "
-            f"duracao={self.duracao} minutos, "
-            f"status={self.status_servico})"
+            f"Servico(id={self.__id}, "
+            f"descricao='{self.__descricao}', "
+            f"valor={self.__valor}, "
+            f"duracao={self.__duracao} minutos, "
+            f"status={self.__status_servico})"
         )
-        
+    
+    # === vALIDAÇÕES ================    
     def valoresValidos(self):
-        if self.valor <= Decimal("0") or self.duracao < -1 :
+        if self.__valor <= Decimal("0") or self.__duracao < -1 :
             raise Exception("Verifique se foi informado algum valor negativo!")
         
     def valoresVazios(self):
-        if not self.descricao.strip() or  self.valor <= Decimal("0") or  self.duracao < -1:
+        if not self.__descricao.strip() or  self.__valor <= Decimal("0") or  self.__duracao < -1:
            raise Exception("Campos vazios! Verifique se os campos estão vazios!")
                

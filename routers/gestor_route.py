@@ -29,7 +29,7 @@ def gestorLogin():
     email_digitado = request.form.get('manager-email-2')
     senha_digitada = request.form.get('manager-password')
     
-    return ControladorGestor.login(email_digitado,senha_digitada)
+    return ControladorGestor.login_gestor(email_digitado,senha_digitada)
 
 
 # Logout Gestor - Encerramento da sessão do Gestor
@@ -74,10 +74,12 @@ def gestorServicoCadastrar():
     return ControladorGestor.cadastrarServico(imagem, descricao_servico, valor, duracao)
 
 # SERVIÇOS - REMOVER
-@gestor.route('/painel/servicos/deletar', methods=['POST'])
+@gestor.route('/painel/servicos/excluir', methods=['POST'])
 def gestor_excluir_servico(): 
-    id_servico = request.form.get('srv-id-deletar')   
-    return ControladorGestor.deletarServico(id_servico)
+    id_servico = request.form.get('srv-id-deletar')
+    foto_nome = request.form.get('srv-foto_nome') 
+    
+    return ControladorGestor.excluir_servico(id_servico, foto_nome)
   
 
 # SERVIÇOS - Salvar edição do serviço no banco de dados
@@ -101,7 +103,7 @@ def gestorServicoEditar():
 # BARBEIROS - Aba de visualização dos Barbeiros cadastrados
 @gestor.route('/painel/barbeiros', methods=['GET'])
 def gestorAbaBarbeiros():
-    return ControladorBarbeiro.gerenciarBarbeiro()
+    return ControladorBarbeiro.consultar_todos_barbeiros()
 
 
 # Gerenciar Barbeiro  - Validando dados informados no cadastro do Barbeiro
@@ -147,7 +149,6 @@ def gestorBarbeiroValidar():
         data_liberacao=datetime.now(timezone.utc),
         descricao=request.form.get('descricao'),
         status_barbeiro=True,
-        fk_id_agenda=None,
         endereco=endereco
     )
     
@@ -169,6 +170,18 @@ def gestorBarbeiroPageUpdate(id_barbeiro:int):
             'gestor.gestorAbaBarbeiros',
             id_barbeiro = id_barbeiro
         )
+
+
+@gestor.route('painel/barbeiro/excluir', methods=['POST'])
+def gestor_excluir_barbeiro():
+    id_barbeiro = request.form.get('srv-id-deletar')
+    foto_nome = request.form.get('srv-foto_nome') 
+    
+    print(foto_nome)
+        
+    return ControladorGestor.excluir_barbeiro(id_barbeiro, foto_nome)
+
+    
 
 
 
