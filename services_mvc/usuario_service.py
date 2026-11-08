@@ -40,6 +40,9 @@ class UsuarioService:
     def escolherPastaImagemUsuario(self):
         raise NotImplementedError
     
+    def atualizar_endereco(self, endereco):
+         EnderecoService.alterar_endereco(endereco) 
+    
     def criarAgenda(self):
         raise NotImplementedError
     

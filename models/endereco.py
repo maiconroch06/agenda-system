@@ -8,9 +8,9 @@ class Endereco:
         logradouro: str,
         numero: int,
         bairro: str,
-        id: int | None = None,
-        sequencia: int = None,
-        complemento: str = None
+        id = None,
+        sequencia = None,
+        complemento = None
     ):
         self.__id = id
         self.__cep = cep

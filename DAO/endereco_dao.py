@@ -7,7 +7,7 @@ from models import Endereco
 class EnderecoDAO:
 
     @staticmethod
-    def salvar(endereco: Endereco):
+    def salvar( endereco: Endereco):
         sql = text("""
             INSERT INTO enderecos (
                 cep,
@@ -46,7 +46,7 @@ class EnderecoDAO:
         return resultado.lastrowid
 
     @staticmethod
-    def buscar_por_id(id_endereco: int):
+    def buscar_por_id( id_endereco: int):
         sql = text("""
             SELECT
                 id,
@@ -73,7 +73,7 @@ class EnderecoDAO:
         return EnderecoDAO._mapear(registro)
 
     @staticmethod
-    def listar_todos():
+    def listar_todos(cls):
         sql = text("""
             SELECT
                 id,
@@ -125,7 +125,7 @@ class EnderecoDAO:
         ]
 
     @staticmethod
-    def atualizar(endereco: Endereco):
+    def atualizar( endereco: Endereco):
         sql = text("""
             UPDATE enderecos
             SET
@@ -152,12 +152,13 @@ class EnderecoDAO:
             "complemento": endereco.complemento
         })
 
-        db.session.flush()
+        print("o valor é "+ str(endereco.sequencia))
+        db.session.commit()
 
         return resultado.rowcount > 0
 
     @staticmethod
-    def excluir(id_endereco: int):
+    def excluir( id_endereco: int):
         sql = text("""
             DELETE FROM enderecos
             WHERE id = :id
@@ -173,7 +174,7 @@ class EnderecoDAO:
         return resultado.rowcount > 0
 
     @staticmethod
-    def _mapear(registro):
+    def _mapear( registro):
         return Endereco(
             id=registro["id"],
             cep=registro["cep"],

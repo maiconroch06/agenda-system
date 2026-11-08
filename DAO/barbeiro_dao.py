@@ -88,9 +88,13 @@ class BarbeiroDAO:
                 b.data_liberacao,
                 b.descricao,
                 b.status_barbeiro,
-                b.fk_id_agenda
+                b.fk_id_agenda,
+                e.*
             FROM usuarios u
-            INNER JOIN barbeiros b ON b.id = u.id
+                INNER JOIN barbeiros b 
+                    ON b.id = u.id
+                INNER JOIN enderecos e
+                    on e.id = u.fk_id_endereco 
             ORDER BY u.nome_completo
         """)
 

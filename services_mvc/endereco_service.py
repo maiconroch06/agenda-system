@@ -10,4 +10,8 @@ class EnderecoService:
         if(endereco is not None):
             endereco.id = cls.__endereco_repositorio.salvar(endereco)
             return endereco
-            
+    
+    @classmethod
+    def alterar_endereco(cls, endereco: Endereco):
+        return  cls.__endereco_repositorio.atualizar(endereco)
+           

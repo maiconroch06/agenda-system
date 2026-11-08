@@ -30,30 +30,16 @@
                     <p id="validation-menssage"></p>
             </div>
             <!-- Formulário -->
-            <form
-                class="w-full bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4"
-                method="post"
-                id="form-servico"
-                action=""
-                enctype="multipart/form-data">
+            <form  class="w-full bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4" method="post" id="form-servico" action="" enctype="multipart/form-data">
                         
-                <input
-                        type="hidden"
-                        id="srv-foto_nome_anterior"
-                        name="srv-foto_nome_anterior"
-                        value="">
-
-                    <input
-                        type="hidden"
-                        id="srv-id"
-                        name="srv-id"
-                        value="">
-               
-
+                <input type="hidden" id="srv-id"name="srv-id" value="">
+     
                 <div class="space-y-4">
 
                     <!-- Upload de imagem -->
                     {% include "componetizacao/avatar_imagem/avatar_imagem.html" %}
+                    <input type="hidden" id="srv-foto_nome_anterior"  name="srv-foto_nome_anterior" value="">
+
 
                     <!-- Inputs do serviço -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">

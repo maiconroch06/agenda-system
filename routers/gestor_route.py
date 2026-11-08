@@ -42,7 +42,7 @@ def gestorLogout():
 # Painel Gestor - Aba inicial
 @gestor.route('/painel', methods=['POST','GET'])
 def gestorPainel():
-    return render_template('pages/gestor/gestor-painel-inicio-rp.html')
+    return ControladorGestor.consultar_agendamentos(1)
 
 
 # Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros
@@ -154,14 +154,8 @@ def gestorBarbeiroValidar():
     
     return ControladorGestor.cadastrarBarbeiro(barbeiro, fotoTemp)
 
-@gestor.route('painel/barbeiro/editar/<int:id_barbeiro>', methods=['GET'])
-def gestorBarbeiroPageEdit(id_barbeiro:int):
-    barbeiro = Barbeiro().consultarIdBarbeiro(id_barbeiro)
 
-    # return f"Dados barbeiro: {barbeiro}"
-    return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html', barbeiro = barbeiro, mensagens_status=EnumStatusMensagens)
-
-@gestor.route('painel/barbeiro/atualizar/<int:id_barbeiro>', methods=['POST'])
+@gestor.route('painel/barbeiro/atualizar', methods=['POST'])
 def gestorBarbeiroPageUpdate(id_barbeiro:int):
 
     return ValidarBarbeiro.validarFormulario(
@@ -170,6 +164,27 @@ def gestorBarbeiroPageUpdate(id_barbeiro:int):
             'gestor.gestorAbaBarbeiros',
             id_barbeiro = id_barbeiro
         )
+
+@gestor.route('painel/barbeiro/endereco/editar', methods=['POST'])
+def gestor_barbeiro_editar_endereco():
+              
+    cep_temp = ''.join(filter(str.isdigit,request.form.get('cep')))
+        
+    endereco = Endereco(
+        id = request.form.get('bar-end-id'),
+        cep=cep_temp,
+        cidade=request.form.get('cidade'),
+        estados_br_sigla=request.form.get('unidade-federativa'),
+        bairro=request.form.get('bairro'),
+        logradouro=request.form.get('logradouro'),
+        numero=request.form.get('numero'),
+        sequencia=request.form.get('sequencia'),
+        complemento=request.form.get('complemento')
+    )
+    
+   
+
+    return ControladorBarbeiro.atualizar_endereco_barbeiro(endereco)
 
 
 @gestor.route('painel/barbeiro/excluir', methods=['POST'])

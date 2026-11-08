@@ -8,12 +8,14 @@ from execoes import ImagemErrorExcecao
 from models import Barbeiro
 from werkzeug.utils import secure_filename
 from .controlador_cliente import ControladorCliente
+from .controlador_agendamento import ControladorAgendamento
 
 class ControladorGestor():
     __gestor_service_mvc = GestorServiceMVC()
     __servicos_barbearia_service_mvc = ServicoBarbearia()
     __barbeiro_service_mvc = BarbeiroService()
     __controlador_cliente = ControladorCliente()
+    __controlador_agendamento = ControladorAgendamento()
   
     
     @classmethod
@@ -98,3 +100,6 @@ class ControladorGestor():
     def consultar_clientes(cls):
         return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios= cls.__controlador_cliente.consultar_todos_clientes(),  mensagens_status=EnumStatusMensagens)
 
+    @classmethod
+    def consultar_agendamentos(cls, status_agendamento):
+        return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos = cls.__controlador_agendamento.consultar_agendamento(status_agendamento)) 
