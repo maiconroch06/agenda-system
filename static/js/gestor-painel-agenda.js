@@ -15,6 +15,14 @@ Object.assign(estado, {
     diaSelecionadoMes: null
 });
 
+/*
+    Utilitario
+*/
+
+function hojeISO() {
+    return formatarISO(new Date());
+}
+
 /* ============================================================
    MAPPING DOM
    ============================================================ */
@@ -97,6 +105,8 @@ function renderizarAgendaDia() {
     const hoje = hojeISO();
     const lista = obterAgendamentosFiltrados();
     const doDia = lista.filter(a => a.data === hoje).sort((a, b) => a.hora.localeCompare(b.hora));
+
+    if (els.bloqData) els.bloqData.value = hoje;
     
     els.listaAgendaDia.innerHTML = doDia.length === 0
         ? `<p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento para hoje.</p>`
@@ -200,9 +210,11 @@ function selecionarDiaMes(iso) {
    ============================================================ */
 
 function iniciar() {
-    popularFiltroBarbeiros();
     atualizarAgendaGeral();
 
+    // Utilitario
+    carregarData();
+    
     if (els.bloqData) els.bloqData.value = hojeISO();
 }
 

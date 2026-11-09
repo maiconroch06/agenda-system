@@ -132,6 +132,9 @@ function excluirBarbeiro(id) {
 function iniciar() {
     renderizarBarbeiros();
 
+    // Utilitario
+    carregarData();
+    
     if (els.bloqData) els.bloqData.value = hojeISO();
 }
 

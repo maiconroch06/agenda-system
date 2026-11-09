@@ -1,0 +1,41 @@
+<div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 mb-5">
+    
+    <div class="flex justify-between mb-2.5 text-xs sm:text-sm">
+        <span class="font-sans">Progresso do Dia</span>
+        <span id="progresso-texto">0 de 0 concluídos</span>
+    </div>
+
+    <div class="h-2 rounded-full bg-[#2a2825] overflow-hidden flex w-full">
+        
+        <!-- Barra Verde (Concluídos) -->
+        <div class="h-full bg-[#0f6e56] transition-all duration-400 ease-in-out"
+            id="progresso-fill" style="width:0%"></div>
+            
+        <!-- Barra Amarela (Pendente) -->
+        <div class="h-full bg-[#f0c05a] transition-all duration-400 ease-in-out"
+            id="progresso-pendente" style="width:0%"></div>
+            
+        <!-- Barra Vermelha (Cancelados) -->
+        <div class="h-full bg-[#f07b7b] transition-all duration-400 ease-in-out"
+            id="progresso-cancelados" style="width:0%"></div>
+            
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-2.5">
+        <span class="text-[11px] sm:text-xs text-[#888780] flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#9fe1cb]"></span>
+                Concluídos
+        </span>
+
+        <span class="text-[11px] sm:text-xs text-[#888780] flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#f0c05a]"></span>
+                Pendentes
+            </span>
+        <span class="text-[11px] sm:text-xs text-[#888780] flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#f07b7b]"></span>
+                Cancelados
+        </span>
+
+    </div>
+
+</div>

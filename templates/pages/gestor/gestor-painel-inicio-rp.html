@@ -13,8 +13,27 @@
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
-    <!-- Header (Exibe apenas para o mobile)-->
-    {% include "componetizacao/Header/header-gestor.html" %}
+    {# ───────── DADOS MOCK VS FLASK ───────── #}
+    {% set barbeiros_mock = [
+        {'id': 'p1', 'nome': 'Carlos Silva', 'cargo': 'Barbeiro Master'},
+        {'id': 'p2', 'nome': 'Lucas Mendes', 'cargo': 'Especialista em Barba'}
+    ] %}
+
+    {% set agendamentos_mock = [
+        {'id': 'a1', 'barbeiro': 'Carlos Silva', 'data': '2026-11-08', 'hora': '09:00', 'cliente': 'Carlos Eduardo', 'telefone': '(11) 98765-4321', 'servico': 'Corte Social', 'valor': 45, 'status': 'concluido', 'observacoes': ''},
+        {'id': 'a2', 'barbeiro': 'Lucas Mendes', 'data': '2026-11-08', 'hora': '10:00', 'cliente': 'Bruno Alves', 'telefone': '(11) 91234-5678', 'servico': 'Degradê & Barba', 'valor': 70, 'status': 'concluido', 'observacoes': 'Cliente prefere degradê baixo'},
+        {'id': 'a3', 'barbeiro': 'Carlos Silva', 'data': '2026-11-08', 'hora': '11:30', 'cliente': 'Rafael Souza', 'telefone': '(11) 99887-6655', 'servico': 'Barba', 'valor': 35, 'status': 'aguardando', 'observacoes': ''},
+        {'id': 'a4', 'barbeiro': 'Lucas Mendes', 'data': '2026-11-08', 'hora': '14:00', 'cliente': 'Diego Martins', 'telefone': '(11) 98111-2233', 'servico': 'Corte Infantil', 'valor': 40, 'status': 'aguardando', 'observacoes': 'Primeira vez'},
+        {'id': 'a5', 'barbeiro': 'Carlos Silva', 'data': '2026-11-08', 'hora': '15:30', 'cliente': 'Felipe Costa', 'telefone': '(11) 97222-3344', 'servico': 'Corte Militar', 'valor': 45, 'status': 'aguardando', 'observacoes': ''},
+        {'id': 'a6', 'barbeiro': 'Lucas Mendes', 'data': '2026-11-08', 'hora': '16:30', 'cliente': 'Gustavo Lima', 'telefone': '(11) 96333-4455', 'servico': 'Social & Barba', 'valor': 70, 'status': 'cancelado', 'observacoes': 'Cliente cancelou'}
+    ] %}
+
+    {% set lista_barbeiros = barbeiros_flask | default(barbeiros_mock) %}
+    {% set lista_agendamentos = agendamentos_flask | default(agendamentos_mock) %}
+    {# ─────────────────────────────────────── #}
+
+    <!-- HEADER (Exibe apenas para o mobile)-->
+    {% include "componetizacao/Header/header-painel.html" %}
 
     <div class="flex flex-col min-h-screen">
 
@@ -26,7 +45,7 @@
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
-                <!-- ABA 1: INÍCIO (DASHBOARD OPERACIONAL E CARDS DO DIA) -->
+                <!-- ABA INICIO -->
                 <section class="aba-func block" id="aba-inicio">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
                         <div>
@@ -42,23 +61,27 @@
                             <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faturamento-hoje">R$ 0,00</div>
                         </div>
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
-                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Atendimentos</div>
-                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-atendimentos-hoje">0 / 0</div>
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Ticket Médio Mensal</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ticket-mdio-mensal">R$ 0,00</div>
                         </div>
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
                             <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Taxa de Ocupação</div>
                             <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ocupacao-hoje">0%</div>
                         </div>
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
-                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faltas / Cancelados
-                            </div>
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faltas / Cancelados</div>
                             <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faltas-hoje">0</div>
                         </div>
                     </div>
 
-                    <!-- CARDS DE HOJE -->
+                    <!-- Card de Progresso de Conclusão dos Agendamentos -->
+                    {% include "componetizacao/Cards/card-progresso-agendamentos.html" %}
+
+                    <!-- Listagem dos agendamentos de hoje -->
                     <div class="mb-6">
+
                         <div class="flex justify-between items-center mb-3">
+<<<<<<< HEAD
                             <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">Agenda de Hoje —
                                 Todos os Barbeiros </h2>
                             <span class="text-xs text-[#888780]"> {{ agendamentos | lenght if agendamentos else 0}} agendamentos</span>
@@ -167,7 +190,20 @@
                             
 
                         
+=======
+
+                            <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">
+                                Agenda de Hoje — Todos os Barbeiros
+                            </h2>
+
+                        </div>
+
+                        <!-- Listagem dos agendamentos de hoje -->
+                        <div class="flex flex-col gap-2" id="lista-hoje-cards"></div>
+
+>>>>>>> feature-frontend
                     </div>
+
                 </section>
 
             </main>
@@ -186,6 +222,15 @@
         class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso">
     </div>
+
+    <!-- INJEÇÃO DE DADOS JSON PARA O JAVASCRIPT -->
+    <script id="dados-barbeiros-json" type="application/json">
+        {{ lista_barbeiros | tojson }}
+    </script>
+
+    <script id="dados-agendamentos-json" type="application/json">
+        {{ lista_agendamentos | tojson }}
+    </script>
 
     <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
     <script src="{{ url_for('static', filename='js/gestor-painel-inicio.js') }}"></script>

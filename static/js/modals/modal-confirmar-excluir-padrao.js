@@ -1,4 +1,4 @@
-const modal = document.querySelector("#modal");
+//const modal = document.querySelector("#modal");
 const form_remover_servico = document.querySelectorAll('#form-confirmar-exclusao');// seleciona todos os forms criados pelo for da tela de servicos
 const botao_fechar = document.querySelector("#botao-fechar");
 const botao_cancelar = document.querySelector("#botao-cancelar");

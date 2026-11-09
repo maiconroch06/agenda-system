@@ -19,6 +19,14 @@
     1. O comando acima deve ser utilizado quando PowerShell bloquear o script
 5. ```python -m venv .venv```
 
+---
+
+Para atualizar o tailwind no windows depois
+1. Intale o nodejs .zip
+2. Configure ele na varivais do computador
+3. Para testar se deu certo: "node -v" e "npm -v"
+4. "npm install tailwindcss @tailwindcss/cli"
+5. Rode "nmp run tailwind" para rodar o tilwind quando estiver esditando o estilo
 
 ---
 

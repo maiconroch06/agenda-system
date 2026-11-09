@@ -13,6 +13,9 @@
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
+    <!-- HEADER (Exibe apenas para o mobile)-->
+    {% include "componetizacao/Header/header-painel.html" %}
+
     <div class="flex flex-col min-h-screen">
 
         <div class="flex flex-1">
@@ -30,6 +33,7 @@
                 <!-- ABA 3: SERVIÇOS -->
                 <section id="aba-servicos">
                     <div class="flex items-center justify-between mb-5 gap-3">
+<<<<<<< HEAD
                         <h1  class="text-lg lg:text-xl font-medium">Catálogo de Serviços</h1>
                         
                     
@@ -38,13 +42,19 @@
                         + Novo serviço
                     </button>
                     
+=======
+                        <div>
+                            <h1 class="text-lg lg:text-xl font-semibold">Catálogo de Serviços</h1>
+                            <p class="text-xs text-[#888780]" id="data-atual-str"></p>
+                        </div>
+                        
+                        <a href="/gestor/painel/servicos/cadastrar">
+                            <button class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
+                                + Novo serviço
+                            </button>
+                        </a>
+>>>>>>> feature-frontend
                     </div>
-
-                    <!--
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <!-- seus cards aqui --
-                    </div> -->
-                    
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
                         id="lista-servicos-painel">
@@ -94,8 +104,15 @@
         id="aviso">
     </div>
 
+<<<<<<< HEAD
     <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/janelas_modais/js_cadastrar_editar_servico.js') }}"></script>
+=======
+    <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modals/modal-servicos.js') }}"></script>
+>>>>>>> feature-frontend
+    <script src="{{ url_for('static', filename='js/modals/modal-confirmar-excluir-padrao.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/modals/modal-cadastrar-editar-servico.js') }}"></script>
 </body>
 
 </html>
