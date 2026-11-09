@@ -210,7 +210,6 @@ function selecionarDiaMes(iso) {
    ============================================================ */
 
 function iniciar() {
-    popularFiltroBarbeiros();
     atualizarAgendaGeral();
 
     // Utilitario

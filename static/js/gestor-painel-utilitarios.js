@@ -57,28 +57,30 @@ function salvarNoStorage(chave, valor) {
 }
 
 /* ============================================================
-   DADOS INICIAIS DA BARBEARIA
+   DADOS DA BARBEARIA (Injetados pelo Flask/Jinja)
    ============================================================ */
 
-const PROFISSIONAIS_PADRAO = [
-    { id: "p1", nome: "Carlos Silva", cargo: "Barbeiro Master" },
-    { id: "p2", nome: "Lucas Mendes", cargo: "Especialista em Barba" }
-];
+/* ============================================================
+   DADOS DA BARBEARIA (Injetados pelo Flask/Jinja via JSON)
+   ============================================================ */
 
-const AGENDAMENTOS_PADRAO = [
-    { id: "a1", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(0), hora: "09:00", cliente: "Carlos Eduardo",  telefone: "(11) 98765-4321", servico: "Corte Social",       valor: 45, status: "concluido",  observacoes: "" },
-    { id: "a2", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(0), hora: "10:00", cliente: "Bruno Alves",      telefone: "(11) 91234-5678", servico: "Degradê & Barba",    valor: 70, status: "concluido",  observacoes: "Cliente prefere degradê baixo" },
-    { id: "a3", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(0), hora: "11:30", cliente: "Rafael Souza",     telefone: "(11) 99887-6655", servico: "Barba",              valor: 35, status: "aguardando", observacoes: "" },
-    { id: "a4", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(0), hora: "14:00", cliente: "Diego Martins",    telefone: "(11) 98111-2233", servico: "Corte Infantil",      valor: 40, status: "aguardando", observacoes: "Primeira vez" },
-    { id: "a5", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(0), hora: "15:30", cliente: "Felipe Costa",     telefone: "(11) 97222-3344", servico: "Corte Militar",       valor: 45, status: "aguardando", observacoes: "" },
-    { id: "a6", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(0), hora: "16:30", cliente: "Gustavo Lima",     telefone: "(11) 96333-4455", servico: "Social & Barba",      valor: 70, status: "cancelado",  observacoes: "Cliente cancelou" },
-    { id: "a7", barbeiro: "Carlos Silva",  data: diasAPartirDeHoje(1), hora: "09:30", cliente: "Henrique Dias",    telefone: "(11) 95444-5566", servico: "Degradê",              valor: 50, status: "aguardando", observacoes: "" },
-    { id: "a9", barbeiro: "Mendes",        data: diasAPartirDeHoje(1), hora: "14:00", cliente: "Igor Pereira",     telefone: "(11) 94555-6677", servico: "Corte Social",         valor: 45, status: "aguardando", observacoes: "" },
-    { id: "a8", barbeiro: "Lucas Mendes",  data: diasAPartirDeHoje(1), hora: "13:00", cliente: "Igor Pereira",     telefone: "(11) 94555-6677", servico: "Corte Social",         valor: 45, status: "aguardando", observacoes: "" }
-];
+function lerDadosInjetados(idElemento) {
+    try {
+        const elemento = document.getElementById(idElemento);
+        if (elemento) {
+            return JSON.parse(elemento.textContent);
+        }
+    } catch (e) {
+        console.error("Erro ao ler dados injetados:", e);
+    }
+    return null;
+}
 
-let barbeiros = carregarDoStorage("barbeiros_manager", PROFISSIONAIS_PADRAO);
-let agendamentos = carregarDoStorage("agendamentos_manager", AGENDAMENTOS_PADRAO);
+const DADOS_BARBEIROS_INJETADOS = lerDadosInjetados("dados-barbeiros-json");
+const DADOS_AGENDAMENTOS_INJETADOS = lerDadosInjetados("dados-agendamentos-json");
+
+let barbeiros = carregarDoStorage("barbeiros_manager", DADOS_BARBEIROS_INJETADOS || []);
+let agendamentos = carregarDoStorage("agendamentos_manager", DADOS_AGENDAMENTOS_INJETADOS || []);
 let bloqueios = carregarDoStorage("bloqueios_manager", []);
 
 function salvarAgendamentos() { salvarNoStorage("agendamentos_manager", agendamentos); }
@@ -122,7 +124,7 @@ const els = {
     bloqFim: document.getElementById("bloq-fim"),
     bloqMotivo: document.getElementById("bloq-motivo"),
 
-    // Modal Bloquear
+    // Modal Filtro
     overlayFiltro: document.getElementById("overlay-filtro"),
     modalFiltro: document.getElementById("modal-filtro"),
 
@@ -156,8 +158,6 @@ function mostrarAviso(msg) {
    NAVEGAÇÃO ENTRE ABAS
    ============================================================ */
 
-/* Cada aba agora é uma página própria (o sidebar foi componentizado).
-   Ajuste as URLs abaixo para as rotas reais do seu backend. */
 const ROTAS_ABAS = {
     inicio: "/gestor/painel/",
     agenda: "/gestor/painel/agenda",
@@ -167,7 +167,6 @@ const ROTAS_ABAS = {
 };
 
 function irParaAba(aba) {
-    // Se a aba pedida não é a desta página, vai para a página dela
     if (aba !== estado.abaAtual && ROTAS_ABAS[aba]) {
         window.location.href = ROTAS_ABAS[aba];
         return;
@@ -197,13 +196,9 @@ function irParaAba(aba) {
 
     estado.abaAtual = aba;
 
-    if (aba === "inicio") carregarDashboardInicio();
-    else if (aba === "agenda") atualizarAgendaGeral();
-    else if (aba === "servicos") renderizarServicos();
-    else if (aba === "barbeiros") renderizarBarbeiros();
-    else if (aba === "clientes") renderizarClientes();
-    else if (aba === "financeiro") renderizarFinanceiro();
-
+    if (aba === "inicio") if (typeof carregarDashboardInicio === "function") carregarDashboardInicio();
+    else if (aba === "agenda") if (typeof atualizarAgendaGeral === "function") atualizarAgendaGeral();
+    
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -212,7 +207,7 @@ function irParaAba(aba) {
    ============================================================ */
 
 function badgeStatusHTML(status) {
-    const mapa = { aguardando: "Aguardando", confirmado: "Confirmado", concluido: "Concluido", cancelado: "Cancelado" };
+    const mapa = { aguardando: "Aguardando", confirmado: "Confirmado", concluido: "Concluído", cancelado: "Cancelado" };
     const classes = {
         aguardando: "bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]",
         confirmado: "bg-[#0a2940] text-[#5ab4f0] border-[#1a5a8a]",
@@ -220,25 +215,6 @@ function badgeStatusHTML(status) {
         cancelado: "bg-[#3a1510] text-[#f0997b] border-[#993c1d]"
     };
     return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${classes[status] || ''}">${mapa[status] || status}</span>`;
-}
-
-/* ============================================================
-   FILTRO DE BARBEIROS (Agenda e modal "Bloquear horário")
-   Fica aqui porque a tela de Barbeiros também chama esta função.
-   ============================================================ */
-
-function popularFiltroBarbeiros() {
-    if (!els.filtroBarbeiroAgenda) return;
-    let html = `<option value="todos">Todos os Barbeiros</option>`;
-    let htmlModal = ``;
-    
-    barbeiros.forEach(p => {
-        html += `<option value="${p.nome}">${p.nome}</option>`;
-        htmlModal += `<option value="${p.nome}">${p.nome}</option>`;
-    });
-
-    els.filtroBarbeiroAgenda.innerHTML = html;
-    if (els.bloqBarbeiro) els.bloqBarbeiro.innerHTML = htmlModal;
 }
 
 /* ============================================================
@@ -300,89 +276,10 @@ function atualizarStatus(id, novoStatus) {
     if (a) a.status = novoStatus;
     salvarAgendamentos();
     fecharModalDetalhe();
-    // Cada tela carrega só o seu JS: atualiza apenas o que existir nesta página
+    
+    // Atualiza interface dependendo de onde o usuário está
     if (typeof carregarDashboardInicio === "function") carregarDashboardInicio();
     if (typeof atualizarAgendaGeral === "function") atualizarAgendaGeral();
-}
-
-/* ============================================================
-   MODAL: DETALHES DO ATENDIMENTO
-   ============================================================ */
-
-   function abrirModalDetalhe(id) {
-    const a = agendamentos.find(a => a.id === id);
-    if (!a) return;
-
-    els.detalheStatusBadge.innerHTML = badgeStatusHTML(a.status);
-    els.detalheCliente.textContent = a.cliente;
-    els.detalheServico.textContent = a.servico;
-    els.detalheHorario.textContent = `${formatarDataExtenso(a.data)} às ${a.hora}`;
-    els.detalheValor.textContent = formatarMoeda(a.valor);
-    els.detalheTelefone.textContent = a.telefone;
-    els.detalheObs.textContent = a.observacoes || "Nenhuma observação";
-
-    let html = "";
-    if (a.status === "aguardando") {
-        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="confirmarPresenca('${a.id}')">Confirmar presença</button>`;
-    }
-    if (a.status === "confirmado") {
-        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="iniciarAtendimento('${a.id}')">Iniciar atendimento</button>`;
-    }
-    if (a.status === "aguardando" || a.status === "confirmado") {
-        html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="concluirAtendimento('${a.id}')">Concluir atendimento</button>`;
-        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors" onclick="cancelarAtendimento('${a.id}')">Cancelar</button>`;
-    }
-    if (a.status === "concluido") {
-        html = `<p class="text-center text-[#888780] text-xs">Atendimento já concluído</p>`;
-    }
-    if (a.status === "cancelado") {
-        html = `<p class="text-center text-[#888780] text-xs">Este atendimento foi cancelado</p>`;
-    }
-    els.detalheAcoes.innerHTML = html;
-
-    els.overlayDetalhe.classList.remove("hidden");
-    els.modalDetalhe.classList.remove("hidden");
-}
-
-function fecharModalDetalhe() {
-    els.overlayDetalhe.classList.add("hidden");
-    els.modalDetalhe.classList.add("hidden");
-}
-
-function confirmarPresenca(id) {
-    atualizarStatus(id, "confirmado");
-    mostrarAviso("Presença confirmada!");
-}
-
-function iniciarAtendimento(id) {
-    mostrarAviso("Atendimento iniciado!");
-    fecharModalDetalhe();
-}
-
-function concluirAtendimento(id) {
-    atualizarStatus(id, "concluido");
-    mostrarAviso("Atendimento concluído!");
-}
-
-function cancelarAtendimento(id) {
-    if (!confirm("Deseja realmente cancelar este atendimento?")) return;
-    atualizarStatus(id, "cancelado");
-    mostrarAviso("Atendimento cancelado");
-}
-
-function atualizarStatus(id, novoStatus) {
-    const a = agendamentos.find(a => a.id === id);
-    if (a) a.status = novoStatus;
-    salvarAgendamentos();
-    fecharModalDetalhe();
-    atualizarTudo();
-}
-
-function atualizarTudo() {
-    renderizarInicio();
-    if (estado.visaoAgenda === "dia") renderizarAgendaDia();
-    if (estado.visaoAgenda === "semana") renderizarAgendaSemana();
-    if (estado.visaoAgenda === "mes") renderizarAgendaMes();
 }
 
 /* ============================================================
@@ -434,7 +331,6 @@ function fecharModalFiltro() {
 }
 
 function confirmarFiltro() {
-
     fecharModalFiltro();
 }
 
@@ -453,7 +349,6 @@ function fecharMenuMais() {
 }
 
 function carregarData() {
-    // Data debaixo do titulo
     const dataFormatted = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
     const elData = document.getElementById("data-atual-str");
     if (elData) elData.textContent = dataFormatted.charAt(0).toUpperCase() + dataFormatted.slice(1);
