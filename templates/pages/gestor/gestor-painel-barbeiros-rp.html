@@ -22,7 +22,7 @@
     {# ───────── DADOS MOCK VS FLASK ───────── #}
     {% set barbeiros_mock = [
         {'id': 1, 'nome_completo': 'Thiago Silva', 'descricao': 'Especializado nas principais academias internacionais, domina técnicas avançadas de corte a tesoura, estruturação de cabelo masculino e atendimento personalizado de alto padrão.', 'email': 'thiago@gmail.com', 'telefone': '(11) 11111-1111', 'fk_id_endereco': '1', 'foto_nome': 'barbeiro-master-thiago-silva.png'},
-        {'id': 2, 'nome_completo': 'Maik Mendes', 'descricao': 'Com foco em tendências modernas, Maik é especialista em degradês perfeitos (Fade), alinhamento de contornos e penteados urbanos contemporâneos.', 'email': 'maik@gmail.com', 'telefone': '(11) 22222-2222', 'fk_id_endereco': '2', 'foto_nome': 'barbeiro_dois_maik.png'}
+        {'id': 2, 'nome_completo': 'Maik Mendes', 'descricao': 'Com foco em tendências modernas, Maik é especialista em degradês perfeitos (Fade), alinhamento de contornos e penteados urbanos contemporâneos.', 'email': 'maik@gmail.com', 'telefone': '(11) 22222-2222', 'fk_id_endereco': '2', 'foto_nome': 'barbeiro_dois_maik.png'},
         {'id': 3, 'nome_completo': 'Samuca Costa', 'descricao': 'Mestre no tradicional ritual da barba com toalha quente e lâmina afiada. Samuca garante um momento relaxante combinado a cuidados profundos com a pele.', 'email': 'samuel@gmail.com', 'telefone': '(11) 33333-2222', 'fk_id_endereco': '2', 'foto_nome': 'barbeiro_dois_maik.png'}
     ] %}
 
@@ -130,19 +130,10 @@
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso"></div>
 
-<<<<<<< HEAD
-    
-    <script src="{{ url_for('static', filename='js/modals/modals-confirmar-excluir-padrao.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modals/modals-validar-editar-endereco.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/modals/modals-validar-editar-barbeiro.js') }}"></script>
-    <!-- icones personlaizados -->
-    <script> lucide.createIcons();</script>
-=======
     <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
     <!--script src="{{ url_for('static', filename='js/gestor-painel-barbeiros.js') }}"></script-->
 
->>>>>>> feature-frontend
-<script src="{{ url_for('static', filename='js/modals/modals-confirmar-excluir-padrao.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modals/modals-confirmar-excluir-padrao.js') }}"></script>
     <script src="{{ url_for('static', filename='js/modals/modals-validar-editar-endereco.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/modals/modals-validar-editar-barbeiro.js') }}"></script>
     <!-- icones personlaizados -->

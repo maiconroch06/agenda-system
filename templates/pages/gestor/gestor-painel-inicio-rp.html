@@ -81,116 +81,6 @@
                     <div class="mb-6">
 
                         <div class="flex justify-between items-center mb-3">
-<<<<<<< HEAD
-                            <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">Agenda de Hoje —
-                                Todos os Barbeiros </h2>
-                            <span class="text-xs text-[#888780]"> {{ agendamentos | lenght if agendamentos else 0}} agendamentos</span>
-                        </div>
-                        
-                        
-                             
-                            {% if agendamentos %}
-
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="lista-hoje-cards"></div>
-                                {%for agendamento in agendamentos%}
-                                    <div
-                                    class="bg-[#1f1e1b] border border-[#38362f] rounded-2xl p-5
-                                        flex flex-col justify-between cursor-pointer
-                                        hover:border-[#4a473f] transition-all duration-200
-                                        hover:scale-[1.01] active:scale-[0.99]
-                                        ${concluidoClasse}"
-                                    onclick="abrirModalDetalhe('${item.id}')"
-                                    >
-
-                                        <!-- Horário e status -->
-                                        <div class="flex justify-between items-center gap-3 mb-5">
-
-                                            <span class="text-xs font-mono font-bold text-[#9fe1cb]
-                                                        bg-[#04342c] px-3 py-1 rounded-lg
-                                                        border border-[#0f6e56] shrink-0">
-                                                ${item.hora}
-                                            </span>
-
-                                            ${badgeStatusHTML(item.status)}
-
-                                        </div>
-
-                                        <!-- Identificação: barbeiro e cliente -->
-                                        <div class="grid grid-cols-2 gap-3 mb-5">
-
-                                            <!-- Barbeiro -->
-                                            <div class="min-w-0 flex flex-col gap-1">
-                                                <span class="text-xs text-[#888780]">
-                                                    Barbeiro
-                                                </span>
-
-                                                <h3 class="text-base font-bold text-[#f1efe8] leading-tight break-words">
-                                                    ${item.barbeiro || "N/A"}
-                                                </h3>
-                                            </div>
-
-                                            <!-- Cliente -->
-                                            <div class="min-w-0 flex flex-col gap-1 border-l border-[#38362f] pl-3">
-                                                <span class="text-xs text-[#888780]">
-                                                    Cliente
-                                                </span>
-
-                                                <h3 class="text-base font-bold text-[#f1efe8] leading-tight break-words">
-                                                    ${item.cliente}
-                                                </h3>
-                                            </div>
-
-                                        </div>
-
-                                        <!-- Serviço -->
-                                        <div class="flex items-center gap-3 border-t border-[#38362f]
-                                                    border-b border-[#38362f] py-3 mb-3">
-
-                                            <span class="text-sm text-amber-500 shrink-0">
-                                                <i class="fa-solid fa-scissors"></i>
-                                            </span>
-
-                                            <span class="text-sm text-[#d6d3cc] font-medium truncate">
-                                                ${item.servico}
-                                            </span>
-
-                                        </div>
-
-                                        <!-- Valor e detalhes -->
-                                        <div class="flex justify-between items-center gap-3">
-
-                                            <span class="text-sm font-bold text-[#f1efe8]">
-                                                ${formatarMoeda(item.valor)}
-                                            </span>
-
-                                            <span class="text-xs text-[#888780] flex items-center gap-1 shrink-0">
-                                                Ver detalhes
-                                                <span>→</span>
-                                            </span>
-
-                                        </div>  
-
-                                    </div>
-                                {%endfor%}
-
-                             </div>           
-
-                            {%else%}
-                                  
-                                <h1> 
-                                    <span class="text-lg font-mono font-bold text-[#9fe1cb]
-                                                        bg-[#04342c] px-3 py-1 rounded-lg
-                                                        border border-[#0f6e56] shrink-0">
-                                               Sem Agendamentos!
-                                    </span>
-
-                                </h1>  
-
-                            {%endif%}
-                            
-
-                        
-=======
 
                             <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">
                                 Agenda de Hoje — Todos os Barbeiros
@@ -201,7 +91,6 @@
                         <!-- Listagem dos agendamentos de hoje -->
                         <div class="flex flex-col gap-2" id="lista-hoje-cards"></div>
 
->>>>>>> feature-frontend
                     </div>
 
                 </section>

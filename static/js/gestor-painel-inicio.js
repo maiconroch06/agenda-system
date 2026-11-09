@@ -35,9 +35,7 @@ Object.assign(els, {
 
 function cardAtendimentoHojeHTML(item) {
     const concluidoClasse = item.status === "concluido" ? " opacity-65" : "";
-<<<<<<< HEAD
-    return;
-=======
+
     return `
         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
             <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${item.hora}</div>
@@ -54,7 +52,6 @@ function cardAtendimentoHojeHTML(item) {
 
         </div>
     `;
->>>>>>> feature-frontend
 }
 
 function carregarDashboardInicio() {
