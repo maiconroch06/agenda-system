@@ -27,7 +27,7 @@ class GestorDAO:
 
         return resposta.lastrowid
 
-    def consultarGestorBarbearia(self, email):
+    def realizar_login_dao(self, email):
         sql = text("""
             SELECT
                 u.id,
@@ -41,8 +41,7 @@ class GestorDAO:
                 u.data_cadastro,
                 u.data_atualizacao,
                 u.fk_id_endereco,
-                g.fk_cnpj_barbearia,
-                g.fk_id_agenda
+                g.fk_cnpj_barbearia
             FROM usuarios u
             INNER JOIN gestor g ON g.id = u.id
             WHERE u.email = :email
@@ -81,35 +80,6 @@ class GestorDAO:
 
         return dict(registros) if registros else None
 
-
-    def listar_por_barbearia(self, cnpj: str):
-        sql = text("""
-            SELECT
-                u.id,
-                u.nome_completo,
-                u.telefone,
-                u.cpf,
-                u.email,
-                u.senha,
-                u.foto_nome,
-                u.status_usuario,
-                u.data_cadastro,
-                u.data_atualizacao,
-                u.fk_id_endereco,
-                g.fk_cnpj_barbearia
-            FROM usuarios u
-            INNER JOIN gestor g ON g.id = u.id
-            WHERE g.fk_cnpj_barbearia = :cnpj
-            ORDER BY u.nome_completo
-        """)
-
-        registros = db.session.execute(
-            sql,
-            {"cnpj": cnpj}
-        ).mappings().all()
-
-        return dict(registros) if registros else None
-
     
     def atualizar(self, gestor: Gestor):
         sql_usuario = text("""
@@ -123,7 +93,6 @@ class GestorDAO:
                 foto_nome = :foto_nome,
                 status_usuario = :status_usuario,
                 data_atualizacao = :data_atualizacao,
-                fk_id_endereco = :fk_id_endereco
             WHERE id = :id
         """)
 
@@ -161,33 +130,4 @@ class GestorDAO:
         db.session.commit()
 
         return resultado_gestor.rowcount > 0
-
-    
-    def excluir(self, id_gestor: int):
-        sql_gestor = text("""
-            DELETE FROM gestor
-            WHERE id = :id
-        """)
-
-        resultado = db.session.execute(
-            sql_gestor,
-            {"id": id_gestor}
-        )
-
-        if resultado.rowcount == 0:
-            return False
-
-        sql_usuario = text("""
-            DELETE FROM usuarios
-            WHERE id = :id
-        """)
-
-        db.session.execute(
-            sql_usuario,
-            {"id": id_gestor}
-        )
-
-        db.session.commit()
-
-        return True
 

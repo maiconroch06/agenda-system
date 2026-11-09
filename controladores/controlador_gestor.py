@@ -2,35 +2,77 @@ from flask import session, redirect, url_for, flash, render_template
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 from database import db
-from enums import EnumStatusMensagens
-from decimal import Decimal, InvalidOperation
-from services_mvc import GestorServiceMVC, ServicoBarbearia
+from enums import EnumStatusMensagens, EnumNomesPastaImagem
+from services_mvc import GestorServiceMVC, ServicoBarbearia, BarbeiroService
 from execoes import ImagemErrorExcecao 
+from models import Barbeiro
+from werkzeug.utils import secure_filename
+from .controlador_cliente import ControladorCliente
+from .controlador_agendamento import ControladorAgendamento
+from .controlador_barbeiro import ControladorBarbeiro
 
 class ControladorGestor():
+    __gestor_service_mvc = GestorServiceMVC()
+    __servicos_barbearia_service_mvc = ServicoBarbearia()
+    __barbeiro_service_mvc = BarbeiroService()
+    __controlador_cliente = ControladorCliente()
+    __controlador_barbeiro = ControladorBarbeiro()
+    __controlador_agendamento = ControladorAgendamento()
+  
     
-    def __init__(self):
-        self.gestor_service_mvc = GestorServiceMVC()
-        self.servicos_barbearia_service_mvc = ServicoBarbearia()
-    
-    def login(self, email:str, senha:str):
+    @classmethod
+    def login_gestor(cls, email:str, senha:str):
         
             try: 
-                self.gestor_service_mvc.gestorRealizarLoginService(email,senha)   
+                cls.__gestor_service_mvc.gestorRealizarLoginService(email,senha)   
                 return redirect(url_for('gestor.gestorPainel'))
             
             except Exception as error:
                 flash(f"{error}")
                 return  redirect(url_for('gestor.gestorLoginPagina'))
 
-    def cadastrarBarbeiro(photo:str, cpf:str, name:str, email:str, telephone:str, address:str, description:str):
-        
+    @classmethod
+    def cadastrarBarbeiro(cls, barbeiro: Barbeiro, fotoTemp):
+        try:
+            
+            barbeiro.id = cls.__barbeiro_service_mvc.cadastrarUsuarioService(barbeiro,secure_filename(fotoTemp.filename))
+                        
+            if cls.__barbeiro_service_mvc.salvar_dados_especificos(barbeiro, fotoTemp):  
+                flash(f"Barbeiro {barbeiro.nome_completo.split(' ')[0]} cadastrado com sucesso.", EnumStatusMensagens.SUCESSO.value)  
+                return redirect(url_for('gestor.gestorAbaBarbeiros'))
+            
+        except Exception as erros:
+            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
+            
+        return redirect(url_for('gestor.gestorBarbeiroPage'))
+    
+    
+    @classmethod
+    def excluir_barbeiro(cls, id_servico, foto_nome):
+            try:
+                cls.__barbeiro_service_mvc.excluir_usuario_barbearia(id_servico,foto_nome,EnumNomesPastaImagem.IMAGENS_BARBEIRO)   
+                flash(f"O barbeiro foi excluído com sucesso!",EnumStatusMensagens.SUCESSO.value)
+            except Exception:
+                flash(f"O barbeiro não foi excluido!", EnumStatusMensagens.ERRO.value)
+                
+            return redirect(url_for('gestor.gestorAbaBarbeiros'))  
+    
+    @classmethod
+    def atualizar_barbeiro(cls, imagem_form, img_padrao, imagem_anterior, barbeiro):
+            try:
+                if cls.__controlador_barbeiro.atualizar_informacoes_barbeiro(imagem_form, img_padrao, imagem_anterior, barbeiro):   
+                    flash(f"As infomações do barbeiro {barbeiro.nome_completo} foi alterada com sucesso!",EnumStatusMensagens.SUCESSO.value)
+            except Exception:
+                flash(f"Nenhuma informação do babeiro foi feita!", EnumStatusMensagens.ERRO.value)
+                
+            return redirect(url_for('gestor.gestorAbaBarbeiros'))  
 
-    def cadastrarServico(self, foto, novo_descricao: str, novo_valor: str, novo_duracao:str ):
+    @classmethod
+    def cadastrarServico(cls, foto, novo_descricao: str, novo_valor: str, novo_duracao:str ):
         
         try:
-            self.servicos_barbearia_service_mvc.cadastrar_servico_barbearia(foto, novo_descricao, novo_valor, novo_duracao)
-            return redirect(url_for('gestor.gestorAbaServicos'))
+            if cls.__servicos_barbearia_service_mvc.cadastrar_servico_barbearia(foto, novo_descricao, novo_valor, novo_duracao):
+                return redirect(url_for('gestor.gestorAbaServicos'))
         
         except ImagemErrorExcecao as erros:
             flash(f"{erros}", EnumStatusMensagens.AVISO.value)
@@ -39,94 +81,38 @@ class ControladorGestor():
         except Exception as erros:
             flash(f"{erros}", EnumStatusMensagens.ERRO.value)
             return redirect(url_for('gestor.gestorServicoCadastrar'))
-        
-        
-        
              
-    def deletarServico(id_servico):
+    @classmethod
+    def excluir_servico(cls, id_servico, foto_nome):
         try:
-            servicos = Servicos()
-           
-            resultado = servicos.deletarServico(id_servico)
-
-            if resultado:
-                flash("Serviço de código ["+ str(id_servico) + "] deletado com sucesso!", EnumStatusMensagens.SUCESSO.value)
-            
-            db.session.commit()
-
+            cls.__servicos_barbearia_service_mvc.excluir_servico_barbearia(id_servico,foto_nome )   
         except Exception as error:
-            db.session.rollback()
-            print(f"{error}")
-            flash("Não foi possivel deletar o serviço, consulte o suporte!", EnumStatusMensagens.ERRO.value)
-        
-        return redirect(url_for('gestor.gestorAbaServicos'))
-  
-    def editarServico(id: str, novo_foto_nome:str, nova_descricao: str, novo_valor: Decimal, nova_duracao:str, ativo:str):
-
-        # Validação inicial simples
-        rota_erro = 'gestor.gestorServicoEditarPagina'
-        
+            flash(f"{error}")
+            
+        return redirect(url_for('gestor.gestorAbaServicos'))  
+           
+    @classmethod
+    def editarServico(cls, id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo):
+       
         try:
-           
-            id_servico = int(id)
-            status_ativo = int(ativo)
-
-            if not nova_descricao.strip() or  novo_valor <= Decimal('0') or not nova_duracao.strip() or id_servico < 1:
-                flash("Campos vazios! Verifique se os campos estão vazios!", EnumStatusMensagens.AVISO.value)
-                return  redirect(url_for('gestor.gestorServicoCadastrar'))
-          
-            servico = Servicos().consultarIdServicoValido(id_servico)
-
-
-            if servico is None:
-                flash("Aviso: edição não efetuada, servico inexistente!", EnumStatusMensagens.AVISO.value)
-                return redirect(url_for("gestor.gestorAbaServicos"))
-                        
-            duracao = int(nova_duracao)
-          
-            if (duracao < 0):
-                flash("A duração devem ser maior que zero!", EnumStatusMensagens.AVISO.value)
-                return  redirect(url_for(rota_erro))
-
-            # atualizando os dados na sessão do Flask
-            servicos = Servicos()
+         
+            cls.__servicos_barbearia_service_mvc.editar_servico_barbearia(id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo)
+            flash(f"Servico {descricao_servico} atualizado com sucesso.", EnumStatusMensagens.SUCESSO.value)
+        except Exception as erros:
+            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
             
-            servicos.id = id_servico
-            servicos.descricao = nova_descricao
-            servicos.valor = novo_valor
-            servicos.duracao = duracao
-            servicos.foto_nome = novo_foto_nome
-            servicos.ativo = status_ativo         
-            servicos.data_atualizacao = servicos.dataFormatada()
-                        
-            resultado_servico = servicos.atualizarServico()
-    
-            if resultado_servico.rowcount == 0:
-                flash( 'Erro ao criar o serviço',EnumStatusMensagens.ERRO.value)
-                return redirect(url_for(rota_erro,id_servico=id_servico))
-                
-            db.session.commit()
-
-            flash( 'Servico atualizado com sucesso!',EnumStatusMensagens.SUCESSO.value)
-            return redirect(url_for('gestor.gestorAbaServicos'))
-           
-        except IntegrityError as i:
-            db.session.rollback()
-            print(f"{i}")
-            flash( "Erro ao cadastrar o serviço!" )
-            return redirect(url_for(rota_erro,id_servico=id_servico))
         
-        except (ValueError, TypeError) as error:
-            print(f" error de tipo {error}")
-            flash("Os campos Preço e duração só aceitam números!" )
-            return redirect(url_for(rota_erro,id_servico=id_servico))
-            
-        except Exception as erro:
-            print(f"{erro}")
-            db.session.rollback()
-            flash("Confira se digitou o campo ")
-            return redirect(url_for(rota_erro,id_servico=id_servico))
-            
-    def consultar_servicos(self):
-        return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = self.servicos_barbearia_service_mvc.consultar_todos_servicos(), mensagens_status=EnumStatusMensagens)
+        return redirect(url_for("gestor.gestorAbaServicos")) 
              
+            
+    @classmethod
+    def consultar_servicos(cls):
+        return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = cls.__servicos_barbearia_service_mvc.consultar_todos_servicos(), mensagens_status=EnumStatusMensagens)
+   
+    @classmethod
+    def consultar_clientes(cls):
+        return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios= cls.__controlador_cliente.consultar_todos_clientes(),  mensagens_status=EnumStatusMensagens)
+
+    @classmethod
+    def consultar_agendamentos(cls, status_agendamento):
+        return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos = cls.__controlador_agendamento.consultar_agendamento(status_agendamento)) 

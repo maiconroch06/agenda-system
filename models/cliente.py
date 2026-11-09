@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 from models import Usuario, Endereco
 
 class Cliente(Usuario):
@@ -17,7 +16,7 @@ class Cliente(Usuario):
         data_atualizacao: datetime,
         endereco: Endereco = None,
         data_ultimo_servico: datetime = None,
-        id: Optional[int] = None,
+        id = None,
     ):
         super().__init__(
             id = id,
@@ -33,12 +32,16 @@ class Cliente(Usuario):
             endereco=endereco
         )
 
-        self.data_ultimo_servico = data_ultimo_servico
+        self.__data_ultimo_servico = data_ultimo_servico
 
-    def consultarDataUltimoServico(self):
-        return self.data_ultimo_servico
+    @property
+    def data_ultimo_servico(self):
+        return self.__data_ultimo_servico
 
-    def atualizarDataUltimoServico(self, data: datetime):
-        self.data_ultimo_servico = data
+    @data_ultimo_servico.setter
+    def data_ultimo_servico(self, value):
+        self.__data_ultimo_servico = value
+
+
 
     

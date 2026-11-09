@@ -31,27 +31,7 @@ Object.assign(els, {
 
 function cardAtendimentoHojeHTML(item) {
     const concluidoClasse = item.status === "concluido" ? " opacity-65" : "";
-    return `
-        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 flex flex-col justify-between cursor-pointer hover:border-[#4a473f] transition-all hover:scale-[1.01] active:scale-[0.99]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
-            <div class="flex justify-between items-start mb-3">
-                <div>
-                    <span class="text-xs font-mono font-bold text-[#9fe1cb] bg-[#04342c] px-2 py-0.5 rounded-md border border-[#0f6e56]">${item.hora}</span>
-                    <span class="text-xs text-[#888780] ml-2">Barbeiro: <strong class="text-[#f1efe8]">${item.barbeiro || "N/A"}</strong></span>
-                </div>
-                ${badgeStatusHTML(item.status)}
-            </div>
-            
-            <div class="mb-3">
-                <h3 class="text-sm font-semibold text-[#f1efe8]">${item.cliente}</h3>
-                <p class="text-xs text-[#888780]">${item.servico}</p>
-            </div>
-
-            <div class="flex justify-between items-center border-t border-[#38362f] pt-2.5 mt-1">
-                <span class="text-xs font-semibold text-[#f1efe8]">${formatarMoeda(item.valor)}</span>
-                <span class="text-[11px] text-[#888780] flex items-center gap-1">Ver detalhes →</span>
-            </div>
-        </div>
-    `;
+    return;
 }
 
 function carregarDashboardInicio() {

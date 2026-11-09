@@ -6,8 +6,7 @@ from models.usuarios import Usuario
 
 class UsuarioDAO:
 
-    @staticmethod
-    def salvar(usuario: Usuario):
+    def cadastrar(self, usuario: Usuario):
         sql = text("""
             INSERT INTO usuarios (
                 id,
@@ -50,13 +49,13 @@ class UsuarioDAO:
             "fk_id_endereco": usuario.endereco.id if usuario.endereco is not None else None
         })
 
-        db.session.commit()
+        db.session.flush()
         
         #retorna o ultimo id inserido no banco;
         return resposta_id_usuario.lastrowid 
 
-    @staticmethod
-    def buscar_por_id(id_usuario: int):
+
+    def buscar_por_id(self, id_usuario: int):
         sql = text("""
             SELECT
                 id,
@@ -84,8 +83,8 @@ class UsuarioDAO:
 
         return UsuarioDAO._mapear(registro)
 
-    @staticmethod
-    def buscar_por_email(email: str):
+
+    def buscar_por_email(self, email: str):
         sql = text("""
             SELECT
                 id,
@@ -113,8 +112,8 @@ class UsuarioDAO:
 
         return UsuarioDAO._mapear(registro)
 
-    @staticmethod
-    def buscar_por_cpf(cpf: str):
+
+    def buscar_por_cpf(self, cpf: str):
         sql = text("""
             SELECT
                 id,
@@ -142,8 +141,8 @@ class UsuarioDAO:
 
         return UsuarioDAO._mapear(registro)
 
-    @staticmethod
-    def listar_todos():
+
+    def consultar_todos_usuarios(self, ):
         sql = text("""
             SELECT
                 id,
@@ -168,8 +167,8 @@ class UsuarioDAO:
             for registro in registros
         ]
 
-    @staticmethod
-    def listar_ativos():
+
+    def contultar_usuarios_ativos(self, ):
         sql = text("""
             SELECT
                 id,
@@ -198,8 +197,35 @@ class UsuarioDAO:
             for registro in registros
         ]
 
-    @staticmethod
-    def atualizar(usuario: Usuario):
+
+    def atualizar_usuarios_sem_senha(self, usuario: Usuario):
+        sql = text("""
+            UPDATE usuarios
+            SET
+                nome_completo = :nome_completo,
+                telefone = :telefone,
+                cpf = :cpf,
+                email = :email,
+                foto_nome = :foto_nome,
+                data_atualizacao = :data_atualizacao
+            WHERE id = :id
+        """)
+
+        resultado = db.session.execute(sql, {
+            "id": usuario.id,
+            "nome_completo": usuario.nome_completo,
+            "telefone": usuario.telefone,
+            "cpf": usuario.cpf,
+            "email": usuario.email,
+            "foto_nome": usuario.foto_nome,
+            "data_atualizacao": usuario.data_atualizacao,
+        })
+
+        db.session.flush()
+
+        return resultado.rowcount > 0
+    
+    def atualizar_usuarios_com_senha(self, usuario: Usuario):
         sql = text("""
             UPDATE usuarios
             SET
@@ -211,7 +237,6 @@ class UsuarioDAO:
                 foto_nome = :foto_nome,
                 status_usuario = :status_usuario,
                 data_atualizacao = :data_atualizacao,
-                fk_id_endereco = :fk_id_endereco
             WHERE id = :id
         """)
 
@@ -232,8 +257,8 @@ class UsuarioDAO:
 
         return resultado.rowcount > 0
 
-    @staticmethod
-    def alterar_status(id_usuario: int, status: bool):
+
+    def alterar_status(self, id_usuario: int, status: bool):
         sql = text("""
             UPDATE usuarios
             SET status_usuario = :status
@@ -249,8 +274,8 @@ class UsuarioDAO:
 
         return resultado.rowcount > 0
 
-    @staticmethod
-    def excluir(id_usuario: int):
+
+    def excluir(self, id_usuario: int):
         sql = text("""
             DELETE FROM usuarios
             WHERE id = :id
@@ -260,13 +285,14 @@ class UsuarioDAO:
             sql,
             {"id": id_usuario}
         )
-
-        db.session.flush()
+        
+            
+        db.session.commit()
 
         return resultado.rowcount > 0
 
-    @staticmethod
-    def verificar_email_existente(
+
+    def verificar_email_existente(self, 
         email: str,
         id_ignorado: int = None
     ):
@@ -285,8 +311,8 @@ class UsuarioDAO:
 
         return resultado is not None
 
-    @staticmethod
-    def verificar_cpf_existente(
+
+    def verificar_cpf_existente(self, 
         cpf: str,
         id_ignorado: int = None
     ):
@@ -305,8 +331,8 @@ class UsuarioDAO:
 
         return resultado is not None
 
-    @staticmethod
-    def _mapear(registro):
+
+    def _mapear(self, registro):
         return Usuario(
             id=registro["id"],
             nome_completo=registro["nome_completo"],

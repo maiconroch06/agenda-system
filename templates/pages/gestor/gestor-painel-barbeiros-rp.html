@@ -9,6 +9,12 @@
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+    <style>
+        .hidden-step { display: none !important; }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+
 </head>
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
@@ -22,6 +28,7 @@
 
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+                <p id="titulo-modal" class="hidden">Barbeiro</p>
                  <!-- ============================================================
                 COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
                 ============================================================ -->
@@ -38,38 +45,65 @@
                         </a>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
-                        id="lista-profissionais-painel">
-                        {%  for barbeiro in barbeiros %}
-                            <div class="relative flex flex-col items-center  bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-100  border-zinc-700/60 transition-all duration-200">
-                        
-                                <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${p.foto}" alt="${p.nome}">
-                                <!-- ${p.foto
-                                    ? `<img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${p.foto}" alt="${p.nome}">`
-                                    : `<div class="w-20 h-20 rounded-full bg-zinc-100  bg-zinc-700 border border-zinc-200  border-zinc-600 flex items-center justify-center text-3xl mb-3 text-zinc-400">👤</div>`
-                                 -->
+                    
+<div id="lista-profissionais-painel"
+     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 w-full">
 
-                                    <h3 class="font-bold text-white   text-base mb-1 text-center">{{barbeiro.nome_completo}}</h3>
-                                    <p class="text-xs text-gray-300  text-center mb-3 line-clamp-2">{{barbeiro.descricao}}</p>
+    {% for barbeiro in barbeiros %}
+    <div id="card_servicos" class="flex flex-col items-center min-w-0 bg-[#232220] rounded-2xl p-4 border border-zinc-700/60 hover:border-amber-500/40 transition-all">
 
-                                    <div class="flex flex-col gap-1 w-full text-xs text-gray-300  mb-4 bg-zinc-50  bg-zinc-800/50 p-2.5 rounded-xl border border-zinc-100  border-zinc-700/40">
-                                        <span class="truncate"><strong>E-mail:</strong> {{barbeiro.email}}</span>
-                                        <span><strong>Tel:</strong> {{barbeiro.telefone}}</span>
-                                        
-                                        <span class="truncate mt-1 border-t border-zinc-200  border-zinc-700 pt-1"><strong>End:</strong> {{barbeiro.fk_id_endereco}}</span>
-                                    </div>
+        <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500"
+            src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome) }}"
+             alt="Foto de {{ barbeiro.nome_completo }}">
 
-                                    <div class="flex gap-2 w-full mt-auto pt-3 border-t border-zinc-100  border-zinc-700/50">
-                                        <a href="/gestor/painel/barbeiro/editar/{{barbeiro.id}}"  class="flex-1 py-1.5 px-3 rounded-lg border border-[#38362f] bg-transparent text-gray-300  hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Editar</a>
-                                        <a  class="flex-1 py-1.5 px-3 rounded-lg border border-[#38362f] bg-transparent text-gray-300  hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Desativar</a>
-                                    </div>
-                            </div>       
-                        {%endfor%}
-                    </div>
+        <h3 id="campo-padrao" class="font-bold text-white text-base text-center">{{ barbeiro.nome_completo }}</h3>
+
+        <p class="text-xs text-gray-300 text-center mb-3">
+            Contato: ({{ barbeiro.telefone[:2] }}) {{ barbeiro.telefone[2:7] }}-{{ barbeiro.telefone[7:] }}
+        </p>
+
+        <div class="w-full min-w-0 text-xs text-gray-300 mb-4 bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/40">
+            <p class="break-all"><strong>E-mail:</strong> {{ barbeiro.email }}</p>
+            <p class="flex items-center gap-2 text-gray-300 mt-2 pt-2 border-t border-zinc-700 break-words">
+                 <i data-lucide="map-pin" class="w-8 h-8 "></i>
+                 {{ barbeiro.logradouro}}, nº {{ barbeiro.numero}} - {{barbeiro.bairro}} {{ ', ' ~ barbeiro.sequencia if barbeiro.sequencia else ""}}{{', ' ~ barbeiro.complemento if barbeiro.complemento else ""}} | {{barbeiro.cidade}}({{barbeiro.estados_br_sigla}}) | CEP: {{ barbeiro.cep[:5] }}-{{barbeiro.cep[5:8]}} </p>
+        </div>
+
+        <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
+
+            <button type="button" id="editar-barbeiro" value="{{barbeiro.id}}&{{barbeiro.nome_completo}}&{{barbeiro.cpf}}&{{barbeiro.email}}&{{barbeiro.telefone}}&{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome) }}&{{barbeiro.foto_nome}}&{{barbeiro.status_barbeiro}}&{{barbeiro.descricao}}"
+                    class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
+                Editar barbeiro
+            </button>
+
+            <button type="button" id="editar-endereco" value="{{barbeiro.fk_id_endereco}}&{{barbeiro.cep}}&{{barbeiro.cidade}}&{{barbeiro.estados_br_sigla}}&{{barbeiro.logradouro}}&{{barbeiro.numero}}&{{barbeiro.bairro}}&{{barbeiro.sequencia if barbeiro.sequencia else '' }}&{{barbeiro.complemento if barbeiro.complemento else ''}}"
+                    class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
+                Editar endereço
+            </button>
+
+            <form action="/gestor/painel/barbeiro/excluir" id="form-confirmar-exclusao"
+                  method="POST" class="flex-1 min-w-0">
+
+                <input type="hidden" name="srv-id-deletar" value="{{ barbeiro.id }}">
+                <input type="hidden" name="srv-foto_nome" value="{{ barbeiro.foto_nome }}">
+
+                <button type="submit" class="w-full py-2 px-2 rounded-lg bg-red-900/80 border border-red-800 text-gray-200 hover:bg-red-700 text-xs font-medium transition-colors">
+                    Excluir
+                </button>
+            </form>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+                            {% include "componetizacao/janela_modal/modal_editar_barbeiro.html" %}   
+                            {% include "componetizacao/janela_modal/modal_editar_endereco.html" %}  
+                            {% include "componetizacao/janela_modal/modal_confimacao_excluir_padrao.html" %}
                 </section>
             </main>
         </div>
-
+       
         <!-- NAVEGAÇÃO INFERIOR MOBILE -->
         {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
 
@@ -125,7 +159,12 @@
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso"></div>
 
-    <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
+    
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_validar_editar_endereco.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/janelas_modais/js_validar_editar_barbeiro.js') }}"></script>
+    <!-- icones personlaizados -->
+    <script> lucide.createIcons();</script>
 </body>
 
 </html>

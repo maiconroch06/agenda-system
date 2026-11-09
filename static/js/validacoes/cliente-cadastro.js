@@ -55,9 +55,7 @@ client_form_register.addEventListener('submit',
             //atribui as variaaveis todos os campos do formulario
             const name = document.querySelector('#client-name');
             const email = document.querySelector('#client-email');
-            
-            
-            
+             
             // Pega a div onde vai ficar a mensagem;
             const div = document.querySelector('#div-validation-message');
 

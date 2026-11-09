@@ -8,26 +8,29 @@ from enums import EnumStatusMensagens
 class ControladorCliente():
 
     def __init__(self):
-        self.clienteService = ClienteService()
+        self.__clienteService = ClienteService()
     
     def login(self, email:str, senha:str):
         try:
-            self.clienteService.realizarLoginService(email,senha)
+            self.__clienteService.realizarLoginService(email,senha)
             return redirect(url_for('cliente.clientAgendamentoServicos'))
        
         except Exception as erros:
            flash(f"{erros}", EnumStatusMensagens.ERRO.value) 
            return  redirect(url_for('cliente.clientLoginPage'))
               
-    def cadastrarCliente(self, cliente:Cliente, fotoTemp):      
+    def cadastrarCliente(self, cliente:Cliente):      
         try:
-            cliente_id_usuario_cadastrado =  self.clienteService.cadastrarUsuarioService(cliente, fotoTemp)
-            self.clienteService.salvar_dados_especificos(cliente_id_usuario_cadastrado)
-                                      
-            return redirect(url_for('cliente.cadastroSucesso'))
+            cliente.id  =  self.__clienteService.cadastrarUsuarioService(cliente, cliente.foto_nome)
+                     
+            if self.__clienteService.salvar_dados_especificos(cliente):                                      
+                return redirect(url_for('cliente.cadastroSucesso'))
         
-        except Exception:
+        except Exception as erros:
+            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
             return redirect(url_for('cliente.clientRegisterPage'))
         
-    
+   
+    def consultar_todos_clientes(self):
+        return self.__clienteService.consultar_clientes_services()
    

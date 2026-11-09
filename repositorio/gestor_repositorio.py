@@ -7,8 +7,8 @@ class GestorRepositorio:
     def __init__(self):
         self.gestor_dao = GestorDAO()
   
-    def consultar_gestor(self, email):
-        return self.gestor_dao.consultarGestorBarbearia(email)
+    def realizar_login(self, email):
+        return self.gestor_dao.realizar_login_dao(email)
 
     def listar_todos(self):
         return self.gestor_dao.consultarGestores()

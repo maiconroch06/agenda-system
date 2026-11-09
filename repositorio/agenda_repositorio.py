@@ -1,25 +1,25 @@
 
 from DAO.agenda_dao import AgendaDAO
 
-
 class AgendaRepositorio:
+    def __init__(self):
+       self.__agenda_dao = AgendaDAO()
 
-    @staticmethod
-    def salvar(agenda):
-        return AgendaDAO.salvar(agenda)
+    def cadastrar_agenda(self, agenda):
+        return  self.__agenda_dao.cadastrar_agenda_dao(agenda)
 
-    @staticmethod
-    def buscar_por_id(id_agenda):
-        return AgendaDAO.buscar_por_id(id_agenda)
+    
+    def buscar_por_id(self,id_agenda):
+        return  self.__agenda_dao.buscar_por_id(id_agenda)
 
-    @staticmethod
-    def listar_todos():
-        return AgendaDAO.listar_todos()
+   
+    def listar_todos(self):
+        return  self.__agenda_dao.listar_todos()
 
-    @staticmethod
-    def atualizar(agenda):
-        return AgendaDAO.atualizar(agenda)
+    
+    def atualizar(self, agenda):
+        return  self.__agenda_dao.atualizar(agenda)
 
-    @staticmethod
-    def excluir(id_agenda):
-        return AgendaDAO.excluir(id_agenda)
+   
+    def excluir(self,id_agenda):
+        return  self.__agenda_dao.excluir(id_agenda)

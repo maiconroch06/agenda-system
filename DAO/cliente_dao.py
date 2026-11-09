@@ -29,10 +29,10 @@ class ClienteDAO:
             "data_ultimo_servico": dataUltimoServico
         }
 
-        resposta_id_cliente = db.session.execute(sql_cliente, parametros_cliente)
-        db.session.commit()
+        resposta_insert_cliente = db.session.execute(sql_cliente, parametros_cliente)
+        db.session.flush()
 
-        return resposta_id_cliente.lastrowid
+        return resposta_insert_cliente.rowcount > 0
 
     
     def consultarClienteId(self, id_cliente: int):
@@ -115,10 +115,7 @@ class ClienteDAO:
 
         registros = db.session.execute(sql).mappings().all()
 
-        return [
-            ClienteDAO._mapear(registro)
-            for registro in registros
-        ]
+        return registros
 
    
     def atualizar(self, cliente: Cliente):

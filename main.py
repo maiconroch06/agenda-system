@@ -39,7 +39,7 @@ app.register_blueprint(barbeiro, url_prefix='/barbeiro')
 
 # 6. Configurações da aplicação
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
-app.config['UPLOAD_FILES'] = r'static/assets/dados'
+app.config['UPLOAD_FILES'] = r'static/assets/img_uploads'
 
 if __name__ == "__main__":
     app.run(

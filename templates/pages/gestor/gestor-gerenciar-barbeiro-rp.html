@@ -54,15 +54,8 @@
             
             <!-- ETAPA 1: DADOS DO BARBEIRO (space-y reduzido) -->
             <div id="step-1" class="space-y-4">
-                <div class="flex flex-col items-center justify-center gap-1.5">
-                    <span class="text-[12px] font-medium text-[#888780]">Foto do Barbeiro</span>
-                    <!-- Círculo da foto reduzido para w-20 h-20 -->
-                    <label for="pro-foto" class="relative w-20 h-20 rounded-full border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-[#0f6e56] hover:bg-[#04342c] overflow-hidden group">
-                        <span class="text-2xl text-[#888780] group-hover:text-[#9fe1cb] leading-none mb-1">+</span>
-                        <span class="text-[10px] text-[#888780] group-hover:text-[#9fe1cb]">Upload</span>
-                        <input type="file" name="foto" id="pro-foto" accept="image/*" class="hidden">
-                    </label>
-                </div>
+                <!-- Upload de imagem -->
+                {% include "componetizacao/avatar_imagem/avatar_imagem.html" %}
                 
                 <!-- Gaps do grid e inputs reduzidos -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -130,11 +123,11 @@
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="pro-complemento" class="text-[12px] font-medium text-[#888780]">Complemento</label>
-                        <input type="text" name="complemento" id="pro-complemento" value="Sala" placeholder="Apto, Sala..." autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                        <input type="text" name="complemento" id="pro-complemento" value="Sala" placeholder="Apto, Sala..." autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="pro-sequencia" class="text-[12px] font-medium text-[#888780]">Sequencia</label>
-                        <input type="text" name="sequencia" id="pro-sequencia" value="123" placeholder="Apto, Sala..." autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                        <input type="text" name="sequencia" id="pro-sequencia" value="123" placeholder="Apto, Sala..." autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
                     </div>
                     
                 </div>
@@ -142,7 +135,7 @@
         </form>
 
         <div class="flex flex-col-reverse sm:flex-row justify-between gap-3">
-            <button type="button" id="btn-voltar" class="h-10 px-4 rounded-[8px] border-none bg-transparent text-[#888780] text-[14px] hover:text-[#f1efe8] transition-colors hidden-step">Voltar</button>
+            <button type="button" id="btn-voltar" class="h-10 px-4 rounded-[8px] border-none bg-transparent text-[#888780] text-[14px] hover:text-[#f1efe8] transition-colors ">Voltar</button>
             <div class="flex-1"></div>
             <!-- Botões -->
             <button type="button" id="btn-proximo" class="h-10 px-5 rounded-[8px] bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">Próximo</button>

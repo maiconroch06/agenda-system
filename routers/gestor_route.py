@@ -1,7 +1,6 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
-from controladores.controlador_gestor import ControladorGestor
-from models import Cliente, Barbeiro, Servico, Endereco
-from controladores import ControladorBarbeiro
+from controladores import ControladorGestor, ControladorBarbeiro
+from models import Cliente, Servico, Endereco, Barbeiro
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
 from datetime import datetime, timezone
@@ -30,9 +29,7 @@ def gestorLogin():
     email_digitado = request.form.get('manager-email-2')
     senha_digitada = request.form.get('manager-password')
     
-    contolador_gestor = ControladorGestor()
-    
-    return contolador_gestor.login(email_digitado,senha_digitada)
+    return ControladorGestor.login_gestor(email_digitado,senha_digitada)
 
 
 # Logout Gestor - Encerramento da sessão do Gestor
@@ -45,7 +42,7 @@ def gestorLogout():
 # Painel Gestor - Aba inicial
 @gestor.route('/painel', methods=['POST','GET'])
 def gestorPainel():
-    return render_template('pages/gestor/gestor-painel-inicio-rp.html')
+    return ControladorGestor.consultar_agendamentos(1)
 
 
 # Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros
@@ -56,10 +53,8 @@ def gestorAbaAgenda():
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados
 @gestor.route('/painel/servicos')
-def gestorAbaServicos(): 
-    controlador_gestor = ControladorGestor()
-    
-    return controlador_gestor.consultar_servicos()
+def gestorAbaServicos():     
+    return ControladorGestor.consultar_servicos()
 
 # SERVIÇOS - pagina para cadastrar o Serviço
 @gestor.route('/painel/servicos/cadastrar', methods=['GET'])
@@ -72,41 +67,20 @@ def gestorServicoCadastrar():
     
     imagem = request.files.get('srv-imagem')
     
-    descricao_servico = request.form.get('srv-nome').strip()
-    valor = request.form.get('srv-preco').strip()
+    descricao_servico = request.form.get('srv-descricao-servico').strip()
+    valor = request.form.get('srv-valor').strip()
     duracao = request.form.get('srv-duracao').strip()
-    
-    controlador_gestor = ControladorGestor() 
-     
-    return controlador_gestor.cadastrarServico(imagem, descricao_servico, valor, duracao)
+         
+    return ControladorGestor.cadastrarServico(imagem, descricao_servico, valor, duracao)
 
 # SERVIÇOS - REMOVER
-@gestor.route('/painel/servicos/deletar', methods=['POST'])
-def gestorServicoDeletar(): 
+@gestor.route('/painel/servicos/excluir', methods=['POST'])
+def gestor_excluir_servico(): 
     id_servico = request.form.get('srv-id-deletar')
+    foto_nome = request.form.get('srv-foto_nome') 
     
-    servico = Servicos().consultarIdServico(id_servico)
-
-    if servico is None:
-        flash("Aviso: Serviço não deletado, serviço inexistente ", EnumStatusMensagens.AVISO.value)
-        return redirect(url_for("gestor.gestorAbaServicos"))
-
-    controladorDeImagens = ValidadorDeImagens()
-    controladorDeImagens.removerImagem(servico["foto_nome"], EnumNomesPastaImagem.IMAGEMS_SERVICOS)
-    
-    return ControladorGestor.deletarServico(id_servico)
-
-# SERVIÇOS - Editar servico
-@gestor.route('/painel/servicos/editar/<int:id_servico>', methods=['GET'])
-def gestorServicoEditarPagina(id_servico:int):
-
-    servico = Servicos().consultarIdServico(id_servico)
-            
-    if servico is None:
-        flash("Edição não efetuado, serviço inexistente", EnumStatusMensagens.AVISO.value)
-        return redirect(url_for("gestor.gestorAbaServicos"))
-    
-    return render_template('pages/gestor/gestor-gerenciar-servico-rp.html', servico = servico, mensagens_status=EnumStatusMensagens)
+    return ControladorGestor.excluir_servico(id_servico, foto_nome)
+  
 
 # SERVIÇOS - Salvar edição do serviço no banco de dados
 @gestor.route('/painel/servicos/editar', methods=['POST'])
@@ -115,30 +89,21 @@ def gestorServicoEditar():
     imagem_form = request.files.get('srv-imagem')
     img_padrao = request.form.get('imagem-padrao', None)
     imagem_anterior = request.form.get('srv-foto_nome_anterior')
-
-    enviarImagem = ValidadorDeImagens()    
-    foto_nome = enviarImagem.editarImagem(imagem_anterior, imagem_form, EnumNomesPastaImagem.IMAGEMS_SERVICOS,img_padrao)
-    
-    if foto_nome is None:
-        flash("Atenção: a imagem não é suportada pelo sistema.", EnumStatusMensagens.AVISO.value)
-        return redirect(url_for('gestor.gestorServicoEditarPagina'))
-     
-    descricao_servico = request.form.get('srv-nome')
-    valor = Decimal(request.form.get('srv-preco').strip())
+  
+    descricao_servico = request.form.get('srv-descricao-servico')
+    valor = request.form.get('srv-valor').strip()
     duracao = request.form.get('srv-duracao').strip()
     ativo = request.form.get('srv-status', type=int)
     id = request.form.get('srv-id')
-
-
-    return ControladorGestor.editarServico(id, foto_nome, descricao_servico, valor, duracao, ativo)
+  
+    return ControladorGestor.editarServico(id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo)
 
 
 ##################################################################################
 # BARBEIROS - Aba de visualização dos Barbeiros cadastrados
 @gestor.route('/painel/barbeiros', methods=['GET'])
 def gestorAbaBarbeiros():
-    controladorBarbeiro = ControladorBarbeiro()
-    return controladorBarbeiro.gerenciarBarbeiro()
+    return ControladorBarbeiro.consultar_todos_barbeiros()
 
 
 # Gerenciar Barbeiro  - Validando dados informados no cadastro do Barbeiro
@@ -151,14 +116,17 @@ def gestorBarbeiroPage():
 @gestor.route('painel/barbeiro/cadastrar', methods=['POST'])
 def gestorBarbeiroValidar():
 
-    #remove a pontuação do telefone      
+    #remove a pontuação do telefone    
+  
     telefone_temp = ''.join(filter(str.isdigit,request.form.get('telefone')))
-    fotoTemp = request.files.get('foto' , None) 
+    cep_temp = ''.join(filter(str.isdigit,request.form.get('cep')))
+    cpf_temp = ''.join(filter(str.isdigit,request.form.get('cpf')))
+    fotoTemp = request.files.get('srv-imagem' , None) 
 
     endereco = Endereco(
-        cep=request.form.get('cep'),
+        cep=cep_temp,
         cidade=request.form.get('cidade'),
-        uf=request.form.get('unidade-federativa'),
+        estados_br_sigla=request.form.get('unidade-federativa'),
         bairro=request.form.get('bairro'),
         logradouro=request.form.get('logradouro'),
         numero=request.form.get('numero'),
@@ -171,7 +139,7 @@ def gestorBarbeiroValidar():
         id=None,
         nome_completo=request.form.get('nome'),
         telefone=telefone_temp,
-        cpf=request.form.get('cpf'),
+        cpf=cpf_temp,
         email=request.form.get('email'),
         senha=request.form.get('senha'),
         foto_nome=None,
@@ -181,28 +149,66 @@ def gestorBarbeiroValidar():
         data_liberacao=datetime.now(timezone.utc),
         descricao=request.form.get('descricao'),
         status_barbeiro=True,
-        fk_id_agenda=None,
         endereco=endereco
     )
     
-    return 
+    return ControladorGestor.cadastrarBarbeiro(barbeiro, fotoTemp)
 
-@gestor.route('painel/barbeiro/editar/<int:id_barbeiro>', methods=['GET'])
-def gestorBarbeiroPageEdit(id_barbeiro:int):
-    barbeiro = Barbeiro().consultarIdBarbeiro(id_barbeiro)
 
-    # return f"Dados barbeiro: {barbeiro}"
-    return render_template('pages/gestor/gestor-gerenciar-barbeiro-rp.html', barbeiro = barbeiro, mensagens_status=EnumStatusMensagens)
+@gestor.route('painel/barbeiro/atualizar', methods=['POST'])
+def gestorBarbeiroPageUpdate():
+    imagem_form = request.files.get('srv-imagem')
+    img_padrao = request.form.get('imagem-padrao', None)
+    imagem_anterior = request.form.get('srv-foto_nome_anterior')
+    
+    cpf_temp = ''.join(filter(str.isdigit,request.form.get('cpf')))
+    
+    barbeiro = Barbeiro(
+        id=request.form.get('srv-id'),
+        nome_completo=request.form.get('nome'),
+        cpf=cpf_temp,
+        telefone=request.form.get('telefone'),
+        email=request.form.get('email'),
+        senha=request.form.get('senha', None),
+        data_atualizacao=datetime.now(timezone.utc),
+        status_barbeiro=request.form.get('status_barbeiro', type=int),
+        descricao=request.form.get('descricao')
+    )
+    
+  
+        
+    return ControladorGestor.atualizar_barbeiro(imagem_form,img_padrao,imagem_anterior, barbeiro)
 
-@gestor.route('painel/barbeiro/atualizar/<int:id_barbeiro>', methods=['POST'])
-def gestorBarbeiroPageUpdate(id_barbeiro:int):
+@gestor.route('painel/barbeiro/endereco/editar', methods=['POST'])
+def gestor_barbeiro_editar_endereco():
+              
+    cep_temp = ''.join(filter(str.isdigit,request.form.get('cep')))
+        
+    endereco = Endereco(
+        id = request.form.get('bar-end-id'),
+        cep=cep_temp,
+        cidade=request.form.get('cidade'),
+        estados_br_sigla=request.form.get('unidade-federativa'),
+        bairro=request.form.get('bairro'),
+        logradouro=request.form.get('logradouro'),
+        numero=request.form.get('numero'),
+        sequencia=request.form.get('sequencia'),
+        complemento=request.form.get('complemento')
+    )
+    
+   
 
-    return ValidarBarbeiro.validarFormulario(
-            request,
-            'pages/gestor/gestor-gerenciar-barbeiro-rp.html',
-            'gestor.gestorAbaBarbeiros',
-            id_barbeiro = id_barbeiro
-        )
+    return ControladorBarbeiro.atualizar_endereco_barbeiro(endereco)
+
+
+@gestor.route('painel/barbeiro/excluir', methods=['POST'])
+def gestor_excluir_barbeiro():
+    id_barbeiro = request.form.get('srv-id-deletar')
+    foto_nome = request.form.get('srv-foto_nome') 
+            
+    return ControladorGestor.excluir_barbeiro(id_barbeiro, foto_nome)
+
+    
 
 
 
@@ -210,8 +216,7 @@ def gestorBarbeiroPageUpdate(id_barbeiro:int):
 #  CLIENTES
 @gestor.route('/painel/clientes')
 def gestorExibirClientes():
-    usuario = Cliente()
-    return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios=usuario.buscarTodosCLientes())
+    return ControladorGestor.consultar_clientes()
 
 ##################################################################################
 # FINANCEIRO

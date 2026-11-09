@@ -1,0 +1,36 @@
+<!-- Upload de imagem -->
+<div class="flex flex-col items-center justify-center gap-1.5">
+
+    <span class="text-[12px] font-medium text-[#888780]">
+        Imagem do Serviço
+    </span>
+
+    <label for="srv-foto"
+        class="relative w-32 h-32 rounded-2xl border-2 border-dashed border-[#4a473f] bg-[#161513] flex flex-col items-center justify-center cursor-pointer transition-all hover:border-brand-gold-hover overflow-hidden group">
+
+        <img
+            id="img_srv-preview"
+            class="hidden absolute inset-0 w-full h-full object-contain"
+            src=""
+            alt="Pré-visualização da imagem">
+
+        <span class="text-2xl text-[#888780] group-hover:text-brand-gold leading-none mb-1">
+            {% include "componetizacao/icones/icone-servico.html" %}
+        </span>
+
+        <span class="text-[10px] text-[#888780] group-hover:text-brand-gold">
+            Selecionar imagem
+        </span>
+
+        <input
+            id="srv-foto"
+            type="file"
+            name="srv-imagem"
+            accept="image/*"
+            class="hidden">
+    </label>
+
+    <div id="butao-remover-imagem"></div>
+</div>
+
+<script  type="module" src="{{ url_for('static', filename='js/validacoes/exibir-imagem-servico.js') }}"></script>

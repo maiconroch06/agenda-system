@@ -6,8 +6,8 @@ from models import Agenda
 
 class AgendaDAO:
 
-    @staticmethod
-    def salvar(agenda: Agenda):
+    
+    def cadastrar_agenda_dao(self, agenda: Agenda):
         sql = text("""
             INSERT INTO agendas (
                 descricao,
@@ -26,14 +26,12 @@ class AgendaDAO:
             "ativo": agenda.ativo
         })
 
-        agenda.id = resultado.lastrowid
-
         db.session.flush()
 
-        return agenda.id
+        return resultado.lastrowid
 
-    @staticmethod
-    def buscar_por_id(id_agenda: int):
+    
+    def buscar_por_id(self, id_agenda: int):
         sql = text("""
             SELECT
                 id,
@@ -54,8 +52,8 @@ class AgendaDAO:
 
         return AgendaDAO._mapear(registro)
 
-    @staticmethod
-    def listar_todos():
+    
+    def listar_todos(self, ):
         sql = text("""
             SELECT
                 id,
@@ -73,8 +71,8 @@ class AgendaDAO:
             for registro in registros
         ]
 
-    @staticmethod
-    def listar_ativas():
+    
+    def listar_ativas(self, ):
         sql = text("""
             SELECT
                 id,
@@ -96,8 +94,8 @@ class AgendaDAO:
             for registro in registros
         ]
 
-    @staticmethod
-    def atualizar(agenda: Agenda):
+    
+    def atualizar(self, agenda: Agenda):
         sql = text("""
             UPDATE agendas
             SET
@@ -116,8 +114,8 @@ class AgendaDAO:
 
         return resultado.rowcount > 0
 
-    @staticmethod
-    def excluir(id_agenda: int):
+    
+    def excluir(self, id_agenda: int):
         sql = text("""
             DELETE FROM agendas
             WHERE id = :id
@@ -132,8 +130,8 @@ class AgendaDAO:
 
         return resultado.rowcount > 0
 
-    @staticmethod
-    def _mapear(registro):
+    
+    def _mapear(self, registro):
         return Agenda(
             id=registro["id"],
             descricao=registro["descricao"],

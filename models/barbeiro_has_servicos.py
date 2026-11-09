@@ -1,32 +1,39 @@
 from datetime import datetime
+from .servicos import Servico
+from .barbeiros import Barbeiro
+
 class BarbeiroHasServicos:
 
     def __init__(
         self,
-        id_servico: int,
-        id_barbeiro: int,
+        servico: Servico,
+        barbeiro: Barbeiro,
         data_cadastro: datetime
     ):
-        self.id_servico = id_servico
-        self.id_barbeiro = id_barbeiro
-        self.data_cadastro = data_cadastro
+        self.__servico = servico
+        self.__barbeiro = barbeiro
+        self.__data_cadastro = data_cadastro
 
-    def consultarIdServico(self):
-        return self.id_servico
+    @property
+    def barbeiro(self):
+        return self.__barbeiro
 
-    def consultarIdBarbeiro(self):
-        return self.id_barbeiro
+    @barbeiro.setter
+    def barbeiro(self, value):
+        self.__barbeiro = value
 
-    def consultarDataCadastro(self):
-        return self.data_cadastro
+    @property
+    def data_cadastro(self):
+        return self.__data_cadastro
 
-    def atualizarDataCadastro(self, data: datetime):
-        self.data_cadastro = data
+    @data_cadastro.setter
+    def data_cadastro(self, value):
+        self.__data_cadastro = value
 
-    def __str__(self):
+    def str__(self):
         return (
             f"BarbeiroHasServicos("
-            f"id_servico={self.id_servico}, "
-            f"id_barbeiro={self.id_barbeiro}, "
-            f"data_cadastro={self.data_cadastro})"
+            f"id_servico={self.__id_servico}, "
+            f"id_barbeiro={self.__id_barbeiro}, "
+            f"data_cadastro={self.__data_cadastro})"
         )

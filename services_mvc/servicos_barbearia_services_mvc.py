@@ -5,15 +5,16 @@ from enums import EnumNomesPastaImagem
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from utilitarios import ValidadorDeImagens
+from werkzeug.utils import secure_filename
 
 
 class ServicoBarbearia:
     
     def __init__(self):
-        self.servico_repositorio = ServicoRepositorio()
+        self.__servico_repositorio = ServicoRepositorio()
         
     def consultar_todos_servicos(self):
-        return self.servico_repositorio.consultar_todos_servicos()
+        return self.__servico_repositorio.consultar_todos_servicos()
     
     def cadastrar_servico_barbearia(self, foto_servico, novo_descricao, novo_valor, novo_duracao):
         
@@ -35,11 +36,14 @@ class ServicoBarbearia:
             
             #salvar a imagem na pasta
             #extensão | validar extensao | pegar o novo nome da imagem
-            extensao = ValidadorDeImagens.extensao_foto_servico(foto_servico)
-            ValidadorDeImagens.imgem_extensao_valida(extensao)
-            servico.foto_nome = ValidadorDeImagens.salvarImagem(foto_servico, EnumNomesPastaImagem.IMAGEMS_SERVICOS, extensao)
             
-            self.servico_repositorio.cadastrar_servico(servico)
+            servico.foto_nome = ValidadorDeImagens.nomeImagem(secure_filename(foto_servico.filename), "servicos") 
+            
+            resposta_repositorio = self.__servico_repositorio.cadastrar_servico(servico)
+            
+            ValidadorDeImagens.salvarImagem(foto_servico, EnumNomesPastaImagem.IMAGEMS_SERVICOS, servico.foto_nome)
+            
+            return resposta_repositorio
             
         except IntegrityError as error:
             raise Exception("Erro ao cadastrar o serviço!")
@@ -48,9 +52,37 @@ class ServicoBarbearia:
             raise Exception("Campos duração e valor só aceitam números.")
         
         
+    def editar_servico_barbearia(self, id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo):
+        
+        try:
+            id_servico = int(id)
+            status_ativo = int(ativo)
+            
+            servico = Servico(
+                id=id_servico,
+                descricao=descricao_servico,
+                valor=Decimal(valor),
+                duracao=int(duracao),
+                data_atualizacao=datetime.now(timezone.utc),
+                status_servico=status_ativo  
+            )
+            
+            servico.foto_nome = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao, "servicos")
+            
+            if not self.__servico_repositorio.atualizar(servico):
+                raise Exception("Error ao tentar atualizar o serviço, tente novamente!")
+             
+        except (IntegrityError, ValueError, TypeError, ArithmeticError) :
+            raise Exception("Os campos Preço e duração só aceitam números!")
         
         
+    def excluir_servico_barbearia(self, id_servico, foto_nome):
+        if self.__servico_repositorio.excluir(id_servico):
+            ValidadorDeImagens.removerImagem(foto_nome, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
+            return
         
+        raise Exception("O serviço não foi excluido.")
+           
         
         
         

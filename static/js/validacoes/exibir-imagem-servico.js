@@ -17,13 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-function ocultarExibirBotaoRemoverImagem(visivel) {
+export function ocultarExibirBotaoRemoverImagem(visivel) {
 
     if (visivel) {
+
+        // verifica se existe um botão com o id par não ficar adicionando varios
+        if (document.querySelector('#button_remover_imagem')){
+            return
+        }
+                                                        
         const botaoRemoverImagem = document.createElement('button');
 
         botaoRemoverImagem.setAttribute('type', 'button')
         botaoRemoverImagem.innerText = "Remover Imagem";
+        botaoRemoverImagem.id = "button_remover_imagem"
         botaoRemoverImagem.classList.add("h-10", "px-5", "text-white", "rounded-[8px]", "bg-red-800", "hover:bg-red-600", "text-[#161513]", "text-[14px]", "hover:opacity-90", "active:scale-[0.98]", "transition-all");
 
         botaoRemoverImagem.addEventListener('click', function (event) {
@@ -31,7 +38,7 @@ function ocultarExibirBotaoRemoverImagem(visivel) {
             img_preview.removeAttribute('src');
             // criar um novo campo para simbolizar que não existe mais imagem
              elementos.forEach(elemento => {
-            elemento.classList.remove('hidden');
+                elemento.classList.remove('hidden');
             });
             
             criarInputDefault(true);     
@@ -69,7 +76,6 @@ function criarInputDefault(visivel){
 
 input.addEventListener('change', () => {
     const arquivo = input.files[0];
-
 
     if (arquivo && arquivo.type.startsWith('image/')) {
         img_preview.src = URL.createObjectURL(arquivo);

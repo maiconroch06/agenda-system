@@ -1,86 +1,109 @@
 from datetime import date, time
+from .agenda import Agenda
 
 
 class HorariosAgenda:
 
     def __init__(
-        self,
-        id: int,
+        self,  
         inicio_expediente: time,
         fim_expediente: time,
         data_mes: date,
-        intervalo_descanco_inicio: time,
-        intervalo_descanso_fim: time,
-        dias_semana: str,
-        fk_id_agenda: int
+        intervalo_descanco_inicio: time | None = None,
+        intervalo_descanso_fim: time  | None = None,
+        dias_semana: str  | None = None,
+        agenda: Agenda = None,
+        id: int | None = None
     ):
-        self.id = id
-        self.inicio_expediente = inicio_expediente
-        self.fim_expediente = fim_expediente
-        self.data_mes = data_mes
-        self.intervalo_descanco_inicio = intervalo_descanco_inicio
-        self.intervalo_descanso_fim = intervalo_descanso_fim
-        self.dias_semana = dias_semana
-        self.fk_id_agenda = fk_id_agenda
+        self.__id = id
+        self.__inicio_expediente = inicio_expediente
+        self.__fim_expediente = fim_expediente
+        self.__data_mes = data_mes
+        self.__intervalo_descanco_inicio = intervalo_descanco_inicio
+        self.__intervalo_descanso_fim = intervalo_descanso_fim
+        self.__dias_semana = dias_semana
+        self.__agenda = agenda
 
-    def consultarInicioExpediente(self):
-        return self.inicio_expediente
+    @property
+    def id(self):
+        return self.__id
 
-    def atualizarInicioExpediente(self, horario: time):
-        self.inicio_expediente = horario
+    @id.setter
+    def id(self, value):
+        self.__id = value
 
-    def consultarFimExpediente(self):
-        return self.fim_expediente
+    @property
+    def inicio_expediente(self):
+        return self.__inicio_expediente
 
-    def atualizarFimExpediente(self, horario: time):
-        self.fim_expediente = horario
+    @inicio_expediente.setter
+    def inicio_expediente(self, value):
+        self.__inicio_expediente = value
 
-    def consultarDataMes(self):
-        return self.data_mes
+    @property
+    def fim_expediente(self):
+        return self.__fim_expediente
 
-    def atualizarDataMes(self, data: date):
-        self.data_mes = data
+    @fim_expediente.setter
+    def fim_expediente(self, value):
+        self.__fim_expediente = value
 
-    def consultarIntervaloDescansoInicio(self):
-        return self.intervalo_descanco_inicio
+    @property
+    def data_mes(self):
+        return self.__data_mes
 
-    def atualizarIntervaloDescansoInicio(self, horario: time):
-        self.intervalo_descanco_inicio = horario
+    @data_mes.setter
+    def data_mes(self, value):
+        self.__data_mes = value
 
-    def consultarIntervaloDescansoFim(self):
-        return self.intervalo_descanso_fim
+    @property
+    def intervalo_descanco_inicio(self):
+        return self.__intervalo_descanco_inicio
 
-    def atualizarIntervaloDescansoFim(self, horario: time):
-        self.intervalo_descanso_fim = horario
+    @intervalo_descanco_inicio.setter
+    def intervalo_descanco_inicio(self, value):
+        self.__intervalo_descanco_inicio = value
 
-    def consultarDiaSemana(self):
-        return self.dias_semana
+    @property
+    def intervalo_descanso_fim(self):
+        return self.__intervalo_descanso_fim
 
-    def atualizarDiaSemana(self, dia: str):
-        self.dias_semana = dia
+    @intervalo_descanso_fim.setter
+    def intervalo_descanso_fim(self, value):
+        self.__intervalo_descanso_fim = value
 
-    def consultarIdAgenda(self):
-        return self.fk_id_agenda
+    @property
+    def dias_semana(self):
+        return self.__dias_semana
 
-    def atualizarIdAgenda(self, id_agenda: int):
-        self.fk_id_agenda = id_agenda
+    @dias_semana.setter
+    def dias_semana(self, value):
+        self.__dias_semana = value
+
+    @property
+    def agenda(self):
+        return self.__agenda
+
+    @agenda.setter
+    def agenda(self, value):
+        self.__agenda = value
 
     def validarHorarioExpediente(self):
-        return self.inicio_expediente < self.fim_expediente
+        return self.__inicio_expediente < self.__fim_expediente
 
     def validarIntervaloDescanso(self):
         return (
-            self.inicio_expediente
-            <= self.intervalo_descanco_inicio
-            < self.intervalo_descanso_fim
-            <= self.fim_expediente
+            self.__inicio_expediente
+            <= self.__intervalo_descanco_inicio
+            < self.__intervalo_descanso_fim
+            <= self.__fim_expediente
         )
 
-    def __str__(self):
+    def _str__(self):
         return (
-            f"HorariosAgenda(id={self.id}, "
-            f"inicio={self.inicio_expediente}, "
-            f"fim={self.fim_expediente}, "
-            f"dia='{self.dias_semana}', "
-            f"id_agenda={self.fk_id_agenda})"
+            f"HorariosAgenda(id={self.__id}, "
+            f"inicio={self.__inicio_expediente}, "
+            f"fim={self.__fim_expediente}, "
+            f"dia='{self.__dias_semana}', "
+            f"id_agenda={self.__fk_id_agenda})"
         )
