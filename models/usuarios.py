@@ -10,11 +10,11 @@ class Usuario:
         telefone: str,
         cpf: str,
         email: str,
-        senha: str,
-        foto_nome: str,
         status_usuario: bool,
         data_cadastro: datetime,
         data_atualizacao: datetime,
+        foto_nome= None,
+        senha=None,
         id = None,
         endereco: Endereco = None
     ):

@@ -30,5 +30,15 @@ class ControladorBarbeiro:
         except Exception:
             flash("Não foi possivel alterar o endeceço, contate o suporte", EnumStatusMensagens.AVISO.value)
         
-        return redirect(url_for('gestor.gestorAbaBarbeiros'))    
+        return redirect(url_for('gestor.gestorAbaBarbeiros'))   
+    
+    @classmethod
+    def atualizar_informacoes_barbeiro(cls, imagem_form, img_padrao, imagem_anterior, usuario):
+        try:
+            cls.__barbeiroService.alterar_usuario_barbearia(imagem_form, img_padrao, imagem_anterior, usuario)
+            return cls.__barbeiroService.alterar_barbeiro_barbearia(usuario)
+        except Exception as erros:
+            flash(f"{erros}")
+            flash(f"Não foi possivel alterar o barbeiro, contate o suporte", EnumStatusMensagens.AVISO.value)
+          
     

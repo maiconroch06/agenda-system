@@ -3,9 +3,9 @@ from DAO.barbeiro_dao import BarbeiroDAO
 
 
 class BarbeiroRepositorio:
+    
     def __init__(self):
         self.__barbeiroDao = BarbeiroDAO()
-
     
     def salvar(self, barbeiro):
         return self.__barbeiroDao.cadastrar(barbeiro)
@@ -20,7 +20,7 @@ class BarbeiroRepositorio:
 
     
     def atualizar(self, barbeiro):
-        return self.__barbeiroDao.atualizar_barbeiro(barbeiro)
+        return self.__barbeiroDao.atualizar_informacoes_barbeiro(barbeiro)
 
     
     def excluir(self, id_barbeiro):

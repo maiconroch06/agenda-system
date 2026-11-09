@@ -7,14 +7,14 @@ class GestorServiceMVC(UsuarioService):
 
       def __init__(self):
           super().__init__()
-          self.gestor_repositorio = GestorRepositorio()  
+          self.__gestor_repositorio = GestorRepositorio()  
           
       def gestorRealizarLoginService(self, email:str, senha:str):  
                 
         if not email or not senha:
             raise Exception("Por favor, verifique se você preencheu todos os campos!")               
                
-        gestor = self.gestor_repositorio.realizar_login(email)
+        gestor = self.__gestor_repositorio.realizar_login(email)
         
         if gestor is not None:        
             Senha.validar_senha(gestor['senha'], senha)    

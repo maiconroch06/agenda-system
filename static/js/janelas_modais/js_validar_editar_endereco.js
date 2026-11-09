@@ -19,6 +19,7 @@ const numero_end = document.getElementById("bar-end-numero");
 const complemento = document.getElementById("bar-end-complemento");
 const sequencia = document.getElementById("bar-end-sequencia");
 
+const estados_siglas = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
 
 botao_editar_barbeiro_endereco.forEach(
     (editar_endereco)=>{
@@ -28,14 +29,14 @@ botao_editar_barbeiro_endereco.forEach(
 
            inicializarMensagensErros();
           
-            cep_end.value = detalhes_endereco_barbeiro[1] ?? "";
+            cep_end.value = detalhes_endereco_barbeiro[1].slice(0,5)+"-"+detalhes_endereco_barbeiro[1].slice(5,8) ?? "";
             id_end.value = detalhes_endereco_barbeiro[0] ?? "";
             uf_end.value = detalhes_endereco_barbeiro[3] ?? "";
             cidade.value = detalhes_endereco_barbeiro[2] ?? "";
             bairro_end.value = detalhes_endereco_barbeiro[6] ?? "";
             logradouro_end.value = detalhes_endereco_barbeiro[4] ?? "";
             numero_end.value = detalhes_endereco_barbeiro[5] ?? "";
-            sequencia.value = detalhes_endereco_barbeiro[7] ?? "";
+            sequencia.value = detalhes_endereco_barbeiro[7] ?? " ";
             complemento.value = detalhes_endereco_barbeiro[8] ?? "";
 
             modal_editar_barbeiro_endereco.showModal();
@@ -94,7 +95,11 @@ function validarValores(){
      if (uf_end.value === null || uf_end.value.trim() === "" ){
         errors.push("campo estado vazio ou nulo, por favor preencha!");
     }
-     if (logradouro_end.value === null || logradouro_end.value.trim() === "" ){
+    if (!estados_siglas.includes(uf_end.value.toUpperCase())){
+        errors.push("ATENÇÃO, a sigla ["+ uf_end.value.toUpperCase()+"] é um estado inválido!");
+    }
+
+    if (logradouro_end.value === null || logradouro_end.value.trim() === "" ){
         errors.push("campo logradouro vazio ou nulo, por favor preencha!");
     }
      

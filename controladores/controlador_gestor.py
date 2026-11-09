@@ -9,12 +9,14 @@ from models import Barbeiro
 from werkzeug.utils import secure_filename
 from .controlador_cliente import ControladorCliente
 from .controlador_agendamento import ControladorAgendamento
+from .controlador_barbeiro import ControladorBarbeiro
 
 class ControladorGestor():
     __gestor_service_mvc = GestorServiceMVC()
     __servicos_barbearia_service_mvc = ServicoBarbearia()
     __barbeiro_service_mvc = BarbeiroService()
     __controlador_cliente = ControladorCliente()
+    __controlador_barbeiro = ControladorBarbeiro()
     __controlador_agendamento = ControladorAgendamento()
   
     
@@ -52,6 +54,16 @@ class ControladorGestor():
                 flash(f"O barbeiro foi excluído com sucesso!",EnumStatusMensagens.SUCESSO.value)
             except Exception:
                 flash(f"O barbeiro não foi excluido!", EnumStatusMensagens.ERRO.value)
+                
+            return redirect(url_for('gestor.gestorAbaBarbeiros'))  
+    
+    @classmethod
+    def atualizar_barbeiro(cls, imagem_form, img_padrao, imagem_anterior, barbeiro):
+            try:
+                if cls.__controlador_barbeiro.atualizar_informacoes_barbeiro(imagem_form, img_padrao, imagem_anterior, barbeiro):   
+                    flash(f"As infomações do barbeiro {barbeiro.nome_completo} foi alterada com sucesso!",EnumStatusMensagens.SUCESSO.value)
+            except Exception:
+                flash(f"Nenhuma informação do babeiro foi feita!", EnumStatusMensagens.ERRO.value)
                 
             return redirect(url_for('gestor.gestorAbaBarbeiros'))  
 

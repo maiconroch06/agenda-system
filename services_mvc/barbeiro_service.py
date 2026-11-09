@@ -3,7 +3,7 @@ from .usuario_service import UsuarioService
 from .agenda_service import AgendaService
 from flask import flash, session
 from werkzeug.security import check_password_hash
-from utilitarios import Senha
+from sqlalchemy.exc import IntegrityError
 from enums import EnumNomesPastaImagem
 from database import db
 from utilitarios import ValidadorDeImagens
@@ -42,6 +42,10 @@ class BarbeiroService(UsuarioService):
             flash(f"{erros}")
             raise Exception ("Não foi possivel cadastrar o Barbeiro")
         
+    def alterar_barbeiro_barbearia(self, usuario):
+        return self.__barbeiroRepositorio.atualizar(usuario)            
+                
+         
 
     # def validarDadosBarbeiro(self, barbeiro, fotoTemp):
     def escolherPastaImagemUsuario(self):

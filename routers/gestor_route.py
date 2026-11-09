@@ -156,14 +156,28 @@ def gestorBarbeiroValidar():
 
 
 @gestor.route('painel/barbeiro/atualizar', methods=['POST'])
-def gestorBarbeiroPageUpdate(id_barbeiro:int):
-
-    return ValidarBarbeiro.validarFormulario(
-            request,
-            'pages/gestor/gestor-gerenciar-barbeiro-rp.html',
-            'gestor.gestorAbaBarbeiros',
-            id_barbeiro = id_barbeiro
-        )
+def gestorBarbeiroPageUpdate():
+    imagem_form = request.files.get('srv-imagem')
+    img_padrao = request.form.get('imagem-padrao', None)
+    imagem_anterior = request.form.get('srv-foto_nome_anterior')
+    
+    cpf_temp = ''.join(filter(str.isdigit,request.form.get('cpf')))
+    
+    barbeiro = Barbeiro(
+        id=request.form.get('srv-id'),
+        nome_completo=request.form.get('nome'),
+        cpf=cpf_temp,
+        telefone=request.form.get('telefone'),
+        email=request.form.get('email'),
+        senha=request.form.get('senha', None),
+        data_atualizacao=datetime.now(timezone.utc),
+        status_barbeiro=request.form.get('status_barbeiro', type=int),
+        descricao=request.form.get('descricao')
+    )
+    
+  
+        
+    return ControladorGestor.atualizar_barbeiro(imagem_form,img_padrao,imagem_anterior, barbeiro)
 
 @gestor.route('painel/barbeiro/endereco/editar', methods=['POST'])
 def gestor_barbeiro_editar_endereco():

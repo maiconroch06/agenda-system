@@ -11,10 +11,10 @@ from werkzeug.utils import secure_filename
 class ServicoBarbearia:
     
     def __init__(self):
-        self.servico_repositorio = ServicoRepositorio()
+        self.__servico_repositorio = ServicoRepositorio()
         
     def consultar_todos_servicos(self):
-        return self.servico_repositorio.consultar_todos_servicos()
+        return self.__servico_repositorio.consultar_todos_servicos()
     
     def cadastrar_servico_barbearia(self, foto_servico, novo_descricao, novo_valor, novo_duracao):
         
@@ -39,7 +39,7 @@ class ServicoBarbearia:
             
             servico.foto_nome = ValidadorDeImagens.nomeImagem(secure_filename(foto_servico.filename), "servicos") 
             
-            resposta_repositorio = self.servico_repositorio.cadastrar_servico(servico)
+            resposta_repositorio = self.__servico_repositorio.cadastrar_servico(servico)
             
             ValidadorDeImagens.salvarImagem(foto_servico, EnumNomesPastaImagem.IMAGEMS_SERVICOS, servico.foto_nome)
             
@@ -69,7 +69,7 @@ class ServicoBarbearia:
             
             servico.foto_nome = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao, "servicos")
             
-            if not self.servico_repositorio.atualizar(servico):
+            if not self.__servico_repositorio.atualizar(servico):
                 raise Exception("Error ao tentar atualizar o serviço, tente novamente!")
              
         except (IntegrityError, ValueError, TypeError, ArithmeticError) :
@@ -77,7 +77,7 @@ class ServicoBarbearia:
         
         
     def excluir_servico_barbearia(self, id_servico, foto_nome):
-        if self.servico_repositorio.excluir(id_servico):
+        if self.__servico_repositorio.excluir(id_servico):
             ValidadorDeImagens.removerImagem(foto_nome, EnumNomesPastaImagem.IMAGEMS_SERVICOS)
             return
         

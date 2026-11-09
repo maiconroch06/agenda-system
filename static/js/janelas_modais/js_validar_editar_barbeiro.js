@@ -27,7 +27,7 @@ botao_editar_barbeiro.forEach(
 
             id.value = detalhes_barbeiro[0];
             nome_barbeiro_editar.value = detalhes_barbeiro[1];
-            cpf.value = detalhes_barbeiro[2];
+            cpf.value = detalhes_barbeiro[2].slice(0,3)+"."+detalhes_barbeiro[2].slice(3,6)+"."+detalhes_barbeiro[2].slice(6,9)+"-"+detalhes_barbeiro[2].slice(9,11);
             email.value= detalhes_barbeiro[3];
             telefone.value = detalhes_barbeiro[4];
             descricao.value = detalhes_barbeiro[8];
@@ -55,7 +55,7 @@ botao_editar_barbeiro.forEach(
 });
 
 formulario.addEventListener("submit", (event)=>{  
-    event.preventDefault();
+   
 });
 
 import { ocultarExibirBotaoRemoverImagem } from '../validacoes/exibir-imagem-servico.js';

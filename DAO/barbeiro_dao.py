@@ -35,7 +35,6 @@ class BarbeiroDAO:
         db.session.flush()
             
         return reposta.rowcount > 0
-
     
     def buscar_por_id(self, id_barbeiro: int):
         sql = text("""
@@ -109,24 +108,26 @@ class BarbeiroDAO:
 
         return registros
 
-   
-    def atualizar_status_barbeiro(self,barbeiro:Barbeiro):
-            sql_usuario = text("""
-                UPDATE barbeiros
-                SET
-                descricao=:descricao,
-                status_barbeiro=:status_barbeiro,
-                WHERE id = :id
-            """)
-    
-            resultado = db.session.execute(sql_usuario, {
-                "id": barbeiro.id,
-                "descricao": barbeiro.descricao,
-                "status_barbeiro": barbeiro.status_barbeiro,
-            })
-    
-            db.session.commit()
-            return resultado.rowcount > 0
+    def atualizar_informacoes_barbeiro(self,barbeiro:Barbeiro):
+               sql_usuario = text("""
+                   UPDATE barbeiros
+                   SET
+                   descricao=:descricao,
+                   status_barbeiro=:status_barbeiro
+                   WHERE id = :id
+               """)
+       
+               resultado = db.session.execute(sql_usuario, {
+                   "id": barbeiro.id,
+                   "descricao": barbeiro.descricao,
+                   "status_barbeiro": barbeiro.status_barbeiro,
+               })
+       
+               db.session.commit()
+               return resultado.rowcount > 0
+           
+           
+
 
     def excluir_barbeiro(self, id_barbeiro: int):
         sql = text("""

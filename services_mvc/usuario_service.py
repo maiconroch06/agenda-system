@@ -2,6 +2,7 @@ from flask import flash
 from repositorio import UsuarioRepositorio
 from .endereco_service import EnderecoService
 from utilitarios import ValidadorDeImagens
+from enums import EnumNomesPastaImagem
 from models import Usuario
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash
@@ -29,7 +30,6 @@ class UsuarioService:
     def excluir_usuario_barbearia(self, id_usuario, foto_nome, nome_pasta):
                 
         try:
-           
             if self.__usuarioRepositorio.excluir(id_usuario):
                 ValidadorDeImagens.removerImagem(foto_nome, nome_pasta)
                 return
@@ -37,7 +37,13 @@ class UsuarioService:
             raise
         
         
+    def alterar_usuario_barbearia(self,  imagem_form, img_padrao, imagem_anterior, usuario):
+                                                     
+        usuario.foto_nome = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao, usuario.getTipo())
         
+        if not self.__usuarioRepositorio.atualizar(usuario):
+            raise Exception("Error ao tentar atualizar o usuario, tente novamente!")
+           
         
    
     def salvar_dados_especificos(self, usuario: Usuario): 

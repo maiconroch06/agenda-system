@@ -198,7 +198,34 @@ class UsuarioDAO:
         ]
 
 
-    def atualizar_usuarios(self, usuario: Usuario):
+    def atualizar_usuarios_sem_senha(self, usuario: Usuario):
+        sql = text("""
+            UPDATE usuarios
+            SET
+                nome_completo = :nome_completo,
+                telefone = :telefone,
+                cpf = :cpf,
+                email = :email,
+                foto_nome = :foto_nome,
+                data_atualizacao = :data_atualizacao
+            WHERE id = :id
+        """)
+
+        resultado = db.session.execute(sql, {
+            "id": usuario.id,
+            "nome_completo": usuario.nome_completo,
+            "telefone": usuario.telefone,
+            "cpf": usuario.cpf,
+            "email": usuario.email,
+            "foto_nome": usuario.foto_nome,
+            "data_atualizacao": usuario.data_atualizacao,
+        })
+
+        db.session.flush()
+
+        return resultado.rowcount > 0
+    
+    def atualizar_usuarios_com_senha(self, usuario: Usuario):
         sql = text("""
             UPDATE usuarios
             SET
