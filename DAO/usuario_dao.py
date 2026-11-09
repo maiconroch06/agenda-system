@@ -258,7 +258,8 @@ class UsuarioDAO:
             sql,
             {"id": id_usuario}
         )
-
+        
+            
         db.session.commit()
 
         return resultado.rowcount > 0

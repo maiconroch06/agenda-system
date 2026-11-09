@@ -89,7 +89,14 @@ class BarbeiroDAO:
                 b.descricao,
                 b.status_barbeiro,
                 b.fk_id_agenda,
-                e.*
+                e.cep,
+                e.cidade,
+                e.estados_br_sigla,
+                e.logradouro,
+                e.numero,
+                e.bairro,
+                e.sequencia,
+                e.complemento
             FROM usuarios u
                 INNER JOIN barbeiros b 
                     ON b.id = u.id

@@ -22,7 +22,7 @@ const imagem_preview = document.querySelector('#img_srv-preview');
 botao_editar_barbeiro.forEach(
     (editar)=>{
         editar.addEventListener("click", (event)=>{
-            titulo.textContent = "Editar barbeiro: "+nome_barbeiro_titulo.textContent ;
+            titulo.textContent = "Editar barbeiro: "+ nome_barbeiro_titulo.textContent;
             const detalhes_barbeiro = editar.value.split("&");
 
             id.value = detalhes_barbeiro[0];

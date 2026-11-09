@@ -14,7 +14,7 @@ class GestorServiceMVC(UsuarioService):
         if not email or not senha:
             raise Exception("Por favor, verifique se você preencheu todos os campos!")               
                
-        gestor = self.gestor_repositorio.consultar_gestor(email)
+        gestor = self.gestor_repositorio.realizar_login(email)
         
         if gestor is not None:        
             Senha.validar_senha(gestor['senha'], senha)    

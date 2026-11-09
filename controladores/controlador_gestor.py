@@ -49,8 +49,9 @@ class ControladorGestor():
     def excluir_barbeiro(cls, id_servico, foto_nome):
             try:
                 cls.__barbeiro_service_mvc.excluir_usuario_barbearia(id_servico,foto_nome,EnumNomesPastaImagem.IMAGENS_BARBEIRO)   
-            except Exception as error:
-                flash(f"{error}")
+                flash(f"O barbeiro foi excluído com sucesso!",EnumStatusMensagens.SUCESSO.value)
+            except Exception:
+                flash(f"O barbeiro não foi excluido!", EnumStatusMensagens.ERRO.value)
                 
             return redirect(url_for('gestor.gestorAbaBarbeiros'))  
 

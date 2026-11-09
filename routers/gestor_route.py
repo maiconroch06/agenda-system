@@ -191,9 +191,7 @@ def gestor_barbeiro_editar_endereco():
 def gestor_excluir_barbeiro():
     id_barbeiro = request.form.get('srv-id-deletar')
     foto_nome = request.form.get('srv-foto_nome') 
-    
-    print(foto_nome)
-        
+            
     return ControladorGestor.excluir_barbeiro(id_barbeiro, foto_nome)
 
     

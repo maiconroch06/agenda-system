@@ -50,13 +50,13 @@
      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 w-full">
 
     {% for barbeiro in barbeiros %}
-    <div class="flex flex-col items-center min-w-0 bg-[#232220] rounded-2xl p-4 border border-zinc-700/60 hover:border-amber-500/40 transition-all">
+    <div id="card_servicos" class="flex flex-col items-center min-w-0 bg-[#232220] rounded-2xl p-4 border border-zinc-700/60 hover:border-amber-500/40 transition-all">
 
         <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500"
-             src="{{ url_for('static', filename='assets/dados/barbeiro-imagens/{}'.format(barbeiro.foto_nome)) }}"
+            src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome) }}"
              alt="Foto de {{ barbeiro.nome_completo }}">
 
-        <h3 id="campo-padrao" class="font-bold text-white text-base text-center break-words">{{ barbeiro.nome_completo }}</h3>
+        <h3 id="campo-padrao" class="font-bold text-white text-base text-center">{{ barbeiro.nome_completo }}</h3>
 
         <p class="text-xs text-gray-300 text-center mb-3">
             Contato: ({{ barbeiro.telefone[:2] }}) {{ barbeiro.telefone[2:7] }}-{{ barbeiro.telefone[7:] }}
@@ -71,7 +71,7 @@
 
         <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
 
-            <button type="button" id="editar-barbeiro" value="{{barbeiro.id}}&{{barbeiro.nome_completo}}&{{barbeiro.cpf}}&{{barbeiro.email}}&{{barbeiro.telefone}}&{{ url_for('static', filename='assets/dados/barbeiro-imagens/{}'.format(barbeiro.foto_nome)) }}&{{barbeiro.foto_nome}}&{{barbeiro.status_barbeiro}}&{{barbeiro.descricao}}"
+            <button type="button" id="editar-barbeiro" value="{{barbeiro.id}}&{{barbeiro.nome_completo}}&{{barbeiro.cpf}}&{{barbeiro.email}}&{{barbeiro.telefone}}&{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome) }}&{{barbeiro.foto_nome}}&{{barbeiro.status_barbeiro}}&{{barbeiro.descricao}}"
                     class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
                 Editar barbeiro
             </button>

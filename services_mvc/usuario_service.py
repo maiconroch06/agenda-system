@@ -27,11 +27,17 @@ class UsuarioService:
         
     
     def excluir_usuario_barbearia(self, id_usuario, foto_nome, nome_pasta):
-                if self.__usuarioRepositorio.excluir(id_usuario):
-                    ValidadorDeImagens.removerImagem(foto_nome, nome_pasta)
-                    return
                 
-                raise Exception("O serviço não foi excluido.")
+        try:
+           
+            if self.__usuarioRepositorio.excluir(id_usuario):
+                ValidadorDeImagens.removerImagem(foto_nome, nome_pasta)
+                return
+        except IntegrityError:
+            raise
+        
+        
+        
         
    
     def salvar_dados_especificos(self, usuario: Usuario): 
