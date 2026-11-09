@@ -13,6 +13,16 @@
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
+    {# ───────── DADOS MOCK VS FLASK ───────── #}
+    {% set barbeiros_mock = [
+        {'id': 1, 'nome_completo': 'Thiago Silva', 'descricao': 'Especializado nas principais academias internacionais, domina técnicas avançadas de corte a tesoura, estruturação de cabelo masculino e atendimento personalizado de alto padrão.', 'email': 'thiago@gmail.com', 'telefone': '(11) 11111-1111', 'fk_id_endereco': '1', 'foto_nome': 'barbeiro-master-thiago-silva.png'},
+        {'id': 2, 'nome_completo': 'Maik Mendes', 'descricao': 'Com foco em tendências modernas, Maik é especialista em degradês perfeitos (Fade), alinhamento de contornos e penteados urbanos contemporâneos.', 'email': 'maik@gmail.com', 'telefone': '(11) 22222-2222', 'fk_id_endereco': '2', 'foto_nome': 'barbeiro_dois_maik.png'}
+        {'id': 3, 'nome_completo': 'Samuca Costa', 'descricao': 'Mestre no tradicional ritual da barba com toalha quente e lâmina afiada. Samuca garante um momento relaxante combinado a cuidados profundos com a pele.', 'email': 'samuel@gmail.com', 'telefone': '(11) 33333-2222', 'fk_id_endereco': '2', 'foto_nome': 'barbeiro_dois_maik.png'}
+    ] %}
+
+    {% set lista_barbeiros = barbeiros_flask | default(barbeiros_mock) %}
+    {# ─────────────────────────────────────── #}
+
     <!-- HEADER (Exibe apenas para o mobile)-->
     {% include "componetizacao/Header/header-painel.html" %}
     
