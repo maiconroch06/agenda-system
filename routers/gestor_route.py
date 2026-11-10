@@ -44,16 +44,14 @@ def gestorLogout():
 def gestorPainel():
     return ControladorGestor.consultar_agendamentos(1)
 
-
 # Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros
-@gestor.route('/painel/agenda')
-def gestorAbaAgenda():
-    return render_template('pages/gestor/gestor-painel-agenda_rp.html')
-
-# Painel Gestor - Aba de visualização os Agendamentos de cada barbeiro
 @gestor.route('/painel/agendamento')
 def gestorAbaAgendamento():
     return render_template('pages/gestor/gestor-painel-agendamento-rp.html')
+
+@gestor.route('/painel/agenda')
+def gestorAbaAgenda():
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html')
 
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados

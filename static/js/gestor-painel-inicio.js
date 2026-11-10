@@ -42,7 +42,7 @@ function cardAtendimentoHojeHTML(item) {
 
             <div class="flex-1">
                 <div class="text-sm font-medium">${item.cliente}</div>
-                <div class="text-xs text-[#888780] mt-0.5">${item.servico}</div>
+                <div class="text-xs text-[#888780] mt-0.5">${item.servico} • <span class="text-[#9fe1cb]">${item.barbeiro}</span></div>
             </div>
 
             <div class="flex flex-col items-end gap-1 flex-shrink-0">
@@ -66,7 +66,7 @@ function carregarDashboardInicio() {
 
     const concluidos = doDia.filter(a => a.status === "concluido").length;
     const cancelados = doDia.filter(a => a.status === "cancelado").length;
-    const pendentes = doDia.filter(a => a.status === "aguardando").length;
+    const pendentes = doDia.filter(a => a.status === "agendado").length;
     const totalGeral = doDia.length;
     
     // Total válido decrementando os cancelados
