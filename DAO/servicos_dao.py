@@ -37,7 +37,7 @@ class ServicoDAO:
             "data_atualizacao": servico.data_atualizacao
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.lastrowid
 
@@ -145,7 +145,7 @@ class ServicoDAO:
             "data_atualizacao": servico.data_atualizacao
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
@@ -164,7 +164,7 @@ class ServicoDAO:
             "data_atualizacao": data_atualizacao
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
@@ -183,7 +183,7 @@ class ServicoDAO:
             "data_atualizacao": data_atualizacao
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
@@ -198,6 +198,6 @@ class ServicoDAO:
             {"id_servico": id_servico}
         )
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
