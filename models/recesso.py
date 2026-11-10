@@ -1,7 +1,7 @@
 
 from datetime import datetime, timezone
 
-class Agenda:
+class Recesso:
 
     def __init__(
         self,
@@ -20,7 +20,7 @@ class Agenda:
     def id_recesso(self):
         return self.__id_recesso
 
-    @id.setter
+    @id_recesso.setter
     def id_recesso(self, value):
         self.__id_recesso = value
 

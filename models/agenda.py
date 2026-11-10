@@ -21,7 +21,7 @@ class Agenda:
     def id_agenda(self):
         return self.__id_agenda
 
-    @id.setter
+    @id_agenda.setter
     def id_agenda(self, value):
         self.__id_agenda = value
 

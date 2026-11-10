@@ -1,8 +1,7 @@
 from datetime import datetime, timezone
-from .usuarios import Usuario
 
 
-class Barbeiro(Usuario):
+class FaltaJustificada:
 
     def __init__(
         self,

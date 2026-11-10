@@ -1,7 +1,7 @@
 
 from datetime import datetime, timezone
 
-class Agenda:
+class MesReferencia:
 
     def __init__(
         self,
@@ -21,7 +21,7 @@ class Agenda:
     def id_mes_referencia(self):
         return self.__id_mes_referencia
 
-    @id.setter
+    @id_mes_referencia.setter
     def id_mes_referencia(self, value):
         self.__id_mes_referencia = value
 
