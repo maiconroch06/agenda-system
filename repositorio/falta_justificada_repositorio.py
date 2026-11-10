@@ -1,32 +1,32 @@
 
-from DAO.barbeiro_has_servicos_dao import BarbeiroHasServicosDAO
+from DAO.falta_justificada_dao import FaltaJustificadaDao
 
 
-class BarbeiroHasServicosRepositorio:
+class FaltaJustificadaRepositorio:
 
     @staticmethod
     def salvar(relacionamento):
-        return BarbeiroHasServicosDAO.salvar(relacionamento)
+        return FaltaJustificadaDao.salvar(relacionamento)
 
     @staticmethod
     def buscar_por_ids(id_servico, id_barbeiro):
-        return BarbeiroHasServicosDAO.buscar_por_ids(
+        return FaltaJustificadaDao.buscar_por_ids(
             id_servico, id_barbeiro
         )
 
     @staticmethod
     def listar_todos():
-        return BarbeiroHasServicosDAO.listar_todos()
+        return FaltaJustificadaDao.listar_todos()
 
     @staticmethod
     def listar_por_barbeiro(id_barbeiro):
-        return BarbeiroHasServicosDAO.listar_por_barbeiro(
+        return FaltaJustificadaDao.listar_por_barbeiro(
             id_barbeiro
         )
 
     @staticmethod
     def listar_por_servico(id_servico):
-        return BarbeiroHasServicosDAO.listar_por_servico(
+        return FaltaJustificadaDao.listar_por_servico(
             id_servico
         )
 
@@ -34,12 +34,12 @@ class BarbeiroHasServicosRepositorio:
     def atualizar_data_cadastro(
         id_servico, id_barbeiro, data_cadastro
     ):
-        return BarbeiroHasServicosDAO.atualizar_data_cadastro(
+        return FaltaJustificadaDao.atualizar_data_cadastro(
             id_servico, id_barbeiro, data_cadastro
         )
 
     @staticmethod
     def excluir(id_servico, id_barbeiro):
-        return BarbeiroHasServicosDAO.excluir(
+        return FaltaJustificadaDao.excluir(
             id_servico, id_barbeiro
         )

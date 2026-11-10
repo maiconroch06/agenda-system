@@ -6,9 +6,10 @@ from .servicos_repositorio import ServicoRepositorio
 from .agenda_repositorio import AgendaRepositorio
 from .agendamento_repositorio import AgendamentoRepositorio
 from .barbearia_repositorio import BarbeariaRepositorio
-from .barbeiro_has_servicos_repositorio import BarbeiroHasServicosRepositorio
+from .falta_justificada_repositorio import FaltaJustificadaRepositorio
+from .recesso_repositorio import RecessoRepositorio
 from .endereco_repositorio import EnderecoRepositorio
-from .horarios_agenda_repositorio import HorariosAgendaRepositorio
+from .mes_referencia_repositorio import MesReferenciaRepositorio
 from .repositorio_address import get_all_states
 
 
