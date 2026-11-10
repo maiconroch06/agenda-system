@@ -27,7 +27,7 @@
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
                 <!-- ABA AGENDA -->
-                <section id="aba-agenda">
+                <section id="aba-agenda" class="pb-28 md:pb-0">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-3">
                         <div>
                             <h1 class="text-lg lg:text-xl font-semibold">Horários de Funcionamento</h1>
@@ -36,112 +36,86 @@
                     </div>
 
                     <!-- Card (Intervalos e Dias) -->
-                    <form class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 mb-5">
+                    <form action="" method="POST" class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-3 md:p-6 flex flex-col gap-5">
                         
-                        <!-- Intervalos de Funcionamento -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 mb-2.5 gap-2">
+                        <!-- 1. Campos de Horários -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
+                            
                             <!-- Abertura -->
-                            <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#232220] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-[#4a473f]">
+                            <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#161513] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-[#4a473f]">
                                 <span class="text-[#f1efe8] select-none">Abertura:</span>
-                                <input name="horario_abertura" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;">
+                                <input name="horario_abertura" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;" required>
                             </label>
 
                             <!-- Fechamento -->
-                            <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#232220] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-[#4a473f]">
+                            <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#161513] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-[#4a473f]">
                                 <span class="text-[#f1efe8] select-none">Fechamento:</span>
-                                <input name="horario_fechamento" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;">
+                                <input name="horario_fechamento" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;" required>
                             </label>
 
                             <!-- Início Almoço -->
-                            <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#232220] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-[#4a473f]">
+                            <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#161513] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-[#4a473f]">
                                 <span class="text-[#f1efe8] select-none">Início Almoço:</span>
                                 <input name="inicio_almoco" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;">
                             </label>
 
                             <!-- Fim Almoço -->
-                            <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#232220] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-[#4a473f]">
+                            <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#161513] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-[#4a473f]">
                                 <span class="text-[#f1efe8] select-none">Fim Almoço:</span>
                                 <input name="fim_almoco" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;">
                             </label>
-
                         </div>
 
-                        <span class="text-xs font-semibold uppercase tracking-wider text-[#f1efe8] block mb-3">
-                            Dias fechados
-                        </span>
+                        <!-- 2. Seção Dias Fechados + Botão no Canto Inferior -->
+                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                            
+                            <!-- Lista de Dias da Semana (Checkboxes) -->
+                            <div class="flex flex-col gap-2">
+                                <span class="text-xs font-semibold uppercase tracking-wider text-[#f1efe8]">Dias Fechados</span>
+                                <div class="flex flex-wrap gap-2">
+                                    {% set dias = [
+                                        ('1', 'Segunda-Feira'),
+                                        ('2', 'Terça-Feira'),
+                                        ('3', 'Quarta-Feira'),
+                                        ('4', 'Quinta-Feira'),
+                                        ('5', 'Sexta-Feira'),
+                                        ('6', 'Sábado'),
+                                        ('0', 'Domingo')
+                                    ] %}
 
-                        <div class="flex justify-between">
-                            <div class="flex gap-1.5 mb-4 flex-wrap">
-                                <!-- Segunda-Feira -->
-                                <label class="cursor-pointer select-none">
-                                    <input type="checkbox" name="dias_semana" value="segunda" class="peer hidden">
-                                    <span class="inline-block px-3.5 py-2 rounded-xl border border-[#38362f] bg-[#232220] text-[#888780] text-xs font-medium transition-all duration-200 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 peer-checked:text-amber-500 hover:border-[#4a473f]">
-                                        Segunda-Feira
-                                    </span>
-                                </label>
-
-                                <!-- Terça-Feira -->
-                                <label class="cursor-pointer select-none">
-                                    <input type="checkbox" name="dias_semana" value="terca" class="peer hidden">
-                                    <span class="inline-block px-3.5 py-2 rounded-xl border border-[#38362f] bg-[#232220] text-[#888780] text-xs font-medium transition-all duration-200 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 peer-checked:text-amber-500 hover:border-[#4a473f]">
-                                        Terça-Feira
-                                    </span>
-                                </label>
-
-                                <!-- Quarta-Feira -->
-                                <label class="cursor-pointer select-none">
-                                    <input type="checkbox" name="dias_semana" value="quarta" class="peer hidden">
-                                    <span class="inline-block px-3.5 py-2 rounded-xl border border-[#38362f] bg-[#232220] text-[#888780] text-xs font-medium transition-all duration-200 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 peer-checked:text-amber-500 hover:border-[#4a473f]">
-                                        Quarta-Feira
-                                    </span>
-                                </label>
-
-                                <!-- Quinta-Feira -->
-                                <label class="cursor-pointer select-none">
-                                    <input type="checkbox" name="dias_semana" value="quinta" class="peer hidden">
-                                    <span class="inline-block px-3.5 py-2 rounded-xl border border-[#38362f] bg-[#232220] text-[#888780] text-xs font-medium transition-all duration-200 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 peer-checked:text-amber-500 hover:border-[#4a473f]">
-                                        Quinta-Feira
-                                    </span>
-                                </label>
-
-                                <!-- Sexta-Feira -->
-                                <label class="cursor-pointer select-none">
-                                    <input type="checkbox" name="dias_semana" value="sexta" class="peer hidden">
-                                    <span class="inline-block px-3.5 py-2 rounded-xl border border-[#38362f] bg-[#232220] text-[#888780] text-xs font-medium transition-all duration-200 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 peer-checked:text-amber-500 hover:border-[#4a473f]">
-                                        Sexta-Feira
-                                    </span>
-                                </label>
-
-                                <!-- Sábado -->
-                                <label class="cursor-pointer select-none">
-                                    <input type="checkbox" name="dias_semana" value="sabado" class="peer hidden">
-                                    <span class="inline-block px-3.5 py-2 rounded-xl border border-[#38362f] bg-[#232220] text-[#888780] text-xs font-medium transition-all duration-200 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 peer-checked:text-amber-500 hover:border-[#4a473f]">
-                                        Sábado
-                                    </span>
-                                </label>
-
-                                <!-- Domingo -->
-                                <label class="cursor-pointer select-none">
-                                    <input type="checkbox" name="dias_semana" value="domingo" class="peer hidden">
-                                    <span class="inline-block px-3.5 py-2 rounded-xl border border-[#38362f] bg-[#232220] text-[#888780] text-xs font-medium transition-all duration-200 peer-checked:border-amber-500 peer-checked:bg-amber-500/10 peer-checked:text-amber-500 hover:border-[#4a473f]">
-                                        Domingo
-                                    </span>
-                                </label>
+                                    {% for val, nome in dias %}
+                                        <label class="cursor-pointer select-none">
+                                            <input type="checkbox" name="dias_fechados" value="{{ val }}" class="peer hidden">
+                                            <span class="inline-block px-3.5 py-2 rounded-xl border border-[#38362f] bg-[#161513] text-[#888780] text-xs font-medium transition-all peer-checked:border-amber-500 peer-checked:bg-amber-500/10 peer-checked:text-amber-500 hover:border-[#4a473f]">
+                                                {{ nome }}
+                                            </span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
                             </div>
+
+                            <!-- Botão Submeter Form (Alinhado à direita no Mobile e Desktop) -->
+                            <div class="flex justify-end pt-2 md:pt-0">
+                                <button type="submit" class="w-36 h-10 px-4 rounded-xl border border-[#38362f] bg-[#2a2825] text-[#f1efe8] text-xs font-semibold hover:bg-[#32302c] hover:border-[#4a473f] transition-all cursor-pointer whitespace-nowrap shadow-sm active:scale-95 flex items-center justify-center">
+                                    Atualizar Horários
+                                </button>
+                            </div>
+
                         </div>
-                        
-                        <button type="button"
-                            class="inline-block px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
-                            Atualizar Horários
-                        </button>
 
-                    </form>
-                    
+                    </form>                 
 
-                    <div>
-                        <h1 class="text-lg lg:text-xl font-semibold">Agenda Geral</h1>
+                    <div class="flex items-center justify-between mb-5 gap-3">
+                        <div>
+                            <h1 class="text-lg lg:text-xl font-semibold">Agenda Geral</h1>
                         <p class="text-xs text-[#888780]" id="data-atual-str"></p>
+                        </div>
+
+                        <button type="button" id="btn-abrir-modal-agenda" class="px-4 py-2.5 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold cursor-pointer">
+                            + Cadastrar Agenda
+                        </button>
                     </div>
+
                     <span class="text-xs font-semibold uppercase tracking-wider text-[#888780] block mb-3">
                         Agendas Cadastradas
                     </span>
@@ -154,9 +128,40 @@
 
                             <h3 id="campo-padrao" class="font-bold text-white text-base text-center"></h3>
 
-                            <p class="text-xs text-gray-300 text-center mb-3">
+                            <p class="text-1x1 text-gray-300 text-center font-semibold mb-3">
                                 Agenda do [MES]
                             </p>
+
+                            <div class="w-full bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-4">
+                                <div class="flex items-center justify-between gap-4">
+                                    
+                                    <!-- Data Início (Esquerda) -->
+                                    <div class="flex-1 min-w-0">
+                                        <span class="block text-[11px] font-semibold uppercase tracking-wider text-[#888780] mb-0.5">
+                                            Dia Início
+                                        </span>
+                                        <p class="text-xs sm:text-sm font-medium text-[#f1efe8] truncate">
+                                            {{ data_inicio | default('01/11/2026') }}
+                                        </p>
+                                    </div>
+
+                                    <!-- Divisoria Central -->
+                                    <div class="flex items-center justify-center shrink-0 px-1">
+                                        <span class="h-6 md:h-10 w-[1px] bg-[#38362f]"></span>
+                                    </div>
+
+                                    <!-- Data Fim (Direita) -->
+                                    <div class="flex-1 min-w-0 text-right">
+                                        <span class="block text-[11px] font-semibold uppercase tracking-wider text-[#888780] mb-0.5">
+                                            Dia Fim
+                                        </span>
+                                        <p class="text-xs sm:text-sm font-medium text-[#f1efe8] truncate">
+                                            {{ data_fim | default('30/11/2026') }}
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
 
                             <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
 
@@ -180,6 +185,7 @@
                         </div>
                     </div>
 
+                    {% include "componetizacao/modals/modal-gerenciar-agenda.html" %}
                 </section>
             </main>
         </div>
@@ -192,6 +198,9 @@
     <!-- TOAST AVISO -->
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso"></div>
+        
+
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_gerenciar_agenda.js') }}"></script>
 
     <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
     <script src="{{ url_for('static', filename='js/gestor-painel-agenda.js') }}"></script>
