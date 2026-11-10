@@ -1,39 +1,42 @@
 
 from sqlalchemy import text
 from database import db
-from models import Barbeiro
+from models import Barbeiro, Endereco
 
 
 class BarbeiroDAO:
 
     def cadastrar(self, barbeiro: Barbeiro):
         sql = text("""
-            INSERT INTO barbeiros (
+            INSERT INTO barbeiro (
                 id_barbeiro,
                 data_liberacao,
-                descricao,
+                bio,
+                especialidade,
                 status_barbeiro,
-                fk_id_agenda
+                data_inicio_carreira
             ) VALUES (
                 :id_barbeiro,
                 :data_liberacao,
-                :descricao,
+                :bio,
+                :especialidade,
                 :status_barbeiro,
-                :fk_id_agenda
+                :data_inicio_carreira
             )
         """)
 
         db.session.execute(sql, {
-            "id_barbeiro": barbeiro.id_barbeiro,
+            "id_barbeiro": barbeiro.id_usuario,
             "data_liberacao": barbeiro.data_liberacao,
-            "descricao": barbeiro.descricao,
+            "bio": barbeiro.descricao,
+            "especialidade": barbeiro.especialidade,
             "status_barbeiro": barbeiro.status_barbeiro,
-            "fk_id_agenda": barbeiro.agenda.id_agenda
+            "data_inicio_carreira": barbeiro.data_inicio_carreira
         })
 
-        db.session.flush()
+        db.session.commit()
 
-        return barbeiro.id_barbeiro
+        return barbeiro.id_usuario
 
     def buscar_por_id(self, id_barbeiro: int):
         sql = text("""
@@ -44,19 +47,36 @@ class BarbeiroDAO:
                 u.cpf,
                 u.email,
                 u.senha,
-                u.foto_nome,
+                u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_atualizacao,
-                u.fk_id_endereco,
+
                 b.id_barbeiro,
                 b.data_liberacao,
-                b.descricao,
+                b.bio,
+                b.especialidade,
                 b.status_barbeiro,
-                b.fk_id_agenda
-            FROM usuarios u
-            INNER JOIN barbeiros b
+                b.data_inicio_carreira,
+
+                e.id_endereco,
+                e.cep,
+                e.cidade,
+                e.uf,
+                e.logradouro,
+                e.numero,
+                e.bairro,
+                e.sequencia,
+                e.complemento
+
+            FROM usuario u
+
+            INNER JOIN barbeiro b
                 ON b.id_barbeiro = u.id_usuario
+
+            LEFT JOIN endereco e
+                ON e.id_endereco = u.fk_id_endereco
+
             WHERE b.id_barbeiro = :id_barbeiro
         """)
 
@@ -79,19 +99,36 @@ class BarbeiroDAO:
                 u.cpf,
                 u.email,
                 u.senha,
-                u.foto_nome,
+                u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_atualizacao,
-                u.fk_id_endereco,
+
                 b.id_barbeiro,
                 b.data_liberacao,
-                b.descricao,
+                b.bio,
+                b.especialidade,
                 b.status_barbeiro,
-                b.fk_id_agenda
-            FROM usuarios u
-            INNER JOIN barbeiros b
+                b.data_inicio_carreira,
+
+                e.id_endereco,
+                e.cep,
+                e.cidade,
+                e.uf,
+                e.logradouro,
+                e.numero,
+                e.bairro,
+                e.sequencia,
+                e.complemento
+
+            FROM usuario u
+
+            INNER JOIN barbeiro b
                 ON b.id_barbeiro = u.id_usuario
+
+            LEFT JOIN endereco e
+                ON e.id_endereco = u.fk_id_endereco
+
             ORDER BY u.nome_completo
         """)
 
@@ -104,71 +141,65 @@ class BarbeiroDAO:
 
     def atualizar_informacoes_barbeiro(self, barbeiro: Barbeiro):
         sql = text("""
-            UPDATE barbeiros
+            UPDATE barbeiro
             SET
                 data_liberacao = :data_liberacao,
-                descricao = :descricao,
+                bio = :bio,
+                especialidade = :especialidade,
                 status_barbeiro = :status_barbeiro,
-                fk_id_agenda = :fk_id_agenda
+                data_inicio_carreira = :data_inicio_carreira
+
             WHERE id_barbeiro = :id_barbeiro
         """)
 
         resultado = db.session.execute(sql, {
-            "id_barbeiro": barbeiro.id_barbeiro,
+            "id_barbeiro": barbeiro.id_usuario,
             "data_liberacao": barbeiro.data_liberacao,
-            "descricao": barbeiro.descricao,
+            "bio": barbeiro.descricao,
+            "especialidade": barbeiro.especialidade,
             "status_barbeiro": barbeiro.status_barbeiro,
-            "fk_id_agenda": barbeiro.agenda.id_agenda
+            "data_inicio_carreira": barbeiro.data_inicio_carreira
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
-    def excluir_barbeiro(self, id_barbeiro: int):
-        sql_barbeiro = text("""
-            DELETE FROM barbeiros
-            WHERE id_barbeiro = :id_barbeiro
-        """)
-
-        resultado = db.session.execute(
-            sql_barbeiro,
-            {"id_barbeiro": id_barbeiro}
-        )
-
-        if resultado.rowcount == 0:
-            return False
-
-        sql_usuario = text("""
-            DELETE FROM usuarios
-            WHERE id_usuario = :id_usuario
-        """)
-
-        db.session.execute(
-            sql_usuario,
-            {"id_usuario": id_barbeiro}
-        )
-
-        db.session.flush()
-
-        return True
-
     @staticmethod
     def _mapear_barbeiro(registro):
+
+        endereco = None
+
+        if registro["id_endereco"] is not None:
+            endereco = Endereco(
+                id_endereco=registro["id_endereco"],
+                cep=registro["cep"],
+                cidade=registro["cidade"],
+                uf=registro["uf"],
+                logradouro=registro["logradouro"],
+                numero=registro["numero"],
+                bairro=registro["bairro"],
+                sequencia=registro["sequencia"],
+                complemento=registro["complemento"]
+            )
+
         return Barbeiro(
-            id_barbeiro=registro["id_barbeiro"],
+            id_usuario=registro["id_usuario"],
             nome_completo=registro["nome_completo"],
             telefone=registro["telefone"],
             cpf=registro["cpf"],
             email=registro["email"],
             senha=registro["senha"],
-            foto_nome=registro["foto_nome"],
+            foto_nome_usuario=registro["foto_nome_usuario"],
             status_usuario=bool(registro["status_usuario"]),
             data_cadastro=registro["data_cadastro"],
             data_atualizacao=registro["data_atualizacao"],
-            fk_id_endereco=registro["fk_id_endereco"],
+
             data_liberacao=registro["data_liberacao"],
-            descricao=registro["descricao"],
+            descricao=registro["bio"],
+            especialidade=registro["especialidade"],
             status_barbeiro=bool(registro["status_barbeiro"]),
-            fk_id_agenda=registro["fk_id_agenda"]
+            data_inicio_carreira=registro["data_inicio_carreira"],
+
+            endereco=endereco
         )

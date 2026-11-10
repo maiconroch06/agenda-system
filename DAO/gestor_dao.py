@@ -21,7 +21,7 @@ class GestorDAO:
                 u.data_cadastro,
                 u.data_atualizacao,
                 g.fk_cnpj_barbearia
-            FROM usuarios u
+            FROM usuario u
             INNER JOIN gestor g
                 ON g.id_gestor = u.id_usuario
             WHERE u.email = :email

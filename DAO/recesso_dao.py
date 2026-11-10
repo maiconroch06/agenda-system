@@ -30,7 +30,7 @@ class RecessoDAO:
             "fk_mes_agenda": recesso.mes_referencia.id_mes_referencia
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.lastrowid
 
@@ -112,7 +112,7 @@ class RecessoDAO:
             "fk_mes_agenda": recesso.mes_referencia.id_mes_referencia
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
@@ -127,7 +127,7 @@ class RecessoDAO:
             {"id_recesso": id_recesso}
         )
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 

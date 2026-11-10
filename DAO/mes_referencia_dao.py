@@ -33,7 +33,7 @@ class MesReferenciaDAO:
             "fk_id_agenda": mes_referencia.agenda.id
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.lastrowid
 
@@ -120,7 +120,7 @@ class MesReferenciaDAO:
             "fk_id_agenda": mes_referencia.agenda.id
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
@@ -135,7 +135,7 @@ class MesReferenciaDAO:
             {"id_mes_referencia": id_mes_referencia}
         )
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 

@@ -152,23 +152,7 @@ class EnderecoDAO:
             "complemento": endereco.complemento
         })
 
-        db.session.flush()
-
-        return resultado.rowcount > 0
-
-    @staticmethod
-    def excluir(id_endereco: int):
-        sql = text("""
-            DELETE FROM endereco
-            WHERE id_endereco = :id_endereco
-        """)
-
-        resultado = db.session.execute(
-            sql,
-            {"id_endereco": id_endereco}
-        )
-
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 

@@ -31,7 +31,3 @@ class ClienteRepositorio:
         return self.clienteDao.atualizar_data_ultimo_servico(
             id_cliente, data
         )
-
-    
-    def excluir(self,id_cliente):
-        return self.clienteDao.excluir(id_cliente)

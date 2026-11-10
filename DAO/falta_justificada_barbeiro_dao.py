@@ -32,7 +32,7 @@ class FaltaJustificadaBarbeiroDAO:
             "fk_id_barbeiro": falta.barbeiro.id
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.lastrowid
 
@@ -104,7 +104,7 @@ class FaltaJustificadaBarbeiroDAO:
             "fk_id_barbeiro": falta.barbeiro.id
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
@@ -119,7 +119,7 @@ class FaltaJustificadaBarbeiroDAO:
             {"id_falta_justificada": id_falta_justificada}
         )
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 

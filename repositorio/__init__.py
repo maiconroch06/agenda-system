@@ -10,7 +10,3 @@ from .falta_justificada_barbeiro_repositorio import FaltaJustificadaBarbeiroRepo
 from .recesso_repositorio import RecessoRepositorio
 from .endereco_repositorio import EnderecoRepositorio
 from .mes_referencia_repositorio import MesReferenciaRepositorio
-from .repositorio_address import get_all_states
-
-
-
