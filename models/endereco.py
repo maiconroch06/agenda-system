@@ -4,18 +4,18 @@ class Endereco:
         self,
         cep: str,
         cidade: str,
-        estados_br_sigla: str,
+        uf: str,
         logradouro: str,
         numero: int,
         bairro: str,
-        id = None,
+        id_endereco = None,
         sequencia = None,
         complemento = None
     ):
-        self.__id = id
+        self.__id_endereco = id_endereco
         self.__cep = cep
         self.__cidade = cidade
-        self.__estados_br_sigla = estados_br_sigla
+        self.__uf = uf
         self.__logradouro = logradouro
         self.__numero = numero
         self.__bairro = bairro
@@ -23,12 +23,12 @@ class Endereco:
         self.__complemento = complemento
 
     @property
-    def id(self):
-        return self.__id
+    def id_endereco(self):
+        return self.__id_endereco
 
-    @id.setter
-    def id(self, value):
-        self.__id = value
+    @id_endereco.setter
+    def id_endereco(self, value):
+        self.id_endereco = value
 
     @property
     def cep(self):
@@ -47,12 +47,12 @@ class Endereco:
         self.__cidade = value
 
     @property
-    def estados_br_sigla(self):
-        return self.__estados_br_sigla
+    def uf(self):
+        return self.__uf
 
-    @estados_br_sigla.setter
-    def estados_br_sigla(self, value):
-        self.__estados_br_sigla = value
+    @uf.setter
+    def uf(self, value):
+        self.__uf = value
 
     @property
     def logradouro(self):
@@ -102,7 +102,7 @@ class Endereco:
             f"Endereco(id={self.__id}, "
             f"cep='{self.__cep}', "
             f"cidade='{self.__cidade}', "
-            f"estado='{self.__estados_br_sigla}', "
+            f"estado='{self.__uf}', "
             f"logradouro='{self.__logradouro}', "
             f"numero={self.__numero}, "
             f"bairro='{self.__bairro}', "

@@ -13,30 +13,30 @@ class Usuario:
         status_usuario: bool,
         data_cadastro: datetime,
         data_atualizacao: datetime,
-        foto_nome= None,
+        foto_nome_usuario = None,
         senha=None,
-        id = None,
+        id_usuario = None,
         endereco: Endereco = None
     ):
-        self.__id = id
+        self.__id_usuario = id_usuario
         self.__nome_completo = nome_completo
         self.__telefone = telefone
         self.__cpf = cpf
         self.__email = email
         self.__senha = senha
-        self.__foto_nome = foto_nome
+        self.__foto_nome_usuario = foto_nome_usuario
         self.__status_usuario = status_usuario
         self.__data_cadastro = data_cadastro
         self.__data_atualizacao = data_atualizacao
         self.__endereco = endereco
 
     @property
-    def id(self):
-        return self.__id
+    def id_usuario(self):
+        return self.__id_usuario
 
-    @id.setter
-    def id(self, value):
-        self.__id = value
+    @id_usuario.setter
+    def id_usuario(self, value):
+        self.__id_usuario = value
 
     @property
     def nome_completo(self):
@@ -79,12 +79,12 @@ class Usuario:
         self.__senha = value
 
     @property
-    def foto_nome(self):
-        return self.__foto_nome
+    def foto_nome_usuario(self):
+        return self.__foto_nome_usuario
 
-    @foto_nome.setter
-    def foto_nome(self, value):
-        self.__foto_nome = value
+    @foto_nome_usuario.setter
+    def foto_nome_usuario(self, value):
+        self.__foto_nome_usuario = value
 
     @property
     def status_usuario(self):

@@ -126,7 +126,7 @@ class BarbeariaDAO:
             nome_barbearia=registro["nome_barbearia"],
             telefone=registro["telefone"],
             email_empresa=registro["email_empresa"],
-            logo_barbearia=registro["logo_barbearia"],
+            logo_barbearia_nome=registro["logo_barbearia"],
             data_cadastro=registro["data_cadastro"],
             endereco=registro["fk_id_endereco"],
             fk_id_agenda=registro["fk_id_agenda"]

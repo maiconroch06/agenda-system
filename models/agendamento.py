@@ -16,9 +16,9 @@ class Agendamento:
         servico: Servico,
         barbeiro: Barbeiro,
         cliente: Cliente,
-        id = None,
+        id_agendamento = None,
     ):
-        self.__id = id
+        self.__id_agendamento = id_agendamento
         self.__data_agendamento = data_agendamento
         self.__hora_inicio = hora_inicio
         self.__hora_fim = hora_fim
@@ -29,12 +29,12 @@ class Agendamento:
         self.__cliente = cliente
 
     @property
-    def id(self):
-        return self.__id
+    def id_agendamento(self):
+        return self.__id_agendamento
 
-    @id.setter
-    def id(self, value):
-        self.__id = value
+    @id_agendamento.setter
+    def id_agendamento(self, value):
+        self.__id_agendamento = value
 
     @property
     def data_agendamento(self):

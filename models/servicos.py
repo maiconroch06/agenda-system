@@ -5,20 +5,20 @@ class Servico:
 
     def __init__(
         self,
-        id: int | None = None,
-        descricao: str | None = None,
+        id_servico: int | None = None,
+        descricao_servico: str | None = None,
         valor: Decimal | None = None,
         duracao: int | None = None,
-        foto_nome: str | None = None,
+        foto_nome_servico: str | None = None,
         status_servico: bool | None = None,
         data_cadastro: datetime | None = None,
         data_atualizacao: datetime | None = None
     ):
         self.__id = id
-        self.__descricao = descricao
+        self.__descricao_servico = descricao_servico
         self.__valor = valor
         self.__duracao = duracao
-        self.__foto_nome = foto_nome
+        self.__foto_nome = foto_nome_servico
         self.__status_servico = status_servico
         self.__data_cadastro = data_cadastro
         self.__data_atualizacao = data_atualizacao
@@ -32,12 +32,12 @@ class Servico:
         self.__id = value
 
     @property
-    def descricao(self):
-        return self.__descricao
+    def descricao_servico(self):
+        return self.__descricao_servico
 
-    @descricao.setter
-    def descricao(self, value):
-        self.__descricao = value
+    @descricao_servico.setter
+    def descricao_servico(self, value):
+        self.__descricao_servico = value
 
     @property
     def valor(self):
@@ -86,15 +86,6 @@ class Servico:
     @data_atualizacao.setter
     def data_atualizacao(self, value):
         self.__data_atualizacao = value
-
-    def _str__(self):
-        return (
-            f"Servico(id={self.__id}, "
-            f"descricao='{self.__descricao}', "
-            f"valor={self.__valor}, "
-            f"duracao={self.__duracao} minutos, "
-            f"status={self.__status_servico})"
-        )
     
     # === vALIDAÇÕES ================    
     def valoresValidos(self):
@@ -102,6 +93,6 @@ class Servico:
             raise Exception("Verifique se foi informado algum valor negativo!")
         
     def valoresVazios(self):
-        if not self.__descricao.strip() or  self.__valor <= Decimal("0") or  self.__duracao < -1:
+        if not self.__descricao_servico.strip() or  self.__valor <= Decimal("0") or  self.__duracao < -1:
            raise Exception("Campos vazios! Verifique se os campos estão vazios!")
                

@@ -1,49 +1,45 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from .usuarios import Usuario
-from .endereco import Endereco
-from .agenda import Agenda
 
 
 class Barbeiro(Usuario):
 
     def __init__(
         self,
-        nome_completo: str,
-        telefone: str,
-        cpf: str,
-        email: str,
-        descricao: str,
-        status_barbeiro: bool,
-        data_liberacao= None,
-        status_usuario= None,
-        data_cadastro=None,
-        data_atualizacao=None,
-        foto_nome= None,
-        senha = None,
-        agenda: Agenda | None = None,
-        id = None,
-        endereco: Endereco = None,
+        nome_completo, 
+        telefone, 
+        cpf, 
+        email, 
+        status_usuario, 
+        data_cadastro, 
+        data_atualizacao,
+        data_liberacao = datetime.now(timezone.utc), 
+        especialidade = None,
+        status_barbeiro = True,
+        foto_nome_usuario=None, 
+        senha=None, 
+        id_usuario=None, 
+        endereco = None
+        ):
         
-        
-    ):
         super().__init__(
-            id=id,
-            nome_completo=nome_completo,
-            telefone=telefone,
-            cpf=cpf,
-            email=email,
-            senha=senha,
-            foto_nome=foto_nome,
-            status_usuario=status_usuario,
+            nome_completo=nome_completo, 
+            telefone=telefone, 
+            cpf=cpf, 
+            email=email, 
+            status_usuario=status_usuario, 
             data_cadastro=data_cadastro,
-            data_atualizacao=data_atualizacao,
+            data_atualizacao=data_atualizacao, 
+            foto_nome_usuario=foto_nome_usuario, 
+            senha =senha, 
+            id_usuario=id_usuario,
             endereco=endereco
-        )
+            )
 
         self.__data_liberacao = data_liberacao
-        self.__descricao = descricao
+        self.__especialidade = especialidade
         self.__status_barbeiro = status_barbeiro
-        self.__agenda = agenda
+        
 
     @property
     def data_liberacao(self):
@@ -54,12 +50,12 @@ class Barbeiro(Usuario):
         self.__data_liberacao = value
 
     @property
-    def descricao(self):
-        return self.__descricao
+    def especialidade(self):
+        return self.__especialidade
 
-    @descricao.setter
-    def descricao(self, value):
-        self.__descricao = value
+    @especialidade.setter
+    def especialidade(self, value):
+        self.__especialidade = value
 
     @property
     def status_barbeiro(self):
@@ -69,13 +65,6 @@ class Barbeiro(Usuario):
     def status_barbeiro(self, value):
         self.__status_barbeiro = value
 
-    @property
-    def agenda(self):
-        return self.__agenda
-
-    @agenda.setter
-    def agenda(self, value):
-        self.__agenda = value
 
 
     
