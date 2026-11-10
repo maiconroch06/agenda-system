@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 
-class FaltaJustificada:
+class FaltaJustificadaBarbeiro:
 
     def __init__(
         self,

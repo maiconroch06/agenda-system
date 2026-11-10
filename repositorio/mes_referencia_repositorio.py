@@ -1,28 +1,26 @@
-from DAO.mes_referencia_dao import MesReferenciaDao
+
+from DAO.mes_referencia_dao import MesReferenciaDAO
 
 
 class MesReferenciaRepositorio:
 
-    @staticmethod
-    def salvar(horario):
-        return MesReferenciaDao.salvar(horario)
+    def __init__(self):
+        self.__mesReferenciaDao = MesReferenciaDAO()
 
-    @staticmethod
-    def buscar_por_id(id_horario):
-        return MesReferenciaDao.buscar_por_id(id_horario)
+    def salvar(self, mes_referencia):
+        return self.__mesReferenciaDao.cadastrar(mes_referencia)
 
-    @staticmethod
-    def listar_todos():
-        return MesReferenciaDao.listar_todos()
+    def buscar_por_id(self, id_mes: int):
+        return self.__mesReferenciaDao.buscar_por_id(id_mes)
 
-    @staticmethod
-    def listar_por_agenda(id_agenda):
-        return MesReferenciaDao.listar_por_agenda(id_agenda)
+    def listar_por_agenda(self, id_agenda: int):
+        return self.__mesReferenciaDao.listar_por_agenda(id_agenda)
 
-    @staticmethod
-    def atualizar(horario):
-        return MesReferenciaDao.atualizar(horario)
+    def listar_todos(self):
+        return self.__mesReferenciaDao.listar_todos()
 
-    @staticmethod
-    def excluir(id_horario):
-        return MesReferenciaDao.excluir(id_horario)
+    def atualizar(self, mes_referencia):
+        return self.__mesReferenciaDao.atualizar(mes_referencia)
+
+    def excluir(self, id_mes: int):
+        return self.__mesReferenciaDao.excluir(id_mes)

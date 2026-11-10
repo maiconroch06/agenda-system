@@ -3,18 +3,12 @@ from sqlalchemy import text
 from database import db
 from models import Cliente
 from datetime import datetime
-from flask import flash
-
-
-
 
 
 class ClienteDAO:
 
-    
-    def cadastrar(self, id:int, dataUltimoServico:datetime | None):
-        
-        sql_cliente = text("""
+    def cadastrar(self, id_cliente: int, data_ultimo_servico: datetime = None):
+        sql = text("""
             INSERT INTO clientes (
                 id_cliente,
                 data_ultimo_servico
@@ -24,21 +18,19 @@ class ClienteDAO:
             )
         """)
 
-        parametros_cliente = {
+        resultado = db.session.execute(sql, {
             "id_cliente": id_cliente,
-            "data_ultimo_servico": dataUltimoServico
-        }
+            "data_ultimo_servico": data_ultimo_servico
+        })
 
-        resposta_insert_cliente = db.session.execute(sql_cliente, parametros_cliente)
         db.session.flush()
 
-        return resposta_insert_cliente.rowcount > 0
+        return resultado.rowcount > 0
 
-    
     def consultarClienteId(self, id_cliente: int):
         sql = text("""
             SELECT
-                u.id,
+                u.id_usuario,
                 u.nome_completo,
                 u.telefone,
                 u.cpf,
@@ -49,10 +41,12 @@ class ClienteDAO:
                 u.data_cadastro,
                 u.data_atualizacao,
                 u.fk_id_endereco,
+                c.id_cliente,
                 c.data_ultimo_servico
             FROM usuarios u
-            INNER JOIN clientes c ON c.id = u.id
-            WHERE c.id = :id_cliente
+            INNER JOIN clientes c
+                ON c.id_cliente = u.id_usuario
+            WHERE c.id_cliente = :id_cliente
         """)
 
         registro = db.session.execute(
@@ -60,9 +54,12 @@ class ClienteDAO:
             {"id_cliente": id_cliente}
         ).mappings().first()
 
+        if registro is None:
+            return None
+
         return dict(registro)
 
-    def login_cliente_email(self, email):
+    def login_cliente_email(self, email: str):
         sql = text("""
             SELECT
                 u.id_usuario,
@@ -76,9 +73,11 @@ class ClienteDAO:
                 u.data_cadastro,
                 u.data_atualizacao,
                 u.fk_id_endereco,
+                c.id_cliente,
                 c.data_ultimo_servico
             FROM usuarios u
-            INNER JOIN clientes c ON c.id_cliente = u.id_usuario
+            INNER JOIN clientes c
+                ON c.id_cliente = u.id_usuario
             WHERE u.email = :email
         """)
 
@@ -86,30 +85,30 @@ class ClienteDAO:
             sql,
             {"email": email}
         ).mappings().first()
-         
+
         if registro is None:
-            flash(f"Email não cadastrado. Verifique se digitou o email correto!")
-            raise Exception()
-        
+            return None
+
         return dict(registro)
-    
+
     def consultar_clientes_services(self):
         sql = text("""
             SELECT
                 u.id_usuario,
+                c.id_cliente,
                 u.nome_completo,
                 u.telefone,
-				c.data_ultimo_servico
-            FROM usuario u
-            INNER JOIN cliente c ON c.id_cliente = u.id_usuario
+                c.data_ultimo_servico
+            FROM usuarios u
+            INNER JOIN clientes c
+                ON c.id_cliente = u.id_usuario
             ORDER BY u.nome_completo
         """)
 
         registros = db.session.execute(sql).mappings().all()
 
-        return registros
+        return [dict(registro) for registro in registros]
 
-   
     def atualizar(self, cliente: Cliente):
         sql_usuario = text("""
             UPDATE usuarios
@@ -123,17 +122,19 @@ class ClienteDAO:
                 status_usuario = :status_usuario,
                 data_atualizacao = :data_atualizacao,
                 fk_id_endereco = :fk_id_endereco
-            WHERE id = :id
+            WHERE id_usuario = :id_usuario
         """)
 
         sql_cliente = text("""
             UPDATE clientes
-            SET data_ultimo_servico = :data_ultimo_servico
-            WHERE id = :id
+            SET
+                data_ultimo_servico = :data_ultimo_servico
+            WHERE id_cliente = :id_cliente
         """)
 
         parametros = {
-            "id": cliente.id,
+            "id_usuario": cliente.id_cliente,
+            "id_cliente": cliente.id_cliente,
             "nome_completo": cliente.nome_completo,
             "telefone": cliente.telefone,
             "cpf": cliente.cpf,
@@ -161,15 +162,14 @@ class ClienteDAO:
 
         return resultado_cliente.rowcount > 0
 
-    
     def excluir(self, id_cliente: int):
-        sql = text("""
+        sql_cliente = text("""
             DELETE FROM clientes
-            WHERE id = :id_cliente
+            WHERE id_cliente = :id_cliente
         """)
 
         resultado = db.session.execute(
-            sql,
+            sql_cliente,
             {"id_cliente": id_cliente}
         )
 
@@ -178,19 +178,18 @@ class ClienteDAO:
 
         sql_usuario = text("""
             DELETE FROM usuarios
-            WHERE id = :id_cliente
+            WHERE id_usuario = :id_usuario
         """)
 
         db.session.execute(
             sql_usuario,
-            {"id_cliente": id_cliente}
+            {"id_usuario": id_cliente}
         )
 
         db.session.flush()
 
         return True
 
-   
     def atualizar_data_ultimo_servico(
         self,
         id_cliente: int,
@@ -199,7 +198,7 @@ class ClienteDAO:
         sql = text("""
             UPDATE clientes
             SET data_ultimo_servico = :data
-            WHERE id = :id_cliente
+            WHERE id_cliente = :id_cliente
         """)
 
         resultado = db.session.execute(sql, {
@@ -210,5 +209,3 @@ class ClienteDAO:
         db.session.flush()
 
         return resultado.rowcount > 0
-
-

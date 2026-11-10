@@ -2,7 +2,7 @@
 from sqlalchemy import text
 from database import db
 from models import Agendamento
-from datetime import date, time, datetime
+from datetime import date
 
 
 class AgendamentoDAO:
@@ -11,7 +11,6 @@ class AgendamentoDAO:
     def salvar(agendamento: Agendamento):
         sql = text("""
             INSERT INTO agendamento (
-                id,
                 data_agendamento,
                 hora_inicio,
                 hora_fim,
@@ -21,7 +20,6 @@ class AgendamentoDAO:
                 fk_id_barbeiro,
                 fk_id_cliente
             ) VALUES (
-                :id,
                 :data_agendamento,
                 :hora_inicio,
                 :hora_fim,
@@ -33,8 +31,7 @@ class AgendamentoDAO:
             )
         """)
 
-        db.session.execute(sql, {
-            "id": agendamento.id,
+        resultado = db.session.execute(sql, {
             "data_agendamento": agendamento.data_agendamento,
             "hora_inicio": agendamento.hora_inicio,
             "hora_fim": agendamento.hora_fim,
@@ -46,19 +43,29 @@ class AgendamentoDAO:
         })
 
         db.session.flush()
-        return agendamento.id
+
+        return resultado.lastrowid
 
     @staticmethod
     def buscar_por_id(id_agendamento: int):
         sql = text("""
-            SELECT *
+            SELECT
+                id_agendamento,
+                data_agendamento,
+                hora_inicio,
+                hora_fim,
+                status_agendamento,
+                data_atualizacao,
+                fk_id_servico,
+                fk_id_barbeiro,
+                fk_id_cliente
             FROM agendamento
-            WHERE id = :id
+            WHERE id_agendamento = :id_agendamento
         """)
 
         resultado = db.session.execute(
             sql,
-            {"id": id_agendamento}
+            {"id_agendamento": id_agendamento}
         ).mappings().first()
 
         if resultado is None:
@@ -69,7 +76,16 @@ class AgendamentoDAO:
     @staticmethod
     def listar_todos():
         sql = text("""
-            SELECT *
+            SELECT
+                id_agendamento,
+                data_agendamento,
+                hora_inicio,
+                hora_fim,
+                status_agendamento,
+                data_atualizacao,
+                fk_id_servico,
+                fk_id_barbeiro,
+                fk_id_cliente
             FROM agendamento
             ORDER BY data_agendamento, hora_inicio
         """)
@@ -84,7 +100,16 @@ class AgendamentoDAO:
     @staticmethod
     def listar_por_cliente(id_cliente: int):
         sql = text("""
-            SELECT *
+            SELECT
+                id_agendamento,
+                data_agendamento,
+                hora_inicio,
+                hora_fim,
+                status_agendamento,
+                data_atualizacao,
+                fk_id_servico,
+                fk_id_barbeiro,
+                fk_id_cliente
             FROM agendamento
             WHERE fk_id_cliente = :id_cliente
             ORDER BY data_agendamento, hora_inicio
@@ -103,7 +128,16 @@ class AgendamentoDAO:
     @staticmethod
     def listar_por_barbeiro(id_barbeiro: int, data: date = None):
         sql = """
-            SELECT *
+            SELECT
+                id_agendamento,
+                data_agendamento,
+                hora_inicio,
+                hora_fim,
+                status_agendamento,
+                data_atualizacao,
+                fk_id_servico,
+                fk_id_barbeiro,
+                fk_id_cliente
             FROM agendamento
             WHERE fk_id_barbeiro = :id_barbeiro
         """
@@ -141,11 +175,11 @@ class AgendamentoDAO:
                 fk_id_servico = :fk_id_servico,
                 fk_id_barbeiro = :fk_id_barbeiro,
                 fk_id_cliente = :fk_id_cliente
-            WHERE id = :id
+            WHERE id_agendamento = :id_agendamento
         """)
 
         resultado = db.session.execute(sql, {
-            "id": agendamento.id,
+            "id_agendamento": agendamento.id_agendamento,
             "data_agendamento": agendamento.data_agendamento,
             "hora_inicio": agendamento.hora_inicio,
             "hora_fim": agendamento.hora_fim,
@@ -157,27 +191,29 @@ class AgendamentoDAO:
         })
 
         db.session.flush()
+
         return resultado.rowcount > 0
 
     @staticmethod
     def excluir(id_agendamento: int):
         sql = text("""
             DELETE FROM agendamento
-            WHERE id = :id
+            WHERE id_agendamento = :id_agendamento
         """)
 
         resultado = db.session.execute(
             sql,
-            {"id": id_agendamento}
+            {"id_agendamento": id_agendamento}
         )
 
         db.session.flush()
+
         return resultado.rowcount > 0
 
     @staticmethod
     def _mapear_agendamento(registro):
         return Agendamento(
-            id=registro["id"],
+            id_agendamento=registro["id_agendamento"],
             data_agendamento=registro["data_agendamento"],
             hora_inicio=registro["hora_inicio"],
             hora_fim=registro["hora_fim"],

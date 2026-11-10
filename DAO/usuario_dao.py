@@ -1,15 +1,12 @@
-
 from sqlalchemy import text
 from database import db
 from models.usuarios import Usuario
-
 
 class UsuarioDAO:
 
     def cadastrar(self, usuario: Usuario):
         sql = text("""
-            INSERT INTO usuario (
-                id,
+            INSERT INTO usuarios (
                 nome_completo,
                 telefone,
                 cpf,
@@ -21,7 +18,6 @@ class UsuarioDAO:
                 data_atualizacao,
                 fk_id_endereco
             ) VALUES (
-                :id,
                 :nome_completo,
                 :telefone,
                 :cpf,
@@ -35,8 +31,7 @@ class UsuarioDAO:
             )
         """)
 
-        resposta_id_usuario = db.session.execute(sql, {
-            "id": None,
+        resultado = db.session.execute(sql, {
             "nome_completo": usuario.nome_completo,
             "telefone": usuario.telefone,
             "cpf": usuario.cpf,
@@ -46,19 +41,21 @@ class UsuarioDAO:
             "status_usuario": usuario.status_usuario,
             "data_cadastro": usuario.data_cadastro,
             "data_atualizacao": usuario.data_atualizacao,
-            "fk_id_endereco": usuario.endereco.id if usuario.endereco is not None else None
+            "fk_id_endereco": (
+                usuario.endereco.id_endereco
+                if usuario.endereco is not None
+                else None
+            )
         })
 
         db.session.flush()
-        
-        #retorna o ultimo id inserido no banco;
-        return resposta_id_usuario.lastrowid 
 
+        return resultado.lastrowid
 
     def buscar_por_id(self, id_usuario: int):
         sql = text("""
             SELECT
-                id,
+                id_usuario,
                 nome_completo,
                 telefone,
                 cpf,
@@ -69,25 +66,24 @@ class UsuarioDAO:
                 data_cadastro,
                 data_atualizacao,
                 fk_id_endereco
-            FROM usuario
-            WHERE id = :id
+            FROM usuarios
+            WHERE id_usuario = :id_usuario
         """)
 
         registro = db.session.execute(
             sql,
-            {"id": id_usuario}
+            {"id_usuario": id_usuario}
         ).mappings().first()
 
         if registro is None:
             return None
 
-        return UsuarioDAO._mapear(registro)
-
+        return self._mapear(registro)
 
     def buscar_por_email(self, email: str):
         sql = text("""
             SELECT
-                id,
+                id_usuario,
                 nome_completo,
                 telefone,
                 cpf,
@@ -98,7 +94,7 @@ class UsuarioDAO:
                 data_cadastro,
                 data_atualizacao,
                 fk_id_endereco
-            FROM usuario
+            FROM usuarios
             WHERE email = :email
         """)
 
@@ -110,13 +106,12 @@ class UsuarioDAO:
         if registro is None:
             return None
 
-        return UsuarioDAO._mapear(registro)
-
+        return self._mapear(registro)
 
     def buscar_por_cpf(self, cpf: str):
         sql = text("""
             SELECT
-                id,
+                id_usuario,
                 nome_completo,
                 telefone,
                 cpf,
@@ -127,7 +122,7 @@ class UsuarioDAO:
                 data_cadastro,
                 data_atualizacao,
                 fk_id_endereco
-            FROM usuario
+            FROM usuarios
             WHERE cpf = :cpf
         """)
 
@@ -139,13 +134,12 @@ class UsuarioDAO:
         if registro is None:
             return None
 
-        return UsuarioDAO._mapear(registro)
+        return self._mapear(registro)
 
-
-    def consultar_todos_usuario(self, ):
+    def consultar_todos_usuario(self):
         sql = text("""
             SELECT
-                id,
+                id_usuario,
                 nome_completo,
                 telefone,
                 cpf,
@@ -156,22 +150,21 @@ class UsuarioDAO:
                 data_cadastro,
                 data_atualizacao,
                 fk_id_endereco
-            FROM usuario
+            FROM usuarios
             ORDER BY nome_completo
         """)
 
         registros = db.session.execute(sql).mappings().all()
 
         return [
-            UsuarioDAO._mapear(registro)
+            self._mapear(registro)
             for registro in registros
         ]
 
-
-    def contultar_usuario_ativos(self, ):
+    def contultar_usuario_ativos(self):
         sql = text("""
             SELECT
-                id,
+                id_usuario,
                 nome_completo,
                 telefone,
                 cpf,
@@ -182,7 +175,7 @@ class UsuarioDAO:
                 data_cadastro,
                 data_atualizacao,
                 fk_id_endereco
-            FROM usuario
+            FROM usuarios
             WHERE status_usuario = :status
             ORDER BY nome_completo
         """)
@@ -193,14 +186,13 @@ class UsuarioDAO:
         ).mappings().all()
 
         return [
-            UsuarioDAO._mapear(registro)
+            self._mapear(registro)
             for registro in registros
         ]
 
-
     def atualizar_usuario_sem_senha(self, usuario: Usuario):
         sql = text("""
-            UPDATE usuario
+            UPDATE usuarios
             SET
                 nome_completo = :nome_completo,
                 telefone = :telefone,
@@ -208,26 +200,26 @@ class UsuarioDAO:
                 email = :email,
                 foto_nome = :foto_nome,
                 data_atualizacao = :data_atualizacao
-            WHERE id = :id
+            WHERE id_usuario = :id_usuario
         """)
 
         resultado = db.session.execute(sql, {
-            "id": usuario.id,
+            "id_usuario": usuario.id_usuario,
             "nome_completo": usuario.nome_completo,
             "telefone": usuario.telefone,
             "cpf": usuario.cpf,
             "email": usuario.email,
             "foto_nome": usuario.foto_nome,
-            "data_atualizacao": usuario.data_atualizacao,
+            "data_atualizacao": usuario.data_atualizacao
         })
 
         db.session.flush()
 
         return resultado.rowcount > 0
-    
+
     def atualizar_usuario_com_senha(self, usuario: Usuario):
         sql = text("""
-            UPDATE usuario
+            UPDATE usuarios
             SET
                 nome_completo = :nome_completo,
                 telefone = :telefone,
@@ -237,11 +229,12 @@ class UsuarioDAO:
                 foto_nome = :foto_nome,
                 status_usuario = :status_usuario,
                 data_atualizacao = :data_atualizacao,
-            WHERE id = :id
+                fk_id_endereco = :fk_id_endereco
+            WHERE id_usuario = :id_usuario
         """)
 
         resultado = db.session.execute(sql, {
-            "id": usuario.id,
+            "id_usuario": usuario.id_usuario,
             "nome_completo": usuario.nome_completo,
             "telefone": usuario.telefone,
             "cpf": usuario.cpf,
@@ -257,16 +250,15 @@ class UsuarioDAO:
 
         return resultado.rowcount > 0
 
-
     def alterar_status(self, id_usuario: int, status: bool):
         sql = text("""
-            UPDATE usuario
+            UPDATE usuarios
             SET status_usuario = :status
-            WHERE id = :id
+            WHERE id_usuario = :id_usuario
         """)
 
         resultado = db.session.execute(sql, {
-            "id": id_usuario,
+            "id_usuario": id_usuario,
             "status": status
         })
 
@@ -274,33 +266,34 @@ class UsuarioDAO:
 
         return resultado.rowcount > 0
 
-
     def excluir(self, id_usuario: int):
         sql = text("""
-            DELETE FROM usuario
-            WHERE id_usuario = :id
+            DELETE FROM usuarios
+            WHERE id_usuario = :id_usuario
         """)
 
         resultado = db.session.execute(
             sql,
-            {"id": id_usuario}
+            {"id_usuario": id_usuario}
         )
-        
-            
-        db.session.commit()
+
+        db.session.flush()
 
         return resultado.rowcount > 0
 
-
-    def verificar_email_existente(self, 
+    def verificar_email_existente(
+        self,
         email: str,
         id_ignorado: int = None
     ):
         sql = text("""
             SELECT 1
-            FROM usuario
+            FROM usuarios
             WHERE email = :email
-              AND (:id_ignorado IS NULL OR id <> :id_ignorado)
+              AND (
+                  :id_ignorado IS NULL
+                  OR id_usuario <> :id_ignorado
+              )
             LIMIT 1
         """)
 
@@ -311,16 +304,19 @@ class UsuarioDAO:
 
         return resultado is not None
 
-
-    def verificar_cpf_existente(self, 
+    def verificar_cpf_existente(
+        self,
         cpf: str,
         id_ignorado: int = None
     ):
         sql = text("""
             SELECT 1
-            FROM usuario
+            FROM usuarios
             WHERE cpf = :cpf
-              AND (:id_ignorado IS NULL OR id <> :id_ignorado)
+              AND (
+                  :id_ignorado IS NULL
+                  OR id_usuario <> :id_ignorado
+              )
             LIMIT 1
         """)
 
@@ -331,10 +327,10 @@ class UsuarioDAO:
 
         return resultado is not None
 
-
-    def _mapear(self, registro):
+    @staticmethod
+    def _mapear(registro):
         return Usuario(
-            id=registro["id"],
+            id_usuario=registro["id_usuario"],
             nome_completo=registro["nome_completo"],
             telefone=registro["telefone"],
             cpf=registro["cpf"],

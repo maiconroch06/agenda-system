@@ -7,12 +7,12 @@ from models import Endereco
 class EnderecoDAO:
 
     @staticmethod
-    def salvar( endereco: Endereco):
+    def salvar(endereco: Endereco):
         sql = text("""
             INSERT INTO endereco (
                 cep,
                 cidade,
-                estados_br_sigla,
+                uf,
                 logradouro,
                 numero,
                 bairro,
@@ -21,7 +21,7 @@ class EnderecoDAO:
             ) VALUES (
                 :cep,
                 :cidade,
-                :estados_br_sigla,
+                :uf,
                 :logradouro,
                 :numero,
                 :bairro,
@@ -33,38 +33,38 @@ class EnderecoDAO:
         resultado = db.session.execute(sql, {
             "cep": endereco.cep,
             "cidade": endereco.cidade,
-            "estados_br_sigla": endereco.estados_br_sigla,
+            "uf": endereco.uf,
             "logradouro": endereco.logradouro,
             "numero": endereco.numero,
             "bairro": endereco.bairro,
             "sequencia": endereco.sequencia,
             "complemento": endereco.complemento
         })
+
         db.session.flush()
 
-        # O ID é gerado pelo AUTO_INCREMENT da tabela.
         return resultado.lastrowid
 
     @staticmethod
-    def buscar_por_id( id_endereco: int):
+    def buscar_por_id(id_endereco: int):
         sql = text("""
             SELECT
-                id,
+                id_endereco,
                 cep,
                 cidade,
-                estados_br_sigla,
+                uf,
                 logradouro,
                 numero,
                 bairro,
                 sequencia,
                 complemento
             FROM endereco
-            WHERE id = :id
+            WHERE id_endereco = :id_endereco
         """)
 
         registro = db.session.execute(
             sql,
-            {"id": id_endereco}
+            {"id_endereco": id_endereco}
         ).mappings().first()
 
         if registro is None:
@@ -73,13 +73,13 @@ class EnderecoDAO:
         return EnderecoDAO._mapear(registro)
 
     @staticmethod
-    def listar_todos(cls):
+    def listar_todos():
         sql = text("""
             SELECT
-                id,
+                id_endereco,
                 cep,
                 cidade,
-                estados_br_sigla,
+                uf,
                 logradouro,
                 numero,
                 bairro,
@@ -100,10 +100,10 @@ class EnderecoDAO:
     def buscar_por_cep(cep: str):
         sql = text("""
             SELECT
-                id,
+                id_endereco,
                 cep,
                 cidade,
-                estados_br_sigla,
+                uf,
                 logradouro,
                 numero,
                 bairro,
@@ -125,7 +125,7 @@ class EnderecoDAO:
         ]
 
     @staticmethod
-    def atualizar( endereco: Endereco):
+    def atualizar(endereco: Endereco):
         sql = text("""
             UPDATE endereco
             SET
@@ -137,11 +137,11 @@ class EnderecoDAO:
                 bairro = :bairro,
                 sequencia = :sequencia,
                 complemento = :complemento
-            WHERE id_endereco = :id
+            WHERE id_endereco = :id_endereco
         """)
 
         resultado = db.session.execute(sql, {
-            "id": endereco.id_endereco,
+            "id_endereco": endereco.id_endereco,
             "cep": endereco.cep,
             "cidade": endereco.cidade,
             "uf": endereco.uf,
@@ -152,21 +152,20 @@ class EnderecoDAO:
             "complemento": endereco.complemento
         })
 
-        print("o valor é "+ str(endereco.sequencia))
-        db.session.commit()
+        db.session.flush()
 
         return resultado.rowcount > 0
 
     @staticmethod
-    def excluir( id_endereco: int):
+    def excluir(id_endereco: int):
         sql = text("""
             DELETE FROM endereco
-            WHERE id = :id
+            WHERE id_endereco = :id_endereco
         """)
 
         resultado = db.session.execute(
             sql,
-            {"id": id_endereco}
+            {"id_endereco": id_endereco}
         )
 
         db.session.flush()
@@ -174,12 +173,12 @@ class EnderecoDAO:
         return resultado.rowcount > 0
 
     @staticmethod
-    def _mapear( registro):
+    def _mapear(registro):
         return Endereco(
-            id=registro["id"],
+            id_endereco=registro["id_endereco"],
             cep=registro["cep"],
             cidade=registro["cidade"],
-            estados_br_sigla=registro["estados_br_sigla"],
+            uf=registro["uf"],
             logradouro=registro["logradouro"],
             numero=registro["numero"],
             bairro=registro["bairro"],

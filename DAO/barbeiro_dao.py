@@ -5,18 +5,17 @@ from models import Barbeiro
 
 
 class BarbeiroDAO:
-    
+
     def cadastrar(self, barbeiro: Barbeiro):
-        # Insere os dados específicos do barbeiro
-        sql_barbeiro = text("""
+        sql = text("""
             INSERT INTO barbeiros (
-                id,
+                id_barbeiro,
                 data_liberacao,
                 descricao,
                 status_barbeiro,
                 fk_id_agenda
             ) VALUES (
-                :id,
+                :id_barbeiro,
                 :data_liberacao,
                 :descricao,
                 :status_barbeiro,
@@ -24,18 +23,18 @@ class BarbeiroDAO:
             )
         """)
 
-        reposta = db.session.execute(sql_barbeiro, {
-            "id": barbeiro.id,
+        db.session.execute(sql, {
+            "id_barbeiro": barbeiro.id_barbeiro,
             "data_liberacao": barbeiro.data_liberacao,
             "descricao": barbeiro.descricao,
             "status_barbeiro": barbeiro.status_barbeiro,
-            "fk_id_agenda": barbeiro.agenda.id
+            "fk_id_agenda": barbeiro.agenda.id_agenda
         })
 
         db.session.flush()
-            
-        return reposta.rowcount > 0
-    
+
+        return barbeiro.id_barbeiro
+
     def buscar_por_id(self, id_barbeiro: int):
         sql = text("""
             SELECT
@@ -49,25 +48,28 @@ class BarbeiroDAO:
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_atualizacao,
+                u.fk_id_endereco,
+                b.id_barbeiro,
                 b.data_liberacao,
                 b.descricao,
-                b.status_barbeiro
+                b.status_barbeiro,
+                b.fk_id_agenda
             FROM usuarios u
-            INNER JOIN barbeiros b ON b.id_barbeiro = u.id_usuario
-            WHERE b.id_barbeiro = :id
+            INNER JOIN barbeiros b
+                ON b.id_barbeiro = u.id_usuario
+            WHERE b.id_barbeiro = :id_barbeiro
         """)
 
         registro = db.session.execute(
             sql,
-            {"id": id_barbeiro}
+            {"id_barbeiro": id_barbeiro}
         ).mappings().first()
 
         if registro is None:
             return None
 
-        return BarbeiroDAO._mapear_barbeiro(registro)
+        return self._mapear_barbeiro(registro)
 
-    
     def consultar_todos(self):
         sql = text("""
             SELECT
@@ -77,89 +79,84 @@ class BarbeiroDAO:
                 u.cpf,
                 u.email,
                 u.senha,
-                u.foto_nome_usuario,
+                u.foto_nome,
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_atualizacao,
                 u.fk_id_endereco,
+                b.id_barbeiro,
                 b.data_liberacao,
-                b.bio,
-                b.especialidade,
+                b.descricao,
                 b.status_barbeiro,
-                TIMESTAMPDIFF(YEAR, b.data_inicio_carreira, CURDATE()) data_inicio_carreira,
-                e.cep,
-                e.cidade,
-                e.uf,
-                e.logradouro,
-                e.numero,
-                e.bairro,
-                e.sequencia,
-                e.complemento
-            FROM usuario u
-                INNER JOIN barbeiro b 
-                   ON b.id_barbeiro = u.id_usuario
-                INNER JOIN endereco e
-                    on e.id_endereco = u.fk_id_endereco 
+                b.fk_id_agenda
+            FROM usuarios u
+            INNER JOIN barbeiros b
+                ON b.id_barbeiro = u.id_usuario
             ORDER BY u.nome_completo
         """)
-        
-    
+
         registros = db.session.execute(sql).mappings().all()
 
-        return registros
+        return [
+            self._mapear_barbeiro(registro)
+            for registro in registros
+        ]
 
-    def atualizar_informacoes_barbeiro(self,barbeiro:Barbeiro):
-               sql_usuario = text("""
-                   UPDATE barbeiros
-                   SET
-                   descricao=:descricao,
-                   status_barbeiro=:status_barbeiro
-                   WHERE id = :id
-               """)
-       
-               resultado = db.session.execute(sql_usuario, {
-                   "id": barbeiro.id,
-                   "descricao": barbeiro.descricao,
-                   "status_barbeiro": barbeiro.status_barbeiro,
-               })
-       
-               db.session.commit()
-               return resultado.rowcount > 0
-           
-           
+    def atualizar_informacoes_barbeiro(self, barbeiro: Barbeiro):
+        sql = text("""
+            UPDATE barbeiros
+            SET
+                data_liberacao = :data_liberacao,
+                descricao = :descricao,
+                status_barbeiro = :status_barbeiro,
+                fk_id_agenda = :fk_id_agenda
+            WHERE id_barbeiro = :id_barbeiro
+        """)
 
+        resultado = db.session.execute(sql, {
+            "id_barbeiro": barbeiro.id_barbeiro,
+            "data_liberacao": barbeiro.data_liberacao,
+            "descricao": barbeiro.descricao,
+            "status_barbeiro": barbeiro.status_barbeiro,
+            "fk_id_agenda": barbeiro.agenda.id_agenda
+        })
+
+        db.session.flush()
+
+        return resultado.rowcount > 0
 
     def excluir_barbeiro(self, id_barbeiro: int):
-        sql = text("""
+        sql_barbeiro = text("""
             DELETE FROM barbeiros
-            WHERE id = :id
+            WHERE id_barbeiro = :id_barbeiro
         """)
 
         resultado = db.session.execute(
-            sql,
-            {"id": id_barbeiro}
+            sql_barbeiro,
+            {"id_barbeiro": id_barbeiro}
         )
 
         if resultado.rowcount == 0:
             return False
 
-        # Exclui o usuário correspondente somente se permitido
         sql_usuario = text("""
             DELETE FROM usuarios
-            WHERE id = :id
+            WHERE id_usuario = :id_usuario
         """)
 
         db.session.execute(
             sql_usuario,
-            {"id": id_barbeiro}
+            {"id_usuario": id_barbeiro}
         )
 
         db.session.flush()
+
         return True
 
-    def _mapear_barbeiros(self, registro):
+    @staticmethod
+    def _mapear_barbeiro(registro):
         return Barbeiro(
-            id=registro["id"],
+            id_barbeiro=registro["id_barbeiro"],
             nome_completo=registro["nome_completo"],
             telefone=registro["telefone"],
             cpf=registro["cpf"],

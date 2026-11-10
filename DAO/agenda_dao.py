@@ -6,135 +6,117 @@ from models import Agenda
 
 class AgendaDAO:
 
-    
-    def cadastrar_agenda_dao(self, agenda: Agenda):
+    def cadastrar(self, agenda: Agenda):
         sql = text("""
             INSERT INTO agendas (
-                descricao,
-                data_criacao,
-                ativo
+                horario_abertura,
+                horario_fechamento,
+                horario_inicio_intrajornada,
+                horario_fim_intrajornada
             ) VALUES (
-                :descricao,
-                :data_criacao,
-                :ativo
+                :horario_abertura,
+                :horario_fechamento,
+                :horario_inicio_intrajornada,
+                :horario_fim_intrajornada
             )
         """)
 
         resultado = db.session.execute(sql, {
-            "descricao": agenda.descricao,
-            "data_criacao": agenda.data_criacao,
-            "ativo": agenda.ativo
+            "horario_abertura": agenda.horario_abertura,
+            "horario_fechamento": agenda.horario_fechamento,
+            "horario_inicio_intrajornada": agenda.horario_inicio_intrajornada,
+            "horario_fim_intrajornada": agenda.horario_fim_intrajornada
         })
 
         db.session.flush()
 
         return resultado.lastrowid
 
-    
     def buscar_por_id(self, id_agenda: int):
         sql = text("""
             SELECT
-                id,
-                descricao,
-                data_criacao,
-                ativo
+                id_agenda,
+                horario_abertura,
+                horario_fechamento,
+                horario_inicio_intrajornada,
+                horario_fim_intrajornada
             FROM agendas
-            WHERE id = :id
+            WHERE id_agenda = :id_agenda
         """)
 
         registro = db.session.execute(
             sql,
-            {"id": id_agenda}
+            {"id_agenda": id_agenda}
         ).mappings().first()
 
         if registro is None:
             return None
 
-        return AgendaDAO._mapear(registro)
+        return self._mapear_agenda(registro)
 
-    
-    def listar_todos(self, ):
+    def consultar_todos(self):
         sql = text("""
             SELECT
-                id,
-                descricao,
-                data_criacao,
-                ativo
+                id_agenda,
+                horario_abertura,
+                horario_fechamento,
+                horario_inicio_intrajornada,
+                horario_fim_intrajornada
             FROM agendas
-            ORDER BY descricao
+            ORDER BY horario_abertura
         """)
 
         registros = db.session.execute(sql).mappings().all()
 
         return [
-            AgendaDAO._mapear(registro)
+            self._mapear_agenda(registro)
             for registro in registros
         ]
 
-    
-    def listar_ativas(self, ):
-        sql = text("""
-            SELECT
-                id,
-                descricao,
-                data_criacao,
-                ativo
-            FROM agendas
-            WHERE ativo = :ativo
-            ORDER BY descricao
-        """)
-
-        registros = db.session.execute(
-            sql,
-            {"ativo": True}
-        ).mappings().all()
-
-        return [
-            AgendaDAO._mapear(registro)
-            for registro in registros
-        ]
-
-    
     def atualizar(self, agenda: Agenda):
         sql = text("""
             UPDATE agendas
             SET
-                descricao = :descricao,
-                ativo = :ativo
-            WHERE id = :id
+                horario_abertura = :horario_abertura,
+                horario_fechamento = :horario_fechamento,
+                horario_inicio_intrajornada = :horario_inicio_intrajornada,
+                horario_fim_intrajornada = :horario_fim_intrajornada
+            WHERE id_agenda = :id_agenda
         """)
 
         resultado = db.session.execute(sql, {
-            "id": agenda.id,
-            "descricao": agenda.descricao,
-            "ativo": agenda.ativo
+            "id_agenda": agenda.id_agenda,
+            "horario_abertura": agenda.horario_abertura,
+            "horario_fechamento": agenda.horario_fechamento,
+            "horario_inicio_intrajornada": agenda.horario_inicio_intrajornada,
+            "horario_fim_intrajornada": agenda.horario_fim_intrajornada
         })
 
         db.session.flush()
 
         return resultado.rowcount > 0
 
-    
     def excluir(self, id_agenda: int):
         sql = text("""
             DELETE FROM agendas
-            WHERE id = :id
+            WHERE id_agenda = :id_agenda
         """)
 
         resultado = db.session.execute(
             sql,
-            {"id": id_agenda}
+            {"id_agenda": id_agenda}
         )
 
         db.session.flush()
 
         return resultado.rowcount > 0
 
-    
-    def _mapear(self, registro):
+    @staticmethod
+    def _mapear_agenda(registro):
         return Agenda(
-            id=registro["id"],
-            descricao=registro["descricao"],
-            data_criacao=registro["data_criacao"],
-            ativo=bool(registro["ativo"])
+            id_agenda=registro["id_agenda"],
+            horario_abertura=registro["horario_abertura"],
+            horario_fechamento=registro["horario_fechamento"],
+            horario_inicio_intrajornada=registro["horario_inicio_intrajornada"],
+            horario_fim_intrajornada=registro["horario_fim_intrajornada"]
         )

@@ -8,5 +8,5 @@ from .cliente_dao import ClienteDAO
 from .usuario_dao import UsuarioDAO
 from .agendamento_dao import AgendamentoDAO
 from .servicos_dao import ServicoDAO
-from .falta_justificada_dao import FaltaJustificadaDao
+from .falta_justificada_barbeiro_dao import FaltaJustificadaBarbeiroDAO
 from .barbeiro_dao import BarbeiroDAO

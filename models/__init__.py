@@ -7,7 +7,7 @@ from .cliente import Cliente
 from .servicos import Servico
 from .agendamento import Agendamento
 from .agenda import Agenda
-from .falta_justificada import FaltaJustificada
+from .falta_justificada_barbeiro import FaltaJustificadaBarbeiro
 from .mes_referencia import MesReferencia
 from .recesso import Recesso
 
