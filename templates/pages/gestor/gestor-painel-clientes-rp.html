@@ -16,7 +16,6 @@
     {# ───────── DADOS MOCK VS FLASK ───────── #}
     {% set clientes_mock = [
         {'nome_completo': 'Ana Souza', 'telefone': '11987654321', 'data_ultimo_servico': '2023-10-01'},
-        {'nome_completo': 'Marcos Paulo', 'telefone': '11912345678', 'data_ultimo_servico': '2023-10-15'}
     ] %}
 
     {% set lista_clientes = usuarios | default(clientes_mock) %}
@@ -63,7 +62,7 @@
                                             <th class="p-3.5 px-4">Cliente</th>
                                             <th class="p-3.5 px-4">Telefone</th>
                                             <th class="p-3.5 px-4">Última Visita</th>
-                                            <th class="p-3.5 px-4">Total Visitas</th>
+                                            <th class="p-3.5 px-4">Total Servicos</th>
                                             <th class="p-3.5 px-4">Total Gasto</th>
                                         </tr>
                                     </thead>

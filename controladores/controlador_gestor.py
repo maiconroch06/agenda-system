@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from .controlador_cliente import ControladorCliente
 from .controlador_agendamento import ControladorAgendamento
 from .controlador_barbeiro import ControladorBarbeiro
+from .controlador_servicos import ControladorServico
 
 class ControladorGestor():
     __gestor_service_mvc = GestorServiceMVC()
@@ -24,7 +25,7 @@ class ControladorGestor():
     def login_gestor(cls, email:str, senha:str):
         
             try: 
-                cls.__gestor_service_mvc.gestorRealizarLoginService(email,senha)   
+                cls.__gestor_service_mvc.gestor_realizar_login_service(email,senha)   
                 return redirect(url_for('gestor.gestorPainel'))
             
             except Exception as error:
@@ -76,18 +77,19 @@ class ControladorGestor():
         
         except ImagemErrorExcecao as erros:
             flash(f"{erros}", EnumStatusMensagens.AVISO.value)
-            return redirect(url_for('gestor.gestorServicoCadastrar'))
+            return redirect(url_for('gestor.gestorAbaServicos'))
         
         except Exception as erros:
             flash(f"{erros}", EnumStatusMensagens.ERRO.value)
-            return redirect(url_for('gestor.gestorServicoCadastrar'))
+            return redirect(url_for('gestor.gestorAbaServicos'))
              
     @classmethod
     def excluir_servico(cls, id_servico, foto_nome):
         try:
-            cls.__servicos_barbearia_service_mvc.excluir_servico_barbearia(id_servico,foto_nome )   
+            cls.__servicos_barbearia_service_mvc.excluir_servico_barbearia(id_servico,foto_nome ) 
+            flash(f"O servico foi excluido com sucesso!", EnumStatusMensagens.SUCESSO.value)  
         except Exception as error:
-            flash(f"{error}")
+            flash(f"{error}", EnumStatusMensagens.ERRO.value)
             
         return redirect(url_for('gestor.gestorAbaServicos'))  
            
@@ -107,7 +109,7 @@ class ControladorGestor():
             
     @classmethod
     def consultar_servicos(cls):
-        return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = cls.__servicos_barbearia_service_mvc.consultar_todos_servicos(), mensagens_status=EnumStatusMensagens)
+            return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = ControladorServico.consultar_todos_os_servicos(), mensagens_status=EnumStatusMensagens)
    
     @classmethod
     def consultar_clientes(cls):

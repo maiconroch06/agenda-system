@@ -12,20 +12,20 @@ from flask import flash
 class ClienteDAO:
 
     
-    def salvar(self, id:int, dataUltimoServico:datetime | None):
+    def cadastrar(self, id:int, dataUltimoServico:datetime | None):
         
         sql_cliente = text("""
             INSERT INTO clientes (
-                id,
+                id_cliente,
                 data_ultimo_servico
             ) VALUES (
-                :id,
+                :id_cliente,
                 :data_ultimo_servico
             )
         """)
 
         parametros_cliente = {
-            "id": id,
+            "id_cliente": id_cliente,
             "data_ultimo_servico": dataUltimoServico
         }
 
@@ -62,10 +62,10 @@ class ClienteDAO:
 
         return dict(registro)
 
-    def loginClienteEmailSenha(self, email):
+    def login_cliente_email(self, email):
         sql = text("""
             SELECT
-                u.id,
+                u.id_usuario,
                 u.nome_completo,
                 u.telefone,
                 u.cpf,
@@ -78,7 +78,7 @@ class ClienteDAO:
                 u.fk_id_endereco,
                 c.data_ultimo_servico
             FROM usuarios u
-            INNER JOIN clientes c ON c.id = u.id
+            INNER JOIN clientes c ON c.id_cliente = u.id_usuario
             WHERE u.email = :email
         """)
 
@@ -93,23 +93,15 @@ class ClienteDAO:
         
         return dict(registro)
     
-    def listar_todos(self):
+    def consultar_clientes_services(self):
         sql = text("""
             SELECT
-                u.id,
+                u.id_usuario,
                 u.nome_completo,
                 u.telefone,
-                u.cpf,
-                u.email,
-                u.senha,
-                u.foto_nome,
-                u.status_usuario,
-                u.data_cadastro,
-                u.data_atualizacao,
-                u.fk_id_endereco,
-                c.data_ultimo_servico
-            FROM usuarios u
-            INNER JOIN clientes c ON c.id = u.id
+				c.data_ultimo_servico
+            FROM usuario u
+            INNER JOIN cliente c ON c.id_cliente = u.id_usuario
             ORDER BY u.nome_completo
         """)
 

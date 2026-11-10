@@ -8,7 +8,7 @@ class EnderecoService:
     @classmethod
     def cadastrar_endereco(cls, endereco: Endereco):
         if(endereco is not None):
-            endereco.id = cls.__endereco_repositorio.salvar(endereco)
+            endereco.id_endereco = cls.__endereco_repositorio.salvar(endereco)
             return endereco
     
     @classmethod

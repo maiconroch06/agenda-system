@@ -1,0 +1,97 @@
+<dialog
+    id="janela_modal_cadastrar_editar_barbeiro"
+    class="fixed inset-2 sm:inset-4 md:inset-8 w-auto h-auto lg:mx-40 lg:my-10 max-h-[calc(100dvh-1rem)] overflow-y-auto overflow-x-hidden rounded-xl border-0 bg-transparent p-0 shadow-xl backdrop:bg-black/50
+    [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
+    <!-- Container externo -->
+    <div class="w-full max-w-2xl m-auto bg-[#232220] border border-[#38362f] rounded-[14px] p-5 sm:p-6 shadow-xl">
+
+       
+        <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
+            {% set logo_class="h-20 sm:h-20 md:h-24" %}
+            {% include "componetizacao/logo/logo-top-horizontal.html" %}
+        </div>
+
+        <h1 id="form-title" class="text-center text-xl font-medium mb-1 text-white">Cadastrar Barbeiro</h1>
+        <p id="form-subtitle" class="text-center text-[13px] text-[#888780] mb-4">Preencha os dados do profissional</p>
+
+            <!-- ============================================================
+             COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
+             ============================================================ -->
+            {% set mensagens=mensagens_status%}
+            {% include "componetizacao/mensagens/mensagens.html" %}
+
+                            
+        <!-- Formulário: padding interno e margin inferior reduzidos -->
+        <form id="form-barbeiro" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" action="/gestor/painel/barbeiro/atualizar"  method="post" enctype="multipart/form-data" novalidate>
+            
+             <input type="hidden" id="bab-id"name="srv-id" value="">
+
+                <!-- Upload de imagem -->
+                {% include "componetizacao/avatar_imagem/avatar_imagem.html" %}
+                <input type="hidden" id="bab-foto_nome_anterior" name="srv-foto_nome_anterior" value="">
+
+                <!-- Gaps do grid e inputs reduzidos -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="flex flex-col gap-1">
+                        <label for="bar-cpf" class="text-[12px] font-medium text-[#888780]">CPF*</label>
+                        <input type="text" name="cpf" id="bar-cpf" value="" placeholder="000.000.000-00" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="bar-nome" class="text-[12px] font-medium text-[#888780]">Nome*</label>
+                        <input type="text" name="nome" id="bar-nome" value="" placeholder="Nome do barbeiro" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="bar-email" class="text-[12px] font-medium text-[#888780]">Email*</label>
+                        <input type="email" name="email" id="bar-email" value="" placeholder="barbeiro@gmail.com" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="bar-telefone" class="text-[12px] font-medium text-[#888780]">Telefone*</label>
+                        <input type="text" name="telefone" id="bar-telefone" value="" placeholder="(00) 00000-0000" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    </div>
+                   
+                    <div class="flex flex-col gap-1">
+                        <label for="bar-senha" class="text-[12px] font-medium text-[#888780]">Nova Senha*</label>
+                        <input type="password" name="senha" id="bar-senha" placeholder="Deixe vazio para manter a senha atual" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                        <small class="text-xs text-[#888780]">
+                            Deixe em branco para manter a senha anterior
+                        </small>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="bar-confirmar-senha" class="text-[12px] font-medium text-[#888780]">Confirmar nova Senha*</label>
+                        <input type="password" name="confirmar-senha" placeholder="'Confirmar senha" id="bar-confirmar-senha" placeholder="********" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1 col-span-full">
+                        <label for="bar-descricao" class="text-[12px] font-medium text-[#888780]">Descrição</label>
+                        <textarea name="descricao" id="bar-descricao" placeholder="Especialidades e experiência..." rows="2" class="w-full p-2.5  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] resize-none">{{ barbeiro['descricao'] if barbeiro else 'Especialidades e experiência...' }}</textarea>
+                    </div>
+                </div>
+           
+            <div id="div-seletor-status" class="flex flex-col gap-1 text-[#888780] mt-5">
+                <label for="bab_status_barbeiro" class="text-[12px] font-medium text-[#888780]">
+                    Status do barbeiro:
+                </label>
+
+                <select id="status_barbeiro" name="status_barbeiro" class="text-[12px] text-amber bg-[#161513] border border-[#4a473f] rounded-lg p-2">
+                    <option id="ativado" value="1">
+                        Ativado
+                    </option>
+
+                    <option id="desativado" value="0">
+                        Desativado
+                    </option>
+                </select>
+            </div>
+
+            <div class="flex flex-col-reverse mt-6 sm:flex-row justify-between gap-3">
+                <button type="button" id="btn-cancelar" class="h-10 px-4  border-none bg-transparent text-[#888780] text-[14px] hover:text-[#f1efe8] transition-colors">Cancelar</button>
+                <!-- Botões -->
+                <button type="submit"  class="h-10 px-5  bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all">Atualizar barbeiro</button>
+            </div>
+        </form>
+
+    </div>
+</dialog>
+
+<!-- Scripts -->
+<script  type="module" src="{{ url_for('static', filename='js/validacoes/exibir-imagem-servico.js') }}"></script>

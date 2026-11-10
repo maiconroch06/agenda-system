@@ -9,18 +9,18 @@ class ClienteRepositorio:
         self.clienteDao = ClienteDAO()
 
     def salvar(self, id:int, dataUltimoServico:datetime | None):
-        return self.clienteDao.salvar(id,dataUltimoServico)
+        return self.clienteDao.cadastrar(id,dataUltimoServico)
 
    
     def consultarClienteId(self,id_cliente):
         return self.clienteDao.consultarClienteId(id_cliente)
 
     def loginClienteEmailSenha(self,email):
-           return self.clienteDao.loginClienteEmailSenha(email)
+           return self.clienteDao.login_cliente_email(email)
        
        
-    def listar_todos(self):
-        return self.clienteDao.listar_todos()
+    def consultar_clientes_services(self):
+        return self.clienteDao.consultar_clientes_services()
 
    
     def atualizar(self,cliente):

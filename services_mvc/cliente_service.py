@@ -45,7 +45,7 @@ class ClienteService(UsuarioService):
             return EnumNomesPastaImagem.IMAGENS_CLIENTE
 
     def consultar_clientes_services(self):
-           return self.__clienteRepositorio.listar_todos()  
+           return self.__clienteRepositorio.consultar_clientes_services()  
 
       
 

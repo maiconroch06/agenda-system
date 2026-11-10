@@ -20,7 +20,7 @@ class UsuarioService:
             usuario.endereco = EnderecoService.cadastrar_endereco(usuario.endereco)
             
             #usuario.foto_nome = ValidadorDeImagens.salvarImagem(fotoTemp, self.escolherPastaImagemUsuario())
-            usuario.foto_nome = ValidadorDeImagens.nomeImagem(fotoTemp, usuario.getTipo())            
+            usuario.foto_nome_usuario = ValidadorDeImagens.nomeImagem(fotoTemp, usuario.getTipo())            
             return self.__usuarioRepositorio.salvar(usuario) 
 
         except IntegrityError as i:
@@ -31,7 +31,7 @@ class UsuarioService:
                 
         try:
             if self.__usuarioRepositorio.excluir(id_usuario):
-                ValidadorDeImagens.removerImagem(foto_nome, nome_pasta)
+                ValidadorDeImagens.excluir_imagem(foto_nome, nome_pasta)
                 return
         except IntegrityError:
             raise
@@ -39,7 +39,7 @@ class UsuarioService:
         
     def alterar_usuario_barbearia(self,  imagem_form, img_padrao, imagem_anterior, usuario):
                                                      
-        usuario.foto_nome = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao, usuario.getTipo())
+        usuario.foto_nome_usuario = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao, usuario.getTipo())
         
         if not self.__usuarioRepositorio.atualizar(usuario):
             raise Exception("Error ao tentar atualizar o usuario, tente novamente!")

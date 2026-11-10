@@ -29,10 +29,10 @@ class ValidadorDeImagens:
     
     @classmethod
     def nomeImagem(cls, nome_imagem, prefixo_nome_imagem):
-   
+       
         extensao_ou_default_imagem = cls.extensao_foto_servico(nome_imagem)  
         cls.imgem_extensao_valida(extensao_ou_default_imagem)
-        
+                
         if extensao_ou_default_imagem != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
             foto_nome = f"{prefixo_nome_imagem}_{int(time.time_ns())}.{extensao_ou_default_imagem}" 
             return foto_nome
@@ -46,7 +46,7 @@ class ValidadorDeImagens:
         # nesse caso ele esta pegando o tempo em nanoSegundos;
         
         extensao_ou_default_imagem = nome_imagem
-                
+       
         try:
             if extensao_ou_default_imagem != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
                   
@@ -84,7 +84,7 @@ class ValidadorDeImagens:
               
             #excluir a imagem anterior, desde que ela não seja a default
             if nome_imagem_anterior != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
-                cls.removerImagem(nome_imagem_anterior, nome_pasta)
+                cls.excluir_imagem(nome_imagem_anterior, nome_pasta)
 
             cls.salvarImagem(nova_imagem, nome_pasta, foto_nome )
         
@@ -98,13 +98,13 @@ class ValidadorDeImagens:
         else:
             #preciso remover a imagem associada caso exista
             if nome_imagem_anterior != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
-                cls.removerImagem(nome_imagem_anterior, nome_pasta)
+                cls.excluir_imagem(nome_imagem_anterior, nome_pasta)
 
             return EnumNomesPastaImagem.IMAGEM_PADRAO.value
 
     # Função remover imagem
     @classmethod
-    def removerImagem(cls, nome_da_imagem, nome_pasta):
+    def excluir_imagem(cls, nome_da_imagem, nome_pasta):
         try:
             if nome_da_imagem!=EnumNomesPastaImagem.IMAGEM_PADRAO.value:
                 caminho_imagem = os.path.join(

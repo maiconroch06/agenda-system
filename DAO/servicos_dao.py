@@ -9,19 +9,19 @@ class ServicoDAO:
     
     def cadastrar_servico(self, servico: Servico):
         sql = text("""
-            INSERT INTO servicos (
-                descricao,
+            INSERT INTO servico (
+                descricao_servico,
                 valor,
                 duracao,
-                foto_nome,
+                foto_nome_servico,
                 status_servico,
                 data_cadastro,
                 data_atualizacao
             ) VALUES (
-                :descricao,
+                :descricao_servico,
                 :valor,
                 :duracao,
-                :foto_nome,
+                :foto_nome_servico,
                 :status_servico,
                 :data_cadastro,
                 :data_atualizacao
@@ -29,11 +29,11 @@ class ServicoDAO:
         """)
 
         resposta = db.session.execute(sql, {
-            "id": servico.id,
-            "descricao": servico.descricao,
+            "id_servico": servico.id_servico,
+            "descricao_servico": servico.descricao_servico,
             "valor": servico.valor,
             "duracao": servico.duracao,
-            "foto_nome": servico.foto_nome,
+            "foto_nome_servico": servico.foto_nome_servico,
             "status_servico": servico.status_servico,
             "data_cadastro": servico.data_cadastro,
             "data_atualizacao": servico.data_atualizacao
@@ -47,21 +47,21 @@ class ServicoDAO:
     def consultar_servico_id(self,id_servico: int):
         sql = text("""
             SELECT
-                id,
-                descricao,
+                id_servico,
+                descricao_servico,
                 valor,
                 duracao,
-                foto_nome,
+                foto_nome_servico,
                 status_servico,
                 data_cadastro,
                 data_atualizacao
             FROM servicos
-            WHERE id = :id
+            WHERE id_servico = :id_servico
         """)
 
         registro = db.session.execute(
             sql,
-            {"id": id_servico}
+            {"id_servico": id_servico}
         ).mappings().first()
 
         
@@ -72,16 +72,32 @@ class ServicoDAO:
     def consultar_todos_os_servicos(self):
         sql = text("""
             SELECT
-                id,
-                descricao,
+                id_servico,
+                descricao_servico,
                 valor,
                 duracao,
-                foto_nome,
+                foto_nome_servico,
                 status_servico,
                 data_cadastro,
                 data_atualizacao
-            FROM servicos
-            ORDER BY descricao
+            FROM servico
+            ORDER BY descricao_servico
+        """)
+
+        registros = db.session.execute(sql).mappings().all()
+
+        return registros
+    
+    def consultar_todos_os_servicos_resumo(self):
+        sql = text("""
+            SELECT
+                descricao_servico,
+                valor,
+                duracao,
+                foto_nome_servico
+            FROM servico
+            where status_servico=1
+            ORDER BY descricao_servico
         """)
 
         registros = db.session.execute(sql).mappings().all()
@@ -93,16 +109,16 @@ class ServicoDAO:
         sql = text("""
             SELECT
                 id,
-                descricao,
+                descricao_servico,
                 valor,
                 duracao,
-                foto_nome,
+                foto_nome_servico,
                 status_servico,
                 data_cadastro,
                 data_atualizacao
             FROM servicos
             WHERE status_servico = :status
-            ORDER BY descricao
+            ORDER BY descricao_servico
         """)
 
         registros = db.session.execute(
@@ -115,23 +131,23 @@ class ServicoDAO:
    
     def atualizar(self, servico: Servico):
         sql = text("""
-            UPDATE servicos
+            UPDATE servico
             SET
-                descricao = :descricao,
+                descricao_servico = :descricao_servico,
                 valor = :valor,
                 duracao = :duracao,
-                foto_nome = :foto_nome,
+                foto_nome_servico = :foto_nome_servico,
                 status_servico = :status_servico,
                 data_atualizacao = :data_atualizacao
-            WHERE id = :id
+            WHERE id_servico = :id_servico
         """)
 
         resultado = db.session.execute(sql, {
-            "id": servico.id,
-            "descricao": servico.descricao,
+            "id_servico": servico.id_servico,
+            "foto_nome_servico": servico.foto_nome_servico,
             "valor": servico.valor,
             "duracao": servico.duracao,
-            "foto_nome": servico.foto_nome,
+            "descricao_servico": servico.descricao_servico,
             "status_servico": servico.status_servico,
             "data_atualizacao": servico.data_atualizacao
         })
@@ -143,15 +159,15 @@ class ServicoDAO:
   
     def ativar(self, id_servico: int, data_atualizacao):
         sql = text("""
-            UPDATE servicos
+            UPDATE servico
             SET
                 status_servico = :status,
                 data_atualizacao = :data_atualizacao
-            WHERE id = :id
+            WHERE id_servico = :id_servico
         """)
 
         resultado = db.session.execute(sql, {
-            "id": id_servico,
+            "id_servico": id_servico,
             "status": True,
             "data_atualizacao": data_atualizacao
         })
@@ -163,15 +179,15 @@ class ServicoDAO:
     
     def desativar(self, id_servico: int, data_atualizacao):
         sql = text("""
-            UPDATE servicos
+            UPDATE servico
             SET
                 status_servico = :status,
                 data_atualizacao = :data_atualizacao
-            WHERE id = :id
+            WHERE id_servico = :id_servico
         """)
 
         resultado = db.session.execute(sql, {
-            "id": id_servico,
+            "id_servico": id_servico,
             "status": False,
             "data_atualizacao": data_atualizacao
         })
@@ -183,8 +199,8 @@ class ServicoDAO:
   
     def excluir(self, id_servico: int):
         sql = text("""
-            DELETE FROM servicos
-            WHERE id = :id
+            DELETE FROM servico
+            WHERE id_servico = :id
         """)
 
         resultado = db.session.execute(

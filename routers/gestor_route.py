@@ -70,7 +70,9 @@ def gestorServicoCadastrar():
     descricao_servico = request.form.get('srv-descricao-servico').strip()
     valor = request.form.get('srv-valor').strip()
     duracao = request.form.get('srv-duracao').strip()
-         
+    
+   
+             
     return ControladorGestor.cadastrarServico(imagem, descricao_servico, valor, duracao)
 
 # SERVIÇOS - REMOVER
@@ -78,7 +80,7 @@ def gestorServicoCadastrar():
 def gestor_excluir_servico(): 
     id_servico = request.form.get('srv-id-deletar')
     foto_nome = request.form.get('srv-foto_nome') 
-    
+        
     return ControladorGestor.excluir_servico(id_servico, foto_nome)
   
 
@@ -103,7 +105,7 @@ def gestorServicoEditar():
 # BARBEIROS - Aba de visualização dos Barbeiros cadastrados
 @gestor.route('/painel/barbeiros', methods=['GET'])
 def gestorAbaBarbeiros():
-    return ControladorBarbeiro.consultar_todos_barbeiros()
+    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = ControladorBarbeiro.consultar_todos_barbeiros(), mensagens_status=EnumStatusMensagens)
 
 
 # Gerenciar Barbeiro  - Validando dados informados no cadastro do Barbeiro

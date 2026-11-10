@@ -25,14 +25,10 @@ class BarbeiroService(UsuarioService):
     # Mexer mais tarde para salvar os dados do barbeiro
     def salvar_dados_especificos(self, usuario, fotoTemp):
         try:
-            
-            agenda_service = AgendaService()
-            
-            usuario.agenda = agenda_service.cadastrar_agenda(usuario.nome_completo.split(" ")[0])
-                        
+                                  
             salvou_barbeiro = self.__barbeiroRepositorio.salvar(usuario)
             
-            ValidadorDeImagens.salvarImagem(fotoTemp, self.escolherPastaImagemUsuario(), usuario.foto_nome)
+            ValidadorDeImagens.salvarImagem(fotoTemp, self.escolherPastaImagemUsuario(), usuario.foto_nome_usuario)
             db.session.commit()
             
             return salvou_barbeiro

@@ -14,7 +14,7 @@ class Servico:
         data_cadastro: datetime | None = None,
         data_atualizacao: datetime | None = None
     ):
-        self.__id = id
+        self.__id_servico = id_servico
         self.__descricao_servico = descricao_servico
         self.__valor = valor
         self.__duracao = duracao
@@ -24,12 +24,12 @@ class Servico:
         self.__data_atualizacao = data_atualizacao
 
     @property
-    def id(self):
-        return self.__id
+    def id_servico(self):
+        return self.__id_servico
 
-    @id.setter
-    def id(self, value):
-        self.__id = value
+    @id_servico.setter
+    def id_servico(self, value):
+        self.__id_servico = value
 
     @property
     def descricao_servico(self):

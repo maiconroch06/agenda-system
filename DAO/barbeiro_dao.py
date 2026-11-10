@@ -39,7 +39,7 @@ class BarbeiroDAO:
     def buscar_por_id(self, id_barbeiro: int):
         sql = text("""
             SELECT
-                u.id,
+                u.id_usuario,
                 u.nome_completo,
                 u.telefone,
                 u.cpf,
@@ -49,14 +49,12 @@ class BarbeiroDAO:
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_atualizacao,
-                u.fk_id_endereco,
                 b.data_liberacao,
                 b.descricao,
-                b.status_barbeiro,
-                b.fk_id_agenda
+                b.status_barbeiro
             FROM usuarios u
-            INNER JOIN barbeiros b ON b.id = u.id
-            WHERE b.id = :id
+            INNER JOIN barbeiros b ON b.id_barbeiro = u.id_usuario
+            WHERE b.id_barbeiro = :id
         """)
 
         registro = db.session.execute(
@@ -73,37 +71,39 @@ class BarbeiroDAO:
     def consultar_todos(self):
         sql = text("""
             SELECT
-                u.id,
+                u.id_usuario,
                 u.nome_completo,
                 u.telefone,
                 u.cpf,
                 u.email,
                 u.senha,
-                u.foto_nome,
+                u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_atualizacao,
                 u.fk_id_endereco,
                 b.data_liberacao,
-                b.descricao,
+                b.bio,
+                b.especialidade,
                 b.status_barbeiro,
-                b.fk_id_agenda,
+                TIMESTAMPDIFF(YEAR, b.data_inicio_carreira, CURDATE()) data_inicio_carreira,
                 e.cep,
                 e.cidade,
-                e.estados_br_sigla,
+                e.uf,
                 e.logradouro,
                 e.numero,
                 e.bairro,
                 e.sequencia,
                 e.complemento
-            FROM usuarios u
-                INNER JOIN barbeiros b 
-                    ON b.id = u.id
-                INNER JOIN enderecos e
-                    on e.id = u.fk_id_endereco 
+            FROM usuario u
+                INNER JOIN barbeiro b 
+                   ON b.id_barbeiro = u.id_usuario
+                INNER JOIN endereco e
+                    on e.id_endereco = u.fk_id_endereco 
             ORDER BY u.nome_completo
         """)
-
+        
+    
         registros = db.session.execute(sql).mappings().all()
 
         return registros

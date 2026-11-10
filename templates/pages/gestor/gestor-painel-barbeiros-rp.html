@@ -70,7 +70,7 @@
                         <div id="card_servicos" class="flex flex-col items-center min-w-0 bg-[#232220] rounded-2xl p-4 border border-zinc-700/60 hover:border-amber-500/40 transition-all">
 
                             <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500"
-                                src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome) }}"
+                                src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario) }}"
                                 alt="Foto de {{ barbeiro.nome_completo }}">
 
                             <h3 id="campo-padrao" class="font-bold text-white text-base text-center">{{ barbeiro.nome_completo }}</h3>
@@ -88,7 +88,7 @@
 
                             <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
 
-                                <button type="button" id="editar-barbeiro" value="{{barbeiro.id}}&{{barbeiro.nome_completo}}&{{barbeiro.cpf}}&{{barbeiro.email}}&{{barbeiro.telefone}}&{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome) }}&{{barbeiro.foto_nome}}&{{barbeiro.status_barbeiro}}&{{barbeiro.descricao}}"
+                                <button type="button" id="editar-barbeiro" value="{{barbeiro.id_servico}}&{{barbeiro.nome_completo}}&{{barbeiro.cpf}}&{{barbeiro.email}}&{{barbeiro.telefone}}&{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario) }}&{{barbeiro.foto_nome_usuario}}&{{barbeiro.status_barbeiro}}&{{barbeiro.bio}}"
                                         class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
                                     Editar barbeiro
                                 </button>
@@ -130,12 +130,11 @@
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso"></div>
 
-    <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
-    <!--script src="{{ url_for('static', filename='js/gestor-painel-barbeiros.js') }}"></script-->
+    
+      <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_validar_editar_endereco.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/janelas_modais/js_validar_editar_barbeiro.js') }}"></script>>
 
-    <script src="{{ url_for('static', filename='js/modals/modals-confirmar-excluir-padrao.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modals/modals-validar-editar-endereco.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/modals/modals-validar-editar-barbeiro.js') }}"></script>
     <!-- icones personlaizados -->
     <script> lucide.createIcons();</script>
     

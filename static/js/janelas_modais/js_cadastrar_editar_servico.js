@@ -17,6 +17,9 @@ const campo_imagem_anterior = document.querySelector("#srv-foto_nome_anterior");
 
 const imagem_preview = document.querySelector('#img_srv-preview');
 
+
+let tipo_dados = -1;
+
 botao_cadastrar_servico.addEventListener("click", ()=>{
     document.getElementById("div-seletor-status").classList.add("hidden");
 
@@ -54,11 +57,15 @@ botao_editar.forEach(
             return;
         }
 
+        tipo_dados = dados_servicos[6];
+
+        
+        
         document.getElementById("form-title").textContent = "Editar Serviço";
         botao_cadastrar_editar.textContent = "Editar Serviço";
         imagem_preview.classList.remove("hidden");
         formulario.action ="/gestor/painel/servicos/editar";
-
+        
         
         document.getElementById("srv-id").value = dados_servicos[0];
         descricao_servico.value  = dados_servicos[1];
@@ -71,7 +78,6 @@ botao_editar.forEach(
              document.getElementById("desativado").selected = false;
         }else{
             document.getElementById("desativado").selected = true;
-             document.getElementById("ativado").selected = false;
         }
 
         imagem_preview.src = dados_servicos[7];
@@ -82,10 +88,9 @@ botao_editar.forEach(
     
         modal_editar_servico.showModal();
 
-        });
+});
 
-    }
-);
+});
 
 botao_cancelar_modal_servico.addEventListener("click", ()=>{
     modal_editar_servico.close();
@@ -163,4 +168,3 @@ function validarValores(){
         
 }
     
-

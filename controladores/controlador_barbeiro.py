@@ -20,7 +20,8 @@ class ControladorBarbeiro:
 
     @classmethod
     def consultar_todos_barbeiros(cls):
-        return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = cls.__barbeiroService.consultar_barbeiros(), mensagens_status=EnumStatusMensagens)
+        return cls.__barbeiroService.consultar_barbeiros()
+        #return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = cls.__barbeiroService.consultar_barbeiros(), mensagens_status=EnumStatusMensagens)
 
     @classmethod
     def atualizar_endereco_barbeiro(cls, endereco):

@@ -14,6 +14,9 @@ class ServicoRepositorio:
     def consultar_todos_servicos(self):
         return self.servico_dao.consultar_todos_os_servicos()
     
+    def consultar_todos_os_servicos_resumo(self):
+        return self.servico_dao.consultar_todos_os_servicos_resumo()
+    
     def listar_ativos(self):
         return self.servico_dao.consultar_servicos_status()
 

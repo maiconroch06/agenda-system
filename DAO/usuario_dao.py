@@ -8,7 +8,7 @@ class UsuarioDAO:
 
     def cadastrar(self, usuario: Usuario):
         sql = text("""
-            INSERT INTO usuarios (
+            INSERT INTO usuario (
                 id,
                 nome_completo,
                 telefone,
@@ -69,7 +69,7 @@ class UsuarioDAO:
                 data_cadastro,
                 data_atualizacao,
                 fk_id_endereco
-            FROM usuarios
+            FROM usuario
             WHERE id = :id
         """)
 
@@ -98,7 +98,7 @@ class UsuarioDAO:
                 data_cadastro,
                 data_atualizacao,
                 fk_id_endereco
-            FROM usuarios
+            FROM usuario
             WHERE email = :email
         """)
 
@@ -127,7 +127,7 @@ class UsuarioDAO:
                 data_cadastro,
                 data_atualizacao,
                 fk_id_endereco
-            FROM usuarios
+            FROM usuario
             WHERE cpf = :cpf
         """)
 
@@ -142,7 +142,7 @@ class UsuarioDAO:
         return UsuarioDAO._mapear(registro)
 
 
-    def consultar_todos_usuarios(self, ):
+    def consultar_todos_usuario(self, ):
         sql = text("""
             SELECT
                 id,
@@ -156,7 +156,7 @@ class UsuarioDAO:
                 data_cadastro,
                 data_atualizacao,
                 fk_id_endereco
-            FROM usuarios
+            FROM usuario
             ORDER BY nome_completo
         """)
 
@@ -168,7 +168,7 @@ class UsuarioDAO:
         ]
 
 
-    def contultar_usuarios_ativos(self, ):
+    def contultar_usuario_ativos(self, ):
         sql = text("""
             SELECT
                 id,
@@ -182,7 +182,7 @@ class UsuarioDAO:
                 data_cadastro,
                 data_atualizacao,
                 fk_id_endereco
-            FROM usuarios
+            FROM usuario
             WHERE status_usuario = :status
             ORDER BY nome_completo
         """)
@@ -198,9 +198,9 @@ class UsuarioDAO:
         ]
 
 
-    def atualizar_usuarios_sem_senha(self, usuario: Usuario):
+    def atualizar_usuario_sem_senha(self, usuario: Usuario):
         sql = text("""
-            UPDATE usuarios
+            UPDATE usuario
             SET
                 nome_completo = :nome_completo,
                 telefone = :telefone,
@@ -225,9 +225,9 @@ class UsuarioDAO:
 
         return resultado.rowcount > 0
     
-    def atualizar_usuarios_com_senha(self, usuario: Usuario):
+    def atualizar_usuario_com_senha(self, usuario: Usuario):
         sql = text("""
-            UPDATE usuarios
+            UPDATE usuario
             SET
                 nome_completo = :nome_completo,
                 telefone = :telefone,
@@ -260,7 +260,7 @@ class UsuarioDAO:
 
     def alterar_status(self, id_usuario: int, status: bool):
         sql = text("""
-            UPDATE usuarios
+            UPDATE usuario
             SET status_usuario = :status
             WHERE id = :id
         """)
@@ -277,8 +277,8 @@ class UsuarioDAO:
 
     def excluir(self, id_usuario: int):
         sql = text("""
-            DELETE FROM usuarios
-            WHERE id = :id
+            DELETE FROM usuario
+            WHERE id_usuario = :id
         """)
 
         resultado = db.session.execute(
@@ -298,7 +298,7 @@ class UsuarioDAO:
     ):
         sql = text("""
             SELECT 1
-            FROM usuarios
+            FROM usuario
             WHERE email = :email
               AND (:id_ignorado IS NULL OR id <> :id_ignorado)
             LIMIT 1
@@ -318,7 +318,7 @@ class UsuarioDAO:
     ):
         sql = text("""
             SELECT 1
-            FROM usuarios
+            FROM usuario
             WHERE cpf = :cpf
               AND (:id_ignorado IS NULL OR id <> :id_ignorado)
             LIMIT 1

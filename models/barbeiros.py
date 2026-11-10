@@ -14,7 +14,7 @@ class Barbeiro(Usuario):
         data_cadastro, 
         data_atualizacao,
         data_liberacao = datetime.now(timezone.utc), 
-        especialidade = None,
+        data_inicio_carreira = None,
         status_barbeiro = True,
         foto_nome_usuario=None, 
         senha=None, 
@@ -37,7 +37,7 @@ class Barbeiro(Usuario):
             )
 
         self.__data_liberacao = data_liberacao
-        self.__especialidade = especialidade
+        self.__data_inicio_carreira = data_inicio_carreira
         self.__status_barbeiro = status_barbeiro
         
 
@@ -50,12 +50,12 @@ class Barbeiro(Usuario):
         self.__data_liberacao = value
 
     @property
-    def especialidade(self):
-        return self.__especialidade
+    def data_inicio_carreira(self):
+        return self.__data_inicio_carreira
 
-    @especialidade.setter
-    def especialidade(self, value):
-        self.__especialidade = value
+    @data_inicio_carreira.setter
+    def data_inicio_carreira(self, value):
+        self.__data_inicio_carreira = value
 
     @property
     def status_barbeiro(self):
