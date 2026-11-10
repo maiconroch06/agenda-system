@@ -39,7 +39,7 @@ class ControladorGestor():
             barbeiro.id = cls.__barbeiro_service_mvc.cadastrarUsuarioService(barbeiro,secure_filename(fotoTemp.filename))
                         
             if cls.__barbeiro_service_mvc.salvar_dados_especificos(barbeiro, fotoTemp):  
-                flash(f"Barbeiro {barbeiro.nome_completo.split(" ")[0]} cadastrado com sucesso.", EnumStatusMensagens.SUCESSO.value)  
+                flash(f"Barbeiro {barbeiro.nome_completo.split(' ')[0]} cadastrado com sucesso.", EnumStatusMensagens.SUCESSO.value)  
                 return redirect(url_for('gestor.gestorAbaBarbeiros'))
             
         except Exception as erros:
