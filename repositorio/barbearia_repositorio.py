@@ -4,22 +4,20 @@ from DAO.barbearia_dao import BarbeariaDAO
 
 class BarbeariaRepositorio:
 
-    @staticmethod
-    def salvar(barbearia):
-        return BarbeariaDAO.salvar(barbearia)
+    def __init__(self):
+        self.__barbeariaDao = BarbeariaDAO()
 
-    @staticmethod
-    def buscar_por_cnpj(cnpj):
-        return BarbeariaDAO.buscar_por_cnpj(cnpj)
+    def salvar(self, barbearia):
+        return self.__barbeariaDao.cadastrar(barbearia)
 
-    @staticmethod
-    def listar_todas():
-        return BarbeariaDAO.listar_todas()
+    def buscar_por_cnpj(self, cnpj: str):
+        return self.__barbeariaDao.buscar_por_cnpj(cnpj)
 
-    @staticmethod
-    def atualizar(barbearia):
-        return BarbeariaDAO.atualizar(barbearia)
+    def listar_todos(self):
+        return self.__barbeariaDao.consultar_todos()
 
-    @staticmethod
-    def excluir(cnpj):
-        return BarbeariaDAO.excluir(cnpj)
+    def atualizar(self, barbearia):
+        return self.__barbeariaDao.atualizar(barbearia)
+
+    def excluir(self, cnpj: str):
+        return self.__barbeariaDao.excluir(cnpj)

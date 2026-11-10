@@ -9,7 +9,8 @@ from .barbearia_repositorio import BarbeariaRepositorio
 from .barbeiro_has_servicos_repositorio import BarbeiroHasServicosRepositorio
 from .endereco_repositorio import EnderecoRepositorio
 from .horarios_agenda_repositorio import HorariosAgendaRepositorio
+from .faltas_justificadas_barbeiro_repositorio import FaltaJustificadaBarbeiroRepositorio
+from .mes_referencia_repository import MesReferenciaRepositorio
+from .recesso_repository import RecessoRepositorio
 from .repositorio_address import get_all_states
-
-
 

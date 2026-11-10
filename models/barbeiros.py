@@ -1,11 +1,7 @@
 from datetime import datetime
-<<<<<<< HEAD
-from models import Usuario, Endereco
-=======
 from .usuarios import Usuario
 from .endereco import Endereco
 from .agenda import Agenda
->>>>>>> dev
 
 
 class Barbeiro(Usuario):
@@ -18,11 +14,6 @@ class Barbeiro(Usuario):
         email: str,
         descricao: str,
         status_barbeiro: bool,
-<<<<<<< HEAD
-        fk_id_agenda: int,
-        id: int | None = None,
-        endereco: Endereco = None
-=======
         data_liberacao= None,
         status_usuario= None,
         data_cadastro=None,
@@ -34,7 +25,6 @@ class Barbeiro(Usuario):
         endereco: Endereco = None,
         
         
->>>>>>> dev
     ):
         super().__init__(
             id=id,

@@ -6,3 +6,6 @@ from .barbeiro_service import BarbeiroService
 from .endereco_service import EnderecoService
 from .agenda_service import AgendaService
 from .agendamento_service import AgendamentoService
+from .faltas_justificadas_barbeiro_service import FaltasJustificadaBarbeiroService
+from .mes_referencia_service import MesReferenciaService
+from .recesso_service import RecessoService

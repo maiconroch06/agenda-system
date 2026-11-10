@@ -9,4 +9,6 @@ from .barbeiro_has_servicos import BarbeiroHasServicos
 from .agendamento import Agendamento
 from .agenda import Agenda
 from .horarios_agenda import HorariosAgenda
-
+from .faltas_justificadas_barbeiro import FaltaJustificadaBarbeiro
+from .mes_referencia import MesReferencia
+from .recesso import Recesso

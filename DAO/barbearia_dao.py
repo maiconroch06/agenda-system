@@ -2,52 +2,65 @@
 from sqlalchemy import text
 from database import db
 from models import Barbearia
+from DAO.agenda_dao import AgendaDAO
+from DAO.endereco_dao import EnderecoDAO
 
 
 class BarbeariaDAO:
 
-    @staticmethod
-    def salvar(barbearia: Barbearia):
+    def __init__(self):
+        self.__agendaDao = AgendaDAO()
+        self.__enderecoDao = EnderecoDAO()
+
+    def cadastrar(self, barbearia: Barbearia):
         sql = text("""
             INSERT INTO barbearia (
                 cnpj,
                 nome_barbearia,
                 telefone,
                 email_empresa,
-                logo_barbearia,
+                logo_barbearia_nome,
                 data_cadastro,
                 fk_id_endereco,
-                fk_id_agenda
+                agenda_id_agenda
             ) VALUES (
                 :cnpj,
                 :nome_barbearia,
                 :telefone,
                 :email_empresa,
-                :logo_barbearia,
+                :logo_barbearia_nome,
                 :data_cadastro,
                 :fk_id_endereco,
-                :fk_id_agenda
+                :agenda_id_agenda
             )
         """)
 
-        db.session.execute(sql, {
+        resultado = db.session.execute(sql, {
             "cnpj": barbearia.cnpj,
             "nome_barbearia": barbearia.nome_barbearia,
             "telefone": barbearia.telefone,
             "email_empresa": barbearia.email_empresa,
-            "logo_barbearia": barbearia.logo_barbearia,
+            "logo_barbearia_nome": barbearia.logo_barbearia,
             "data_cadastro": barbearia.data_cadastro,
-            "fk_id_endereco": barbearia.fk_id_endereco,
-            "fk_id_agenda": barbearia.fk_id_agenda
+            "fk_id_endereco": barbearia.endereco.id,
+            "agenda_id_agenda": barbearia.agenda.id
         })
 
         db.session.flush()
-        return barbearia.cnpj
 
-    @staticmethod
-    def buscar_por_cnpj(cnpj: str):
+        return resultado.rowcount > 0
+
+    def buscar_por_cnpj(self, cnpj: str):
         sql = text("""
-            SELECT *
+            SELECT
+                cnpj,
+                nome_barbearia,
+                telefone,
+                email_empresa,
+                logo_barbearia_nome,
+                data_cadastro,
+                fk_id_endereco,
+                agenda_id_agenda
             FROM barbearia
             WHERE cnpj = :cnpj
         """)
@@ -60,12 +73,19 @@ class BarbeariaDAO:
         if registro is None:
             return None
 
-        return BarbeariaDAO._mapear_barbearia(registro)
+        return self._mapear_barbearia(registro)
 
-    @staticmethod
-    def listar_todas():
+    def consultar_todos(self):
         sql = text("""
-            SELECT *
+            SELECT
+                cnpj,
+                nome_barbearia,
+                telefone,
+                email_empresa,
+                logo_barbearia_nome,
+                data_cadastro,
+                fk_id_endereco,
+                agenda_id_agenda
             FROM barbearia
             ORDER BY nome_barbearia
         """)
@@ -73,21 +93,20 @@ class BarbeariaDAO:
         registros = db.session.execute(sql).mappings().all()
 
         return [
-            BarbeariaDAO._mapear_barbearia(registro)
+            self._mapear_barbearia(registro)
             for registro in registros
         ]
 
-    @staticmethod
-    def atualizar(barbearia: Barbearia):
+    def atualizar(self, barbearia: Barbearia):
         sql = text("""
             UPDATE barbearia
             SET
                 nome_barbearia = :nome_barbearia,
                 telefone = :telefone,
                 email_empresa = :email_empresa,
-                logo_barbearia = :logo_barbearia,
+                logo_barbearia_nome = :logo_barbearia_nome,
                 fk_id_endereco = :fk_id_endereco,
-                fk_id_agenda = :fk_id_agenda
+                agenda_id_agenda = :agenda_id_agenda
             WHERE cnpj = :cnpj
         """)
 
@@ -96,16 +115,16 @@ class BarbeariaDAO:
             "nome_barbearia": barbearia.nome_barbearia,
             "telefone": barbearia.telefone,
             "email_empresa": barbearia.email_empresa,
-            "logo_barbearia": barbearia.logo_barbearia,
-            "fk_id_endereco": barbearia.fk_id_endereco,
-            "fk_id_agenda": barbearia.fk_id_agenda
+            "logo_barbearia_nome": barbearia.logo_barbearia,
+            "fk_id_endereco": barbearia.endereco.id,
+            "agenda_id_agenda": barbearia.agenda.id
         })
 
         db.session.flush()
+
         return resultado.rowcount > 0
 
-    @staticmethod
-    def excluir(cnpj: str):
+    def excluir(self, cnpj: str):
         sql = text("""
             DELETE FROM barbearia
             WHERE cnpj = :cnpj
@@ -117,17 +136,26 @@ class BarbeariaDAO:
         )
 
         db.session.flush()
+
         return resultado.rowcount > 0
 
-    @staticmethod
-    def _mapear_barbearia(registro):
+    def _mapear_barbearia(self, registro):
+
+        agenda = self.__agendaDao.buscar_por_id(
+            registro["agenda_id_agenda"]
+        )
+
+        endereco = self.__enderecoDao.buscar_por_id(
+            registro["fk_id_endereco"]
+        )
+
         return Barbearia(
             cnpj=registro["cnpj"],
             nome_barbearia=registro["nome_barbearia"],
             telefone=registro["telefone"],
             email_empresa=registro["email_empresa"],
-            logo_barbearia=registro["logo_barbearia"],
+            logo_barbearia=registro["logo_barbearia_nome"],
             data_cadastro=registro["data_cadastro"],
-            endereco=registro["fk_id_endereco"],
-            fk_id_agenda=registro["fk_id_agenda"]
+            endereco=endereco,
+            agenda=agenda
         )

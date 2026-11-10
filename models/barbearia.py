@@ -1,6 +1,7 @@
 
 from datetime import datetime
 from .endereco import Endereco
+from .agenda import Agenda
 
 
 class Barbearia:
@@ -14,6 +15,7 @@ class Barbearia:
         logo_barbearia: str,
         data_cadastro: datetime,
         endereco: Endereco,
+        agenda: Agenda,
     ):
         self.__cnpj = cnpj
         self.__nome_barbearia = nome_barbearia
@@ -22,6 +24,7 @@ class Barbearia:
         self.__logo_barbearia = logo_barbearia
         self.__data_cadastro = data_cadastro
         self.__endereco = endereco
+        self.__agenda = agenda
 
     @property
     def cnpj(self):
@@ -79,13 +82,18 @@ class Barbearia:
     def endereco(self, value):
         self.__endereco = value
 
-        
+    @property
+    def agenda(self):
+        return self.__agenda
 
-   
+    @agenda.setter
+    def agenda(self, value):
+        self.__agenda = value
 
-    def _str__(self):
+    def __str__(self):
         return (
-            f"Barbearia(cnpj='{self.__cnpj}', "
+            f"Barbearia("
+            f"cnpj='{self.__cnpj}', "
             f"nome='{self.__nome_barbearia}', "
             f"telefone='{self.__telefone}', "
             f"email='{self.__email_empresa}')"
