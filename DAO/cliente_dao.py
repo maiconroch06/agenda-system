@@ -9,7 +9,7 @@ class ClienteDAO:
 
     def cadastrar(self, id_cliente: int, data_ultimo_servico: datetime = None):
         sql = text("""
-            INSERT INTO clientes (
+            INSERT INTO cliente (
                 id_cliente,
                 data_ultimo_servico
             ) VALUES (
@@ -23,7 +23,7 @@ class ClienteDAO:
             "data_ultimo_servico": data_ultimo_servico
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
@@ -43,8 +43,8 @@ class ClienteDAO:
                 u.fk_id_endereco,
                 c.id_cliente,
                 c.data_ultimo_servico
-            FROM usuarios u
-            INNER JOIN clientes c
+            FROM usuario u
+            INNER JOIN cliente c
                 ON c.id_cliente = u.id_usuario
             WHERE c.id_cliente = :id_cliente
         """)
@@ -75,8 +75,8 @@ class ClienteDAO:
                 u.fk_id_endereco,
                 c.id_cliente,
                 c.data_ultimo_servico
-            FROM usuarios u
-            INNER JOIN clientes c
+            FROM usuario u
+            INNER JOIN cliente c
                 ON c.id_cliente = u.id_usuario
             WHERE u.email = :email
         """)
@@ -99,8 +99,8 @@ class ClienteDAO:
                 u.nome_completo,
                 u.telefone,
                 c.data_ultimo_servico
-            FROM usuarios u
-            INNER JOIN clientes c
+            FROM usuario u
+            INNER JOIN cliente c
                 ON c.id_cliente = u.id_usuario
             ORDER BY u.nome_completo
         """)
@@ -111,7 +111,7 @@ class ClienteDAO:
 
     def atualizar(self, cliente: Cliente):
         sql_usuario = text("""
-            UPDATE usuarios
+            UPDATE usuario
             SET
                 nome_completo = :nome_completo,
                 telefone = :telefone,
@@ -126,7 +126,7 @@ class ClienteDAO:
         """)
 
         sql_cliente = text("""
-            UPDATE clientes
+            UPDATE cliente
             SET
                 data_ultimo_servico = :data_ultimo_servico
             WHERE id_cliente = :id_cliente
@@ -158,37 +158,9 @@ class ClienteDAO:
             sql_cliente, parametros
         )
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado_cliente.rowcount > 0
-
-    def excluir(self, id_cliente: int):
-        sql_cliente = text("""
-            DELETE FROM clientes
-            WHERE id_cliente = :id_cliente
-        """)
-
-        resultado = db.session.execute(
-            sql_cliente,
-            {"id_cliente": id_cliente}
-        )
-
-        if resultado.rowcount == 0:
-            return False
-
-        sql_usuario = text("""
-            DELETE FROM usuarios
-            WHERE id_usuario = :id_usuario
-        """)
-
-        db.session.execute(
-            sql_usuario,
-            {"id_usuario": id_cliente}
-        )
-
-        db.session.flush()
-
-        return True
 
     def atualizar_data_ultimo_servico(
         self,
@@ -196,7 +168,7 @@ class ClienteDAO:
         data: datetime
     ):
         sql = text("""
-            UPDATE clientes
+            UPDATE cliente
             SET data_ultimo_servico = :data
             WHERE id_cliente = :id_cliente
         """)
@@ -206,6 +178,6 @@ class ClienteDAO:
             "data": data
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0

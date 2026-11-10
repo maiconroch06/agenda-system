@@ -18,7 +18,7 @@ class Servico:
         self.__descricao_servico = descricao_servico
         self.__valor = valor
         self.__duracao = duracao
-        self.__foto_nome = foto_nome_servico
+        self.__foto_nome_servico = foto_nome_servico
         self.__status_servico = status_servico
         self.__data_cadastro = data_cadastro
         self.__data_atualizacao = data_atualizacao
@@ -56,12 +56,12 @@ class Servico:
         self.__duracao = value
 
     @property
-    def foto_nome(self):
-        return self.__foto_nome
+    def foto_nome_servico(self):
+        return self.__foto_nome_servico
 
-    @foto_nome.setter
-    def foto_nome(self, value):
-        self.__foto_nome = value
+    @foto_nome_servico.setter
+    def foto_nome_servico(self, value):
+        self.__foto_nome_servico = value
 
     @property
     def status_servico(self):

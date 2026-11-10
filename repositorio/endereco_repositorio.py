@@ -23,7 +23,3 @@ class EnderecoRepositorio:
     @staticmethod
     def atualizar(endereco):
         return EnderecoDAO.atualizar(endereco)
-
-    @staticmethod
-    def excluir(id_endereco):
-        return EnderecoDAO.excluir(id_endereco)

@@ -15,13 +15,9 @@ class BarbeiroRepositorio:
         return self.__barbeiroDao.buscar_por_id(id_barbeiro)
 
     
-    def listar_todos(self, ):
+    def listar_todos(self):
         return self.__barbeiroDao.consultar_todos()
 
     
     def atualizar(self, barbeiro):
         return self.__barbeiroDao.atualizar_informacoes_barbeiro(barbeiro)
-
-    
-    def excluir(self, id_barbeiro):
-        return self.__barbeiroDao.excluir_barbeiro(id_barbeiro)

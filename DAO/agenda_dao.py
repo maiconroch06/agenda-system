@@ -8,35 +8,6 @@ from models import Agenda
 
 class AgendaDAO:
 
-    def cadastrar(self, agenda: Agenda):
-        sql = text("""
-            INSERT INTO agenda (
-                horario_abertura,
-                horario_fechamento,
-                horario_inicio_intrajornada,
-                horario_fim_intrajornada,
-                dias_fechados
-            ) VALUES (
-                :horario_abertura,
-                :horario_fechamento,
-                :horario_inicio_intrajornada,
-                :horario_fim_intrajornada,
-                :dias_fechados
-            )
-        """)
-
-        resultado = db.session.execute(sql, {
-            "horario_abertura": agenda.horario_abertura,
-            "horario_fechamento": agenda.horario_fechamento,
-            "horario_inicio_intrajornada": agenda.horario_inicio_intrajornada,
-            "horario_fim_intrajornada": agenda.horario_fim_intrajornada,
-            "dias_fechados": json.dumps(agenda.dias_fechados)
-        })
-
-        db.session.flush()
-
-        return resultado.lastrowid
-
     def buscar_por_id(self, id_agenda: int):
         sql = text("""
             SELECT
@@ -101,22 +72,7 @@ class AgendaDAO:
             "dias_fechados": json.dumps(agenda.dias_fechados)
         })
 
-        db.session.flush()
-
-        return resultado.rowcount > 0
-
-    def excluir(self, id_agenda: int):
-        sql = text("""
-            DELETE FROM agenda
-            WHERE id_agenda = :id_agenda
-        """)
-
-        resultado = db.session.execute(
-            sql,
-            {"id_agenda": id_agenda}
-        )
-
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 

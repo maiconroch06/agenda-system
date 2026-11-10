@@ -42,7 +42,7 @@ class AgendamentoDAO:
             "fk_id_cliente": agendamento.fk_id_cliente
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.lastrowid
 
@@ -190,7 +190,7 @@ class AgendamentoDAO:
             "fk_id_cliente": agendamento.fk_id_cliente
         })
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 
@@ -206,7 +206,7 @@ class AgendamentoDAO:
             {"id_agendamento": id_agendamento}
         )
 
-        db.session.flush()
+        db.session.commit()
 
         return resultado.rowcount > 0
 

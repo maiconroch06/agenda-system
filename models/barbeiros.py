@@ -1,3 +1,4 @@
+
 from datetime import datetime, timezone
 from .usuarios import Usuario
 
@@ -6,40 +7,43 @@ class Barbeiro(Usuario):
 
     def __init__(
         self,
-        nome_completo, 
-        telefone, 
-        cpf, 
-        email, 
-        status_usuario, 
-        data_cadastro, 
+        nome_completo,
+        telefone,
+        cpf,
+        email,
+        status_usuario,
+        data_cadastro,
         data_atualizacao,
-        data_liberacao = datetime.now(timezone.utc), 
-        data_inicio_carreira = None,
-        status_barbeiro = True,
-        foto_nome_usuario=None, 
-        senha=None, 
-        id_usuario=None, 
-        endereco = None
-        ):
-        
+        data_liberacao=datetime.now(timezone.utc),
+        data_inicio_carreira=None,
+        status_barbeiro=True,
+        foto_nome_usuario=None,
+        senha=None,
+        id_usuario=None,
+        endereco=None,
+        descricao=None,
+        especialidade=None
+    ):
+
         super().__init__(
-            nome_completo=nome_completo, 
-            telefone=telefone, 
-            cpf=cpf, 
-            email=email, 
-            status_usuario=status_usuario, 
+            nome_completo=nome_completo,
+            telefone=telefone,
+            cpf=cpf,
+            email=email,
+            status_usuario=status_usuario,
             data_cadastro=data_cadastro,
-            data_atualizacao=data_atualizacao, 
-            foto_nome_usuario=foto_nome_usuario, 
-            senha =senha, 
+            data_atualizacao=data_atualizacao,
+            foto_nome_usuario=foto_nome_usuario,
+            senha=senha,
             id_usuario=id_usuario,
             endereco=endereco
-            )
+        )
 
         self.__data_liberacao = data_liberacao
         self.__data_inicio_carreira = data_inicio_carreira
         self.__status_barbeiro = status_barbeiro
-        
+        self.__descricao = descricao
+        self.__especialidade = especialidade
 
     @property
     def data_liberacao(self):
@@ -65,6 +69,18 @@ class Barbeiro(Usuario):
     def status_barbeiro(self, value):
         self.__status_barbeiro = value
 
+    @property
+    def descricao(self):
+        return self.__descricao
 
+    @descricao.setter
+    def descricao(self, value):
+        self.__descricao = value
 
-    
+    @property
+    def especialidade(self):
+        return self.__especialidade
+
+    @especialidade.setter
+    def especialidade(self, value):
+        self.__especialidade = value
