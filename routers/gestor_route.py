@@ -187,19 +187,17 @@ def gestor_barbeiro_editar_endereco():
     cep_temp = ''.join(filter(str.isdigit,request.form.get('cep')))
         
     endereco = Endereco(
-        id = request.form.get('bar-end-id'),
+        id_endereco= request.form.get('bar-end-id'),
         cep=cep_temp,
         cidade=request.form.get('cidade'),
-        estados_br_sigla=request.form.get('unidade-federativa'),
+        uf=request.form.get('unidade-federativa'),
         bairro=request.form.get('bairro'),
         logradouro=request.form.get('logradouro'),
         numero=request.form.get('numero'),
         sequencia=request.form.get('sequencia'),
         complemento=request.form.get('complemento')
     )
-    
    
-
     return ControladorBarbeiro.atualizar_endereco_barbeiro(endereco)
 
 

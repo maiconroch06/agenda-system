@@ -9,7 +9,7 @@ class EnderecoDAO:
     @staticmethod
     def salvar( endereco: Endereco):
         sql = text("""
-            INSERT INTO enderecos (
+            INSERT INTO endereco (
                 cep,
                 cidade,
                 estados_br_sigla,
@@ -58,7 +58,7 @@ class EnderecoDAO:
                 bairro,
                 sequencia,
                 complemento
-            FROM enderecos
+            FROM endereco
             WHERE id = :id
         """)
 
@@ -85,7 +85,7 @@ class EnderecoDAO:
                 bairro,
                 sequencia,
                 complemento
-            FROM enderecos
+            FROM endereco
             ORDER BY cidade, bairro, logradouro
         """)
 
@@ -109,7 +109,7 @@ class EnderecoDAO:
                 bairro,
                 sequencia,
                 complemento
-            FROM enderecos
+            FROM endereco
             WHERE cep = :cep
             ORDER BY cidade, bairro, logradouro
         """)
@@ -127,24 +127,24 @@ class EnderecoDAO:
     @staticmethod
     def atualizar( endereco: Endereco):
         sql = text("""
-            UPDATE enderecos
+            UPDATE endereco
             SET
                 cep = :cep,
                 cidade = :cidade,
-                estados_br_sigla = :estados_br_sigla,
+                uf = :uf,
                 logradouro = :logradouro,
                 numero = :numero,
                 bairro = :bairro,
                 sequencia = :sequencia,
                 complemento = :complemento
-            WHERE id = :id
+            WHERE id_endereco = :id
         """)
 
         resultado = db.session.execute(sql, {
-            "id": endereco.id,
+            "id": endereco.id_endereco,
             "cep": endereco.cep,
             "cidade": endereco.cidade,
-            "estados_br_sigla": endereco.estados_br_sigla,
+            "uf": endereco.uf,
             "logradouro": endereco.logradouro,
             "numero": endereco.numero,
             "bairro": endereco.bairro,
@@ -160,7 +160,7 @@ class EnderecoDAO:
     @staticmethod
     def excluir( id_endereco: int):
         sql = text("""
-            DELETE FROM enderecos
+            DELETE FROM endereco
             WHERE id = :id
         """)
 
