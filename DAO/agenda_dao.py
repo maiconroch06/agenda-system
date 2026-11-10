@@ -1,4 +1,6 @@
 
+import json
+
 from sqlalchemy import text
 from database import db
 from models import Agenda
@@ -8,16 +10,18 @@ class AgendaDAO:
 
     def cadastrar(self, agenda: Agenda):
         sql = text("""
-            INSERT INTO agendas (
+            INSERT INTO agenda (
                 horario_abertura,
                 horario_fechamento,
                 horario_inicio_intrajornada,
-                horario_fim_intrajornada
+                horario_fim_intrajornada,
+                dias_fechados
             ) VALUES (
                 :horario_abertura,
                 :horario_fechamento,
                 :horario_inicio_intrajornada,
-                :horario_fim_intrajornada
+                :horario_fim_intrajornada,
+                :dias_fechados
             )
         """)
 
@@ -25,7 +29,8 @@ class AgendaDAO:
             "horario_abertura": agenda.horario_abertura,
             "horario_fechamento": agenda.horario_fechamento,
             "horario_inicio_intrajornada": agenda.horario_inicio_intrajornada,
-            "horario_fim_intrajornada": agenda.horario_fim_intrajornada
+            "horario_fim_intrajornada": agenda.horario_fim_intrajornada,
+            "dias_fechados": json.dumps(agenda.dias_fechados)
         })
 
         db.session.flush()
@@ -39,8 +44,9 @@ class AgendaDAO:
                 horario_abertura,
                 horario_fechamento,
                 horario_inicio_intrajornada,
-                horario_fim_intrajornada
-            FROM agendas
+                horario_fim_intrajornada,
+                dias_fechados
+            FROM agenda
             WHERE id_agenda = :id_agenda
         """)
 
@@ -61,8 +67,9 @@ class AgendaDAO:
                 horario_abertura,
                 horario_fechamento,
                 horario_inicio_intrajornada,
-                horario_fim_intrajornada
-            FROM agendas
+                horario_fim_intrajornada,
+                dias_fechados
+            FROM agenda
             ORDER BY horario_abertura
         """)
 
@@ -75,12 +82,13 @@ class AgendaDAO:
 
     def atualizar(self, agenda: Agenda):
         sql = text("""
-            UPDATE agendas
+            UPDATE agenda
             SET
                 horario_abertura = :horario_abertura,
                 horario_fechamento = :horario_fechamento,
                 horario_inicio_intrajornada = :horario_inicio_intrajornada,
-                horario_fim_intrajornada = :horario_fim_intrajornada
+                horario_fim_intrajornada = :horario_fim_intrajornada,
+                dias_fechados = :dias_fechados
             WHERE id_agenda = :id_agenda
         """)
 
@@ -89,7 +97,8 @@ class AgendaDAO:
             "horario_abertura": agenda.horario_abertura,
             "horario_fechamento": agenda.horario_fechamento,
             "horario_inicio_intrajornada": agenda.horario_inicio_intrajornada,
-            "horario_fim_intrajornada": agenda.horario_fim_intrajornada
+            "horario_fim_intrajornada": agenda.horario_fim_intrajornada,
+            "dias_fechados": json.dumps(agenda.dias_fechados)
         })
 
         db.session.flush()
@@ -98,7 +107,7 @@ class AgendaDAO:
 
     def excluir(self, id_agenda: int):
         sql = text("""
-            DELETE FROM agendas
+            DELETE FROM agenda
             WHERE id_agenda = :id_agenda
         """)
 
@@ -113,10 +122,17 @@ class AgendaDAO:
 
     @staticmethod
     def _mapear_agenda(registro):
+        dias_fechados = registro["dias_fechados"]
+
+        # Converte o JSON retornado pelo banco em uma lista Python.
+        if isinstance(dias_fechados, str):
+            dias_fechados = json.loads(dias_fechados)
+
         return Agenda(
             id_agenda=registro["id_agenda"],
             horario_abertura=registro["horario_abertura"],
             horario_fechamento=registro["horario_fechamento"],
             horario_inicio_intrajornada=registro["horario_inicio_intrajornada"],
-            horario_fim_intrajornada=registro["horario_fim_intrajornada"]
+            horario_fim_intrajornada=registro["horario_fim_intrajornada"],
+            dias_fechados=dias_fechados or []
         )

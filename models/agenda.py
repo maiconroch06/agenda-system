@@ -1,21 +1,21 @@
 
-from datetime import datetime, timezone
-
 class Agenda:
 
     def __init__(
         self,
-        id_agenda = None,
-        horario_abertura = None,
-        horario_fechamento = None,
-        horario_inicio_intrajornada = None,
-        horario_fim_intrajornada = None
+        id_agenda=None,
+        horario_abertura=None,
+        horario_fechamento=None,
+        horario_inicio_intrajornada=None,
+        horario_fim_intrajornada=None,
+        dias_fechados=None
     ):
         self.__id_agenda = id_agenda
         self.__horario_abertura = horario_abertura
         self.__horario_fechamento = horario_fechamento
         self.__horario_inicio_intrajornada = horario_inicio_intrajornada
         self.__horario_fim_intrajornada = horario_fim_intrajornada
+        self.__dias_fechados = dias_fechados if dias_fechados is not None else []
 
     @property
     def id_agenda(self):
@@ -56,3 +56,11 @@ class Agenda:
     @horario_fim_intrajornada.setter
     def horario_fim_intrajornada(self, value):
         self.__horario_fim_intrajornada = value
+
+    @property
+    def dias_fechados(self):
+        return self.__dias_fechados
+
+    @dias_fechados.setter
+    def dias_fechados(self, value):
+        self.__dias_fechados = value if value is not None else []
