@@ -13,6 +13,10 @@
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
+    {# ───────── DADOS MOCK VS FLASK ───────── #}
+    {% include "componetizacao/preCadastro/dados.html" %}
+    {# ─────────────────────────────────────── #}
+
     <!-- HEADER (Exibe apenas para o mobile)-->
     {% include "componetizacao/Header/header-barbeiro-painel.html" %}
 
@@ -72,8 +76,6 @@
 
             </main>
         </div>
-
-        {% include "componetizacao/SiderBar/sider-bar-barbeiro-mobile.html" %}
 
     </div>
 
