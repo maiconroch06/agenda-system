@@ -47,6 +47,35 @@
                     <!-- Listagem dos agendamentos de hoje -->
                     <div class="flex flex-col gap-2" id="lista-inicio-hoje"></div>
 
+                    <div class="flex justify-center items-center mt-6 mb-2 gap-4">
+                        <!-- Botão de Voltar Dia -->
+                        <button onclick="mudarDia(-1)" 
+                            class="w-10 h-10 flex items-center justify-center rounded-full bg-[#232220] border border-[#38362f] text-[#f1efe8] hover:bg-[#38362f] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f0c05a] active:scale-95" 
+                            aria-label="Dia Anterior">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button> 
+
+                        <!-- Exibição da Data Atual na Navegação -->
+                        <div class="flex flex-col items-center justify-center min-w-[140px]">
+                            <span id="nav-data-display" class="text-sm font-semibold text-[#f1efe8]">Hoje</span>
+                            <!-- Botão para voltar ao dia de hoje (oculto por padrão) -->
+                            <button id="btn-hoje" onclick="irParaHoje()" class="text-[10px] text-[#f0c05a] hover:underline mt-0.5 hidden">
+                                Voltar para Hoje
+                            </button>
+                        </div>
+
+                        <!-- Botão de Avançar Dia -->
+                        <button onclick="mudarDia(1)" 
+                            class="w-10 h-10 flex items-center justify-center rounded-full bg-[#232220] border border-[#38362f] text-[#f1efe8] hover:bg-[#38362f] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f0c05a] active:scale-95" 
+                            aria-label="Próximo Dia">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button> 
+                    </div>
+
                 </section>
 
             </main>
@@ -54,7 +83,7 @@
 
     </div>
 
-    {% include "componetizacao/modals/modal-detalhes-atendimento.html" %}
+    {% include "componetizacao/modals/modal-detalhes-atendimento-barbeiro.html" %}
 
     <input type="file" id="inp-nova-foto" accept="image/*" class="hidden">
 

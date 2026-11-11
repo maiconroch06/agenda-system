@@ -12,7 +12,7 @@ const els = {
     progressoPendentes: document.getElementById("progresso-pendente"),
     listaInicioHoje: document.getElementById("lista-inicio-hoje"),
 
-    // Modal: Detalhes do Atendimento
+    // Modal: Detalhes do Agendamento
     detalheStatusBadge: document.getElementById("detalhe-status-badge"),
     detalheCliente: document.getElementById("detalhe-cliente"),
     detalheServico: document.getElementById("detalhe-servico"),
@@ -75,6 +75,76 @@ function cardAgendamentoHTML(item) {
 }
 
 /* ============================================================
+   ESTADO GLOBAL DE NAVEGAÇÃO
+   ============================================================ */
+// Define o dia atual em exibição. Inicialmente é hoje.
+let dataExibicaoAtual = new Date();
+
+/* ============================================================
+   MUDAR DE DIA E ATUALIZAR INTERFACE
+   ============================================================ */
+
+function formatarDataNavegacao(data) {
+    const hoje = new Date();
+    const amanha = new Date();
+    amanha.setDate(hoje.getDate() + 1);
+    const ontem = new Date();
+    ontem.setDate(hoje.getDate() - 1);
+
+    if (formatarISO(data) === formatarISO(hoje)) return "Hoje";
+    if (formatarISO(data) === formatarISO(amanha)) return "Amanhã";
+    if (formatarISO(data) === formatarISO(ontem)) return "Ontem";
+
+    // Para outros dias, exibe o formato curto, ex: "Qua, 11/11"
+    const opcoes = { weekday: 'short', day: '2-digit', month: '2-digit' };
+    let formatada = data.toLocaleDateString('pt-BR', opcoes);
+    // Capitaliza a primeira letra do dia da semana
+    return formatada.charAt(0).toUpperCase() + formatada.slice(1);
+}
+
+function atualizarInterfaceNavegacao() {
+    const navDisplay = document.getElementById("nav-data-display");
+    const btnHoje = document.getElementById("btn-hoje");
+    const tituloLista = document.querySelector(".text-xs.font-medium.text-\\[\\#888780\\].uppercase.tracking-wider.mb-3");
+    
+    const stringDataFormatada = formatarDataNavegacao(dataExibicaoAtual);
+    const isHoje = formatarISO(dataExibicaoAtual) === hojeISO(); // hojeISO() deve estar definido em barbeiro-painel-utilitarios.js
+
+    // Atualiza o texto central entre os botões
+    if (navDisplay) {
+        navDisplay.textContent = stringDataFormatada;
+    }
+
+    // Exibe ou oculta o botão "Voltar para Hoje"
+    if (btnHoje) {
+        if (isHoje) {
+            btnHoje.classList.add("hidden");
+        } else {
+            btnHoje.classList.remove("hidden");
+        }
+    }
+
+    // Atualiza o título acima da lista de cards
+    if (tituloLista) {
+        tituloLista.textContent = isHoje ? "Agendamentos de hoje" : `Agendamentos de ${stringDataFormatada}`;
+    }
+
+    // Re-renderiza a lista de cards baseada na nova data
+    renderizarInicio(); 
+}
+
+function mudarDia(delta) {
+    // Adiciona ou subtrai dias da data atual em exibição
+    dataExibicaoAtual.setDate(dataExibicaoAtual.getDate() + delta);
+    atualizarInterfaceNavegacao();
+}
+
+function irParaHoje() {
+    dataExibicaoAtual = new Date(); // Reseta para a data real de hoje
+    atualizarInterfaceNavegacao();
+}
+
+/* ============================================================
    ABA INÍCIO
    ============================================================ */
 
@@ -82,7 +152,9 @@ function renderizarInicio() {
     const hoje = hojeISO();
 
     // Filtra os agendamentos do dia e aplica a ordenação por Status e Hora
+    const dataAlvoStr = formatarISO(dataExibicaoAtual); 
     const doDia = agendamentos
+        .filter(a => a.data === dataAlvoStr)
         .filter(a => a.data === hoje)
         .sort((a, b) => {
             // Define o peso (prioridade) de cada status
@@ -121,7 +193,7 @@ function renderizarInicio() {
     // Renderização dos cards da lista
     if (els.listaInicioHoje) {
         els.listaInicioHoje.innerHTML = totalGeral === 0
-            ? `<p class="text-center text-[#888780] text-sm py-8 italic">Nenhum atendimento agendado para hoje.</p>`
+            ? `<p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento agendado para hoje.</p>`
             : doDia.map(cardAgendamentoHTML).join("");
     }
 }
@@ -168,15 +240,15 @@ function fecharModalDetalhe() {
     els.modalDetalhe.classList.add("hidden");
 }
 
-function concluirAtendimento(id) {
+function concluirAgendamento(id) {
     atualizarStatus(id, "concluido");
-    mostrarAviso("Atendimento concluído!");
+    mostrarAviso("Agendamento concluído!");
 }
 
-function cancelarAtendimento(id) {
-    if (!confirm("Deseja realmente cancelar este atendimento?")) return;
+function cancelarAgendamento(id) {
+    if (!confirm("Deseja realmente cancelar este agendamento?")) return;
     atualizarStatus(id, "cancelado");
-    mostrarAviso("Atendimento cancelado");
+    mostrarAviso("Agendamento cancelado");
 }
 
 function atualizarStatus(id, novoStatus) {
