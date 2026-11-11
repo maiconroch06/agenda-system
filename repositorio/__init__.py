@@ -3,10 +3,10 @@ from .gestor_repositorio import GestorRepositorio
 from .usuario_repositorio import UsuarioRepositorio
 from .barbeiro_repositorio import BarbeiroRepositorio
 from .servicos_repositorio import ServicoRepositorio
-from .agenda_repositorio import AgendaRepositorio
+from .horario_funcionamento_repositorio import HorarioFuncionamentoRepositorio
 from .agendamento_repositorio import AgendamentoRepositorio
 from .barbearia_repositorio import BarbeariaRepositorio
 from .falta_justificada_barbeiro_repositorio import FaltaJustificadaBarbeiroRepositorio
 from .recesso_repositorio import RecessoRepositorio
 from .endereco_repositorio import EnderecoRepositorio
-from .mes_referencia_repositorio import MesReferenciaRepositorio
+from .agenda_mensal_repositorio import AgendaMensalRepositorio

@@ -3,31 +3,31 @@ from sqlalchemy import text
 from database import db
 
 from models import Recesso
-from DAO.mes_referencia_dao import MesReferenciaDAO
+from DAO.agenda_mensal_dao import AgendaMensalDAO
 
 
 class RecessoDAO:
 
     def __init__(self):
-        self.__mesReferenciaDao = MesReferenciaDAO()
+        self.__mesReferenciaDao = AgendaMensalDAO()
 
-    def cadastrar(self, recesso: Recesso):
+    def cadastrar(self, recesso: Recesso, barbearia_cnpj):
         sql = text("""
             INSERT INTO recesso (
                 data_dia,
                 descricao_feriado,
-                fk_mes_agenda
+                fk_barbearia_cnpj
             ) VALUES (
                 :data_dia,
                 :descricao_feriado,
-                :fk_mes_agenda
+                :fk_barbearia_cnpj
             )
         """)
 
         resultado = db.session.execute(sql, {
             "data_dia": recesso.data_dia,
             "descricao_feriado": recesso.descricao_feriado,
-            "fk_mes_agenda": recesso.mes_referencia.id_mes_referencia
+            "fk_barbearia_cnpj":barbearia_cnpj
         })
 
         db.session.commit()

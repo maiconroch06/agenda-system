@@ -1,29 +1,29 @@
 
-class Agenda:
+class HorarioFuncionamento:
 
     def __init__(
         self,
-        id_agenda=None,
+        id_horario=None,
         horario_abertura=None,
         horario_fechamento=None,
         horario_inicio_intrajornada=None,
         horario_fim_intrajornada=None,
-        dias_fechados=None
+        dias_funcionamento=None
     ):
-        self.__id_agenda = id_agenda
+        self.__id_horario = id_horario
         self.__horario_abertura = horario_abertura
         self.__horario_fechamento = horario_fechamento
         self.__horario_inicio_intrajornada = horario_inicio_intrajornada
         self.__horario_fim_intrajornada = horario_fim_intrajornada
-        self.__dias_fechados = dias_fechados if dias_fechados is not None else []
+        self.__dias_funcionamento = dias_funcionamento if dias_funcionamento is not None else []
 
     @property
-    def id_agenda(self):
-        return self.__id_agenda
+    def id_horario(self):
+        return self.__id_horario
 
-    @id_agenda.setter
-    def id_agenda(self, value):
-        self.__id_agenda = value
+    @id_horario.setter
+    def id_horario(self, value):
+        self.__id_horario = value
 
     @property
     def horario_abertura(self):
@@ -58,9 +58,9 @@ class Agenda:
         self.__horario_fim_intrajornada = value
 
     @property
-    def dias_fechados(self):
-        return self.__dias_fechados
+    def dias_funcionamento(self):
+        return self.__dias_funcionamento
 
-    @dias_fechados.setter
-    def dias_fechados(self, value):
-        self.__dias_fechados = value if value is not None else []
+    @dias_funcionamento.setter
+    def dias_funcionamento(self, value):
+        self.__dias_funcionamento = value if value is not None else []

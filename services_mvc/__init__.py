@@ -4,5 +4,7 @@ from .gestor_service import GestorServiceMVC
 from .servicos_barbearia_services_mvc import ServicoBarbearia
 from .barbeiro_service import BarbeiroService
 from .endereco_service import EnderecoService
-from .agenda_service import AgendaService
+from .horario_funcionamento_service import HorarioFuncionamentoService
 from .agendamento_service import AgendamentoService
+from .agenda_mensal_service import AgendaMensalService
+from .barbearia_service import BarbeariaService

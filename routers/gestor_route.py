@@ -1,6 +1,6 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
 from controladores import ControladorGestor, ControladorBarbeiro
-from models import Cliente, Servico, Endereco, Barbeiro
+from models import Cliente, Servico, Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
 from datetime import datetime, timezone
@@ -49,9 +49,41 @@ def gestorPainel():
 def gestorAbaAgendamento():
     return render_template('pages/gestor/gestor-painel-agendamento-rp.html')
 
-@gestor.route('/painel/agenda')
-def gestorAbaAgenda():
-    return render_template('pages/gestor/gestor-painel-agenda-rp.html')
+##################################################################################
+#  HORARIO_FUNCIONAMENTO
+
+@gestor.route('/painel/horario_funcionamento')
+def gestor_horario_funcionamento_barbearia():
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_mensal_barbearia() ,mensagens_status=EnumStatusMensagens)
+
+
+@gestor.route('/painel/horario_funcionamento/atualizar', methods=['POST'])
+def gestor_horario_funcionamento_barbearia_atualizar():
+    
+    horario_funcionamento = HorarioFuncionamento(
+        id_horario=request.form.get("horario_funcionamento_id"),
+        horario_abertura= datetime.strptime(request.form.get("horario_abertura"), "%H:%M").time(),
+        horario_fechamento=request.form.get("horario_fechamento"),
+        horario_inicio_intrajornada=request.form.get("inicio_almoco"),
+        horario_fim_intrajornada=request.form.get("fim_almoco"),
+        dias_funcionamento=list(map(int, request.form.getlist("dias_funcionamento")))
+    )
+       
+    return ControladorGestor.atualizar_horario_funcionamento_barbearia(horario_funcionamento)
+
+##################################################################################
+# AGENDA MENSAL 
+
+@gestor.route('/painel/agenda_mensal/cadastrar', methods=['POST'])
+def gestor_agenda_mensal_cadastrar():
+    
+    agenda_mensal = AgendaMensal(
+        data_inicial_mes= datetime.strptime(request.form.get("data_inicio"),  "%Y-%m-%d").date(),
+        data_final_mes=datetime.strptime(request.form.get("data_fim"),  "%Y-%m-%d").date(),
+        titulo_agenda=request.form.get("titulo_agenda"), 
+    )
+     
+    return ControladorGestor.cadastrar_agenda_mensal_barbearia(agenda_mensal)
 
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados

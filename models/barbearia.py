@@ -1,7 +1,7 @@
 
 from datetime import datetime
 from .endereco import Endereco
-from .agenda import Agenda
+from .horario_funcionamento import HorarioFuncionamento
 
 
 class Barbearia:
@@ -15,7 +15,7 @@ class Barbearia:
         logo_barbearia_nome: str,
         data_cadastro: datetime,
         endereco: Endereco,
-        agenda: Agenda
+        agenda: HorarioFuncionamento
     ):
         self.__cnpj = cnpj
         self.__nome_barbearia = nome_barbearia
