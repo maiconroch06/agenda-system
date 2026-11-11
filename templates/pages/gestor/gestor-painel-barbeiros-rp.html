@@ -8,19 +8,19 @@
 
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
+    <style>
+        .hidden-step { display: none !important; }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+
 </head>
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
     {# ───────── DADOS MOCK VS FLASK ───────── #}
-    {% set barbeiros_mock = [
-        {'id': 1, 'nome_completo': 'Thiago Silva', 'descricao': 'Especializado nas principais academias internacionais, domina técnicas avançadas de corte a tesoura, estruturação de cabelo masculino e atendimento personalizado de alto padrão.', 'email': 'thiago@gmail.com', 'telefone': '(11) 11111-1111', 'fk_id_endereco': '1', 'foto_nome': 'barbeiro-master-thiago-silva.png'},
-        {'id': 2, 'nome_completo': 'Maik Mendes', 'descricao': 'Com foco em tendências modernas, Maik é especialista em degradês perfeitos (Fade), alinhamento de contornos e penteados urbanos contemporâneos.', 'email': 'maik@gmail.com', 'telefone': '(11) 22222-2222', 'fk_id_endereco': '2', 'foto_nome': 'barbeiro_dois_maik.png'}
-        {'id': 3, 'nome_completo': 'Samuca Costa', 'descricao': 'Mestre no tradicional ritual da barba com toalha quente e lâmina afiada. Samuca garante um momento relaxante combinado a cuidados profundos com a pele.', 'email': 'samuel@gmail.com', 'telefone': '(11) 33333-2222', 'fk_id_endereco': '2', 'foto_nome': 'barbeiro_dois_maik.png'}
-    ] %}
-
-    {% set lista_barbeiros = barbeiros_flask | default(barbeiros_mock) %}
+    {% include "componetizacao/preCadastro/dados.html" %}
     {# ─────────────────────────────────────── #}
 
     <!-- HEADER (Exibe apenas para o mobile)-->
@@ -35,6 +35,7 @@
 
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+                <p id="titulo-modal" class="hidden">Barbeiro</p>
                  <!-- ============================================================
                 COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
                 ============================================================ -->
@@ -55,87 +56,68 @@
                         </a>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
-                        id="lista-profissionais-painel">
-                        {%  for barbeiro in barbeiros %}
-                            <div class="relative flex flex-col items-center  bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-100  border-zinc-700/60 transition-all duration-200">
-                        
-                                <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${p.foto}" alt="${p.nome}">
-                                <!-- ${p.foto
-                                    ? `<img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500 shadow-sm" src="${p.foto}" alt="${p.nome}">`
-                                    : `<div class="w-20 h-20 rounded-full bg-zinc-100  bg-zinc-700 border border-zinc-200  border-zinc-600 flex items-center justify-center text-3xl mb-3 text-zinc-400">👤</div>`
-                                 -->
+                    
+                    <div id="lista-profissionais-painel"
+                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 w-full">
 
-                                    <h3 class="font-bold text-white   text-base mb-1 text-center">{{barbeiro.nome_completo}}</h3>
-                                    <p class="text-xs text-gray-300  text-center mb-3 line-clamp-2">{{barbeiro.descricao}}</p>
+                        {% for barbeiro in barbeiros %}
+                        <div id="card_servicos" class="flex flex-col items-center min-w-0 bg-[#232220] rounded-2xl p-4 border border-zinc-700/60 hover:border-amber-500/40 transition-all">
 
-                                    <div class="flex flex-col gap-1 w-full text-xs text-gray-300  mb-4 bg-zinc-50  bg-zinc-800/50 p-2.5 rounded-xl border border-zinc-100  border-zinc-700/40">
-                                        <span class="truncate"><strong>E-mail:</strong> {{barbeiro.email}}</span>
-                                        <span><strong>Tel:</strong> {{barbeiro.telefone}}</span>
-                                        
-                                        <span class="truncate mt-1 border-t border-zinc-200  border-zinc-700 pt-1"><strong>End:</strong> {{barbeiro.fk_id_endereco}}</span>
-                                    </div>
+                            <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500"
+                                src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario) }}"
+                                alt="Foto de {{ barbeiro.nome_completo }}">
 
-                                    <div class="flex gap-2 w-full mt-auto pt-3 border-t border-zinc-100  border-zinc-700/50">
-                                        <button  class="flex-1 py-1.5 px-3 rounded-lg border border-[#38362f] bg-transparent text-gray-300  hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Editar</button>
-                                        <button  class="flex-1 py-1.5 px-3 rounded-lg border border-[#38362f] bg-transparent text-gray-300  hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">Desativar</button>
-                                    </div>
-                            </div>       
-                        {%endfor%}
+                            <h3 id="campo-padrao" class="font-bold text-white text-base text-center">{{ barbeiro.nome_completo }}</h3>
+
+                            <p class="text-xs text-gray-300 text-center mb-3">
+                                Contato: ({{ barbeiro.telefone[:2] }}) {{ barbeiro.telefone[2:7] }}-{{ barbeiro.telefone[7:] }}
+                            </p>
+
+                            <div class="w-full min-w-0 text-xs text-gray-300 mb-4 bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/40">
+                                <p class="break-all"><strong>E-mail:</strong> {{ barbeiro.endereco.email }}</p>
+                                <p class="flex items-center gap-2 text-gray-300 mt-2 pt-2 border-t border-zinc-700 break-words">
+                                    <i data-lucide="map-pin" class="w-8 h-8 "></i>
+                                    {{ barbeiro.endereco.logradouro}}, nº {{ barbeiro.endereco.numero}} - {{barbeiro.endereco.bairro}} {{ ', ' ~ barbeiro.endereco.sequencia if barbeiro.endereco.sequencia else ""}}{{', ' ~ barbeiro.endereco.complemento if barbeiro.endereco.complemento else ""}} | {{barbeiro.endereco.cidade}}({{barbeiro.endereco.estados_br_sigla}}) | CEP: {{ barbeiro.endereco.cep[:5] }}-{{barbeiro.endereco.cep[5:8]}} </p>
+                            </div>
+
+                            <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
+
+                                <button type="button" id="editar-barbeiro" value="{{barbeiro.id_servico}}&{{barbeiro.nome_completo}}&{{barbeiro.cpf}}&{{barbeiro.email}}&{{barbeiro.telefone}}&{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario) }}&{{barbeiro.foto_nome_usuario}}&{{barbeiro.status_barbeiro}}&{{barbeiro.bio}}"
+                                        class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
+                                    Editar barbeiro
+                                </button>
+
+                                <button type="button" id="editar-endereco" value="{{barbeiro.fk_id_endereco}}&{{barbeiro.cep}}&{{barbeiro.cidade}}&{{barbeiro.uf}}&{{barbeiro.logradouro}}&{{barbeiro.numero}}&{{barbeiro.bairro}}&{{barbeiro.sequencia if barbeiro.sequencia else '' }}&{{barbeiro.complemento if barbeiro.complemento else ''}}"
+                                        class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
+                                    Editar endereço
+                                </button>
+
+                                <form action="/gestor/painel/barbeiro/excluir" id="form-confirmar-exclusao"
+                                    method="POST" class="flex-1 min-w-0">
+
+                                    <input type="hidden" name="srv-id-deletar" value="{{ barbeiro.id }}">
+                                    <input type="hidden" name="srv-foto_nome" value="{{ barbeiro.foto_nome }}">
+
+                                    <button type="submit" class="w-full py-2 px-2 rounded-lg bg-red-900/80 border border-red-800 text-gray-200 hover:bg-red-700 text-xs font-medium transition-colors">
+                                        Excluir
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
+
+                    {% include "componetizacao/modals/modal-editar-barbeiro.html" %}   
+                    {% include "componetizacao/modals/modal-editar-endereco.html" %}  
+                    {% include "componetizacao/modals/modal-confimacao-excluir-padrao.html" %}
                 </section>
             </main>
         </div>
-
+       
         <!-- NAVEGAÇÃO INFERIOR MOBILE -->
         {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
 
-    </div>
-
-    <!-- MODAL: BLOQUEAR HORÁRIO -->
-    <div class="hidden fixed inset-0 bg-black/65 z-[300]" id="overlay-bloquear" onclick="fecharModalBloquear()"></div>
-    <div class="hidden fixed inset-0 z-[301] flex items-end sm:items-center justify-center sm:p-6" id="modal-bloquear"
-        onclick="if(event.target===this) fecharModalBloquear()">
-        <div
-            class="bg-[#232220] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-5 w-full sm:max-w-md max-h-[85vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-base font-medium">Bloquear horário</h2>
-                <button
-                    class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center"
-                    onclick="fecharModalBloquear()">✕</button>
-            </div>
-            <form class="flex flex-col gap-3" novalidate>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-[#888780]" for="bloq-barbeiro">Barbeiro</label>
-                    <select id="bloq-barbeiro"
-                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
-                    </select>
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-[#888780]" for="bloq-data">Data</label>
-                    <input type="date" id="bloq-data"
-                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-[#888780]" for="bloq-inicio">Início</label>
-                    <input type="time" id="bloq-inicio" value="12:00"
-                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-[#888780]" for="bloq-fim">Fim</label>
-                    <input type="time" id="bloq-fim" value="13:00"
-                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs font-medium text-[#888780]" for="bloq-motivo">Motivo (opcional)</label>
-                    <input type="text" id="bloq-motivo" placeholder="Ex: Almoço"
-                        class="h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-sm focus:outline-none">
-                </div>
-                <button type="button"
-                    class="w-full h-10 px-4 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm cursor-pointer mt-2"
-                    onclick="confirmarBloqueio()">Bloquear horário</button>
-            </form>
-        </div>
     </div>
 
     <!-- TOAST AVISO -->
@@ -143,8 +125,13 @@
         id="aviso"></div>
 
     <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
-    <!--script src="{{ url_for('static', filename='js/gestor-painel-barbeiros.js') }}"></script-->
 
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_validar_editar_endereco.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/janelas_modais/js_validar_editar_barbeiro.js') }}"></script>
+    <!-- icones personlaizados -->
+    <script> lucide.createIcons();</script>
+    
 </body>
 
 </html>

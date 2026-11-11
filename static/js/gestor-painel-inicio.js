@@ -35,13 +35,14 @@ Object.assign(els, {
 
 function cardAtendimentoHojeHTML(item) {
     const concluidoClasse = item.status === "concluido" ? " opacity-65" : "";
+
     return `
         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
             <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${item.hora}</div>
 
             <div class="flex-1">
                 <div class="text-sm font-medium">${item.cliente}</div>
-                <div class="text-xs text-[#888780] mt-0.5">${item.servico}</div>
+                <div class="text-xs text-[#888780] mt-0.5">${item.servico} • <span class="text-[#9fe1cb]">${item.barbeiro}</span></div>
             </div>
 
             <div class="flex flex-col items-end gap-1 flex-shrink-0">
@@ -65,7 +66,7 @@ function carregarDashboardInicio() {
 
     const concluidos = doDia.filter(a => a.status === "concluido").length;
     const cancelados = doDia.filter(a => a.status === "cancelado").length;
-    const pendentes = doDia.filter(a => a.status === "aguardando").length;
+    const pendentes = doDia.filter(a => a.status === "agendado").length;
     const totalGeral = doDia.length;
     
     // Total válido decrementando os cancelados

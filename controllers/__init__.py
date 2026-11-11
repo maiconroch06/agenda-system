@@ -1,1 +1,0 @@
-from .controlador_de_imagens import ControladorDeImagens

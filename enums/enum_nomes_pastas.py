@@ -1,5 +1,8 @@
 from enum import Enum
 
 class EnumNomesPastaImagem(Enum):
-    IMAGEMS_SERVICOS= "post-imagens"
+    IMAGENS_GESTOR = "gestor-imagens"
+    IMAGENS_CLIENTE = "cliente-imagens"
+    IMAGENS_BARBEIRO = "barbeiro-imagens"
+    IMAGEMS_SERVICOS= "servicos-imagens"
     IMAGEM_PADRAO = "default.png"

@@ -1,0 +1,1 @@
+from .imagem_excecoes import ImagemErrorExcecao

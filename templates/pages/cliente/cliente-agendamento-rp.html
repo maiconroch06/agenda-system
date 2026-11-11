@@ -8,7 +8,7 @@
 
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
 </head>
 
 <body
@@ -88,7 +88,7 @@
                         <div class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col justify-between items-center gap-3 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
 
                             <div class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
-                                <img src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" class="w-full h-full object-cover">
+                                <img_uploads src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" class="w-full h-full object-cover">
                                 
                             </div>
 

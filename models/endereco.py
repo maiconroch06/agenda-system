@@ -1,97 +1,111 @@
-from database import db
-from sqlalchemy import text
-
-class Endereco(db.Model):
-    __tablename__ = 'enderecos'
-
-    # Chave Primária e Configurações de Identificação
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
-        
-    cep = db.Column(db.String(10), nullable=False)        
-    cidade = db.Column(db.String(40), nullable=False)     
-    numero = db.Column(db.Integer, nullable=False)        
-    bairro = db.Column(db.String(150), nullable=False)    
-    sequencia = db.Column(db.Integer, nullable=True)      
-    complemento = db.Column(db.String(100), nullable=True)
-    fk_estado =  db.Column(db.Integer, db.ForeignKey('estados.id'), nullable=True)     
+class Endereco:
 
     def __init__(
         self,
-        cep,
-        cidade,
-        numero,
-        bairro,
-        estado,
-        sequencia=None,
-        complemento=None
+        cep: str,
+        cidade: str,
+        uf: str,
+        logradouro: str,
+        numero: int,
+        bairro: str,
+        id_endereco = None,
+        sequencia = None,
+        complemento = None
     ):
-        self.cep = cep
-        self.cidade = cidade
-        self.numero = numero
-        self.bairro = bairro
-        self.fk_estado = estado
-        self.sequencia = sequencia
-        self.complemento = complemento
+        self.__id_endereco = id_endereco
+        self.__cep = cep
+        self.__cidade = cidade
+        self.__uf = uf
+        self.__logradouro = logradouro
+        self.__numero = numero
+        self.__bairro = bairro
+        self.__sequencia = sequencia
+        self.__complemento = complemento
 
-    def consultarEnderecoInicial():
-        sql = text("""
-                    select * from enderecos limit 1    
-                """)  
-        resultado = db.session.execute(sql) # retorna um resultset
-        return  resultado.fetchall() # pega todos os registros retornados por uma consulta SQL e coloca em uma lista.
+    @property
+    def id_endereco(self):
+        return self.__id_endereco
 
-    def inserirEndereco(self):
-        resultado = db.session.execute(
-                        db.text("""
-                            INSERT INTO enderecos
-                            (
-                                cep,
-                                cidade,
-                                numero,
-                                bairro,
-                                sequencia,
-                                complemento,
-                                fk_estado
-                            )
-                            VALUES
-                            (
-                                :cep,
-                                :cidade,
-                                :numero,
-                                :bairro,
-                                :sequencia,
-                                :complemento,
-                                :fk_estado
-                            )
-                        """),
-                        {
-                            "cep": self.cep,
-                            "cidade":self.cidade,
-                            "numero": self.numero,
-                            "bairro": self.bairro,
-                            "sequencia": self.sequencia,
-                            "complemento": self.complemento,
-                            "fk_estado": self.fk_estado
-                        }
-                    )
-        
-                        
-        return resultado.lastrowid
+    @id_endereco.setter
+    def id_endereco(self, value):
+        self.id_endereco = value
 
-    @classmethod
-    def inserirEnderecoPadrao(cls):
+    @property
+    def cep(self):
+        return self.__cep
 
-        endereco_padrao = cls.consultarEnderecoInicial()
-        
-        if not endereco_padrao: # Verifica se não existe endereço padrão cadastrado
-            cls.cep = "59215000"
-            cls.cidade= "Nova Cruz"
-            cls.numero= 55
-            cls.bairro= "Centro"
-            cls.sequencia= None
-            cls.complemento= None
-            cls.fk_estado= 20
-                     
-            return cls.inserirEndereco(cls)
+    @cep.setter
+    def cep(self, value):
+        self.__cep = value
 
-        return -1
+    @property
+    def cidade(self):
+        return self.__cidade
+
+    @cidade.setter
+    def cidade(self, value):
+        self.__cidade = value
+
+    @property
+    def uf(self):
+        return self.__uf
+
+    @uf.setter
+    def uf(self, value):
+        self.__uf = value
+
+    @property
+    def logradouro(self):
+        return self.__logradouro
+
+    @logradouro.setter
+    def logradouro(self, value):
+        self.__logradouro = value
+
+    @property
+    def numero(self):
+        return self.__numero
+
+    @numero.setter
+    def numero(self, value):
+        self.__numero = value
+
+    @property
+    def bairro(self):
+        return self.__bairro
+
+    @bairro.setter
+    def bairro(self, value):
+        self.__bairro = value
+
+    @property
+    def sequencia(self):
+        return self.__sequencia
+
+    @sequencia.setter
+    def sequencia(self, value):
+        self.__sequencia = value
+
+    @property
+    def complemento(self):
+        return self.__complemento
+
+    @complemento.setter
+    def complemento(self, value):
+        self.__complemento = value
+
+
+   
+
+    def _str__(self):
+        return (
+            f"Endereco(id={self.__id}, "
+            f"cep='{self.__cep}', "
+            f"cidade='{self.__cidade}', "
+            f"estado='{self.__uf}', "
+            f"logradouro='{self.__logradouro}', "
+            f"numero={self.__numero}, "
+            f"bairro='{self.__bairro}', "
+            f"sequencia={self.__sequencia}, "
+            f"complemento='{self.__complemento}')"
+        )

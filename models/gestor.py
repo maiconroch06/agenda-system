@@ -1,63 +1,49 @@
-from database import db
+from datetime import datetime
+from models.usuarios import Usuario
+from .endereco import Endereco
 
-class Gestor(db.Model):
-    __tablename__ = 'gestor'
 
-    
-    id = db.Column(
-        db.Integer, 
-        db.ForeignKey('usuarios.id', onupdate='restrict', ondelete='restrict'), 
-        primary_key=True, 
-        nullable=False
-    )
+class Gestor(Usuario):
 
-    # O parêntese do ForeignKey agora fecha DEPOIS do ondelete/onupdate
-    fk_cnpj_barbearia = db.Column(
-        db.String(14), 
-        db.ForeignKey('barbearia.cnpj', onupdate='restrict', ondelete='restrict'), 
-        nullable=False, 
-        unique=True
-    )
-
-    # 2. Construtor para salvar na tabela clientes
-    def __init__(self, cliente_id:int, cnpj: str):
-            self.cliente_id = cliente_id 
-            self.fk_cnpj_barbearia = cnpj
-    
-    # as consultas devem ser nas classes, pois cada tipo de usuario vai ter consultas com atributos e tabelas diferentes
-    @classmethod
-    def consultarGestorEmail(cls,email:str, cnpj:str):
-        resultado = db.session.execute(
-              db.text(
-               """
-               select * from gestor g join usuarios u  on u.id = g.id where u.email =:email and g.fk_cnpj_barbearia=:cnpj
-                """    
-              ),
-              {"email":email, "cnpj":cnpj}
-         )
-        return resultado.mappings().first()
+    def __init__(
+        self,
+        cnpj_barbearia,
+        nome_completo, 
+        telefone, 
+        cpf, 
+        email, 
+        status_usuario, 
+        data_cadastro, 
+        data_atualizacao, 
+        foto_nome_usuario=None, 
+        senha=None, 
+        id_usuario=None, 
+        endereco = None
+        ):
         
-
-
-    @classmethod
-    def inserirGestor(cls, id_gestor:int, cnpj:str):
-       
-        db.session.execute(
-                db.text("""
-                    INSERT INTO gestor
-                    (
-                        id,
-                        fk_cnpj_barbearia
-                    )
-                    VALUES
-                    (
-                        :id,
-                        :fk_cnpj_barbearia
-                    )
-                """),
-                {
-                    "id": id_gestor,
-                    "fk_cnpj_barbearia": cnpj
-                }
+        super().__init__(
+            nome_completo=nome_completo, 
+            telefone=telefone, 
+            cpf=cpf, 
+            email=email, 
+            status_usuario=status_usuario, 
+            data_cadastro=data_cadastro,
+            data_atualizacao=data_atualizacao, 
+            foto_nome_usuario=foto_nome_usuario, 
+            senha =senha, 
+            id_usuario=id_usuario,
+            endereco=endereco
             )
-        
+
+        self.__cnpj_barbearia = cnpj_barbearia
+
+    @property
+    def cnpj_barbearia(self):
+        return self.__cnpj_barbearia
+
+    @cnpj_barbearia.setter
+    def cnpj_barbearia(self, value):
+        self.__cnpj_barbearia = value
+
+
+   

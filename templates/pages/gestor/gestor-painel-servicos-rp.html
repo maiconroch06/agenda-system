@@ -8,11 +8,15 @@
 
     <!--<script src="https://cdn.tailwindcss.com"></script>-->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
 </head>
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
+    {# ───────── DADOS MOCK VS FLASK ───────── #}
+    {% include "componetizacao/preCadastro/dados.html" %}
+    {# ─────────────────────────────────────── #}
+    
     <!-- HEADER (Exibe apenas para o mobile)-->
     {% include "componetizacao/Header/header-painel.html" %}
 
@@ -29,50 +33,52 @@
                 {% set mensagens=mensagens_status %}
                 {% include "componetizacao/mensagens/mensagens.html" %}
  
+                <p id="titulo-modal" class="hidden">Serviço</p>
                 <!-- ABA 3: SERVIÇOS -->
                 <section id="aba-servicos">
                     <div class="flex items-center justify-between mb-5 gap-3">
+
                         <div>
                             <h1 class="text-lg lg:text-xl font-semibold">Catálogo de Serviços</h1>
                             <p class="text-xs text-[#888780]" id="data-atual-str"></p>
                         </div>
                         
-                        <a href="/gestor/painel/servicos/cadastrar">
-                            <button class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
+                            <button id="cadastrar-servico" class="px-4 py-2 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
                                 + Novo serviço
                             </button>
-                        </a>
+                        
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
                         id="lista-servicos-painel">
                        
-                        {% for servico in listaServicos%}
-                            <div class=" bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-700/60 transition-all duration-200" >
+                        {% for servico in listaServicos or [] %}
+                            <div id="card_servicos" class=" bg-[#232220] rounded-2xl p-5 shadow-sm hover:shadow-md border border-zinc-700/60 transition-all duration-200" >
                                 <div class="relative flex flex-col items-center">
                                     
-                                    <img class="w-20 h-20 rounded-full aspect-[3/4] object-cover mb-3 shadow-sm" src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" >
+                                    <img id="imagem-servico" class="w-20 h-20 rounded-full object-cover mb-3 shadow-sm" 
+                                    src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/servicos-imagens/' ~ servico.foto_nome_servico) }}" >
                     
-                                    <h3 class="font-bold text-base mb-1 text-center">{{servico.descricao}}</h3>
+                                    <h3 id="campo-padrao" class="font-bold text-base mb-1 text-center">{{servico.descricao_servico}}</h3>
                                     <p class="text-xs text-center mb-3 line-clamp-2">Valor R$ {{servico.valor}} | duracao {{servico.duracao}} minutos</p>
                                 
                                 </div>
                                 <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-[#38362f]">
-                                    <a href="/gestor/painel/servicos/editar/{{servico.id}}" method="GET" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">
-                                        <button  type="submit"> Editar </button> 
-                                    </a>
-
-                                    <form action="/gestor/painel/servicos/deletar" id="form-confirmar-exclusao" method="POST" class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center">
-                                        <input class="hidden" type="number" name="srv-id-deletar" value="{{servico.id}}">
-                                        <button  type="submit"> Remover </button> 
+                     
+                                    <button type="button" id="editar-servico" value="{{servico.id_servico}}&{{servico.descricao_servico}}&{{servico.valor}}&{{servico.duracao}}&{{servico.foto_nome_servico}}&{{servico.status_servico}}&1&{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/servicos-imagens/' ~ servico.foto_nome_servico) }}"
+                                     class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center"> Editar </button> 
+                                    <form action="/gestor/painel/servicos/excluir" id="form-confirmar-exclusao" method="POST" class="py-1.5 bg-red-800 rounded-lg border border-[#38362f]  text-white hover:bg-red-700  text-xs font-medium transition-colors cursor-pointer text-center">
+                                        <input class="hidden" type="number" name="srv-id-deletar" value="{{servico.id_servico}}">
+                                        <input class="hidden" type="text" name="srv-foto_nome" value="{{servico.foto_nome_servico}}">
+                                        <button  type="submit"> Excluir </button> 
                                     </form>
                                 
                                 </div>
                             </div>
                         {% endfor %}
 
-                        {% set mensagens=mensagens_status %}
-                        {% include "componetizacao/modals/modal-confirmacao.html" %}
+                        {% include "componetizacao/modals/modal-confimacao-excluir-padrao.html" %}
+                        {% include "componetizacao/modals/modal-cadastrar-editar-servico.html" %}
                     </div>
                 </section>
 
@@ -90,9 +96,11 @@
         class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso">
     </div>
-
+    
     <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modals/modal-servicos.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/janelas_modais/js_cadastrar_editar_servico.js') }}"></script>
 </body>
 
 </html>

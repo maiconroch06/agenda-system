@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/maiconroch06/agenda-system#readme",
   "devDependencies": {
-    "@tailwindcss/cli": "^4.3.3",
-    "tailwindcss": "^4.3.3"
+    "@tailwindcss/cli": "^4.3.5",
+    "tailwindcss": "^4.3.5"
   }
 }

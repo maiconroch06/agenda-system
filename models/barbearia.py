@@ -1,88 +1,92 @@
-from datetime import datetime, timezone
-from database import db
-from sqlalchemy import text
 
-class Barbearia(db.Model):
+from datetime import datetime
+from .endereco import Endereco
+from .agenda import Agenda
 
-    # Chave Primária (CNPJ de 14 caracteres limpos)
-    cnpj = db.Column(db.CHAR(14), primary_key=True,  nullable=False)
+
+class Barbearia:
+
+    def __init__(
+        self,
+        cnpj: str,
+        nome_barbearia: str,
+        telefone: str,
+        email_empresa: str,
+        logo_barbearia_nome: str,
+        data_cadastro: datetime,
+        endereco: Endereco,
+        agenda: Agenda
+    ):
+        self.__cnpj = cnpj
+        self.__nome_barbearia = nome_barbearia
+        self.__telefone = telefone
+        self.__email_empresa = email_empresa
+        self.__logo_barbearia_nome = logo_barbearia_nome
+        self.__data_cadastro = data_cadastro
+        self.__endereco = endereco
+        self.__agenda = agenda
+
+
+    @property
+    def cnpj(self):
+        return self.__cnpj
+
+    @cnpj.setter
+    def cnpj(self, value):
+        self.__cnpj = value
+
+    @property
+    def nome_barbearia(self):
+        return self.__nome_barbearia
+
+    @nome_barbearia.setter
+    def nome_barbearia(self, value):
+        self.__nome_barbearia = value
+
+    @property
+    def telefone(self):
+        return self.__telefone
+
+    @telefone.setter
+    def telefone(self, value):
+        self.__telefone = value
+
+    @property
+    def email_empresa(self):
+        return self.__email_empresa
+
+    @email_empresa.setter
+    def email_empresa(self, value):
+        self.__email_empresa = value
+
+    @property
+    def logo_barbearia(self):
+        return self.__logo_barbearia_nome
+
+    @logo_barbearia.setter
+    def logo_barbearia(self, value):
+        self.__logo_barbearia_nome = value
+
+    @property
+    def data_cadastro(self):
+        return self.__data_cadastro
+
+    @data_cadastro.setter
+    def data_cadastro(self, value):
+        self.__data_cadastro = value
+
+    @property
+    def endereco(self):
+        return self.__endereco
+
+    @endereco.setter
+    def endereco(self, value):
+        self.__endereco = value
+
+    @property
+    def agenda(self):
+            return self.__agenda
     
-    nome_barbearia = db.Column(db.String(150), nullable=False)
-    telefone = db.Column(db.String(11), nullable=False, unique=True)
-    email_empresa = db.Column(db.String(150), nullable=False, unique=True)
-    logo_barbearia = db.Column(db.String(255), nullable=False)
-    
-    # Controle de Data com o padrão moderno timezone-aware
-    data_cadastro = db.Column(
-        db.DateTime, 
-        default=lambda: datetime.now(timezone.utc), 
-        nullable=False
-    )
-    
-    # Chaves Estrangeiras com Regra CASCADE
-    fk_id_endereco = db.Column(
-        db.Integer, 
-        db.ForeignKey('enderecos.id', onupdate='RESTRICT', ondelete='RESTRICT'), 
-        nullable=False
-    )
-
-    def getCNPJ():
-        return "00000000000101"
-
-    # Metodo responsavel por retornar o cnpj da empresa
-    # pode ser feito via consulta tbm
-    def consultarBarbearia():
-       return db.session.execute ( 
-           db.text("""
-            SELECT * from barbearia limit 1
-            """)  
-            ).fetchall()
-
-    # chamar o método pela própria classe
-    # cls é uma convenção do Python que representa a própria classe
-    @classmethod
-    def inserirBarbeariaPadrao(cls, id_endereco:int):
-        
-        barbearia = cls.consultarBarbearia()
-        print("barbearia", barbearia )
-        if not barbearia:
-
-            db.session.execute(
-                    db.text("""
-                        INSERT INTO barbearia
-                        (
-                            cnpj,
-                            nome_barbearia,
-                            telefone,
-                            email_empresa,
-                            logo_barbearia,
-                            data_cadastro,
-                            fk_id_endereco
-                        )
-                        VALUES
-                        (
-                            :cnpj,
-                            :nome_barbearia,
-                            :telefone,
-                            :email_empresa,
-                            :logo_barbearia,
-                            :data_cadastro,
-                            :fk_id_endereco
-                        )
-                    """),
-                    {
-                        "cnpj": cls.getCNPJ(),
-                        "nome_barbearia": "TMS Barbearia",
-                        "telefone": "84999999999",
-                        "email_empresa": "contato@tmsbarbearia.com",
-                        "logo_barbearia": "default/logo.png",
-                        "data_cadastro": datetime.now(),
-                        "fk_id_endereco": id_endereco
-                    }
-                )
-       
-            print('Barbearia cadastrada com sucesso.')
-
-            return cls.getCNPJ()
-
-        return None
+    @agenda.setter
+    def agenda(self, value):
+        self.__agenda = value

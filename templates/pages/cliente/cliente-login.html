@@ -8,7 +8,7 @@
     
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
 </head>
 
 <body class="min-h-dvh w-screen bg-[#161513] text-gray-100 font-sans antialiased flex items-center justify-center p-4 sm:p-6 md:p-8">
@@ -43,13 +43,9 @@
                 <form id="form-login" action="/cliente/login" method="post" novalidate
                     class="flex flex-col gap-4 md:gap-5 shrink-0">
 
-                    <!-- Mensagem de erros -->
-                    {% if session.get('erro') %}
-                    <div
-                        class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
-                        {{ session.pop('erro')|replace('\n', '<br>')|safe }}
-                    </div>
-                    {% endif %}
+                    <!-- Mensagem de Erro -->
+                    {% set mensagens =  mensagens_status %}
+                    {% include "componetizacao/mensagens/mensagens.html" %}
 
                     <div id='div-validation-message'
                         class="bg-red-500/10 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide hidden ">

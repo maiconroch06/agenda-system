@@ -8,11 +8,15 @@
 
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
 </head>
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
-
+    
+    {# ───────── DADOS MOCK VS FLASK ───────── #}
+    {% include "componetizacao/preCadastro/dados.html" %}
+    {# ─────────────────────────────────────── #}
+    
     <!-- HEADER (Exibe apenas para o mobile)-->
     {% include "componetizacao/Header/header-painel.html" %}
 
@@ -90,17 +94,17 @@
                                             <th class="p-3.5 px-4">Valor</th>
                                             <th class="p-3.5 px-4">Status</th>
                                         </tr>
-                                        <!-- { for agendamento in agendamentos%} Falta a % aqui, nos demais falta uma { no lado direito
+                                        {% for agendamento in lista_agendamentos %} 
                                             <tr class="border-b border-[#38362f] text-[13px] tracking-wider text-[#888780]">
-                                                <td class="p-3.5 px-4 text-white">{agendamento.dataHoraAgendamento}}</td>
-                                                <td class="p-3.5 px-4 text-white">{agendamento.nomeCliente}}</td>
-                                                <td class="p-3.5 px-4">{agendamento.nomeServico}}</td>
-                                                <td class="p-3.5 px-4">{agendamento.nomeBarbeiro}}</td>
-                                                <td class="p-3.5 px-4 text-white">{agendamento.valorServico}}</td>
-                                                <td class="p-3 px-4">${badgeStatusHTML(agendamento.status)}</td>
+                                                <td class="p-3.5 px-4 text-white">{{agendamento.dataHoraAgendamento}}</td>
+                                                <td class="p-3.5 px-4 text-white">{{agendamento.nomeCliente}}</td>
+                                                <td class="p-3.5 px-4">{{agendamento.nomeServico}}</td>
+                                                <td class="p-3.5 px-4">{{agendamento.nomeBarbeiro}}</td>
+                                                <td class="p-3.5 px-4 text-white">{{agendamento.valorServico}}</td>
+                                                <td class="p-3 px-4">{{badgeStatusHTML(agendamento.status)}}</td>
                                                 status agendamento
                                             </tr>
-                                        { endfor %} -->
+                                        {% endfor %} 
                                     </thead>
                                     <tbody id="fin-tabela-corpo" class="text-xs text-[#f1efe8]">
                                         <tr>

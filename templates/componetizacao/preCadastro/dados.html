@@ -1,0 +1,46 @@
+{# ───────── DADOS MOCK VS FLASK ───────── #}
+{% set barbeiros_mock = [
+    {'id': 'p1', 'nome': 'Carlos Silva', 'cargo': 'Barbeiro Master'},
+    {'id': 'p2', 'nome': 'Lucas Mendes', 'cargo': 'Especialista em Barba'}
+] %}
+
+    {% set agendamentos_mock = [
+    {'id': 'a1', 'barbeiro': 'Carlos Silva', 'data': '2026-11-10', 'hora': '09:00', 'cliente': 'Carlos Eduardo', 'telefone': '(11) 98765-4321', 'servico': 'Corte Social', 'valor': 45, 'status': 'agendado', 'observacoes': ''},
+    {'id': 'a2', 'barbeiro': 'Lucas Mendes', 'data': '2026-11-10', 'hora': '10:00', 'cliente': 'Bruno Alves', 'telefone': '(11) 91234-5678', 'servico': 'Degradê & Barba', 'valor': 70, 'status': 'agendado', 'observacoes': 'Cliente prefere degradê baixo'},
+    {'id': 'a3', 'barbeiro': 'Carlos Silva', 'data': '2026-11-10', 'hora': '11:30', 'cliente': 'Rafael Souza', 'telefone': '(11) 99887-6655', 'servico': 'Barba', 'valor': 35, 'status': 'agendado', 'observacoes': ''},
+    {'id': 'a4', 'barbeiro': 'Lucas Mendes', 'data': '2026-11-10', 'hora': '14:00', 'cliente': 'Diego Martins', 'telefone': '(11) 98111-2233', 'servico': 'Corte Infantil', 'valor': 40, 'status': 'agendado', 'observacoes': 'Primeira vez'},
+    {'id': 'a5', 'barbeiro': 'Carlos Silva', 'data': '2026-11-10', 'hora': '15:30', 'cliente': 'Felipe Costa', 'telefone': '(11) 97222-3344', 'servico': 'Corte Militar', 'valor': 45, 'status': 'agendado', 'observacoes': ''},
+    {'id': 'a6', 'barbeiro': 'Lucas Mendes', 'data': '2026-11-10', 'hora': '16:30', 'cliente': 'Gustavo Lima', 'telefone': '(11) 96333-4455', 'servico': 'Social & Barba', 'valor': 70, 'status': 'cancelado', 'observacoes': 'Cliente cancelou'},
+    {'id': 'a7', 'barbeiro': 'Carlos Silva', 'data': '2026-11-11', 'hora': '09:30', 'cliente': 'Henrique Dias', 'telefone': '(11) 95444-5566', 'servico': 'Degradê', 'valor': 50, 'status': 'agendado', 'observacoes': ''},
+    {'id': 'a9', 'barbeiro': 'Mendes', 'data': '2026-11-11', 'hora': '14:00', 'cliente': 'Igor Pereira', 'telefone': '(11) 94555-6677', 'servico': 'Corte Social', 'valor': 45, 'status': 'agendado', 'observacoes': ''},
+    {'id': 'a8', 'barbeiro': 'Lucas Mendes', 'data': '2026-11-11', 'hora': '13:00', 'cliente': 'Igor Pereira', 'telefone': '(11) 94555-6677', 'servico': 'Corte Social', 'valor': 45, 'status': 'agendado', 'observacoes': ''}
+] %}
+
+{% set clientes_mock = [
+    {'id': 'c1', 'nome_completo': 'Carlos Eduardo', 'telefone': '11987654321', 'email': 'carlos.eduardo@gmail.com', 'data_ultimo_servico': '10/11/2026'},
+    {'id': 'c2', 'nome_completo': 'Bruno Alves', 'telefone': '11912345678', 'email': 'bruno.alves@gmail.com', 'data_ultimo_servico': '10/11/2026'},
+    {'id': 'c3', 'nome_completo': 'Rafael Souza', 'telefone': '11998876655', 'email': 'rafael.souza@gmail.com', 'data_ultimo_servico': '10/11/2026'},
+    {'id': 'c4', 'nome_completo': 'Diego Martins', 'telefone': '11981112233', 'email': 'diego.martins@gmail.com', 'data_ultimo_servico': '10/11/2026'},
+    {'id': 'c5', 'nome_completo': 'Felipe Costa', 'telefone': '11972223344', 'email': 'felipe.costa@gmail.com', 'data_ultimo_servico': '10/11/2026'},
+    {'id': 'c6', 'nome_completo': 'Gustavo Lima', 'telefone': '11963334455', 'email': 'gustavo.lima@gmail.com', 'data_ultimo_servico': '10/11/2026'},
+    {'id': 'c7', 'nome_completo': 'Henrique Dias', 'telefone': '11954445566', 'email': 'henrique.dias@gmail.com', 'data_ultimo_servico': '11/11/2026'},
+    {'id': 'c8', 'nome_completo': 'Igor Pereira', 'telefone': '11945556677', 'email': 'igor.pereira@gmail.com', 'data_ultimo_servico': '11/11/2026'}
+] %}
+
+{% set lista_barbeiros = barbeiros_flask if barbeiros_flask else barbeiros_mock %}
+{% set lista_agendamentos = agendamentos_flask if agendamentos_flask else agendamentos_mock %}
+{% set lista_clientes = clientes_flask if clientes_flask else clientes_mock %}
+{# ─────────────────────────────────────── #}
+
+<!-- INJEÇÃO DE DADOS JSON PARA O JAVASCRIPT -->
+<script id="dados-barbeiros-json" type="application/json">
+    {{ lista_barbeiros | tojson }}
+</script>
+
+<script id="dados-agendamentos-json" type="application/json">
+    {{ lista_agendamentos | tojson }}
+</script>
+
+<script id="dados-clientes-json" type="application/json">
+    {{ lista_clientes | tojson }}
+</script>

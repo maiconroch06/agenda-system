@@ -54,7 +54,7 @@ function alterarEtapa(direcao) {
             renderizarEtapa();
         } else if (state.etapaAtual === 1) {
             // Se está no step 1, volta para o painel
-            window.location.href = "/gestor/painel"; // Altere para a URL exata do seu painel se for diferente
+            window.location.href = "/gestor/painel/barbeiros"; // Altere para a URL exata do seu painel se for diferente
             // ou use window.history.back(); para voltar à página anterior do histórico
         }
     }
@@ -63,19 +63,19 @@ function alterarEtapa(direcao) {
 function renderizarEtapa() {
     // Alterna a exibição das etapas
     if (state.etapaAtual === 1) {
-        els.step1.classList.remove("hidden");
-        els.step2.classList.add("hidden");
+        els.step1.classList.remove("hidden-step");
+        els.step2.classList.add("hidden-step");
         
         els.btnVoltar.textContent = "Cancelar"; // Muda o texto para dar sentido de voltar ao painel
-        els.btnProximo.classList.remove("hidden");
-        els.btnSubmit.classList.add("hidden");
+        els.btnProximo.classList.remove("hidden-step");
+        els.btnSubmit.classList.add("hidden-step");
     } else {
-        els.step1.classList.add("hidden");
-        els.step2.classList.remove("hidden");
+        els.step1.classList.add("hidden-step");
+        els.step2.classList.remove("hidden-step");
         
         els.btnVoltar.textContent = "Voltar"; // Muda o texto de volta para o padrão da etapa
-        els.btnProximo.classList.add("hidden");
-        els.btnSubmit.classList.remove("hidden");
+        els.btnProximo.classList.add("hidden-step");
+        els.btnSubmit.classList.remove("hidden-step");
     }
 
     atualizarEstiloIndicador();
@@ -126,76 +126,6 @@ function configurarEventosWizard() {
         els.btnSubmit.textContent = "Aguarde...";
         els.form.submit();
     });
-}
-
-/* ============================================================
-   LÓGICA DE UPLOAD E PREVIEW DE IMAGEM
-   ============================================================ */
-function configurarUploadImagem() {
-    const spanTextos = els.fotoInput.parentElement.querySelectorAll('span');
-
-    // Checa ao carregar a página se já tem foto (ex: em edição)
-    if (!els.imgPreview.classList.contains('hidden') && !els.imgPreview.src.includes("default.png")) {
-        ocultarExibirBotaoRemoverImagem(true);
-        spanTextos.forEach(el => el.classList.add('hidden'));
-    }
-
-    els.fotoInput.addEventListener('change', () => {
-        const arquivo = els.fotoInput.files[0];
-
-        if (arquivo && arquivo.type.startsWith('image/')) {
-            els.imgPreview.src = URL.createObjectURL(arquivo);
-            els.imgPreview.classList.remove('hidden');
-
-            spanTextos.forEach(el => el.classList.add('hidden'));
-
-            if (!els.divButoes.querySelector('button')) {
-                ocultarExibirBotaoRemoverImagem(true);
-            }
-            criarInputDefault(false);
-        } else {
-            resetarImagemPreview(spanTextos);
-        }
-    });
-
-    function ocultarExibirBotaoRemoverImagem(visivel) {
-        if (visivel) {
-            const botaoRemover = document.createElement('button');
-            botaoRemover.setAttribute('type', 'button');
-            botaoRemover.innerText = "Remover";
-            botaoRemover.classList.add("mt-2", "h-8", "px-3", "text-white", "rounded-md", "bg-red-900/80", "hover:bg-red-600", "text-[12px]", "transition-all");
-
-            botaoRemover.addEventListener('click', function () {
-                resetarImagemPreview(spanTextos);
-                criarInputDefault(true);
-                els.fotoInput.value = "";
-                botaoRemover.remove();
-            });
-
-            els.divButoes.appendChild(botaoRemover);
-        } else {
-            els.divButoes.querySelector('button')?.remove();
-        }
-    }
-
-    function resetarImagemPreview(spans) {
-        els.imgPreview.classList.add('hidden');
-        els.imgPreview.removeAttribute('src');
-        spans.forEach(el => el.classList.remove('hidden'));
-    }
-
-    function criarInputDefault(visivel) {
-        if (visivel) {
-            const inputPadrao = document.createElement('input');
-            inputPadrao.type = "hidden";
-            inputPadrao.id = "imagem-padrao";
-            inputPadrao.name = "imagem-padrao";
-            inputPadrao.value = "default.png";
-            els.divButoes.appendChild(inputPadrao);
-        } else {
-            els.divButoes.querySelector("#imagem-padrao")?.remove();
-        }
-    }
 }
 
 /* ============================================================

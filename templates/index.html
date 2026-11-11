@@ -12,34 +12,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
 </head>
 
 <body class="bg-brand-bg-primary font-sans text-gray-100 antialiased selection:bg-brand-gold selection:text-black">
 
     {# ───────── DADOS (edite o conteúdo aqui) ───────── #}
-    {% set barbers = [
-        {'name': 'Thiago Silva', 'role': 'Master Barber', 'tag': 'Fundador & Master Barber', 'exp': '10+ anos de experiência', 'img': 'barbeiro-master-thiago-silva.png',
-         'bio': 'Especializado nas principais academias internacionais, domina técnicas avançadas de corte a tesoura, estruturação de cabelo masculino e atendimento personalizado de alto padrão.',
-         'skills': ['Visagismo', 'Cortes Clássicos', 'Modelagem de Barba']},
-        {'name': 'Maik Mendes', 'role': 'Especialista em Visagismo', 'tag': 'Especialista em Estilo', 'exp': '6 anos de experiência', 'img': 'barbeiro_dois_maik.png',
-         'bio': 'Com foco em tendências modernas, Maik é especialista em degradês perfeitos (Fade), alinhamento de contornos e penteados urbanos contemporâneos.',
-         'skills': ['Fade / Degradê', 'Hair Design', 'Colorimetria']},
-        {'name': 'Samuca Costa', 'role': 'Especialista em Barboterapia', 'tag': 'Especialista em Barboterapia', 'exp': '8 anos de experiência', 'img': 'barbeiro-tres-samuca.png',
-         'bio': 'Mestre no tradicional ritual da barba com toalha quente e lâmina afiada. Samuca garante um momento relaxante combinado a cuidados profundos com a pele.',
-         'skills': ['Barboterapia', 'Tratamento Facial', 'Navalha Clássica']}
-    ] %}
-    {% set services = [
-        ('Cabelo', 'Cortes personalizados para valorizar o seu estilo e formato de rosto.', 'R$ 50,00'),
-        ('Barboterapia', 'Barba alinhada com toalha quente, massagem e produtos de alta qualidade.', 'R$ 45,00'),
-        ('Combo TMS', 'Corte de cabelo e barboterapia completa para um visual impecável.', 'R$ 85,00'),
-        ('Sobrancelha & Acabamento', 'Alinhamento e simetria para realçar o olhar de forma natural.', 'R$ 25,00')
-    ] %}
-    {% set plans = [
-        {'name': 'Plano Corte', 'price': 135, 'cta': 'Assinar Plano', 'perks': ['4 Cortes de Cabelo por mês', '10% OFF em produtos', 'Atendimento VIP']},
-        {'name': 'Plano Combo', 'price': 240, 'cta': 'Garantir Estilo', 'featured': true, 'perks': ['4 Cortes + 4 Barbas por mês', '15% OFF em produtos', 'Desconto em serviços extras']},
-        {'name': 'Plano Barba', 'price': 120, 'cta': 'Assinar Plano', 'perks': ['4 Barboterapias por mês', '10% OFF em produtos', 'Atendimento VIP']}
-    ] %}
     {% set faqs = [
         ('Preciso agendar ou posso ir sem marcar horário?', 'Recomendamos o agendamento prévio para garantir seu atendimento no horário desejado, sem filas. Porém, também atendemos por ordem de chegada, conforme a disponibilidade dos barbeiros.'),
         ('Quais formas de pagamento são aceitas?', 'Aceitamos Pix, cartões de crédito e débito (todas as bandeiras), além de dinheiro em espécie.'),
@@ -116,7 +94,7 @@
                         </svg>
                     </button>
 
-                    <!-- Lista de Tabs (Cards do Carrossel) -->
+                    <!-- Lista de Tabs (Cards do Carrossel) PRIMEIRO CARROSSEL -->
                     <div id="barber-carousel-track" class="relative flex h-full w-full items-center justify-center">
                         {% if barbeiros %}
                             {% for b in barbeiros %}
@@ -125,28 +103,15 @@
                                     class="barber-tab absolute w-full max-w-[200px] flex flex-col items-center justify-center gap-2 rounded-xl border border-brand-border bg-brand-bg-card p-4 text-center transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold/80 aria-selected:border-brand-gold aria-selected:bg-brand-gold/5">
                                     
                                     <span class="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-brand-border bg-[#22252a] transition-colors group-aria-selected:border-brand-gold sm:h-28 sm:w-28">
-                                        <img src="{{ url_for('static', filename='assets/img/barbeiros/' ~ b.foto_nome) }}" alt="Foto do barbeiro {{ b.nome_completo }}" width="112" height="112" loading="lazy" class="h-full w-full aspect-[3/4] object-cover">
+                                        <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_nome_usuario) }}"
+                                        alt="Foto do barbeiro {{ b.nome_completo }}" width="112" height="112" loading="lazy" class="h-full w-full aspect-[3/4] object-cover">
                                     </span>
                                     <span>
                                         <span class="block text-base font-bold text-white sm:text-lg">{{ b.nome_completo }}</span>
                                         <!-- <span class="mt-1 block text-xs text-brand-muted">{{ b.role }}</span> -->
                                     </span>
                                 </button>
-                            {% endfor %}
-                        {% else %}
-                            {% for b in barbers %}
-                                <button type="button" role="tab" id="tab-{{ loop.index }}" aria-controls="panel-{{ loop.index }}"
-                                    aria-selected="{{ 'true' if loop.first else 'false' }}" tabindex="{{ 0 if loop.first else -1 }}"
-                                    class="barber-tab absolute w-full max-w-[200px] flex flex-col items-center justify-center gap-2 rounded-xl border border-brand-border bg-brand-bg-card p-4 text-center transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold/80 aria-selected:border-brand-gold aria-selected:bg-brand-gold/5">
-                                    
-                                    <span class="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-brand-border bg-[#22252a] transition-colors group-aria-selected:border-brand-gold sm:h-28 sm:w-28">
-                                        <img src="{{ url_for('static', filename='assets/img/barbeiros/' ~ b.img) }}" alt="Foto do barbeiro {{ b.name }}" width="112" height="112" loading="lazy" class="h-full w-full aspect-[3/4] object-cover">
-                                    </span>
-                                    <span>
-                                        <span class="block text-base font-bold text-white sm:text-lg">{{ b.name }}</span>
-                                        <span class="mt-1 block text-xs text-brand-muted">{{ b.role }}</span>
-                                    </span>
-                                </button>
+                                                   
                             {% endfor %}
                         {% endif %}
                     </div>
@@ -172,60 +137,23 @@
                                 <!-- Informações (Texto) -->
                                 <div class="space-y-4 flex-1 w-full text-center md:text-left p-6 sm:p-10 flex flex-col justify-center">
                                     <div>
-                                        <!-- <span class="block text-xs font-bold uppercase tracking-[0.2em] text-brand-gold">{{ b.tag }}</span> -->
+                                        <span class="block text-xs font-bold uppercase tracking-[0.2em] text-brand-gold">{{ b.especialidade }}</span>
                                         <h3 class="font-title text-2xl font-bold text-white sm:text-4xl mt-1">{{ b.nome_completo }}</h3>
-                                        <!-- <span class="block text-xs text-brand-muted">{{ b.exp }}</span> -->
+                                        <span class="block text-xs text-brand-muted">{{ b.data_inicio_carreira }} anos de esperiencias</span>
                                     </div>
-                                    <!-- <p class="max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base mx-auto md:mx-0">{{ b.bio }}</p> -->
-                                    <ul class="flex flex-wrap justify-center md:justify-start gap-2 pt-2">
-                                        <!-- {% for s in b.skills %}
-                                        <li class="rounded-full border border-brand-border bg-white/5 px-3.5 py-1 text-xs text-brand-muted">{{ s }}</li>
-                                        {% endfor %} -->
-                                    </ul>
+                                    <p class="max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base mx-auto md:mx-0">{{ b.bio }}</p>
+                        
                                     <div class="pt-2">
                                         <a href="/cliente/login" class="inline-block text-sm font-semibold text-brand-gold transition-colors hover:text-white">Agendar com {{ b.nome_completo.split()[0] }} →</a>
                                     </div>
                                 </div>
 
                                 <div class="relative w-full md:w-[300px] shrink-0 overflow-hidden md:border-l border-brand-border/30 aspect-square md:aspect-[3/4] bg-brand-bg-card">
-                                    <img src="{{ url_for('static', filename='assets/img/barbeiros/' ~ b.foto_nome) }}" 
+                                    <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_nome_usuario) }}" 
                                         alt="Foto do barbeiro {{ b.nome_completo }}" 
                                         loading="lazy" 
                                         class="h-full w-full aspect-[3/4] object-cover [mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]
                                                     [-webkit-mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]">
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        {% for b in barbers %}
-                            <div id="panel-{{ loop.index }}" role="tabpanel" aria-labelledby="tab-{{ loop.index }}" tabindex="0"
-                                class="barber-panel {{ '' if loop.first else 'hidden' }} animate-fade-in flex flex-col md:flex-row items-center w-full">
-
-                                <!-- Informações (Imagem) -->
-                                <div class="relative w-full md:w-[300px] shrink-0 overflow-hidden md:border-l border-brand-border/30 aspect-square md:aspect-[3/4] bg-brand-bg-card">
-                                    <img src="{{ url_for('static', filename='assets/img/barbeiros/' ~ b.img) }}" 
-                                        alt="Foto do barbeiro {{ b.name }}" 
-                                        loading="lazy" 
-                                        class="h-full w-full aspect-[3/4] object-cover [mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]
-                                                    [-webkit-mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]">
-                                </div>
-
-                                <!-- Informações (Texto) -->
-                                <div class="space-y-4 flex-1 w-full text-center md:text-left p-6 sm:p-10 flex flex-col justify-center">
-                                    <div>
-                                        <span class="block text-xs font-bold uppercase tracking-[0.2em] text-brand-gold">{{ b.tag }}</span>
-                                        <h3 class="font-title text-2xl font-bold text-white sm:text-4xl mt-1">{{ b.name }}</h3>
-                                        <span class="block text-xs text-brand-muted">{{ b.exp }}</span>
-                                    </div>
-                                    <p class="max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base mx-auto md:mx-0">{{ b.bio }}</p>
-                                    <ul class="flex flex-wrap justify-center md:justify-start gap-2 pt-2">
-                                        {% for s in b.skills %}
-                                            <li class="rounded-full border border-brand-border bg-white/5 px-3.5 py-1 text-xs text-brand-muted">{{ s }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                    <div class="pt-2">
-                                        <a href="/cliente/login" class="inline-block text-sm font-semibold text-brand-gold transition-colors hover:text-white">Agendar com {{ b.name.split()[0] }} →</a>
-                                    </div>
                                 </div>
                             </div>
                         {% endfor %}
@@ -236,58 +164,53 @@
 
         <!-- Serviços -->
         <section id="servicos" class="border-t border-brand-border/30 bg-brand-bg-primary py-20 sm:py-28 overflow-hidden">
+            
             <div class="mx-auto max-w-6xl px-5 relative">
-                {{ section_head('Cuidado completo', 'Nossos <span class="text-brand-gold">Serviços</span>', 'Desde cortes clássicos a tratamentos completos') }}
+                {% if servicos %}
+                    {{ section_head('Cuidado completo', 'Nossos <span class="text-brand-gold">Serviços</span>', 'Desde cortes clássicos a tratamentos completos') }}
                 
-                <!-- Container do Carrossel -->
-                <div class="relative mx-auto mt-10 h-[450px] w-full max-w-5xl md:h-[420px]">
+                    <!-- Container do Carrossel -->
+                    <div class="relative mx-auto mt-10 h-[450px] w-full max-w-5xl md:h-[420px]">
+                        
+                        <!-- Setas de Navegação -->
+                        <button id="btn-prev-service" class="absolute left-0 top-1/2 z-30 -translate-y-1/2 rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all hover:scale-110 hover:bg-brand-gold hover:text-black hidden sm:block">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                            </svg>
+                        </button>
+
+                        <button id="btn-next-service" class="absolute right-0 top-1/2 z-30 -translate-y-1/2 rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all hover:scale-110 hover:bg-brand-gold hover:text-black hidden sm:block">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                            </svg>
+                        </button>
+
+                        <!-- Lista de Cards -->
+                        <div id="carousel-track" class="relative flex h-full w-full items-center justify-center">
+                        
+                                {% for servico in servicos %}
+                                    <article class="service-card absolute w-full max-w-[280px] sm:max-w-[300px] flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold">
+                                        <div>           
+                                            <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/servicos-imagens/' ~ servico.foto_nome_servico) }}" alt="{{ servico.descricao }}" class="w-full object-cover rounded-lg mb-3">
+                                            
+                                            <h3 class="font-title mb-1 text-xl text-white">{{ servico.descricao_servico }}</h3>
+                                            <p class="text-sm leading-relaxed text-brand-muted">Duração: {{ servico.duracao }} min</p>
+                                        </div>
+                                        <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
+                                            <span class="text-xl font-bold text-brand-gold">R$ {{ "%.2f"|format(servico.valor|float) }}</span>
+                                            <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
+                                        </div>
+                                    </article>
+                                {% endfor %}
+                                
+                        </div>
+                    {% else %}
+                        
+                        {{ section_head('Nenhum', '<span class="text-brand-gold">Serviço</span>', 'Cadastrado') }}
                     
-                    <!-- Setas de Navegação -->
-                    <button id="btn-prev-service" class="absolute left-0 top-1/2 z-30 -translate-y-1/2 rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all hover:scale-110 hover:bg-brand-gold hover:text-black hidden sm:block">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                        </svg>
-                    </button>
-
-                    <button id="btn-next-service" class="absolute right-0 top-1/2 z-30 -translate-y-1/2 rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all hover:scale-110 hover:bg-brand-gold hover:text-black hidden sm:block">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                        </svg>
-                    </button>
-
-                    <!-- Lista de Cards -->
-                    <div id="carousel-track" class="relative flex h-full w-full items-center justify-center">
-                        {% if servicos %}
-                            {% for servico in servicos %}
-                                <article class="service-card absolute w-full max-w-[280px] sm:max-w-[300px] flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold">
-                                    <div>           
-                                        <img src="{{ url_for('static', filename='assets/dados/post-imagens/' ~ servico.foto_nome) }}" alt="{{ servico.descricao }}" class="w-full h-55 aspect-[3/4] object-cover rounded-lg mb-3">
-                                        
-                                        <h3 class="font-title mb-1 text-xl text-white">{{ servico.descricao }}</h3>
-                                        <p class="text-sm leading-relaxed text-brand-muted">Duração: {{ servico.duracao }} min</p>
-                                    </div>
-                                    <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
-                                        <span class="text-xl font-bold text-brand-gold">R$ {{ "%.2f"|format(servico.valor|float) }}</span>
-                                        <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
-                                    </div>
-                                </article>
-                            {% endfor %}
-                        {% else %}
-                            {% for name, desc, price in services %}
-                                <article class="service-card absolute w-full max-w-[280px] sm:max-w-[320px] flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold">
-                                    <div>
-                                        <h3 class="font-title mb-3 text-xl text-white">{{ name }}</h3>
-                                        <p class="text-sm leading-relaxed text-brand-muted">{{ desc }}</p>
-                                    </div>
-                                    <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
-                                        <span class="text-xl font-bold text-brand-gold">{{ price }}</span>
-                                        <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
-                                    </div>
-                                </article>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
+                    {% endif %}
                 </div>
+               
                 
                 <!-- Controles Mobile (Setas em baixo) -->
                 <div class="mt-6 flex justify-center gap-4 sm:hidden">
@@ -302,34 +225,6 @@
             </div>
         </section>
 
-        <!-- Planos --
-        <section id="planos" class="border-t border-brand-border/50 bg-brand-bg-secondary py-20 sm:py-28">
-            <div class="mx-auto max-w-6xl px-5">
-                {{ section_head('Assinatura', 'Planos <span class="text-brand-gold">Mensais</span>', 'Mantenha o visual sempre em dia com descontos exclusivos') }}
-
-                <div class="mx-auto grid max-w-md grid-cols-1 gap-8 md:max-w-none md:grid-cols-3 md:gap-6 lg:gap-8">
-                    {% for p in plans %}
-                    {% set hot = p.get('featured') %}
-                    <article class="relative flex flex-col justify-between rounded-xl bg-brand-bg-card p-8 text-center {{ 'border-2 border-brand-gold shadow-xl shadow-brand-gold/10 md:-translate-y-2' if hot else 'border border-brand-border' }}">
-                        {% if hot %}
-                        <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-black">Mais Pedido</span>
-                        {% endif %}
-                        <div>
-                            <h3 class="font-title mb-3 text-2xl text-white">{{ p.name }}</h3>
-                            <div class="mb-6 text-4xl font-bold text-white sm:text-5xl">R$ {{ p.price }}<span class="text-sm font-normal text-brand-muted">/mês</span></div>
-                            <ul class="mb-8 divide-y divide-brand-border/60 text-sm text-brand-muted">
-                                {% for perk in p.perks %}
-                                <li class="flex items-center justify-center gap-2 py-3"><span aria-hidden="true" class="text-brand-gold">✓</span>{{ perk }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <a href="/cliente/login"
-                            class="block w-full rounded py-3.5 text-xs font-semibold uppercase tracking-wider transition-all {{ 'bg-brand-gold text-black shadow-md hover:bg-brand-gold-hover' if hot else 'border border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black' }}">{{ p.cta }}</a>
-                    </article>
-                    {% endfor %}
-                </div>
-            </div>
-        </section> -->
 
         <!-- FAQ -->
         <section id="faq" class="border-t border-brand-border/30 bg-black py-20 text-white sm:py-28">

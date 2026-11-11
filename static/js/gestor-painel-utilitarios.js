@@ -57,10 +57,6 @@ function salvarNoStorage(chave, valor) {
 }
 
 /* ============================================================
-   DADOS DA BARBEARIA (Injetados pelo Flask/Jinja)
-   ============================================================ */
-
-/* ============================================================
    DADOS DA BARBEARIA (Injetados pelo Flask/Jinja via JSON)
    ============================================================ */
 
@@ -207,10 +203,9 @@ function irParaAba(aba) {
    ============================================================ */
 
 function badgeStatusHTML(status) {
-    const mapa = { aguardando: "Aguardando", confirmado: "Confirmado", concluido: "Concluído", cancelado: "Cancelado" };
+    const mapa = { agendado: "Agendado", concluido: "Concluído", cancelado: "Cancelado" };
     const classes = {
-        aguardando: "bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]",
-        confirmado: "bg-[#0a2940] text-[#5ab4f0] border-[#1a5a8a]",
+        agendado: "bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]",
         concluido: "bg-[#085041] text-[#9fe1cb] border-[#0f6e56]",
         cancelado: "bg-[#3a1510] text-[#f0997b] border-[#993c1d]"
     };
@@ -235,21 +230,17 @@ function abrirModalDetalhe(id) {
     els.detalheObs.textContent = a.observacoes || "Nenhuma observação";
 
     let html = "";
-    if (a.status === "aguardando") {
-        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="confirmarPresenca('${a.id}')">Confirmar presença</button>`;
-    }
-    if (a.status === "confirmado") {
-        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="iniciarAtendimento('${a.id}')">Iniciar atendimento</button>`;
-    }
-    if (a.status === "aguardando" || a.status === "confirmado") {
-        html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="concluirAtendimento('${a.id}')">Concluir atendimento</button>`;
-        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors" onclick="cancelarAtendimento('${a.id}')">Cancelar</button>`;
+    if (a.status === "agendado") {
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="concluirAgendamento('${a.id}')">Concluir agendamento</button>`;
+        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors" onclick="cancelarAgendamento('${a.id}')">Cancelar</button>`;
     }
     if (a.status === "concluido") {
-        html = `<p class="text-center text-[#888780] text-xs">Atendimento já concluído</p>`;
+        html = `<p class="text-center text-[#888780] text-xs">Agendamento já concluído</p>`;
+        html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="resetarStatus('${a.id}')">Voltar status</button>`;
     }
     if (a.status === "cancelado") {
-        html = `<p class="text-center text-[#888780] text-xs">Este atendimento foi cancelado</p>`;
+        html = `<p class="text-center text-[#888780] text-xs">Este agendamento foi cancelado</p>`;
+        html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="resetarStatus('${a.id}')">Voltar status</button>`;
     }
     els.detalheAcoes.innerHTML = html;
 
@@ -262,13 +253,12 @@ function fecharModalDetalhe() {
     els.modalDetalhe.classList.add("hidden");
 }
 
-function confirmarPresenca(id) { atualizarStatus(id, "confirmado"); mostrarAviso("Presença confirmada!"); }
-function iniciarAtendimento(id) { mostrarAviso("Atendimento iniciado!"); fecharModalDetalhe(); }
-function concluirAtendimento(id) { atualizarStatus(id, "concluido"); mostrarAviso("Atendimento concluído!"); }
-function cancelarAtendimento(id) {
-    if (!confirm("Deseja realmente cancelar este atendimento?")) return;
+function resetarStatus(id) { atualizarStatus(id, "agendado"); mostrarAviso("Agendamento resetado!"); }
+function concluirAgendamento(id) { atualizarStatus(id, "concluido"); mostrarAviso("Agendamento concluído!"); }
+function cancelarAgendamento(id) {
+    if (!confirm("Deseja realmente cancelar este agendamento?")) return;
     atualizarStatus(id, "cancelado");
-    mostrarAviso("Atendimento cancelado");
+    mostrarAviso("Agendamento cancelado");
 }
 
 function atualizarStatus(id, novoStatus) {

@@ -1,14 +1,11 @@
 from flask import Blueprint, render_template
-from models.servicos import Servicos
-from models.barbeiros import Barbeiro
+from controladores import ControladorBarbeiro, ControladorServico
 
 publics = Blueprint('public', __name__)
 
 @publics.route('/')
 def homePage():
-    barbeiros = Barbeiro.consultarBarbeiros()
-    servicos = Servicos.consultarTodosOsServicos()
-    return render_template('index.html', servicos=servicos, barbeiros=barbeiros)
+    return render_template('index.html', barbeiros = ControladorBarbeiro.consultar_todos_barbeiros(), servicos = ControladorServico.consultar_servicos_resumido() )
 
 @publics.route('/tipo-usuario')
 def category():

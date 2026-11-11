@@ -8,7 +8,7 @@
 
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
 </head>
 
 <body
@@ -38,13 +38,11 @@
                         Preencha as informações referentes ao cliente.
                     </p>
                 </div>
+
                 <!-- Mensagem de Erro -->
-                {% if session.get('erro') %}
-                <div
-                    class="bg-red-500/10 my-8 border border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide">
-                    {{ session.pop('erro')|replace('\n', '<br>')|safe }}
-                </div>
-                {% endif %}
+                {% set mensagens =  mensagens_status %}
+                {% include "componetizacao/mensagens/mensagens.html" %}
+
                 <!-- MENSAGEM DE ERROS DO JAVASCRIPT -->
                 <div id='div-validation-message'
                     class="bg-red-500/10 border mb-8 border-red-500/30 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-left font-medium tracking-wide hidden ">

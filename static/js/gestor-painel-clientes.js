@@ -6,91 +6,53 @@
 estado.abaAtual = "clientes";
 
 /* ============================================================
-   MAPPING DOM
-   ============================================================ */
-
-Object.assign(els, {
-    // Clientes
-    buscaCliente: document.getElementById("busca-cliente"),
-    tabelaClientesCorpo: document.getElementById("tabela-clientes-corpo"),
-});
-
-/* ============================================================
-   ABA 5: CLIENTES (AGREGAÇÃO DE CLIENTES A PARTIR DE AGENDAMENTOS)
-   ============================================================ */
-
-function extrairClientes() {
-    const mapaClientes = {};
-
-    agendamentos.forEach(a => {
-        if (!a.cliente) return;
-        const chave = a.cliente.toLowerCase().trim();
-        
-        if (!mapaClientes[chave]) {
-            mapaClientes[chave] = {
-                nome: a.cliente,
-                telefone: a.telefone || "Não informado",
-                ultimaVisita: a.data,
-                totalVisitas: 0,
-                totalGasto: 0
-            };
-        }
-
-        if (a.data > mapaClientes[chave].ultimaVisita) {
-            mapaClientes[chave].ultimaVisita = a.data;
-        }
-
-        if (a.status === "concluido") {
-            mapaClientes[chave].totalVisitas += 1;
-            mapaClientes[chave].totalGasto += Number(a.valor || 0);
-        }
-    });
-
-    return Object.values(mapaClientes);
-}
-
-function renderizarClientes(filtro = "") {
-    if (!els.tabelaClientesCorpo) return;
-
-    const clientes = extrairClientes();
-    const termo = filtro.toLowerCase().trim();
-
-    const filtrados = clientes.filter(c => 
-        c.nome.toLowerCase().includes(termo) || 
-        c.telefone.toLowerCase().includes(termo)
-    );
-
-    if (filtrados.length === 0) {
-        els.tabelaClientesCorpo.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-[#888780]">Nenhum cliente encontrado.</td></tr>`;
-        return;
-    }
-
-    els.tabelaClientesCorpo.innerHTML = filtrados.map(c => `
-        <tr class="border-b border-[#38362f] hover:bg-[#2a2825]/50 transition-colors">
-            <td class="p-3.5 px-4 font-medium text-[#f1efe8]">${c.nome}</td>
-            <td class="p-3.5 px-4 text-[#888780]">${c.telefone}</td>
-            <td class="p-3.5 px-4 text-[#888780]">${formatarDataExtenso(c.ultimaVisita)}</td>
-            <td class="p-3.5 px-4 font-medium">${c.totalVisitas} visita(s)</td>
-            <td class="p-3.5 px-4 font-semibold text-[#9fe1cb]">${formatarMoeda(c.totalGasto)}</td>
-        </tr>
-    `).join("");
-}
-
-function filtrarClientes() {
-    const valor = els.buscaCliente ? els.buscaCliente.value : "";
-    renderizarClientes(valor);
-}
-
-/* ============================================================
-   INICIALIZAÇÃO
+   INICIALIZAÇÃO & FILTRO DE BUSCA LOCAL
    ============================================================ */
 
 function iniciar() {
-    renderizarClientes();
+    // Carrega a data no cabeçalho, provida pelo utilitários
+    if (typeof carregarData === "function") {
+        carregarData();
+    }
 
-    // Utilitario
-    carregarData();
+    // Configura o filtro de clientes em tempo real no Front-end
+    const inputBusca = document.getElementById("busca-cliente");
     
+    if (inputBusca) {
+        inputBusca.addEventListener("input", function (e) {
+            const termo = e.target.value.toLowerCase();
+            const linhas = document.querySelectorAll(".cliente-row");
+            let visiveis = 0;
+
+            linhas.forEach(linha => {
+                const nome = linha.querySelector(".cliente-nome")?.textContent.toLowerCase() || "";
+                const tel = linha.querySelector(".cliente-tel")?.textContent.toLowerCase() || "";
+                
+                // Oculta a linha se não bater com a pesquisa
+                if (nome.includes(termo) || tel.includes(termo)) {
+                    linha.style.display = "";
+                    visiveis++;
+                } else {
+                    linha.style.display = "none";
+                }
+            });
+
+            // Gerencia a exibição da mensagem de "Nenhum cliente encontrado"
+            let linhaVazia = document.getElementById("linha-vazia-busca");
+            
+            if (visiveis === 0 && linhas.length > 0) {
+                if (!linhaVazia) {
+                    const tbody = document.getElementById("tabela-clientes-corpo");
+                    linhaVazia = document.createElement("tr");
+                    linhaVazia.id = "linha-vazia-busca";
+                    linhaVazia.innerHTML = `<td colspan="5" class="p-6 text-center text-[#888780]">Nenhum cliente encontrado para "${e.target.value}".</td>`;
+                    tbody.appendChild(linhaVazia);
+                }
+            } else if (linhaVazia) {
+                linhaVazia.remove();
+            }
+        });
+    }
 }
 
 iniciar();

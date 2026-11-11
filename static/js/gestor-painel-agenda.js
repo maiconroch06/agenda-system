@@ -89,10 +89,12 @@ function cardAgendamentoHTML(a) {
     return `
         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${a.id}')">
             <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${a.hora}</div>
+            
             <div class="flex-1">
                 <div class="text-sm font-medium">${a.cliente}</div>
                 <div class="text-xs text-[#888780] mt-0.5">${a.servico} • <span class="text-[#9fe1cb]">${a.barbeiro}</span></div>
             </div>
+            
             <div class="flex flex-col items-end gap-1 flex-shrink-0">
                 ${badgeStatusHTML(a.status)}
                 <div class="text-xs font-medium">${formatarMoeda(a.valor)}</div>
