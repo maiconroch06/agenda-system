@@ -28,7 +28,7 @@ class BarbeiroService(UsuarioService):
                                   
             salvou_barbeiro = self.__barbeiroRepositorio.salvar(usuario)
             
-            ValidadorDeImagens.salvarImagem(fotoTemp, self.escolherPastaImagemUsuario(), usuario.foto_nome_usuario)
+            ValidadorDeImagens.salvarImagem(fotoTemp, self.definir_pasta_imagem_usuario(), usuario.foto_nome_usuario)
             db.session.commit()
             
             return salvou_barbeiro
@@ -44,6 +44,6 @@ class BarbeiroService(UsuarioService):
          
 
     # def validarDadosBarbeiro(self, barbeiro, fotoTemp):
-    def escolherPastaImagemUsuario(self):
+    def definir_pasta_imagem_usuario(self):
         return EnumNomesPastaImagem.IMAGENS_BARBEIRO
             

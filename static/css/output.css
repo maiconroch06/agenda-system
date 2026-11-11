@@ -513,6 +513,12 @@
   .ml-2 {
     margin-left: calc(var(--spacing) * 2);
   }
+  .ml-3 {
+    margin-left: calc(var(--spacing) * 3);
+  }
+  .ml-20 {
+    margin-left: calc(var(--spacing) * 20);
+  }
   .line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
@@ -2132,9 +2138,6 @@
   :is(:where(.peer):checked ~ .peer-checked\:border-green-400) {
     border-color: var(--color-green-400);
   }
-  :is(:where(.peer):checked ~ .peer-checked\:border-green-600) {
-    border-color: var(--color-green-600);
-  }
   :is(:where(.peer):checked ~ .peer-checked\:bg-\[\#0f6e56\]) {
     background-color: #0f6e56;
   }
@@ -2150,20 +2153,11 @@
       background-color: color-mix(in oklab, var(--color-green-400) 10%, transparent);
     }
   }
-  :is(:where(.peer):checked ~ .peer-checked\:bg-green-600\/10) {
-    background-color: color-mix(in srgb, oklch(62.7% 0.194 149.214) 10%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-green-600) 10%, transparent);
-    }
-  }
   :is(:where(.peer):checked ~ .peer-checked\:text-brand-gold) {
     color: var(--color-brand-gold);
   }
   :is(:where(.peer):checked ~ .peer-checked\:text-green-400) {
     color: var(--color-green-400);
-  }
-  :is(:where(.peer):checked ~ .peer-checked\:text-green-600) {
-    color: var(--color-green-600);
   }
   .selection\:bg-brand-gold ::selection {
     background-color: var(--color-brand-gold);
@@ -2814,6 +2808,9 @@
     }
     .md\:mb-6 {
       margin-bottom: calc(var(--spacing) * 6);
+    }
+    .md\:ml-3 {
+      margin-left: calc(var(--spacing) * 3);
     }
     .md\:flex {
       display: flex;

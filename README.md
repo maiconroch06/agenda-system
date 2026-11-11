@@ -27,6 +27,7 @@ Para atualizar o tailwind no windows depois
 3. Para testar se deu certo: "node -v" e "npm -v"
 4. "npm install tailwindcss @tailwindcss/cli"
 5. Rode "nmp run tailwind" para rodar o tilwind quando estiver esditando o estilo
+6. tailwindcss -i static/css/input.css -o static/css/output.css --watch
 
 ---
 

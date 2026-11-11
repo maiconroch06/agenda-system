@@ -95,7 +95,6 @@ class ClienteDAO:
         sql = text("""
             SELECT
                 u.id_usuario,
-                c.id_cliente,
                 u.nome_completo,
                 u.telefone,
                 c.data_ultimo_servico

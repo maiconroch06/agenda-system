@@ -28,7 +28,7 @@ class BarbeiroDAO:
         db.session.execute(sql, {
             "id_barbeiro": barbeiro.id_usuario,
             "data_liberacao": barbeiro.data_liberacao,
-            "bio": barbeiro.descricao,
+            "bio": barbeiro.bio,
             "especialidade": barbeiro.especialidade,
             "status_barbeiro": barbeiro.status_barbeiro,
             "data_inicio_carreira": barbeiro.data_inicio_carreira

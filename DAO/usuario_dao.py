@@ -12,7 +12,7 @@ class UsuarioDAO:
                 cpf,
                 email,
                 senha,
-                foto_nome,
+                foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
                 data_atualizacao,
@@ -23,7 +23,7 @@ class UsuarioDAO:
                 :cpf,
                 :email,
                 :senha,
-                :foto_nome,
+                :foto_nome_usuario,
                 :status_usuario,
                 :data_cadastro,
                 :data_atualizacao,
@@ -37,7 +37,7 @@ class UsuarioDAO:
             "cpf": usuario.cpf,
             "email": usuario.email,
             "senha": usuario.senha,
-            "foto_nome": usuario.foto_nome,
+            "foto_nome_usuario": usuario.foto_nome_usuario,
             "status_usuario": usuario.status_usuario,
             "data_cadastro": usuario.data_cadastro,
             "data_atualizacao": usuario.data_atualizacao,
@@ -61,7 +61,7 @@ class UsuarioDAO:
                 cpf,
                 email,
                 senha,
-                foto_nome,
+                foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
                 data_atualizacao,
@@ -89,7 +89,7 @@ class UsuarioDAO:
                 cpf,
                 email,
                 senha,
-                foto_nome,
+                foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
                 data_atualizacao,
@@ -117,7 +117,7 @@ class UsuarioDAO:
                 cpf,
                 email,
                 senha,
-                foto_nome,
+                foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
                 data_atualizacao,
@@ -145,7 +145,7 @@ class UsuarioDAO:
                 cpf,
                 email,
                 senha,
-                foto_nome,
+                foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
                 data_atualizacao,
@@ -170,7 +170,7 @@ class UsuarioDAO:
                 cpf,
                 email,
                 senha,
-                foto_nome,
+                foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
                 data_atualizacao,
@@ -228,7 +228,7 @@ class UsuarioDAO:
                 cpf = :cpf,
                 email = :email,
                 senha = :senha,
-                foto_nome = :foto_nome,
+                foto_nome_usuario = :foto_nome_usuario,
                 status_usuario = :status_usuario,
                 data_atualizacao = :data_atualizacao,
                 fk_id_endereco = :fk_id_endereco
@@ -242,7 +242,7 @@ class UsuarioDAO:
             "cpf": usuario.cpf,
             "email": usuario.email,
             "senha": usuario.senha,
-            "foto_nome": usuario.foto_nome,
+            "foto_nome_usuario": usuario.foto_nome_usuario,
             "status_usuario": usuario.status_usuario,
             "data_atualizacao": usuario.data_atualizacao,
             "fk_id_endereco": usuario.fk_id_endereco
@@ -278,7 +278,7 @@ class UsuarioDAO:
             sql,
             {"id_usuario": id_usuario}
         )
-
+        
         db.session.commit()
 
         return resultado.rowcount > 0
@@ -338,7 +338,7 @@ class UsuarioDAO:
             cpf=registro["cpf"],
             email=registro["email"],
             senha=registro["senha"],
-            foto_nome=registro["foto_nome"],
+            foto_nome_usuario=registro["foto_nome_usuario"],
             status_usuario=bool(registro["status_usuario"]),
             data_cadastro=registro["data_cadastro"],
             data_atualizacao=registro["data_atualizacao"],

@@ -28,7 +28,7 @@ class Endereco:
 
     @id_endereco.setter
     def id_endereco(self, value):
-        self.id_endereco = value
+        self.__id_endereco = value
 
     @property
     def cep(self):

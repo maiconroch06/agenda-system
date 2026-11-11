@@ -38,8 +38,15 @@
                             <p class="text-xs text-[#888780]" id="data-atual-str"></p>
                         </div>
 
-                        <input class="h-9 md:h-10 px-3 w-32 md:w-64 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none"
-                            id="busca-cliente" type="text" placeholder="Buscar por nome ou telefone...">
+                        <div>
+                            <form action="#" method="post">
+                                <input class="h-9 md:h-10 px-3 w-32 md:w-64 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none"
+                                id="busca-cliente" name="buscar-cliente" type="text" placeholder="Buscar por nome ou telefone...">
+                                <button id="consultar-cliente" type="submit" class="px-4 py-2 md: ml-3 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
+                                    Consultar Cliente
+                                </button>                                    
+                            </form>
+                        </div>
                     </div>
 
                     <div class="mb-6">

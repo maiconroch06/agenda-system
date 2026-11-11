@@ -97,8 +97,8 @@
                                 <form action="/gestor/painel/barbeiro/excluir" id="form-confirmar-exclusao"
                                     method="POST" class="flex-1 min-w-0">
 
-                                    <input type="hidden" name="srv-id-deletar" value="{{ barbeiro.id }}">
-                                    <input type="hidden" name="srv-foto_nome" value="{{ barbeiro.foto_nome }}">
+                                    <input type="hidden" name="srv-id-deletar" value="{{ barbeiro.id_usuario }}">
+                                    <input type="hidden" name="srv-foto_nome" value="{{ barbeiro.foto_nome_usuario }}">
 
                                     <button type="submit" class="w-full py-2 px-2 rounded-lg bg-red-900/80 border border-red-800 text-gray-200 hover:bg-red-700 text-xs font-medium transition-colors">
                                         Excluir

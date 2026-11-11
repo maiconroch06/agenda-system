@@ -14,13 +14,13 @@ class UsuarioService:
 
     def cadastrarUsuarioService(self, usuario: Usuario, fotoTemp:str):
         try:
-          
+            
             usuario.nomeVazioUsuario()
             usuario.senha = generate_password_hash(usuario.senha)
             usuario.endereco = EnderecoService.cadastrar_endereco(usuario.endereco)
-            
-            #usuario.foto_nome = ValidadorDeImagens.salvarImagem(fotoTemp, self.escolherPastaImagemUsuario())
-            usuario.foto_nome_usuario = ValidadorDeImagens.nomeImagem(fotoTemp, usuario.getTipo())            
+           
+            usuario.foto_nome_usuario = ValidadorDeImagens.nomeImagem(fotoTemp, usuario.getTipo())   
+        
             return self.__usuarioRepositorio.salvar(usuario) 
 
         except IntegrityError as i:
@@ -39,7 +39,7 @@ class UsuarioService:
         
     def alterar_usuario_barbearia(self,  imagem_form, img_padrao, imagem_anterior, usuario):
                                                      
-        usuario.foto_nome_usuario = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao, usuario.getTipo())
+        usuario.foto_nome_usuario = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,self.definir_pasta_imagem_usuario(), img_padrao, usuario.getTipo())
         
         if not self.__usuarioRepositorio.atualizar_usuario_sem_senha(usuario):
             raise Exception("Error ao tentar atualizar o usuario, tente novamente!")
@@ -49,7 +49,7 @@ class UsuarioService:
     def salvar_dados_especificos(self, usuario: Usuario): 
         raise NotImplementedError
 
-    def escolherPastaImagemUsuario(self):
+    def definir_pasta_imagem_usuario(self):
         raise NotImplementedError
     
     def atualizar_endereco(self, endereco):

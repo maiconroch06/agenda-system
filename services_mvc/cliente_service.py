@@ -41,7 +41,7 @@ class ClienteService(UsuarioService):
             
         raise Exception("E-mail inexistente. Verifique o email e tente novamente!")
 
-    def escolherPastaImagemUsuario(self):
+    def definir_pasta_imagem_usuario(self):
             return EnumNomesPastaImagem.IMAGENS_CLIENTE
 
     def consultar_clientes_services(self):

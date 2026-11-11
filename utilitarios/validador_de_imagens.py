@@ -11,7 +11,7 @@ class ValidadorDeImagens:
     @classmethod
     def imgem_extensao_valida(cls, extensao:str):
         # valida a imagem
-        if (extensao != 'png' and extensao!='jpg' and extensao!='jpeg' and extensao != EnumNomesPastaImagem.IMAGEM_PADRAO.value):
+        if (extensao.lower() != 'png' and extensao.lower()!='jpg' and extensao.lower()!='jpeg' and extensao != EnumNomesPastaImagem.IMAGEM_PADRAO.value):
             raise ImagemErrorExcecao("O sistema só aceita imagens em formato png ou jpg")
     
      
@@ -21,7 +21,7 @@ class ValidadorDeImagens:
         if nome_imagem and nome_imagem.strip():
             # pega a extensao
             extensao = nome_imagem.split(".")
-                        
+                      
             if len(extensao) == 2:
                 return extensao[1]
                 
@@ -32,7 +32,7 @@ class ValidadorDeImagens:
        
         extensao_ou_default_imagem = cls.extensao_foto_servico(nome_imagem)  
         cls.imgem_extensao_valida(extensao_ou_default_imagem)
-                
+                        
         if extensao_ou_default_imagem != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
             foto_nome = f"{prefixo_nome_imagem}_{int(time.time_ns())}.{extensao_ou_default_imagem}" 
             return foto_nome
@@ -46,7 +46,7 @@ class ValidadorDeImagens:
         # nesse caso ele esta pegando o tempo em nanoSegundos;
         
         extensao_ou_default_imagem = nome_imagem
-       
+        print(" DEFAULT IMGEM: " + imagem.filename + " - " + nomePasta.value + " - "+ extensao_ou_default_imagem) 
         try:
             if extensao_ou_default_imagem != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
                   
@@ -75,18 +75,17 @@ class ValidadorDeImagens:
 
     # Função para editar uma imagem
     @classmethod
-    def editarImagem(cls, nome_imagem_anterior: str, nova_imagem, nome_pasta:EnumNomesPastaImagem, imagem_padrao, prefixo_nome_imagem): 
-        
+    def editarImagem(cls, nome_imagem_anterior: str, nova_imagem, nome_pasta:EnumNomesPastaImagem, imagem_padrao, prefixo_nome_imagem):    
         # Imagem nova
         if nova_imagem and nova_imagem.filename:
             # devolvo o nome, e valido extensão
             foto_nome =  cls.nomeImagem(secure_filename(nova_imagem.filename), prefixo_nome_imagem)
-              
+            
             #excluir a imagem anterior, desde que ela não seja a default
             if nome_imagem_anterior != EnumNomesPastaImagem.IMAGEM_PADRAO.value:
                 cls.excluir_imagem(nome_imagem_anterior, nome_pasta)
 
-            cls.salvarImagem(nova_imagem, nome_pasta, foto_nome )
+            cls.salvarImagem(nova_imagem, nome_pasta, foto_nome)
         
             return foto_nome
         

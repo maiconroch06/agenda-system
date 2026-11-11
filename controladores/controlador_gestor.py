@@ -35,9 +35,7 @@ class ControladorGestor():
     @classmethod
     def cadastrarBarbeiro(cls, barbeiro: Barbeiro, fotoTemp):
         try:
-            
-            barbeiro.id = cls.__barbeiro_service_mvc.cadastrarUsuarioService(barbeiro,secure_filename(fotoTemp.filename))
-                        
+            barbeiro.id_usuario = cls.__barbeiro_service_mvc.cadastrarUsuarioService(barbeiro,secure_filename(fotoTemp.filename))        
             if cls.__barbeiro_service_mvc.salvar_dados_especificos(barbeiro, fotoTemp):  
                 flash(f"Barbeiro {barbeiro.nome_completo.split(' ')[0]} cadastrado com sucesso.", EnumStatusMensagens.SUCESSO.value)  
                 return redirect(url_for('gestor.gestorAbaBarbeiros'))
@@ -49,9 +47,9 @@ class ControladorGestor():
     
     
     @classmethod
-    def excluir_barbeiro(cls, id_servico, foto_nome):
+    def excluir_barbeiro(cls, id_barbeiro, foto_nome):
             try:
-                cls.__barbeiro_service_mvc.excluir_usuario_barbearia(id_servico,foto_nome,EnumNomesPastaImagem.IMAGENS_BARBEIRO)   
+                cls.__barbeiro_service_mvc.excluir_usuario_barbearia(id_barbeiro,foto_nome,EnumNomesPastaImagem.IMAGENS_BARBEIRO)   
                 flash(f"O barbeiro foi excluído com sucesso!",EnumStatusMensagens.SUCESSO.value)
             except Exception:
                 flash(f"O barbeiro não foi excluido!", EnumStatusMensagens.ERRO.value)
@@ -113,7 +111,7 @@ class ControladorGestor():
    
     @classmethod
     def consultar_clientes(cls):
-        return render_template('pages/gestor/gestor-painel-clientes-rp.html', usuarios= cls.__controlador_cliente.consultar_todos_clientes(),  mensagens_status=EnumStatusMensagens)
+        return render_template('pages/gestor/gestor-painel-clientes-rp.html', lista_clientes= cls.__controlador_cliente.consultar_todos_clientes(),  mensagens_status=EnumStatusMensagens)
 
     @classmethod
     def consultar_agendamentos(cls, status_agendamento):
