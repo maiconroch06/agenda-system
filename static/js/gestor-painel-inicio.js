@@ -54,10 +54,24 @@ function cardAtendimentoHojeHTML(item) {
     `;
 }
 
-function carregarDashboardInicio() {
+function renderizarInicio() {
     const hoje = hojeISO();
 
-    const doDia = agendamentos.filter(a => a.data === hoje).sort((a, b) => (a.hora || "").localeCompare(b.hora || ""));
+    // Filtra os agendamentos do dia e aplica a ordenação por Status e Hora
+    const doDia = agendamentos
+        .filter(a => a.data === hoje)
+        .sort((a, b) => {
+            // Define o peso (prioridade) de cada status
+            const pesoStatus = { agendado: 1, concluido: 2, cancelado: 3 };
+            
+            // 1º Critério: Ordena pelo peso do status
+            if (pesoStatus[a.status] !== pesoStatus[b.status]) {
+                return pesoStatus[a.status] - pesoStatus[b.status];
+            }
+            
+            // 2º Critério: Se o status for igual, ordena pela hora mais próxima (crescente)
+            return (a.hora || "").localeCompare(b.hora || "");
+        });
 
     // Cálculos de faturamento e contagens
     const faturamento = doDia
@@ -111,8 +125,7 @@ function carregarDashboardInicio() {
 function iniciar() {
     localStorage.clear();
     
-    carregarDashboardInicio();
-    renderizarFinanceiro();
+    renderizarInicio();
 
     // Utilitario
     carregarData();
