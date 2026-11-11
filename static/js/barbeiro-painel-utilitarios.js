@@ -96,51 +96,22 @@ function confirmarFiltro() {
 /* ============================================================
    CARREGAMENTO DE DADOS (JINJA/FLASK)
    ============================================================ */
+let agendamentos = [];
+let barbeiros = [];
+let funcionario = { nome: "Barbeiro", telefone: "", descricao: "" };
 
-const AGENDAMENTOS_PADRAO = [
-    { id: "a1",  data: diasAPartirDeHoje(0), hora: "09:00", cliente: "Carlos Eduardo",  telefone: "(11) 98765-4321", servico: "Corte Social",       valor: 18, status: "concluido",  observacoes: "" },
-    { id: "a2",  data: diasAPartirDeHoje(0), hora: "10:00", cliente: "Bruno Alves",      telefone: "(11) 91234-5678", servico: "Degradê & Barba",    valor: 30, status: "concluido",  observacoes: "Cliente prefere degradê baixo" },
-    { id: "a3",  data: diasAPartirDeHoje(0), hora: "11:30", cliente: "Rafael Souza",     telefone: "(11) 99887-6655", servico: "Barba",              valor: 15, status: "aguardando", observacoes: "" },
-    { id: "a4",  data: diasAPartirDeHoje(0), hora: "14:00", cliente: "Diego Martins",    telefone: "(11) 98111-2233", servico: "Corte Infantil",      valor: 20, status: "aguardando", observacoes: "Primeira vez, criança de 6 anos" },
-    { id: "a5",  data: diasAPartirDeHoje(0), hora: "15:30", cliente: "Felipe Costa",     telefone: "(11) 97222-3344", servico: "Corte Militar",       valor: 15, status: "aguardando", observacoes: "" },
-    { id: "a6",  data: diasAPartirDeHoje(0), hora: "16:30", cliente: "Gustavo Lima",     telefone: "(11) 96333-4455", servico: "Social & Barba",      valor: 30, status: "cancelado",  observacoes: "Cliente cancelou por telefone" },
-    { id: "a7",  data: diasAPartirDeHoje(1), hora: "09:30", cliente: "Henrique Dias",    telefone: "(11) 95444-5566", servico: "Degradê",              valor: 22, status: "aguardando", observacoes: "" },
-    { id: "a9",  data: diasAPartirDeHoje(1), hora: "14:00", cliente: "Igor Pereira",     telefone: "(11) 94555-6677", servico: "Corte Social",         valor: 18, status: "aguardando", observacoes: "" },
-    { id: "a8",  data: diasAPartirDeHoje(1), hora: "13:00", cliente: "Igor Pereira",     telefone: "(11) 94555-6677", servico: "Corte Social",         valor: 18, status: "aguardando", observacoes: "" }
-];
+try {
+    const jsonAgend = document.getElementById("dados-agendamentos-json");
+    if (jsonAgend) agendamentos = JSON.parse(jsonAgend.textContent);
 
-
-
-const agendamentos = carregarDoStorage("agendamentos", AGENDAMENTOS_PADRAO);
-
-/* ============================================================
-   DADOS DO FUNCIONÁRIO LOGADO
-   ============================================================ */
-
-const FUNCIONARIO_PADRAO = {
-    nome: "Maicon",
-    foto: null,
-    empresa: "Barbearia do Zé",
-    telefone: "(11) 98888-7777",
-    descricao: "Barbeiro especializado em degradê e barboterapia.",
-    comissaoPercentual: 50,
-};
-
-let funcionario = carregarDoStorage("profissional", FUNCIONARIO_PADRAO);
-
-/* ============================================================
-   SERVIÇOS
-   ============================================================ */
-
-const SERVICOS_PADRAO = [
-    { id: "s1", nome: "Corte Social",       duracao: 30, preco: 18, ativo: true },
-    { id: "s2", nome: "Degradê",            duracao: 40, preco: 22, ativo: true },
-    { id: "s3", nome: "Degradê & Barba",    duracao: 60, preco: 30, ativo: true },
-    { id: "s4", nome: "Social & Barba",     duracao: 50, preco: 30, ativo: true }
-];
-
-const servicosFunc = carregarDoStorage("servicosFunc", SERVICOS_PADRAO);
-const bloqueios = carregarDoStorage("bloqueios", []);
+    const jsonBarb = document.getElementById("dados-barbeiros-json");
+    if (jsonBarb) {
+        barbeiros = JSON.parse(jsonBarb.textContent);
+        if (barbeiros.length > 0) funcionario = barbeiros[0]; // Puxa o 1º barbeiro do Mock/Flask
+    }
+} catch (e) {
+    console.warn("Não foi possível carregar os dados JSON do Jinja.", e);
+}
 
 /* ============================================================
    PERSISTÊNCIA (localStorage)
