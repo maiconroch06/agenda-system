@@ -11,18 +11,6 @@ const els = {
     progressoCancelados: document.getElementById("progresso-cancelados"),
     progressoPendentes: document.getElementById("progresso-pendente"),
     listaInicioHoje: document.getElementById("lista-inicio-hoje"),
-
-    // Modal: Detalhes do Agendamento
-    detalheStatusBadge: document.getElementById("detalhe-status-badge"),
-    detalheCliente: document.getElementById("detalhe-cliente"),
-    detalheServico: document.getElementById("detalhe-servico"),
-    detalheHorario: document.getElementById("detalhe-horario"),
-    detalheValor: document.getElementById("detalhe-valor"),
-    detalheTelefone: document.getElementById("detalhe-telefone"),
-    detalheObs: document.getElementById("detalhe-obs"),
-    detalheAcoes: document.getElementById("detalhe-acoes"),
-    overlayDetalhe: document.getElementById("overlay-detalhe"),
-    modalDetalhe: document.getElementById("modal-detalhe"),
 };
 
 /* ============================================================
@@ -200,7 +188,7 @@ function renderizarInicio() {
 
 /* ============================================================
    MODAL: DETALHES DO ATENDIMENTO
-   ============================================================ */
+   ============================================================ 
 
 function abrirModalDetalhe(id) {
     const a = agendamentos.find(a => a.id === id);
@@ -213,51 +201,7 @@ function abrirModalDetalhe(id) {
     els.detalheValor.textContent = formatarMoeda(a.valor);
     els.detalheTelefone.textContent = a.telefone;
     els.detalheObs.textContent = a.observacoes || "Nenhuma observação";
-
-    let html = "";
-    
-    if (a.status === "agendado") {
-        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="concluirAgendamento('${a.id}')">Concluir agendamento</button>`;
-        html += `<button class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors" onclick="cancelarAgendamento('${a.id}')">Cancelar</button>`;
-    }
-    if (a.status === "concluido") {
-        html = `<p class="text-center text-[#888780] text-xs">Agendamento já concluído</p>`;
-        html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="resetarStatus('${a.id}')">Voltar status</button>`;
-    }
-    if (a.status === "cancelado") {
-        html = `<p class="text-center text-[#888780] text-xs">Este agendamento foi cancelado</p>`;
-        html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="resetarStatus('${a.id}')">Voltar status</button>`;
-    }
-    
-    els.detalheAcoes.innerHTML = html;
-
-    els.overlayDetalhe.classList.remove("hidden");
-    els.modalDetalhe.classList.remove("hidden");
-}
-
-function fecharModalDetalhe() {
-    els.overlayDetalhe.classList.add("hidden");
-    els.modalDetalhe.classList.add("hidden");
-}
-
-function concluirAgendamento(id) {
-    atualizarStatus(id, "concluido");
-    mostrarAviso("Agendamento concluído!");
-}
-
-function cancelarAgendamento(id) {
-    if (!confirm("Deseja realmente cancelar este agendamento?")) return;
-    atualizarStatus(id, "cancelado");
-    mostrarAviso("Agendamento cancelado");
-}
-
-function atualizarStatus(id, novoStatus) {
-    const a = agendamentos.find(a => a.id === id);
-    if (a) a.status = novoStatus;
-    
-    fecharModalDetalhe();
-    renderizarInicio();
-}
+}*/
 
 /* ============================================================
    INICIALIZAÇÃO
