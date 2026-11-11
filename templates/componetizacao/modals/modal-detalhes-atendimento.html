@@ -15,7 +15,7 @@
                 </button>
             </div>
 
-            <div id="container-detalhe-barbeiro" class="hidden items-center gap-3 py-2 border-b border-[#38362f]">
+            <div id="container-detalhe-barbeiro" class="flex items-center gap-3 py-2 border-b border-[#38362f]">
                 <span class="text-sm w-5">{% include "componetizacao/icones/icone-barbeiro.html" %}</span>
                 <div>
                     <div class="text-[11px] text-[#888780]">Barbeiro</div>
@@ -90,21 +90,24 @@
         if (!a) return;
 
         elsModal.detalheStatusBadge.innerHTML = badgeStatusHTML(a.status);
+    
+        // Captura a URL completa em minúsculas para evitar falha com maiúsculas
+        const urlAtual = window.location.pathname.toLowerCase();
         
-        const ehRotaBarbeiro = window.location.pathname.includes("/barbeiro/painel?");
+        // Identifica se está no painel do barbeiro (via URL ou pelo objeto global funcionario)
+        const ehRotaBarbeiro = urlAtual.includes("barbeiro") || (typeof funcionario !== "undefined" && !urlAtual.includes("gestor"));
 
-        const deveOcultarBarbeiro = ehRotaBarbeiro || !a.barbeiro || a.barbeiro.trim() === "";
+        // Oculta se estiver no painel do barbeiro OU se o nome do barbeiro não existir
+        const deveOcultar = ehRotaBarbeiro || !a.barbeiro || String(a.barbeiro).trim() === "";
 
-        if (deveOcultarBarbeiro) {
-            if (elsModal.containerBarbeiro) {
-                elsModal.containerBarbeiro.classList.remove("flex");
-                elsModal.containerBarbeiro.classList.add("hidden");
-            }
-        } else {
-            if (elsModal.detalheBarbeiro) elsModal.detalheBarbeiro.textContent = a.barbeiro;
-            if (elsModal.containerBarbeiro) {
-                elsModal.containerBarbeiro.classList.remove("hidden");
-                elsModal.containerBarbeiro.classList.add("flex");
+        const elContainer = document.getElementById("container-detalhe-barbeiro");
+        
+        if (elContainer) {
+            if (deveOcultar) {
+                elContainer.style.display = "none";
+            } else {
+                elContainer.style.display = "flex";
+                if (elsModal.detalheBarbeiro) elsModal.detalheBarbeiro.textContent = a.barbeiro;
             }
         }
 
