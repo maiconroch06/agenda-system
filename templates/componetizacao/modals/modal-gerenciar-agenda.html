@@ -20,7 +20,7 @@
         <p id="form-subtitle-agenda" class="text-center text-[13px] text-[#888780] mb-4">Defina o nome e o período de funcionamento</p>
 
         <!-- Formulário de Agenda -->
-        <form id="form-agenda" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" action="#" method="post" novalidate>
+        <form id="form-agenda-mensal" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" action="/gestor/painel/agenda_mensal/cadastrar" method="post" novalidate>
             
             <!-- Campo Oculto para ID (Edição) -->
             <input type="hidden" id="agenda-id" name="agenda_id" value="">
@@ -30,7 +30,7 @@
                 <!-- Nome da Agenda (Ocupa largura inteira) -->
                 <div class="flex flex-col gap-1 col-span-full">
                     <label for="agenda-nome" class="text-[12px] font-medium text-[#888780]">Nome da Agenda*</label>
-                    <input type="text" name="nome_agenda" id="agenda-nome" value="" placeholder="Ex: Agenda de Fim de Ano / Horário de Verão" autocomplete="off" class="w-full h-10 px-3 border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+                    <input type="text" name="titulo_agenda" id="agenda-nome" value="" placeholder="Ex: Agenda de Fim de Ano / Horário de Verão" autocomplete="off" class="w-full h-10 px-3 border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
                 </div>
 
                 <!-- Dia de Início -->

@@ -1,21 +1,20 @@
 
 from datetime import datetime, timezone
 
-class MesReferencia:
+class AgendaMensal:
 
     def __init__(
         self,
-        id_mes_referencia = None,
+        id_agenda_mensal = None,
         data_inicial_mes = None,
         data_final_mes = None,
-        nome_mes = None,
-        agenda = None
+        titulo_agenda = None,
+        
     ):
-        self.__id_mes_referencia = id_mes_referencia
+        self.__id_mes_referencia = id_agenda_mensal
         self.__data_inicial_mes = data_inicial_mes
         self.__data_final_mes = data_final_mes
-        self.__nome_mes = nome_mes
-        self.__horario_fim_intrajornada = agenda
+        self.__titulo_agenda = titulo_agenda
 
     @property
     def id_mes_referencia(self):
@@ -42,12 +41,12 @@ class MesReferencia:
         self.__data_final_mes = value
 
     @property
-    def nome_mes(self):
-        return self.__nome_mes
+    def titulo_agenda(self):
+        return self.__titulo_agenda
 
-    @nome_mes.setter
-    def nome_mes(self, value):
-        self.__nome_mes = value
+    @titulo_agenda.setter
+    def titulo_agenda(self, value):
+        self.__titulo_agenda = value
 
     @property
     def horario_fim_intrajornada(self):

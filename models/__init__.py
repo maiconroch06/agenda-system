@@ -6,9 +6,9 @@ from .barbeiros import Barbeiro
 from .cliente import Cliente
 from .servicos import Servico
 from .agendamento import Agendamento
-from .agenda import Agenda
+from .horario_funcionamento import HorarioFuncionamento
 from .falta_justificada_barbeiro import FaltaJustificadaBarbeiro
-from .mes_referencia import MesReferencia
+from .agenda_mensal import AgendaMensal
 from .recesso import Recesso
 
 

@@ -11,6 +11,8 @@ from .controlador_cliente import ControladorCliente
 from .controlador_agendamento import ControladorAgendamento
 from .controlador_barbeiro import ControladorBarbeiro
 from .controlador_servicos import ControladorServico
+from .Controlador_horarios_funcionamento import ControladorHorarioFuncionamento
+from .controlador_agenda_mensal import ControladorAgendaMensal
 
 class ControladorGestor():
     __gestor_service_mvc = GestorServiceMVC()
@@ -19,7 +21,7 @@ class ControladorGestor():
     __controlador_cliente = ControladorCliente()
     __controlador_barbeiro = ControladorBarbeiro()
     __controlador_agendamento = ControladorAgendamento()
-  
+ 
     
     @classmethod
     def login_gestor(cls, email:str, senha:str):
@@ -116,3 +118,36 @@ class ControladorGestor():
     @classmethod
     def consultar_agendamentos(cls, status_agendamento):
         return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos = cls.__controlador_agendamento.consultar_agendamento(status_agendamento)) 
+    
+    
+    @classmethod
+    def consultar_horario_funcionamento(cls, id_barbearia):
+        return ControladorHorarioFuncionamento.consultar_horario_funcionamento(id_barbearia)
+    
+    @classmethod
+    def atualizar_horario_funcionamento_barbearia(cls, horario_funcionamento_barbearia):
+            
+            try:
+                ControladorHorarioFuncionamento.atualizar_horario_funcionamento(horario_funcionamento_barbearia)
+                flash("Horario de funcionmento da barbearia atualziado com sucesso", EnumStatusMensagens.SUCESSO.value)
+            except Exception :
+                flash(f"Erro ao tentar atualizar o horario de funcionmento da barbearia", EnumStatusMensagens.ERRO.value)
+            
+            return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))   
+        
+    @classmethod
+    def cadastrar_agenda_mensal_barbearia(cls, horario_funcionamento_barbearia):        
+        try:
+            ControladorAgendaMensal.cadastrar_agenda_mensal_service(horario_funcionamento_barbearia)
+            flash("Agenda da barbearia cadastrada com sucesso", EnumStatusMensagens.SUCESSO.value)
+        except Exception as erros:
+            flash(f"Erro ao tentar cadastrar a agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)
+        
+        return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))       
+        
+    @classmethod
+    def consultar_agenda_mensal_barbearia(cls):        
+        try:
+            return ControladorAgendaMensal.consultar_todas_agenda_mensal_service()
+        except Exception as erros:
+            flash(f"Erro na consulta da agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)     

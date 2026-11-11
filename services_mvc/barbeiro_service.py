@@ -1,6 +1,6 @@
 from repositorio import BarbeiroRepositorio
 from .usuario_service import UsuarioService
-from .agenda_service import AgendaService
+from .horario_funcionamento_service import HorarioFuncionamentoService
 from flask import flash, session
 from werkzeug.security import check_password_hash
 from sqlalchemy.exc import IntegrityError
