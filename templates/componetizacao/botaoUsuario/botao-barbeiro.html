@@ -4,11 +4,15 @@
 
         <!-- FOTO DO USUÁRIO -->
         {% if session.get('dados_barbeiro') and session.get('dados_barbeiro').get('foto_path') %}
-            <img class="w-full h-full object-cover">
-                src="{{ url_for('static', filename=session.get('dados_barbeiro')['foto_path']) }}" alt="Avatar"
-        {% else %}
+            <img class="w-full h-full object-cover"
+                src="{{ url_for('static', filename='assets/img_uploads/barbeiros/' ~ session.get('dados_barbeiro')['foto_nome_usuario']) }}" alt="Avatar">
+        {% elif session.get('dados_barbeiro') and session.get('dados_barbeiro').get('nome_completo') %}
             <span class="text-sm font-bold text-[#f1efe8]">
                 {{ session.get("dados_barbeiro")["nome_completo"][0] | upper }}
+            </span>
+        {% else %}
+            <span class="text-sm font-bold text-[#f1efe8]">
+                B
             </span>
         {% endif %}
         
