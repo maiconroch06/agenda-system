@@ -94,7 +94,7 @@ function confirmarFiltro() {
 }
 
 /* ============================================================
-   DADOS MOCK — AGENDAMENTOS
+   CARREGAMENTO DE DADOS (JINJA/FLASK)
    ============================================================ */
 
 const AGENDAMENTOS_PADRAO = [

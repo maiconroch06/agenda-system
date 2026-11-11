@@ -1,4 +1,4 @@
-{# ───────── DADOS MOCK VS FLASK ───────── #}
+{# ──────────────────────────────────────────────── DADOS MOCK VS FLASK ──────────────────────────────────────────────── #}
 {% set barbeiros_mock = [
     {'id': 'p1', 'nome': 'Carlos Silva', 'cargo': 'Barbeiro Master'},
     {'id': 'p2', 'nome': 'Lucas Mendes', 'cargo': 'Especialista em Barba'}
@@ -30,7 +30,7 @@
 {% set lista_barbeiros = barbeiros_flask if barbeiros_flask else barbeiros_mock %}
 {% set lista_agendamentos = agendamentos_flask if agendamentos_flask else agendamentos_mock %}
 {% set lista_clientes = clientes_flask if clientes_flask else clientes_mock %}
-{# ─────────────────────────────────────── #}
+{# ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────── #}
 
 <!-- INJEÇÃO DE DADOS JSON PARA O JAVASCRIPT -->
 <script id="dados-barbeiros-json" type="application/json">
