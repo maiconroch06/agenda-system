@@ -109,7 +109,7 @@ class BarbeiroDAO:
                 b.bio,
                 b.especialidade,
                 b.status_barbeiro,
-                b.data_inicio_carreira,
+                TIMESTAMPDIFF(YEAR, b.data_inicio_carreira, CURDATE()) data_inicio_carreira,
 
                 e.id_endereco,
                 e.cep,
@@ -143,7 +143,6 @@ class BarbeiroDAO:
         sql = text("""
             UPDATE barbeiro
             SET
-                data_liberacao = :data_liberacao,
                 bio = :bio,
                 especialidade = :especialidade,
                 status_barbeiro = :status_barbeiro,
@@ -155,7 +154,7 @@ class BarbeiroDAO:
         resultado = db.session.execute(sql, {
             "id_barbeiro": barbeiro.id_usuario,
             "data_liberacao": barbeiro.data_liberacao,
-            "bio": barbeiro.descricao,
+            "bio": barbeiro.bio,
             "especialidade": barbeiro.especialidade,
             "status_barbeiro": barbeiro.status_barbeiro,
             "data_inicio_carreira": barbeiro.data_inicio_carreira
@@ -196,7 +195,7 @@ class BarbeiroDAO:
             data_atualizacao=registro["data_atualizacao"],
 
             data_liberacao=registro["data_liberacao"],
-            descricao=registro["bio"],
+            bio=registro["bio"],
             especialidade=registro["especialidade"],
             status_barbeiro=bool(registro["status_barbeiro"]),
             data_inicio_carreira=registro["data_inicio_carreira"],

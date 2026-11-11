@@ -13,24 +13,28 @@ const email = document.getElementById("bar-email");
 const senha = document.getElementById("bar-senha");
 const confirmar_senha = document.getElementById("bar-confirmar-senha");
 const telefone = document.getElementById("bar-telefone");
-const descricao = document.getElementById("bar-descricao");
-const id = document.getElementById("bab-id");
+const bio = document.getElementById("bar-bio");
+const id = document.getElementById("bar-id");
+const especialidade = document.getElementById("bar-especialidade");
+const anos_experiencia = document.getElementById("bar-anos_experiencia");
 
-const campo_imagem_anterior = document.querySelector("#bab-foto_nome_anterior");
+const campo_imagem_anterior = document.querySelector("#bar-foto_nome_anterior");
 const imagem_preview = document.querySelector('#img_srv-preview');
 
 botao_editar_barbeiro.forEach(
     (editar)=>{
         editar.addEventListener("click", (event)=>{
             titulo.textContent = "Editar barbeiro: "+ nome_barbeiro_titulo.textContent;
-            const detalhes_barbeiro = editar.value.split("&");
+            const detalhes_barbeiro = editar.value.split("#");
 
             id.value = detalhes_barbeiro[0];
             nome_barbeiro_editar.value = detalhes_barbeiro[1];
             cpf.value = detalhes_barbeiro[2].slice(0,3)+"."+detalhes_barbeiro[2].slice(3,6)+"."+detalhes_barbeiro[2].slice(6,9)+"-"+detalhes_barbeiro[2].slice(9,11);
             email.value= detalhes_barbeiro[3];
             telefone.value = detalhes_barbeiro[4];
-            descricao.value = detalhes_barbeiro[8];
+            bio.value = detalhes_barbeiro[8];
+            especialidade.value = detalhes_barbeiro[9];
+            anos_experiencia.value = detalhes_barbeiro[10];
             
             imagem_preview.classList.remove("hidden");
             imagem_preview.src = detalhes_barbeiro[5];

@@ -24,47 +24,56 @@
             <!-- Formulário: padding interno e margin inferior reduzidos -->
             <form id="form-barbeiro" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" action="/gestor/painel/barbeiro/atualizar"  method="post" enctype="multipart/form-data" novalidate>
                 
-                <input type="hidden" id="bab-id"name="srv-id" value="">
+                <input type="hidden" id="bar-id" name="srv-id" value="">
 
                     <!-- Upload de imagem -->
                     {% include "componetizacao/avatar_imagem/avatar_imagem.html" %}
-                    <input type="hidden" id="bab-foto_nome_anterior" name="srv-foto_nome_anterior" value="">
+                    <input type="hidden" id="bar-foto_nome_anterior" name="srv-foto_nome_anterior" value="">
 
                     <!-- Gaps do grid e inputs reduzidos -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div class="flex flex-col gap-1">
-                            <label for="bar-cpf" class="text-[12px] font-medium text-[#888780]">CPF*</label>
-                            <input type="text" name="cpf" id="bar-cpf" value="" placeholder="000.000.000-00" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] disabled:opacity-50 disabled:cursor-not-allowed transition-all">
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label for="bar-nome" class="text-[12px] font-medium text-[#888780]">Nome*</label>
-                            <input type="text" name="nome" id="bar-nome" value="" placeholder="Nome do barbeiro" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label for="bar-email" class="text-[12px] font-medium text-[#888780]">Email*</label>
-                            <input type="email" name="email" id="bar-email" value="" placeholder="barbeiro@gmail.com" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label for="bar-telefone" class="text-[12px] font-medium text-[#888780]">Telefone*</label>
-                            <input type="text" name="telefone" id="bar-telefone" value="" placeholder="(00) 00000-0000" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                        </div>
-                    
-                        <div class="flex flex-col gap-1">
-                            <label for="bar-senha" class="text-[12px] font-medium text-[#888780]">Nova Senha*</label>
-                            <input type="password" name="senha" id="bar-senha" placeholder="Deixe vazio para manter a senha atual" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                            <small class="text-xs text-[#888780]">
-                                Deixe em branco para manter a senha anterior
-                            </small>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label for="bar-confirmar-senha" class="text-[12px] font-medium text-[#888780]">Confirmar nova Senha*</label>
-                            <input type="password" name="confirmar-senha" placeholder="'Confirmar senha" id="bar-confirmar-senha" placeholder="********" autocomplete="off" class="w-full h-10 px-3  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
-                        </div>
-                        <div class="flex flex-col gap-1 col-span-full">
-                            <label for="bar-descricao" class="text-[12px] font-medium text-[#888780]">Descrição</label>
-                            <textarea name="descricao" id="bar-descricao" placeholder="Especialidades e experiência..." rows="2" class="w-full p-2.5  border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] resize-none">{{ barbeiro['descricao'] if barbeiro else 'Especialidades e experiência...' }}</textarea>
-                        </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="pro-cpf" class="text-[12px] font-medium text-[#888780]">CPF*</label>
+                        <input type="text" name="cpf" id="bar-cpf" value="529.982.247-25" placeholder="000.000.000-00" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] disabled:opacity-50 disabled:cursor-not-allowed transition-all">
                     </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="pro-nome" class="text-[12px] font-medium text-[#888780]">Nome*</label>
+                        <input type="text" name="nome" id="bar-nome" value="Barbeiro" placeholder="Nome do barbeiro" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="pro-email" class="text-[12px] font-medium text-[#888780]">Email*</label>
+                        <input type="email" name="email" id="bar-email" value="barbeiro@gmail.com" placeholder="email barbeiro" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="pro-telefone" class="text-[12px] font-medium text-[#888780]">Telefone*</label>
+                        <input type="text" name="telefone" id="bar-telefone" value="(00) 00000-0000" placeholder="(00) 00000-0000" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="pro-senha" class="text-[12px] font-medium text-[#888780]">Senha*</label>
+                        <input type="password" name="senha" id="bar-senha" placeholder="digite a senha" value=""
+                        autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                        <small class="text-xs text-[#888780]">
+                            Deixe em branco para manter a senha anterior
+                        </small>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="pro-confirmar-senha" class="text-[12px] font-medium text-[#888780]">Confirmar Senha*</label>
+                        <input type="password" name="confirmar-senha" placeholder="Confirmar senha" value=""
+                         id="bar-confirmar-senha" placeholder="********" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="pro-email" class="text-[12px] font-medium text-[#888780]">Especialidade*</label>
+                        <input type="email" name="especialidade" id="bar-especialidade" value="Especialista em corte degradê" placeholder="Especialiota em ..." autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="pro-telefone" class="text-[12px] font-medium text-[#888780]">Total de anos de experiencia*</label>
+                        <input type="number" name="anos_experiencia" id="bar-anos_experiencia" value="4" placeholder="1, 2, ou 3 anos" autocomplete="off" class="w-full h-10 px-3 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c]">
+                    </div>
+                    <div class="flex flex-col gap-1 col-span-full">
+                        <label for="pro-descricao" class="text-[12px] font-medium text-[#888780]">Breve descrição do barbeiro (Bio):</label>
+                        <textarea name="bio" id="bar-bio" placeholder="Barbeiro com experiência em..." rows="2" class="w-full p-2.5 rounded-[8px] border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] resize-none">{{ barbeiro['descricao'] if barbeiro else 'Especialidades e experiência...' }}</textarea>
+                    </div>
+                </div>
             
                 <div id="div-seletor-status" class="flex flex-col gap-1 text-[#888780] mt-5">
                     <label for="bab_status_barbeiro" class="text-[12px] font-medium text-[#888780]">

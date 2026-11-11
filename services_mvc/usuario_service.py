@@ -41,7 +41,7 @@ class UsuarioService:
                                                      
         usuario.foto_nome_usuario = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao, usuario.getTipo())
         
-        if not self.__usuarioRepositorio.atualizar(usuario):
+        if not self.__usuarioRepositorio.atualizar_usuario_sem_senha(usuario):
             raise Exception("Error ao tentar atualizar o usuario, tente novamente!")
            
         

@@ -11,17 +11,17 @@ class Barbeiro(Usuario):
         telefone,
         cpf,
         email,
-        status_usuario,
-        data_cadastro,
         data_atualizacao,
         data_liberacao=datetime.now(timezone.utc),
+        status_usuario = None,
+        data_cadastro = None,
         data_inicio_carreira=None,
         status_barbeiro=True,
         foto_nome_usuario=None,
         senha=None,
         id_usuario=None,
         endereco=None,
-        descricao=None,
+        bio=None,
         especialidade=None
     ):
 
@@ -42,7 +42,7 @@ class Barbeiro(Usuario):
         self.__data_liberacao = data_liberacao
         self.__data_inicio_carreira = data_inicio_carreira
         self.__status_barbeiro = status_barbeiro
-        self.__descricao = descricao
+        self.__bio = bio
         self.__especialidade = especialidade
 
     @property
@@ -70,12 +70,12 @@ class Barbeiro(Usuario):
         self.__status_barbeiro = value
 
     @property
-    def descricao(self):
-        return self.__descricao
+    def bio(self):
+        return self.__bio
 
-    @descricao.setter
-    def descricao(self, value):
-        self.__descricao = value
+    @bio.setter
+    def bio(self, value):
+        self.__bio = value
 
     @property
     def especialidade(self):

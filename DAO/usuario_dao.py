@@ -191,6 +191,7 @@ class UsuarioDAO:
         ]
 
     def atualizar_usuario_sem_senha(self, usuario: Usuario):
+        
         sql = text("""
             UPDATE usuario
             SET
@@ -198,7 +199,7 @@ class UsuarioDAO:
                 telefone = :telefone,
                 cpf = :cpf,
                 email = :email,
-                foto_nome = :foto_nome,
+                foto_nome_usuario = :foto_nome_usuario,
                 data_atualizacao = :data_atualizacao
             WHERE id_usuario = :id_usuario
         """)
@@ -209,12 +210,13 @@ class UsuarioDAO:
             "telefone": usuario.telefone,
             "cpf": usuario.cpf,
             "email": usuario.email,
-            "foto_nome": usuario.foto_nome,
+            "foto_nome_usuario": usuario.foto_nome_usuario,
             "data_atualizacao": usuario.data_atualizacao
         })
 
         db.session.flush()
-
+        
+               
         return resultado.rowcount > 0
 
     def atualizar_usuario_com_senha(self, usuario: Usuario):

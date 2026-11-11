@@ -24,7 +24,7 @@ botao_editar_barbeiro_endereco.forEach(
     (editar_endereco)=>{
         editar_endereco.addEventListener("click", (event)=>{
             titulo.textContent =  nome_barbeiro_titulo.textContent;
-            const detalhes_endereco_barbeiro = editar_endereco.value.split("&");
+            const detalhes_endereco_barbeiro = editar_endereco.value.split("#");
 
            inicializarMensagensErros();
           

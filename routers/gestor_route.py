@@ -127,11 +127,12 @@ def gestorBarbeiroValidar():
     cep_temp = ''.join(filter(str.isdigit,request.form.get('cep')))
     cpf_temp = ''.join(filter(str.isdigit,request.form.get('cpf')))
     fotoTemp = request.files.get('srv-imagem' , None) 
-
+    agora_utc = datetime.now(timezone.utc)
+    
     endereco = Endereco(
         cep=cep_temp,
         cidade=request.form.get('cidade'),
-        estados_br_sigla=request.form.get('unidade-federativa'),
+        uf=request.form.get('unidade-federativa'),
         bairro=request.form.get('bairro'),
         logradouro=request.form.get('logradouro'),
         numero=request.form.get('numero'),
@@ -141,19 +142,21 @@ def gestorBarbeiroValidar():
 
     # Inicializando o objeto Barbeiro
     barbeiro = Barbeiro(
-        id=None,
+        id_usuario=None,
         nome_completo=request.form.get('nome'),
         telefone=telefone_temp,
         cpf=cpf_temp,
         email=request.form.get('email'),
         senha=request.form.get('senha'),
-        foto_nome=None,
+        foto_nome_usuario=None,
         status_usuario=True,
         data_cadastro=datetime.now(timezone.utc),
         data_atualizacao=datetime.now(timezone.utc),
         data_liberacao=datetime.now(timezone.utc),
-        descricao=request.form.get('descricao'),
+        bio=request.form.get('bio'),
         status_barbeiro=True,
+        especialidade=request.form.get('especialidade'),
+        data_inicio_carreira=agora_utc.replace(year=agora_utc.year-request.form.get('anos_experiencia', type=int)),   
         endereco=endereco
     )
     
@@ -167,9 +170,11 @@ def gestorBarbeiroPageUpdate():
     imagem_anterior = request.form.get('srv-foto_nome_anterior')
     
     cpf_temp = ''.join(filter(str.isdigit,request.form.get('cpf')))
+    agora_utc = datetime.now(timezone.utc)
     
+     
     barbeiro = Barbeiro(
-        id=request.form.get('srv-id'),
+        id_usuario=request.form.get('srv-id'),
         nome_completo=request.form.get('nome'),
         cpf=cpf_temp,
         telefone=request.form.get('telefone'),
@@ -177,10 +182,10 @@ def gestorBarbeiroPageUpdate():
         senha=request.form.get('senha', None),
         data_atualizacao=datetime.now(timezone.utc),
         status_barbeiro=request.form.get('status_barbeiro', type=int),
-        descricao=request.form.get('descricao')
+        bio=request.form.get('bio'),
+        especialidade=request.form.get('especialidade'),
+        data_inicio_carreira=agora_utc.replace(year=agora_utc.year-request.form.get('anos_experiencia', type=int))   
     )
-    
-  
         
     return ControladorGestor.atualizar_barbeiro(imagem_form,img_padrao,imagem_anterior, barbeiro)
 
