@@ -87,9 +87,23 @@ function cardAgendamentoHTML(item) {
 function renderizarInicio() {
     const hoje = hojeISO();
 
-    const doDia = agendamentos.filter(a => a.data === hoje).sort((a, b) => a.hora.localeCompare(b.hora));
+    // Filtra os agendamentos do dia e aplica a ordenação por Status e Hora
+    const doDia = agendamentos
+        .filter(a => a.data === hoje)
+        .sort((a, b) => {
+            // Define o peso (prioridade) de cada status
+            const pesoStatus = { agendado: 1, concluido: 2, cancelado: 3 };
+            
+            // 1º Critério: Ordena pelo peso do status
+            if (pesoStatus[a.status] !== pesoStatus[b.status]) {
+                return pesoStatus[a.status] - pesoStatus[b.status];
+            }
+            
+            // 2º Critério: Se o status for igual, ordena pela hora mais próxima (crescente)
+            return a.hora.localeCompare(b.hora);
+        });
 
-    // Métricas de contagem
+    // Calcula os indicadores de progresso
     const concluidos = doDia.filter(a => a.status === "concluido").length;
     const cancelados = doDia.filter(a => a.status === "cancelado").length;
     const pendentes = doDia.filter(a => a.status === "agendado").length;
