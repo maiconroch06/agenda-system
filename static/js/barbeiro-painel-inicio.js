@@ -6,12 +6,6 @@ const els = {
     aviso: document.getElementById("aviso"),
 
     // KPI's & Aba Início
-    inicioNome: document.getElementById("inicio-primeiro-nome"),
-    kpiTotalHoje: document.getElementById("kpi-total-hoje"),
-    kpiFaltasHoje: document.getElementById("kpi-faltas-hoje"),
-    //kpiTotalHojeSub: document.getElementById("kpi-total-hoje-sub"),
-    kpiProximo: document.getElementById("kpi-proximo"),
-    //kpiProximoSub: document.getElementById("kpi-proximo-sub"),
     progressoTexto: document.getElementById("progresso-texto"),
     progressoFill: document.getElementById("progresso-fill"),
     progressoCancelados: document.getElementById("progresso-cancelados"),
@@ -190,10 +184,6 @@ function atualizarStatus(id, novoStatus) {
     
     fecharModalDetalhe();
     renderizarInicio();
-}
-
-/* ============================================================
-   ============================================================ */
 }
 
 /* ============================================================
