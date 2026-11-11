@@ -105,59 +105,6 @@ function carregarDashboardInicio() {
 }
 
 /* ============================================================
-   ABA 6: FINANCEIRO (ESTATÍSTICAS E HISTÓRICO REAL)
-   ============================================================ */
-
-function renderizarFinanceiro() {
-    const concluidos = agendamentos.filter(a => a.status === "concluido");
-
-    const receitaTotal = concluidos.reduce((acc, a) => acc + Number(a.valor || 0), 0);
-    const totalCortes = concluidos.length;
-    const ticketMedio = totalCortes > 0 ? receitaTotal / totalCortes : 0;
-
-    const contagemServicos = {};
-    concluidos.forEach(a => {
-        if (a.servico) {
-            contagemServicos[a.servico] = (contagemServicos[a.servico] || 0) + 1;
-        }
-    });
-
-    let maisRealizado = "—";
-    let maxQtd = 0;
-    for (const [srv, qtd] of Object.entries(contagemServicos)) {
-        if (qtd > maxQtd) {
-            maxQtd = qtd;
-            maisRealizado = srv;
-        }
-    }
-
-    if (els.finReceitaMes) els.finReceitaMes.textContent = formatarMoeda(receitaTotal);
-    if (els.finTotalCortes) els.finTotalCortes.textContent = totalCortes;
-    if (els.finTicketMedio) els.finTicketMedio.textContent = formatarMoeda(ticketMedio);
-    if (els.finMaisRealizado) els.finMaisRealizado.textContent = maisRealizado;
-
-    if (!els.finTabelaCorpo) return;
-
-    if (agendamentos.length === 0) {
-        els.finTabelaCorpo.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-[#888780]">Nenhum atendimento registrado ainda.</td></tr>`;
-        return;
-    }
-
-    const ordenados = [...agendamentos].sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
-
-    els.finTabelaCorpo.innerHTML = ordenados.map(a => `
-        <tr class="border-b border-[#38362f] hover:bg-[#2a2825]/50 transition-colors">
-            <td class="p-3 px-4 font-mono text-[#888780]">${a.data} ${a.hora}</td>
-            <td class="p-3 px-4 font-medium">${a.cliente}</td>
-            <td class="p-3 px-4 text-[#888780]">${a.servico}</td>
-            <td class="p-3 px-4 text-[#888780]">${a.barbeiro || "Não atribuído"}</td>
-            <td class="p-3 px-4 font-semibold text-[#f1efe8]">${formatarMoeda(a.valor)}</td>
-            <td class="p-3 px-4">${badgeStatusHTML(a.status)}</td>
-        </tr>
-    `).join("");
-}
-
-/* ============================================================
    INICIALIZAÇÃO
    ============================================================ */
 
