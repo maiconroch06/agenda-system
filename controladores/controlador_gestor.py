@@ -22,17 +22,15 @@ class ControladorGestor():
     __controlador_barbeiro = ControladorBarbeiro()
     __controlador_agendamento = ControladorAgendamento()
  
-    
     @classmethod
     def login_gestor(cls, email:str, senha:str):
+        try:
+            cls.__gestor_service_mvc.gestor_realizar_login_service(email,senha)   
+            return redirect(url_for('gestor.gestorPainel'))
         
-            try: 
-                cls.__gestor_service_mvc.gestor_realizar_login_service(email,senha)   
-                return redirect(url_for('gestor.gestorPainel'))
-            
-            except Exception as error:
-                flash(f"{error}")
-                return  redirect(url_for('gestor.gestorLoginPagina'))
+        except Exception as error:
+            flash(f"{error}")
+            return  redirect(url_for('gestor.gestorLoginPagina'))
 
     @classmethod
     def cadastrarBarbeiro(cls, barbeiro: Barbeiro, fotoTemp):

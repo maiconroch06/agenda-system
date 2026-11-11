@@ -6,6 +6,41 @@ from models import Barbeiro, Endereco
 
 class BarbeiroDAO:
 
+    def realizar_login_dao(self, email: str):
+        sql = text("""
+            SELECT
+                u.id_usuario,
+                u.nome_completo,
+                u.telefone,
+                u.cpf,
+                u.email,
+                u.senha,
+                u.foto_nome_usuario,
+                u.status_usuario,
+                u.data_cadastro,
+                u.data_atualizacao,
+                b.id_barbeiro,
+                b.data_liberacao,
+                b.bio,
+                b.especialidade,
+                b.status_barbeiro,
+                b.data_inicio_carreira
+            FROM usuario u INNER JOIN barbeiro b
+            ON b.id_barbeiro = u.id_usuario
+            WHERE u.email = :email
+            
+        """)
+
+        registro = db.session.execute(
+            sql,
+            {"email": email}
+        ).mappings().first()
+
+        if registro is None:
+            return None
+
+        return dict(registro)
+    
     def cadastrar(self, barbeiro: Barbeiro):
         sql = text("""
             INSERT INTO barbeiro (

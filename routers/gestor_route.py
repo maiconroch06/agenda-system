@@ -26,8 +26,8 @@ def gestorLoginPagina():
 # Envio dos dados a partid da Tela de Login
 @gestor.route('/login', methods=["POST"])
 def gestorLogin():
-    email_digitado = request.form.get('manager-email-2')
-    senha_digitada = request.form.get('manager-password')
+    email_digitado = request.form.get('gestor-email-2')
+    senha_digitada = request.form.get('gestor-password')
     
     return ControladorGestor.login_gestor(email_digitado,senha_digitada)
 

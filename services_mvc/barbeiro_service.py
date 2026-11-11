@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from enums import EnumNomesPastaImagem
 from database import db
 from utilitarios import ValidadorDeImagens
+from utilitarios import Senha
 
 class BarbeiroService(UsuarioService):
 
@@ -14,7 +15,19 @@ class BarbeiroService(UsuarioService):
         super().__init__()
         self.__barbeiroRepositorio = BarbeiroRepositorio()
         
-
+    def barbeiro_realizar_login_service(self, email:str, senha:str):  
+        if not email or not senha:
+            raise Exception("Por favor, verifique se você preencheu todos os campos!")               
+                
+        barbeiro = self.__barbeiroRepositorio.realizar_login(email)
+        if barbeiro is not None:        
+            Senha.validar_senha(barbeiro['senha'], senha)    
+            session.permanent = True 
+            session['dados_barbeiro'] = barbeiro  
+            return  
+        
+        raise Exception("E-mail inexistente. Verifique o email e tente novamente!")
+        
     def consultar_barbeiros(self):
         try:
             barbeiros = self.__barbeiroRepositorio.listar_todos()

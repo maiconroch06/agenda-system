@@ -1,5 +1,5 @@
 // pega um elemento usando um seletor CSS.
-const user_form_login = document.querySelector('#barber-form-login');
+const user_form_login = document.querySelector('#barbeiro-form-login');
 
 //document.querySelector('#user-email');  // id
 //document.querySelector('.campo__erro'); // classe
@@ -19,8 +19,8 @@ function validateUserLogin(email, senha){
 //Validação para o USUARIO E LOGIN
 user_form_login.addEventListener('submit', function(event){
     
-        const email = document.querySelector("#barber-login").value; //sem o # oiu o . significa elemento
-        const senha = document.querySelector("#barber-senha").value;
+        const email = document.querySelector("#barbeiro-login").value; //sem o # oiu o . significa elemento
+        const senha = document.querySelector("#barbeiro-senha").value;
         const message = document.querySelector("#validation-menssage");//significa o elemento p
         const div = document.querySelector('#div-validation-message');
         message.textContent = '';

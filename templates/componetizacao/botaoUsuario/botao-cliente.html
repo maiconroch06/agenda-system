@@ -8,7 +8,7 @@
                 src="{{ url_for('static', filename=session.get('dados_cliente')['foto_path']) }}" alt="Avatar"
         {% else %}
             <span class="text-sm font-bold text-[#f1efe8]">
-                {{ session.get('dados_cliente')['nome_completo'][0]|upper }}
+                {{ session.get('dados_cliente')['nome_completo'][0] | upper }}
             </span>
         {% endif %}
     </div>

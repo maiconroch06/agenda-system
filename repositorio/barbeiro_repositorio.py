@@ -6,6 +6,9 @@ class BarbeiroRepositorio:
     
     def __init__(self):
         self.__barbeiroDao = BarbeiroDAO()
+        
+    def realizar_login(self, email):
+        return self.__barbeiroDao.realizar_login_dao(email)
     
     def salvar(self, barbeiro):
         return self.__barbeiroDao.cadastrar(barbeiro)
