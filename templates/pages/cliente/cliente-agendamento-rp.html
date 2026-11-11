@@ -260,54 +260,6 @@
     <!-- JAVASCRIPT -->
     <script src="{{ url_for('static', filename='js/cliente-agendamento.js') }}"></script>
 
-
-    <!-- CONTROLE DO DROPDOWN -->
-    <script>
-
-        const btnUsuario = document.getElementById('btn-usuario');
-        const dropdownUsuario = document.getElementById('dropdown-usuario');
-        const setaUsuario = document.getElementById('seta-usuario');
-
-
-        // Abrir / fechar dropdown
-        btnUsuario.addEventListener('click', function (event) {
-
-            event.stopPropagation();
-
-            dropdownUsuario.hidden = !dropdownUsuario.hidden;
-
-            // Rotaciona a seta
-            if (dropdownUsuario.hidden) {
-
-                setaUsuario.classList.remove('rotate-180');
-
-            } else {
-
-                setaUsuario.classList.add('rotate-180');
-
-            }
-
-        });
-
-
-        // Fechar ao clicar fora
-        document.addEventListener('click', function (event) {
-
-            if (
-                !btnUsuario.contains(event.target) &&
-                !dropdownUsuario.contains(event.target)
-            ) {
-
-                dropdownUsuario.hidden = true;
-
-                setaUsuario.classList.remove('rotate-180');
-
-            }
-
-        });
-
-    </script>
-
 </body>
 
 </html>
