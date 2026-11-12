@@ -106,7 +106,7 @@ class AgendaMensalDAO:
             SET
                 data_inicial_mes = :data_inicial_mes,
                 data_final_mes = :data_final_mes,
-                titulo_agenda = :titulo_agenda,
+                titulo_agenda = :titulo_agenda
             WHERE id_agenda_mensal = :id_agenda_mensal
         """)
 
@@ -135,6 +135,23 @@ class AgendaMensalDAO:
         db.session.commit()
 
         return resultado.rowcount > 0
+    
+    
+    def verificar_aganda_aberta(self, agenda):
+        sql = text("""
+                    SELECT count(id_agenda_mensal)  
+                    FROM agenda_mensal 
+                    WHERE data_final_mes >= :data_inicio_mes;
+                """)
+        
+        resultado = db.session.execute(
+            sql,
+            {"data_inicio_mes": agenda.data_inicial_mes}
+        )
+        
+        db.session.commit()
+
+        return resultado.scalar()
 
     def __mapear_agenda_mensal(self, registro):
        

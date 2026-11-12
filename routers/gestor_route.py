@@ -85,6 +85,19 @@ def gestor_agenda_mensal_cadastrar():
      
     return ControladorGestor.cadastrar_agenda_mensal_barbearia(agenda_mensal)
 
+@gestor.route('/painel/agenda_mensal/atualizar', methods=['POST'])
+def gestor_agenda_mensal_atualizar():
+    
+    agenda_mensal = AgendaMensal(
+        id_agenda_mensal=request.form.get("agenda_id", type=int),
+        data_inicial_mes= datetime.strptime(request.form.get("data_inicio"),  "%Y-%m-%d").date(),
+        data_final_mes=datetime.strptime(request.form.get("data_fim"),  "%Y-%m-%d").date(),
+        titulo_agenda=request.form.get("titulo_agenda")
+    )
+     
+    return ControladorGestor.atualizar_agenda_mensal_barbearia(agenda_mensal)
+
+
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados
 @gestor.route('/painel/servicos')
@@ -248,9 +261,6 @@ def gestor_excluir_barbeiro():
                
     return ControladorGestor.excluir_barbeiro(id_barbeiro, foto_nome)
 
-    
-
-
 
 ##################################################################################
 #  CLIENTES
@@ -271,6 +281,9 @@ def authentication():
     #Varifica se o cliente tem sessão
     if 'dados_cliente' in session:
             return redirect(url_for('cliente.clientAgendamentoServicos'))
+    
+    if 'dados_barbeiro' in session:
+                return redirect(url_for('barbeiro.barbeiroPainel'))
         
     #Criando as rotas publicas para gestor
     routers_publics = ['gestor.gestorSource','gestor.gestorLoginPagina', 'gestor.gestorLogin']

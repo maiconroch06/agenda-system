@@ -99,8 +99,7 @@ class ControladorGestor():
             cls.__servicos_barbearia_service_mvc.editar_servico_barbearia(id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo)
             flash(f"Servico {descricao_servico} atualizado com sucesso.", EnumStatusMensagens.SUCESSO.value)
         except Exception as erros:
-            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
-            
+           print(f"erro ao tentar atualizar a agenda: {erros}")       
         
         return redirect(url_for("gestor.gestorAbaServicos")) 
              
@@ -134,14 +133,26 @@ class ControladorGestor():
             return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))   
         
     @classmethod
-    def cadastrar_agenda_mensal_barbearia(cls, horario_funcionamento_barbearia):        
+    def cadastrar_agenda_mensal_barbearia(cls, agenda_barbearia):        
         try:
-            ControladorAgendaMensal.cadastrar_agenda_mensal_service(horario_funcionamento_barbearia)
+            ControladorAgendaMensal.cadastrar_agenda_mensal_service(agenda_barbearia)
             flash("Agenda da barbearia cadastrada com sucesso", EnumStatusMensagens.SUCESSO.value)
         except Exception as erros:
-            flash(f"Erro ao tentar cadastrar a agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)
+            print(f"Erro ao tentar cadastrar a agenda da barbearia", EnumStatusMensagens.ERRO.value)
         
         return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))       
+     
+    @classmethod
+    def atualizar_agenda_mensal_barbearia(cls, agenda_barbearia):        
+        try:
+            ControladorAgendaMensal.atualizar_agenda_mensal_service(agenda_barbearia)
+            flash("Agenda da barbearia atualizada com sucesso", EnumStatusMensagens.SUCESSO.value)
+        except Exception as erros:
+            flash(f"Erro ao tentar atualizar a agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)
+        
+        return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))       
+     
+     
         
     @classmethod
     def consultar_agenda_mensal_barbearia(cls):        

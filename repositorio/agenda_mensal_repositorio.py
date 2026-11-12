@@ -9,6 +9,9 @@ class AgendaMensalRepositorio:
 
     def salvar(self, nova_agenda_mensal, cnpj_barbearia):
         return self.__aganda_mensal_DAO.cadastrar(nova_agenda_mensal, cnpj_barbearia)
+    
+    def verificar_aganda_aberta(self, nova_agenda_mensal):
+        return self.__aganda_mensal_DAO.verificar_aganda_aberta(nova_agenda_mensal)
 
     def buscar_por_id(self, id_mes: int):
         return self.__aganda_mensal_DAO.buscar_por_id(id_mes)

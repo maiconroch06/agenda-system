@@ -11,18 +11,18 @@ class AgendaMensal:
         titulo_agenda = None,
         
     ):
-        self.__id_mes_referencia = id_agenda_mensal
+        self.__id_agenda_mensal = id_agenda_mensal
         self.__data_inicial_mes = data_inicial_mes
         self.__data_final_mes = data_final_mes
         self.__titulo_agenda = titulo_agenda
 
     @property
-    def id_mes_referencia(self):
-        return self.__id_mes_referencia
+    def id_agenda_mensal(self):
+        return self.__id_agenda_mensal
 
-    @id_mes_referencia.setter
-    def id_mes_referencia(self, value):
-        self.__id_mes_referencia = value
+    @id_agenda_mensal.setter
+    def id_agenda_mensal(self, value):
+        self.__id_agenda_mensal = value
 
     @property
     def data_inicial_mes(self):

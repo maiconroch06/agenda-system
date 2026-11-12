@@ -38,7 +38,7 @@
                         </div>
                     </div>
 
-                    <!-- Card (Intervalos e Dias) -->
+                        <!-- Card (Intervalos e Dias) -->
                     <form action="/gestor/painel/horario_funcionamento/atualizar" method="POST" class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-3 md:p-6 flex flex-col gap-5">
                         <input type="hidden" name="horario_funcionamento_id" value="{{horario_funcionamento.id_horario}}">
                         <!-- 1. Campos de Horários -->
@@ -77,7 +77,7 @@
                                 <span class="text-xs font-semibold uppercase tracking-wider text-[#f1efe8]">Dias de Funcionamento</span>
                                 <div class="flex flex-wrap gap-2">
                                     {% set dias = [
-              
+            
                                         (1, 'Segunda-Feira'),
                                         (2, 'Terça-Feira'),
                                         (3, 'Quarta-Feira'),
@@ -85,7 +85,7 @@
                                         (5, 'Sexta-Feira'),
                                         (6, 'Sábado'),
                                         (0, 'Domingo')
- 
+
                                     ] %}
 
                                     {% for val, nome in dias %}
@@ -93,7 +93,7 @@
                                             <input type="checkbox" name="dias_funcionamento" value="{{ val }}" class="peer hidden" {% if val in horario_funcionamento.dias_funcionamento %} checked {% endif%}>
                                             <span class="inline-block px-3.5 py-2 rounded-xl border border-[#38362f] bg-[#161513] text-[#888780] text-xs font-medium transition-all peer-checked:border-green-400 peer-checked:bg-green-400/10 peer-checked:text-green-400 hover:border-amber-400">
                                                 {{ nome }} 
-                                               
+                                            
                     
 
                                             </span>
@@ -116,7 +116,7 @@
                     <div class="flex items-center justify-between mb-5 gap-3">
                         <div>
                             <h1 class="text-lg lg:text-xl font-semibold">Agenda Geral</h1>
-                        <p class="text-xs text-[#888780]" ></p>
+                    
                         </div>
 
                         <button type="button" id="btn-abrir-modal-agenda" class="px-4 py-2.5 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold cursor-pointer">
@@ -127,74 +127,74 @@
                     <span class="text-xs font-semibold uppercase tracking-wider text-[#888780] block mb-3">
                         Agendas Cadastradas
                     </span>
+                        
+                        <div id="lista-profissionais-painel" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 w-full">
 
-                    {%for agenda in agendas or [] %}
-                            <div id="lista-profissionais-painel"
-                            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 w-full">
+                                {% for agenda in agendas or [] %}
+                                    <div id="card_servicos" class="flex flex-col items-center min-w-0 bg-[#232220] rounded-2xl p-4 border border-zinc-700/60 hover:border-amber-500/40 transition-all">
 
+                                        <p class="text-lg text-gray-300 text-center font-semibold mb-3">
+                                            {{ agenda.titulo_agenda }}
+                                        </p>
 
-                            <div id="card_servicos" class="flex flex-col items-center min-w-0 bg-[#232220] rounded-2xl p-4 border border-zinc-700/60 hover:border-amber-500/40 transition-all">
-
-                                <h3 id="campo-padrao" class="font-bold text-white text-base text-center"></h3>
-
-                                <p class="text-1x1 text-gray-300 text-center font-semibold mb-3">
-                                    {{agenda.titulo_agenda}}
-                                </p>
-
-                                <div class="w-full bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-4">
-                                    <div class="flex items-center justify-between gap-4">
-                                        
-                                        <!-- Data Início (Esquerda) -->
-                                        <div class="flex-1 min-w-0">
-                                            <span class="block text-[11px] font-semibold uppercase tracking-wider text-[#888780] mb-0.5">
-                                                Dia Início
-                                            </span>
-                                            <p class="text-xs sm:text-sm font-medium text-[#f1efe8] truncate">
+                                        <div class="w-full bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-4">
+                                            <div class="flex items-center justify-between gap-4">
                                                 
-                                                {{ agenda.data_inicial_mes.strftime('%d/%m/%Y')  }}
-                                            </p>
+                                                <!-- Data Início (Esquerda) -->
+                                                <div class="flex-1 min-w-0">
+                                                    <span class="block text-[11px] font-semibold uppercase tracking-wider text-[#888780] mb-0.5">
+                                                        Dia Início
+                                                    </span>
+                                                    <p class="text-xs sm:text-sm font-medium text-[#f1efe8] truncate">
+                                                        {{ agenda.data_inicial_mes.strftime('%d/%m/%Y') }}
+                                                    </p>
+                                                </div>
+
+                                                <!-- Divisória Central -->
+                                                <div class="flex items-center justify-center shrink-0 px-1">
+                                                    <span class="h-6 md:h-10 w-[1px] bg-[#38362f]"></span>
+                                                </div>
+
+                                                <!-- Data Fim (Direita) -->
+                                                <div class="flex-1 min-w-0 text-right">
+                                                    <span class="block text-[11px] font-semibold uppercase tracking-wider text-[#888780] mb-0.5">
+                                                        Dia Fim
+                                                    </span>
+                                                    <p class="text-xs sm:text-sm font-medium text-[#f1efe8] truncate">
+                                                        {{ agenda.data_final_mes.strftime('%d/%m/%Y') }}
+                                                    </p>
+                                                </div>
+
+                                            </div>
                                         </div>
 
-                                        <!-- Divisoria Central -->
-                                        <div class="flex items-center justify-center shrink-0 px-1">
-                                            <span class="h-6 md:h-10 w-[1px] bg-[#38362f]"></span>
-                                        </div>
+                                        <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
 
-                                        <!-- Data Fim (Direita) -->
-                                        <div class="flex-1 min-w-0 text-right">
-                                            <span class="block text-[11px] font-semibold uppercase tracking-wider text-[#888780] mb-0.5">
-                                                Dia Fim
-                                            </span>
-                                            <p class="text-xs sm:text-sm font-medium text-[#f1efe8] truncate">
-                                                {{ agenda.data_final_mes.strftime('%d/%m/%Y')}}
-                                            </p>
-                                        </div>
+                                            <button type="button" id="editar-agenda-mensal" value="{{agenda.id_agenda_mensal}}#{{agenda.titulo_agenda}}#{{agenda.data_inicial_mes}}#{{agenda.data_final_mes}}"
+                                                    class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
+                                                Editar agenda
+                                            </button>
 
+                                            <form action="" id="form-confirmar-exclusao" method="POST" class="flex-1 min-w-0">
+                                                <input type="hidden" name="srv-id-deletar" value="">
+                                                <input type="hidden" name="srv-foto_nome" value="">
+
+                                                <button type="submit" class="w-full py-2 px-2 rounded-lg bg-amber-500 border border-black text-black hover:bg-amber-600 text-xs font-bold transition-colors">
+                                                    Desativar
+                                                </button>
+                                            </form>
+
+                                        </div>
                                     </div>
-                                </div>
+                                {% endfor %}
 
-                                <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
-
-                                    <button type="button" id="editar-barbeiro" value=""
-                                            class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
-                                        Editar agenda
-                                    </button>
-
-                                    <form action="" id="form-confirmar-exclusao"
-                                        method="POST" class="flex-1 min-w-0">
-
-                                        <input type="hidden" name="srv-id-deletar" value="">
-                                        <input type="hidden" name="srv-foto_nome" value="">
-
-                                        <button type="submit" class="w-full py-2 px-2 rounded-lg bg-amber-500 border border-black text-black hover:bg-amber-600 text-xs font-bold transition-colors">
-                                            Desativar
-                                        </button>
-                                    </form>
-
-                                </div>
-                            </div>
                         </div>
-                    {% endfor %}
+                    
+                    {% if not agendas %}
+                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-3 md:p-6 flex flex-col gap-5">
+                            <h1 class="text-lg lg:text-xl font-semibold text-amber-400">Nenhuma agenda cadastrada</h1>
+                        </div>
+                    {%endif%}
 
                     {% include "componetizacao/modals/modal-gerenciar-agenda.html" %}
                 </section>
