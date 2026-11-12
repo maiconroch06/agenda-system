@@ -137,8 +137,8 @@ class ControladorGestor():
         try:
             ControladorAgendaMensal.cadastrar_agenda_mensal_service(agenda_barbearia)
             flash("Agenda da barbearia cadastrada com sucesso", EnumStatusMensagens.SUCESSO.value)
-        except Exception as erros:
-            flash(f"Erro ao tentar cadastrar a agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)
+        except Exception :
+            flash(f"Erro ao tentar cadastrar a agenda da barbearia", EnumStatusMensagens.ERRO.value)
         
         return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))       
      
@@ -166,7 +166,10 @@ class ControladorGestor():
             resultado = ControladorAgendaMensal.atualizar_status_agenda_mensal_service(agenda_mensal)
             if resultado > 0:
                 status = "ativada" if agenda_mensal.status_agenda_mensal else "desativada"
-                flash(f"Agenda mensal {status} com sucesso", EnumStatusMensagens.SUCESSO.value)  
+                flash(f"Agenda mensal {status} com sucesso", EnumStatusMensagens.SUCESSO.value)
+            else:
+                flash(f"Agenda mensal não atualizado com sucesso", EnumStatusMensagens.ERRO.value)       
+                
         except Exception as erros:
             flash(f"Erro ao tentar alterar o status da agenda {erros}", EnumStatusMensagens.ERRO.value)  
         
