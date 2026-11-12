@@ -840,6 +840,9 @@
   .min-w-\[60px\] {
     min-width: 60px;
   }
+  .min-w-\[140px\] {
+    min-width: 140px;
+  }
   .flex-1 {
     flex: 1;
   }
@@ -1305,6 +1308,9 @@
   .border-emerald-800 {
     border-color: var(--color-emerald-800);
   }
+  .border-green-500 {
+    border-color: var(--color-green-500);
+  }
   .border-green-500\/30 {
     border-color: color-mix(in srgb, oklch(72.3% 0.219 149.579) 30%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -1517,6 +1523,9 @@
   }
   .bg-gray-100 {
     background-color: var(--color-gray-100);
+  }
+  .bg-green-500 {
+    background-color: var(--color-green-500);
   }
   .bg-green-500\/10 {
     background-color: color-mix(in srgb, oklch(72.3% 0.219 149.579) 10%, transparent);
@@ -2675,6 +2684,9 @@
   }
   .focus\:ring-\[\#04342c\]:focus {
     --tw-ring-color: #04342c;
+  }
+  .focus\:ring-\[\#f0c05a\]:focus {
+    --tw-ring-color: #f0c05a;
   }
   .focus\:ring-brand-gold:focus {
     --tw-ring-color: var(--color-brand-gold);

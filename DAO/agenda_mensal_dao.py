@@ -166,6 +166,7 @@ class AgendaMensalDAO:
 
         return bool(resultado)
 
+    # Colocar o campo de status do agendamento e a data final for maior ou igual a hoje
     def buscar_ultima_agenda_mensal(self, cnpj_barbearia: str):
         sql = text("""
             SELECT
@@ -175,7 +176,7 @@ class AgendaMensalDAO:
                 titulo_agenda
             FROM agenda_mensal
             WHERE fk_barbearia_cnpj = :cnpj_barbearia
-            ORDER BY id_agenda_mensal DESC
+            ORDER BY id_agenda_mensal ASC
             LIMIT 1
         """)
 
