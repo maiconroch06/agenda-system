@@ -97,6 +97,23 @@ def gestor_agenda_mensal_atualizar():
      
     return ControladorGestor.atualizar_agenda_mensal_barbearia(agenda_mensal)
 
+@gestor.route('/painel/agenda_mensal/alterar_status', methods=['POST'])
+def gestor_agenda_mensal_alterar_status():
+        
+   
+    status_agenda_mensal = request.form.get("agenda-mensal-status", type=int)
+   
+    agenda_mensal = AgendaMensal(
+        
+            id_agenda_mensal=request.form.get("agenda-mensal-id", type=int),
+            data_inicial_mes= datetime.strptime(request.form.get("data_inicio"),  "%Y-%m-%d").date(),
+            data_final_mes=datetime.strptime(request.form.get("data_fim"),  "%Y-%m-%d").date(),
+            titulo_agenda=request.form.get("titulo_agenda"),
+            status_agenda_mensal= not status_agenda_mensal
+    )
+    
+    return ControladorGestor.atualizar_status_agenda_mensal_barbearia(agenda_mensal)
+
 
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados

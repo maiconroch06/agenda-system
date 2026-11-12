@@ -175,12 +175,15 @@
                                                 Editar agenda
                                             </button>
 
-                                            <form action="" id="form-confirmar-exclusao" method="POST" class="flex-1 min-w-0">
-                                                <input type="hidden" name="srv-id-deletar" value="">
-                                                <input type="hidden" name="srv-foto_nome" value="">
+                                            <form action="/gestor/painel/agenda_mensal/alterar_status" id="form-confirmar-exclusao" method="POST" class="flex-1 min-w-0">
+                                                
+                                                <input type="hidden" name="agenda-mensal-id" value="{{agenda.id_agenda_mensal}}">
+                                                <input type="hidden" name="agenda-mensal-status" value="{{agenda.status_agenda_mensal}}">
+                                                <input type="hidden" name="data_inicio" value="{{agenda.data_inicial_mes}}">
+                                                <input type="hidden" name="data_fim" value="{{agenda.data_final_mes}}">
 
                                                 <button type="submit" class="w-full py-2 px-2 rounded-lg bg-amber-500 border border-black text-black hover:bg-amber-600 text-xs font-bold transition-colors">
-                                                    Desativar
+                                                   {{ 'Desativar' if agenda.status_agenda_mensal == 1 else 'Ativar' }} 
                                                 </button>
                                             </form>
 
