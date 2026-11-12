@@ -21,6 +21,8 @@ class BarbeiroRepositorio:
     def listar_todos(self):
         return self.__barbeiroDao.consultar_todos()
 
+    def listar_agendamentos_barbeiro(self, id_barbeiro):
+        return self.__barbeiroDao.consultar_agendamentos_barbeiro(id_barbeiro)
     
     def atualizar(self, barbeiro):
         return self.__barbeiroDao.atualizar_informacoes_barbeiro(barbeiro)

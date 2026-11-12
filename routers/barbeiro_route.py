@@ -9,15 +9,12 @@ def barberSource():
     return redirect('/')
 
 ##################################################################################
-# Login Barbeiro
+# Logout Barbeiro - Encerramento da sessão do Barbeiro
 
-@barbeiro.route('/login')
-def barbeiroLoginPagina():
-    if session.get('dados_barbeiro') is None:
-        return render_template('pages/barbeiro/barbeiro-login.html', mensagens_status=EnumStatusMensagens)
-        
-    return redirect(url_for('barbeiro.barbeiroPainel'))
-    # return render_template('pages/barbeiro/barbeiro-login.html')
+@barbeiro.route('/logout', methods=['POST','GET'])
+def barbeiroLogout():
+    session.clear()
+    return redirect('/')
 
 ##################################################################################
 # Acesso do Barbeiro - Criação da sessão
@@ -30,16 +27,25 @@ def barbeiroLogin():
     return ControladorBarbeiro.login_barbeiro(email_digitado,senha_digitada)
 
 ##################################################################################
-# Logout Barbeiro - Encerramento da sessão do Barbeiro
+# O que isso esta fazendo? A mesma função existe no gestor
 
-@barbeiro.route('/logout', methods=['POST','GET'])
-def barbeiroLogout():
-    session.clear()
-    return redirect('/')
+@barbeiro.route('/login')
+def barbeiroLoginPagina():
+    if session.get('dados_barbeiro') is None:
+        return render_template('pages/barbeiro/barbeiro-login.html', mensagens_status=EnumStatusMensagens)
+        
+    return redirect(url_for('barbeiro.barbeiroPainel'))
 
 ##################################################################################
 # Painel de Visualização de Agendamentos
 
 @barbeiro.route('/painel')
 def barbeiroPainel():
-    return render_template('pages/barbeiro/barbeiro-painel-inicio-rp.html')
+    barbeiro = session.get('dados_barbeiro')
+
+    agendamentos_flask = ControladorBarbeiro.consultar_agendamentos_barbeiro(barbeiro)
+    
+    #print("\n 1. BARBEIRO NA SESSÃO: ", barbeiro)
+    #print("\n 2. AGENDAMENTOS RETORNADOS: ", agendamentos_flask)
+
+    return render_template('pages/barbeiro/barbeiro-painel-inicio-rp.html', barbeiro=barbeiro, agendamentos_flask=agendamentos_flask)
