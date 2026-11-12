@@ -139,6 +139,64 @@ class BarbeiroDAO:
             for registro in registros
         ]
 
+    def consultar_todos_ativos(self):
+        sql = text("""
+            SELECT
+                u.id_usuario,
+                u.nome_completo,
+                u.telefone,
+                u.cpf,
+                u.email,
+                u.senha,
+                u.foto_nome_usuario,
+                u.status_usuario,
+                u.data_cadastro,
+                u.data_atualizacao,
+
+                b.id_barbeiro,
+                b.data_liberacao,
+                b.bio,
+                b.especialidade,
+                b.status_barbeiro,
+                TIMESTAMPDIFF(
+                    YEAR,
+                    b.data_inicio_carreira,
+                    CURDATE()
+                ) AS data_inicio_carreira,
+
+                e.id_endereco,
+                e.cep,
+                e.cidade,
+                e.uf,
+                e.logradouro,
+                e.numero,
+                e.bairro,
+                e.sequencia,
+                e.complemento
+
+            FROM usuario u
+
+            INNER JOIN barbeiro b
+                ON b.id_barbeiro = u.id_usuario
+
+            LEFT JOIN endereco e
+                ON e.id_endereco = u.fk_id_endereco
+
+            WHERE
+                u.status_usuario = 1
+                AND b.status_barbeiro = 1
+
+            ORDER BY u.nome_completo
+        """)
+
+        registros = db.session.execute(sql).mappings().all()
+
+        return [
+            self._mapear_barbeiro(registro)
+            for registro in registros
+        ]
+    
+
     def atualizar_informacoes_barbeiro(self, barbeiro: Barbeiro):
         sql = text("""
             UPDATE barbeiro

@@ -61,7 +61,16 @@ class ServicoDAO:
             {"id_servico": id_servico}
         ).mappings().first()
 
-        return dict(registro) if registro else None
+        return Servico(
+            id_servico=registro["id_servico"],
+            descricao_servico=registro["descricao_servico"],
+            valor=registro["valor"],
+            duracao=registro["duracao"],
+            foto_nome_servico=registro["foto_nome_servico"],
+            status_servico=registro["status_servico"],
+            data_cadastro=registro["data_cadastro"],
+            data_atualizacao=registro["data_atualizacao"]
+        )
 
     def consultar_todos_os_servicos(self):
         sql = text("""

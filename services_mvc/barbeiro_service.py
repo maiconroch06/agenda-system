@@ -22,6 +22,13 @@ class BarbeiroService(UsuarioService):
         except Exception as error:
             flash(f"Erro ao buscar os barbeiros cadastrados no banco {error}")
 
+    def consultar_barbeiros_ativos(self):
+            try:
+                barbeiros = self.__barbeiroRepositorio.listar_todos_ativos()
+                return barbeiros
+            except Exception as error:
+                flash(f"Erro ao buscar os barbeiros cadastrados no banco {error}")
+
     # Mexer mais tarde para salvar os dados do barbeiro
     def salvar_dados_especificos(self, usuario, fotoTemp):
         try:
@@ -41,7 +48,9 @@ class BarbeiroService(UsuarioService):
     def alterar_barbeiro_barbearia(self, usuario):
         return self.__barbeiroRepositorio.atualizar(usuario)            
                 
-         
+
+    def buscar_barbeiro_id(self, id_barbeiro):
+        return self.__barbeiroRepositorio.buscar_por_id(id_barbeiro)
 
     # def validarDadosBarbeiro(self, barbeiro, fotoTemp):
     def definir_pasta_imagem_usuario(self):

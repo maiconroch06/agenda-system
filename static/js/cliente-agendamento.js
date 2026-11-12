@@ -1,22 +1,23 @@
+
 /* ============================================================
    DADOS
    ============================================================ */
 
 const SERVICOS = [
-    { id: "infantil",       name: "Corte Infantil",      duration: 30, price: 20, icon: "../../static/assets/img/cortes/corte-infantil.jpeg",        alt: "corte-infantil" },
-    { id: "social",         name: "Corte Social",        duration: 30, price: 18, icon: "../../static/assets/img/cortes/corte-social.jpeg",           alt: "corte-social" },
-    { id: "social-barba",   name: "Social & Barba",    duration: 50, price: 30, icon: "../../static/assets/img/cortes/corte-social&barba.jpeg",     alt: "corte-social-barba" },
-    { id: "degrade",        name: "Degradê",           duration: 40, price: 22, icon: "../../static/assets/img/cortes/corte-degrade.jpeg",          alt: "corte-degrade" },
-    { id: "degrade-barba",  name: "Degradê & Barba",   duration: 60, price: 30, icon: "../../static/assets/img/cortes/corte-degrade-barba.jpeg",   alt: "corte-degrade-barba" },
-    { id: "militar",        name: "Corte Militar",     duration: 20, price: 15, icon: "../../static/assets/img/cortes/corte-militar.jpeg",          alt: "corte-militar" },
-    { id: "barba",          name: "Barba",             duration: 25, price: 15, icon: "../../static/assets/img/cortes/corte-barba.jpeg",            alt: "corte-barba" },
+    { id: "infantil", name: "Corte Infantil", duration: 30, price: 20, icon: "../../static/assets/img/cortes/corte-infantil.jpeg", alt: "corte-infantil" },
+    { id: "social", name: "Corte Social", duration: 30, price: 18, icon: "../../static/assets/img/cortes/corte-social.jpeg", alt: "corte-social" },
+    { id: "social-barba", name: "Social & Barba", duration: 50, price: 30, icon: "../../static/assets/img/cortes/corte-social&barba.jpeg", alt: "corte-social-barba" },
+    { id: "degrade", name: "Degradê", duration: 40, price: 22, icon: "../../static/assets/img/cortes/corte-degrade.jpeg", alt: "corte-degrade" },
+    { id: "degrade-barba", name: "Degradê & Barba", duration: 60, price: 30, icon: "../../static/assets/img/cortes/corte-degrade-barba.jpeg", alt: "corte-degrade-barba" },
+    { id: "militar", name: "Corte Militar", duration: 20, price: 15, icon: "../../static/assets/img/cortes/corte-militar.jpeg", alt: "corte-militar" },
+    { id: "barba", name: "Barba", duration: 25, price: 15, icon: "../../static/assets/img/cortes/corte-barba.jpeg", alt: "corte-barba" },
 ];
 
 const PROFISSIONAIS = [
-    { id: "thiago", name: "Thiago Tomaz",          description: "Barbeiro sênior",                  icon: "../../static/assets/img/barbeiros/barbeiro-master-thiago-silva.png", alt: "thiago" },
-    { id: "samuel", name: "Samuel",                description: "Barbeiro sênior",                  icon: "../../static/assets/img/barbeiros/barbeiro-tres-samuca.png", alt: "samuel" },
-    { id: "maik",   name: "Maik",                  description: "Barbeiro novato",                  icon: "../../static/assets/img/barbeiros/barbeiro_dois_maik.png",   alt: "maik" },
-    { id: "any",    name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "⇄" },
+    { id: "thiago", name: "Thiago Tomaz", description: "Barbeiro sênior", icon: "../../static/assets/img/barbeiros/barbeiro-master-thiago-silva.png", alt: "thiago" },
+    { id: "samuel", name: "Samuel", description: "Barbeiro sênior", icon: "../../static/assets/img/barbeiros/barbeiro-tres-samuca.png", alt: "samuel" },
+    { id: "maik", name: "Maik", description: "Barbeiro novato", icon: "../../static/assets/img/barbeiros/barbeiro_dois_maik.png", alt: "maik" },
+    { id: "any", name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "⇄" },
 ];
 
 const NOMES_DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -27,15 +28,7 @@ const TODOS_HORARIOS = [
     "15:00", "15:30", "16:00", "16:30", "17:00"
 ];
 
-const HORARIOS_OCUPADOS = {
-    0: ["09:00", "09:30", "14:00"],
-    1: ["10:00", "10:30"],
-    2: [],
-    3: ["13:00", "13:30"],
-    4: ["15:00", "15:30"],
-    5: ["14:00"],
-    6: TODOS_HORARIOS
-};
+const HORARIOS_OCUPADOS = {};
 
 const historicoCortes = [];
 
@@ -44,13 +37,13 @@ const historicoCortes = [];
    ============================================================ */
 
 const estado = {
-    etapaAtual:              1,
-    servicoSelecionado:      null,
+    etapaAtual: 1,
+    servicoSelecionado: null,
     profissionalSelecionado: null,
-    diaSelecionado:          null,
-    horarioSelecionado:      null,
-    agendamentoConcluido:    false,
-    nome:                   "Maicon Rocha"
+    diaSelecionado: null,
+    horarioSelecionado: null,
+    agendamentoConcluido: false,
+    nome: "Maicon Rocha"
 };
 
 /* ============================================================
@@ -58,46 +51,54 @@ const estado = {
    ============================================================ */
 
 const els = {
-    etapa:              document.getElementById("etapa"),
-    listaServico:       document.getElementById("lista-servico"),
+    etapa: document.getElementById("etapa"),
+    listaServico: document.getElementById("lista-servico"),
     listaProfissionais: document.getElementById("lista-profissionais"),
-    abasDias:           document.getElementById("abas-dias"),
-    gradeHorarios:      document.getElementById("grade-horarios"),
-    resumo:             document.getElementById("resumo"),
-    btnVoltar:          document.getElementById("btn-voltar"),
-    btnContinuar:       document.getElementById("btn-continuar"),
-    navEtapa:           document.getElementById("nav-etapa"),
-    aviso:              document.getElementById("aviso"),
-    sucesso:            document.getElementById("painel-5"),
-    sucessoTexto:       document.getElementById("sucesso-texto"),
-    btnVoltarInicio:    document.getElementById("btn-voltar-inicio"),
-    btnHistorico:       document.getElementById("btn-toggle-historico"),
-    painelHistorico:    document.getElementById("painel-historico"),
-    listaHistorico:     document.getElementById("lista-historico"),
-    modalHistorico:     document.getElementById("modal-historico"),
-    resumoModal:        document.getElementById("resumo-modal-conteudo")
+    abasDias: document.getElementById("abas-dias"),
+    gradeHorarios: document.getElementById("grade-horarios"),
+    resumo: document.getElementById("resumo"),
+    btnVoltar: document.getElementById("btn-voltar"),
+    btnContinuar: document.getElementById("btn-continuar"),
+    navEtapa: document.getElementById("nav-etapa"),
+    aviso: document.getElementById("aviso"),
+    sucesso: document.getElementById("painel-5"),
+    sucessoTexto: document.getElementById("sucesso-texto"),
+    btnVoltarInicio: document.getElementById("btn-voltar-inicio"),
+    btnHistorico: document.getElementById("btn-toggle-historico"),
+    painelHistorico: document.getElementById("painel-historico"),
+    listaHistorico: document.getElementById("lista-historico"),
+    modalHistorico: document.getElementById("modal-historico"),
+    resumoModal: document.getElementById("resumo-modal-conteudo")
 };
 
 const form = {};
 
 /* ============================================================
-   LOCALSTORAGE & HISTÓRICO INITIALIZATION
+   LOCALSTORAGE & HISTÓRICO
    ============================================================ */
 
 function salvarNoHistorico(novoItem) {
     const historico = historicoCortes;
+
     historico.unshift(novoItem);
-    localStorage.setItem("historicoAgendamentos", JSON.stringify(historico));
+
+    localStorage.setItem(
+        "historicoAgendamentos",
+        JSON.stringify(historico)
+    );
 }
 
 /* ============================================================
-   AVISO (toast)
+   AVISO (TOAST)
    ============================================================ */
 
 function mostrarAviso(mensagem) {
     els.aviso.textContent = mensagem;
     els.aviso.classList.add("visivel");
-    setTimeout(() => els.aviso.classList.remove("visivel"), 2500);
+
+    setTimeout(() => {
+        els.aviso.classList.remove("visivel");
+    }, 2500);
 }
 
 /* ============================================================
@@ -105,15 +106,28 @@ function mostrarAviso(mensagem) {
    ============================================================ */
 
 function mostrarPainel(numero) {
+
     for (let i = 1; i <= 4; i++) {
         const painel = document.getElementById(`painel-${i}`);
-        if (painel) painel.hidden = i !== numero;
+
+        if (painel) {
+            painel.hidden = i !== numero;
+        }
     }
+
     els.sucesso.hidden = true;
-    if (els.painelHistorico) els.painelHistorico.hidden = true;
+
+    if (els.painelHistorico) {
+        els.painelHistorico.hidden = true;
+    }
+
     atualizarStepper();
     atualizarBotoes();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 /* ============================================================
@@ -121,132 +135,166 @@ function mostrarPainel(numero) {
    ============================================================ */
 
 function abrirHistorico() {
+
     for (let i = 1; i <= 4; i++) {
         const painel = document.getElementById(`painel-${i}`);
+
         if (painel) painel.hidden = true;
     }
+
     els.sucesso.hidden = true;
     els.etapa.hidden = true;
     els.navEtapa.hidden = true;
     els.painelHistorico.hidden = false;
 
     carregarHistorico();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 function voltarParaAgendamento() {
+
     els.painelHistorico.hidden = true;
-    
+
     if (estado.agendamentoConcluido) {
         reiniciar();
     } else {
         els.etapa.hidden = false;
         els.navEtapa.hidden = false;
+
         mostrarPainel(estado.etapaAtual);
     }
 
     const textoBtn = document.getElementById("texto-btn-historico");
-    if (textoBtn) textoBtn.textContent = "Meus Agendamentos";
-    if (els.btnHistorico) els.btnHistorico.classList.remove("border-brand-gold", "text-brand-gold");
-}
 
-function alternarHistorico() {
-    const painelHistorico = els.painelHistorico;
-    const btnToggle = els.btnHistorico;
-    const textoBtn = document.getElementById("texto-btn-historico");
-    const stepper = els.etapa;
-    const navEtapa = els.navEtapa;
+    if (textoBtn) {
+        textoBtn.textContent = "Meus Agendamentos";
+    }
 
-    const estaNoHistorico = !painelHistorico.hidden;
-
-    if (estaNoHistorico) {
-        painelHistorico.hidden = true;
-        
-        if (estado.agendamentoConcluido) {
-            reiniciar();
-        } else {
-            mostrarPainel(estado.etapaAtual || 1);
-            if (stepper) stepper.hidden = false;
-            if (navEtapa) navEtapa.hidden = false;
-        }
-
-        if (textoBtn) textoBtn.textContent = "Meus Agendamentos";
-        if (btnToggle) btnToggle.classList.remove("border-brand-gold", "text-brand-gold");
-    } else {
-        [1, 2, 3, 4, 5].forEach(i => {
-            const p = document.getElementById(`painel-${i}`);
-            if (p) p.hidden = true;
-        });
-
-        carregarHistorico();
-
-        painelHistorico.hidden = false;
-        if (stepper) stepper.hidden = true;
-        if (navEtapa) navEtapa.hidden = true;
-
-        if (textoBtn) textoBtn.textContent = "← Voltar ao Agendamento";
-        if (btnToggle) btnToggle.classList.add("border-brand-gold", "text-brand-gold");
+    if (els.btnHistorico) {
+        els.btnHistorico.classList.remove(
+            "border-brand-gold",
+            "text-brand-gold"
+        );
     }
 }
 
+function alternarHistorico() {
+    window.location.href = URL_MEUS_AGENDAMENTOS;
+}
+
 function carregarHistorico() {
+
     const historico = historicoCortes;
 
     if (!historico || historico.length === 0) {
-        els.listaHistorico.innerHTML = `<p class="text-[#888780] text-sm text-center col-span-full py-8">Nenhum agendamento encontrado.</p>`;
+
+        els.listaHistorico.innerHTML = `
+            <p class="text-[#888780] text-sm text-center col-span-full py-8">
+                Nenhum agendamento encontrado.
+            </p>
+        `;
+
         return;
     }
 
     els.listaHistorico.innerHTML = historico.map(item => `
-        <div class="bg-[#1c1c1c] border border-[#38362f] rounded-xl p-4 flex flex-col gap-3 hover:border-brand-gold/50 cursor-pointer transition-all" onclick="exibirDetalhesHistorico('${item.id}')">
+        <div class="bg-[#1c1c1c] border border-[#38362f] rounded-xl p-4 flex flex-col gap-3 hover:border-brand-gold/50 cursor-pointer transition-all"
+             onclick="exibirDetalhesHistorico('${item.id}')">
+
             <div class="flex justify-between items-center border-b border-[#2e2d29] pb-2">
-                <span class="font-medium text-[#f1efe8] text-[15px]">${item.servico}</span>
-                <span class="text-[12px] px-2 py-0.5 rounded-full font-medium ${item.status === 'Concluído' ? 'bg-green-900/40 text-green-400 border border-green-800' : 'bg-amber-900/40 text-amber-400 border border-amber-800'}">${item.status}</span>
+
+                <span class="font-medium text-[#f1efe8] text-[15px]">
+                    ${item.servico}
+                </span>
+
+                <span class="text-[12px] px-2 py-0.5 rounded-full font-medium
+                    ${item.status === 'Concluído'
+                        ? 'bg-green-900/40 text-green-400 border border-green-800'
+                        : 'bg-amber-900/40 text-amber-400 border border-amber-800'}">
+                    ${item.status}
+                </span>
+
             </div>
+
             <div class="flex flex-col gap-1 text-[13px] text-[#888780]">
-                <span><strong class="text-[#f1efe8]">Profissional:</strong> ${item.profissional}</span>
-                <span><strong class="text-[#f1efe8]">Data:</strong> ${item.data}</span>
-                <span><strong class="text-[#f1efe8]">Horário:</strong> ${item.horario}</span>
+
+                <span>
+                    <strong class="text-[#f1efe8]">Profissional:</strong>
+                    ${item.profissional}
+                </span>
+
+                <span>
+                    <strong class="text-[#f1efe8]">Data:</strong>
+                    ${item.data}
+                </span>
+
+                <span>
+                    <strong class="text-[#f1efe8]">Horário:</strong>
+                    ${item.horario}
+                </span>
+
             </div>
+
             <div class="flex justify-between items-center pt-2 border-t border-[#2e2d29]">
-                <span class="font-bold text-[#f1efe8] text-[14px]">${item.valor}</span>
-                <span class="text-[12px] text-brand-gold hover:underline">Ver resumo &rarr;</span>
+
+                <span class="font-bold text-[#f1efe8] text-[14px]">
+                    ${item.valor}
+                </span>
+
+                <span class="text-[12px] text-brand-gold hover:underline">
+                    Ver resumo →
+                </span>
+
             </div>
+
         </div>
     `).join("");
 }
 
 function exibirDetalhesHistorico(id) {
+
     const historico = historicoCortes;
     const item = historico.find(h => h.id === id);
+
     if (!item) return;
 
     els.resumoModal.innerHTML = `
         <div class="divide-y divide-[#38362f] text-[14px]">
+
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Serviço</span>
                 <span class="font-medium text-[#f1efe8]">${item.servico}</span>
             </div>
+
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Profissional</span>
                 <span class="font-medium text-[#f1efe8]">${item.profissional}</span>
             </div>
+
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Data</span>
                 <span class="font-medium text-[#f1efe8]">${item.data}</span>
             </div>
+
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Horário</span>
                 <span class="font-medium text-[#f1efe8]">${item.horario}</span>
             </div>
+
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Valor</span>
                 <span class="font-medium text-[#f1efe8]">${item.valor}</span>
             </div>
+
             <div class="flex justify-between py-2.5">
                 <span class="text-[#888780]">Status</span>
                 <span class="font-medium text-[#f1efe8]">${item.status}</span>
             </div>
+
         </div>
     `;
 
@@ -262,36 +310,44 @@ function fecharModalHistorico() {
    ============================================================ */
 
 function atualizarStepper() {
+
     const itens = els.etapa.querySelectorAll(".etapa__item");
 
     itens.forEach((item, index) => {
+
         const numero = index + 1;
         const ciclo = item.querySelector(".etapa__ciclo");
         const label = item.querySelector(".etapa__label");
 
         if (numero < estado.etapaAtual) {
+
             item.classList.remove("before:bg-brand-border");
             item.classList.add("before:bg-brand-gold");
 
             ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-brand-gold border border-brand-gold flex items-center justify-center text-[13px] font-bold text-black etapa__ciclo";
+
             ciclo.textContent = "✓";
 
             label.className = "text-brand-gold font-medium etapa__label";
 
         } else if (numero === estado.etapaAtual) {
+
             item.classList.remove("before:bg-brand-border");
             item.classList.add("before:bg-brand-gold");
 
             ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-brand-gold border border-brand-gold flex items-center justify-center text-[13px] font-bold text-black etapa__ciclo shadow-md shadow-brand-gold/30";
+
             ciclo.textContent = numero;
 
             label.className = "text-white font-bold etapa__label";
 
         } else {
+
             item.classList.remove("before:bg-brand-gold");
             item.classList.add("before:bg-brand-border");
 
             ciclo.className = "relative z-10 w-[28px] h-[28px] rounded-full bg-[#111215] border border-brand-border flex items-center justify-center text-[13px] font-medium text-brand-muted etapa__ciclo";
+
             ciclo.textContent = numero;
 
             label.className = "text-brand-muted etapa__label";
@@ -304,21 +360,41 @@ function atualizarStepper() {
    ============================================================ */
 
 function atualizarBotoes() {
-    els.btnVoltar.disabled = estado.etapaAtual === 1;
+
+    // O botão nunca fica desabilitado.
+    // Na primeira etapa, ele permite sair do agendamento.
+    els.btnVoltar.disabled = false;
 
     const podeContinuar = verificarEtapaAtual();
+
     els.btnContinuar.disabled = !podeContinuar;
 
-    els.btnContinuar.textContent = estado.etapaAtual === 4 ? "Finalizar" : "Continuar";
+    els.btnContinuar.textContent =
+        estado.etapaAtual === 4 ? "Finalizar" : "Continuar";
+
+    els.btnVoltar.textContent =
+        estado.etapaAtual === 1 ? "Voltar ao Início" : "Voltar";
 }
 
 function verificarEtapaAtual() {
+
     switch (estado.etapaAtual) {
-        case 1: return estado.servicoSelecionado !== null;
-        case 2: return estado.profissionalSelecionado !== null;
-        case 3: return estado.diaSelecionado !== null && estado.horarioSelecionado !== null;
-        case 4: return true;
-        default: return false;
+
+        case 1:
+            return estado.servicoSelecionado !== null;
+
+        case 2:
+            return estado.profissionalSelecionado !== null;
+
+        case 3:
+            return estado.diaSelecionado !== null &&
+                   estado.horarioSelecionado !== null;
+
+        case 4:
+            return true;
+
+        default:
+            return false;
     }
 }
 
@@ -327,7 +403,13 @@ function verificarEtapaAtual() {
    ============================================================ */
 
 function avancarEtapa() {
+
+    if (!AGENDA_DISPONIVEL) {
+        return;
+    }
+
     if (estado.etapaAtual === 4) {
+
         if (!validarFormulario()) {
             mostrarAviso("Verifique os campos destacados");
             return;
@@ -337,12 +419,15 @@ function avancarEtapa() {
     }
 
     if (!verificarEtapaAtual()) {
+
         const mensagens = {
             1: "Selecione um serviço para continuar",
             2: "Selecione um profissional para continuar",
-            3: "Selecione um dia e horário para continuar",
+            3: "Selecione um dia e horário para continuar"
         };
+
         mostrarAviso(mensagens[estado.etapaAtual]);
+
         return;
     }
 
@@ -361,224 +446,502 @@ function avancarEtapa() {
 }
 
 function voltarEtapa() {
-    if (estado.etapaAtual > 1) {
-        estado.etapaAtual--;
-        mostrarPainel(estado.etapaAtual);
+
+    // PRIMEIRA ETAPA: RETORNA À PÁGINA INICIAL
+    if (estado.etapaAtual === 1) {
+
+        window.location.href = "/";
+        return;
     }
+
+    // DEMAIS ETAPAS: RETORNA UMA ETAPA
+    estado.etapaAtual--;
+
+    mostrarPainel(estado.etapaAtual);
 }
 
 /* ============================================================
    ETAPA 1 — SERVIÇOS
    ============================================================ */
-/*
+
 function carregarServicos() {
+
     if (!els.listaServico) return;
 
-    els.listaServico.innerHTML = SERVICOS.map(servico => {
-        const checked = estado.servicoSelecionado === servico.id ? "checked" : "";
-        const letraInicial = servico.name ? servico.name.charAt(0) : "";
+    const inputs = els.listaServico.querySelectorAll(
+        "input[name='inputCorte']"
+    );
 
-        return `
-            <label class="cursor-pointer w-full group">
-                <input type="radio" name="inputCorte" id="${servico.id}" class="peer hidden" value="${servico.id}" ${checked}>
-                <div class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col justify-between items-center gap-3 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
-                    
-                    <div class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
-                        ${servico.icon
-                            ? `<img src="${servico.icon}" alt="${servico.alt}" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-white font-bold text-2xl sm:text-xl md:text-2xl\\'>${letraInicial}</span>';" class="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105">`
-                            : `<span class="text-white font-bold text-2xl sm:text-xl md:text-2xl">${letraInicial}</span>`
-                        }
-                    </div>
-                    
-                    <span class="font-semibold text-base sm:text-sm md:text-base lg:lg-text-base text-white text-center peer-checked:text-brand-gold line-clamp-2 leading-tight w-full min-h-[2.5rem] flex items-center justify-center">
-                        ${servico.name}
-                    </span>
-                    
-                    <div class="flex justify-between items-center w-full text-sm sm:text-xs md:text-sm lg-text-base text-brand-muted pt-2 border-t border-brand-border/50 mt-auto">
-                        <span>${servico.duration} min</span>
-                        <span class="font-semibold text-white">R$ ${servico.price.toFixed(2).replace(".", ",")}</span>
-                    </div>
-                </div>
-            </label>
-        `;
-    }).join("");
+    inputs.forEach(input => {
 
-    els.listaServico.querySelectorAll("input[type='radio']").forEach(input => {
+        input.checked = estado.servicoSelecionado === input.value;
+
         input.addEventListener("change", () => {
+
             estado.servicoSelecionado = input.value;
+
             atualizarBotoes();
         });
     });
 }
-*/
+
 /* ============================================================
    ETAPA 2 — PROFISSIONAIS
    ============================================================ */
 
-function carregarProfissionais() {
-    if (!els.listaProfissionais) return;
+    function carregarProfissionais() {
 
-    els.listaProfissionais.innerHTML = PROFISSIONAIS.map(profissional => {
-        const checked = estado.profissionalSelecionado === profissional.id ? "checked" : "";
-        const isSemPreferencia = profissional.id === "any" || profissional.name.toLowerCase().includes("sem preferência");
-        const simboloSubstituto = isSemPreferencia ? "⇄" : profissional.name.charAt(0);
+        if (!els.listaProfissionais) return;
 
-        return `
-            <label class="cursor-pointer w-full group">
-                <input type="radio" name="inputFuncionario" id="${profissional.id}" class="peer hidden" value="${profissional.id}" ${checked}>
-                <div class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col items-center justify-between text-center transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
-                    
-                    <div class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
-                        ${profissional.icon
-                            ? `<img src="${profissional.icon}" alt="${profissional.alt}" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-white font-bold text-2xl sm:text-xl md:text-2xl\\'>${simboloSubstituto}</span>';" class="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105">`
-                            : `<span class="text-white font-bold text-2xl sm:text-xl md:text-2xl">${simboloSubstituto}</span>`
-                        }
-                    </div>
+        const inputs = els.listaProfissionais.querySelectorAll(
+            "input[name='inputBarbeiro']"
+        );
 
-                    <div class="w-full pt-2.5">
-                        <h3 class="font-semibold text-base sm:text-sm md:text-base text-white peer-checked:text-brand-gold line-clamp-1 leading-tight">${profissional.name}</h3>
-                        <p class="text-sm sm:text-xs md:text-sm text-brand-muted mt-1 line-clamp-2 leading-snug">${profissional.description}</p>
-                    </div>
-                </div>
-            </label>
-        `;
-    }).join("");
+        inputs.forEach(input => {
 
-    els.listaProfissionais.querySelectorAll("input[type='radio']").forEach(input => {
-        input.addEventListener("change", () => {
-            estado.profissionalSelecionado = input.value;
-            atualizarBotoes();
+            input.checked =
+                estado.profissionalSelecionado === input.value;
+
+            input.addEventListener("change", () => {
+
+                estado.profissionalSelecionado = input.value;
+
+                atualizarBotoes();
+            });
         });
-    });
-}
+    }
 
 /* ============================================================
    ETAPA 3 — DIAS E HORÁRIOS
    ============================================================ */
 
-function obterProximosDias() {
-    const dias = [];
-    const hoje = new Date();
-    for (let i = 0; i < 7; i++) {
-        const data = new Date();
-        data.setDate(hoje.getDate() + i);
-        dias.push(data);
+function obterDiasDaAgenda() {
+
+    if (!AGENDA_MENSAL) {
+        return [];
     }
+
+    const [anoInicial, mesInicial, diaInicial] =
+        AGENDA_MENSAL.dataInicial.split("-").map(Number);
+
+    const [anoFinal, mesFinal, diaFinal] =
+        AGENDA_MENSAL.dataFinal.split("-").map(Number);
+
+    const inicio = new Date(
+        anoInicial, mesInicial - 1, diaInicial
+    );
+
+    const fim = new Date(
+        anoFinal, mesFinal - 1, diaFinal
+    );
+
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const dataInicial = inicio < hoje ? hoje : inicio;
+
+    const dias = [];
+
+    for (
+        let data = new Date(dataInicial);
+        data <= fim;
+        data.setDate(data.getDate() + 1)
+    ) {
+        dias.push(new Date(data));
+    }
+
     return dias;
 }
 
 function renderizarDias() {
-    const dias = obterProximosDias();
-    els.abasDias.innerHTML = dias.map((data, indice) => {
-        const fechado = HORARIOS_OCUPADOS[indice]?.length === TODOS_HORARIOS.length;
-        const ativo = estado.diaSelecionado === indice;
 
-        const classeEstado = ativo
-            ? "bg-[#f1efe8] text-[#161513] border-2 border-[#f1efe8] scale-[1.02] shadow-sm"
-            : "bg-[#1c1c1c] border-2 border-[#38362f] text-[#f1efe8] hover:border-[#888780] hover:-translate-y-0.5 active:scale-95";
+    const dias = obterDiasDaAgenda();
+
+    if (dias.length === 0) {
+        els.abasDias.innerHTML = `
+            <p class="text-brand-muted text-sm">
+                Não existem datas disponíveis na agenda.
+            </p>
+        `;
+        return;
+    }
+
+    els.abasDias.innerHTML = dias.map(data => {
+
+        const dataISO = [
+            data.getFullYear(),
+            String(data.getMonth() + 1).padStart(2, "0"),
+            String(data.getDate()).padStart(2, "0")
+        ].join("-");
+
+        const ativo = estado.diaSelecionado === dataISO;
 
         return `
             <button
-                class="flex flex-col items-center justify-center min-w-[60px] py-2 px-3 rounded-xl transition-all duration-300 ease-in-out ${classeEstado} ${fechado ? "opacity-35 cursor-not-allowed transform-none hover:border-[#38362f]" : ""}"
-                data-dia="${indice}"
-                ${fechado ? "disabled" : ""}
+                type="button"
+                data-dia="${dataISO}"
+                class="flex flex-col items-center justify-center
+                       min-w-[60px] py-2 px-3 rounded-xl
+                       ${ativo
+                           ? "bg-[#f1efe8] text-[#161513]"
+                           : "bg-[#1c1c1c] border-2 border-[#38362f] text-white"}"
             >
-                <span class="text-[12px] uppercase font-medium">${NOMES_DIAS[data.getDay()]}</span>
-                <strong class="text-[16px] font-bold">${data.getDate()}</strong>
+                <span class="text-xs">
+                    ${NOMES_DIAS[data.getDay()]}
+                </span>
+
+                <strong class="text-base">
+                    ${data.getDate()}
+                </strong>
             </button>
         `;
+
     }).join("");
 
     els.abasDias.querySelectorAll("[data-dia]").forEach(botao => {
+
         botao.addEventListener("click", () => {
-            estado.diaSelecionado = Number(botao.dataset.dia);
+
+            estado.diaSelecionado = botao.dataset.dia;
+
             estado.horarioSelecionado = null;
+
             renderizarDias();
             renderizarHorarios();
+
             atualizarBotoes();
         });
     });
 }
 
+
 function renderizarHorarios() {
-    if (estado.diaSelecionado === null) {
-        els.gradeHorarios.innerHTML = `<p class="text-brand-muted text-sm text-center col-span-full">Escolha um dia para visualizar os horários.</p>`;
+
+    if (!els.gradeHorarios) return;
+
+    if (!estado.diaSelecionado) {
+        els.gradeHorarios.innerHTML = `
+            <p class="col-span-full text-center text-brand-muted text-sm">
+                Selecione um dia para visualizar os horários disponíveis.
+            </p>
+        `;
         return;
     }
 
-    const ocupados = HORARIOS_OCUPADOS[estado.diaSelecionado] || [];
+    // Temporário: utiliza os horários fictícios existentes no arquivo.
+    const dia = new Date(
+        estado.diaSelecionado + "T12:00:00"
+    ).getDay();
+
+    const ocupados = HORARIOS_OCUPADOS[dia] || [];
 
     els.gradeHorarios.innerHTML = TODOS_HORARIOS.map(horario => {
-        const ocupado = ocupados.includes(horario);
-        const ativo = estado.horarioSelecionado === horario;
 
-        let classeEstado = "bg-[#1c1c1c] border-2 border-brand-border text-white hover:border-brand-gold/60 hover:-translate-y-0.5 active:scale-95 hover:shadow-md hover:shadow-brand-gold/10 cursor-pointer";
-        
-        if (ativo) {
-            classeEstado = "bg-brand-gold/10 border-2 border-brand-gold text-brand-gold font-bold shadow-md shadow-brand-gold/20 scale-[1.02]";
-        } else if (ocupado) {
-            classeEstado = "bg-[#1c1c1c] border-2 border-brand-border/30 text-brand-muted/40 opacity-40 line-through cursor-not-allowed";
-        }
+        const indisponivel = ocupados.includes(horario);
+        const selecionado = estado.horarioSelecionado === horario;
 
         return `
             <button
-                class="py-2.5 px-3 rounded-xl text-[14px] text-center transition-all duration-300 ease-in-out ${classeEstado}"
+                type="button"
                 data-horario="${horario}"
-                ${ocupado ? "disabled" : ""}
+                ${indisponivel ? "disabled" : ""}
+                class="
+                    rounded-lg p-3 text-sm font-semibold transition-all
+                    ${indisponivel
+                        ? "bg-[#111215] text-[#555] cursor-not-allowed line-through"
+                        : selecionado
+                            ? "bg-brand-gold text-black border border-brand-gold"
+                            : "bg-[#1c1c1c] border border-[#38362f] text-white hover:border-brand-gold"
+                    }
+                "
             >
                 ${horario}
             </button>
         `;
+
     }).join("");
 
-    els.gradeHorarios.querySelectorAll("[data-horario]:not(:disabled)").forEach(botao => {
+    els.gradeHorarios.querySelectorAll("[data-horario]").forEach(botao => {
+
         botao.addEventListener("click", () => {
+
             estado.horarioSelecionado = botao.dataset.horario;
+
             renderizarHorarios();
+
             atualizarBotoes();
         });
+
     });
 }
+
+function obterServicoSelecionado() {
+    const input = document.querySelector(
+        "input[name='inputCorte']:checked"
+    );
+
+    if (!input) return null;
+
+    return {
+        id: Number(input.value),
+        nome: input.dataset.nome,
+        valor: Number(input.dataset.valor),
+        duracao: Number(input.dataset.duracao),
+        foto: input.dataset.foto
+    };
+}
+
+function obterBarbeiroSelecionado() {
+    const input = document.querySelector(
+        "input[name='inputBarbeiro']:checked"
+    );
+
+    if (!input) return null;
+
+    return {
+        id: Number(input.value),
+        nome: input.dataset.nome,
+        foto: input.dataset.foto
+    };
+}
+
+function renderizarResumo() {
+    if (!els.resumo) return;
+
+    const servico = obterServicoSelecionado();
+    const profissional = obterBarbeiroSelecionado();
+
+    const formatarMoeda = valor =>
+        Number(valor).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+
+    const formatarDataCompleta = () => {
+        if (!estado.diaSelecionado) return "-";
+
+        const [ano, mes, dia] = estado.diaSelecionado
+            .split("-")
+            .map(Number);
+
+        return new Date(ano, mes - 1, dia).toLocaleDateString(
+            "pt-BR",
+            {
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            }
+        );
+    };
+
+    const dados = {
+        servico: servico?.nome || "-",
+        duracao: servico?.duracao || 0,
+        valor: servico?.valor || 0,
+        fotoServico: servico?.foto || "",
+        profissional: profissional?.nome || "-",
+        fotoProfissional: profissional?.foto || "",
+        data: formatarDataCompleta(),
+        horario: estado.horarioSelecionado || "-"
+    };
+
+    els.resumo.innerHTML = `
+        <div class="bg-[#1c1c1c] border border-[#38362f]
+                    rounded-2xl p-4 sm:p-5 space-y-5">
+
+            <!-- CABEÇALHO -->
+            <div class="flex items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-base font-semibold text-white">
+                        Resumo do agendamento
+                    </h2>
+                    <p class="text-xs text-[#888780] mt-1">
+                        Confira os dados do atendimento
+                    </p>
+                </div>
+
+                <div class="w-10 h-10 rounded-xl bg-[#C9A34A]/10
+                            flex items-center justify-center">
+                    <i class="fa-solid fa-calendar-check
+                              text-[#C9A34A] text-lg"></i>
+                </div>
+            </div>
+
+            <!-- SERVIÇO -->
+            <div class="bg-[#25241f] rounded-xl p-4
+                        border border-[#38362f]">
+
+                <div class="flex justify-between items-center gap-3">
+
+                    <div class="flex items-center gap-3 min-w-0">
+
+                        <div class="w-14 h-14 shrink-0 rounded-lg
+                                    overflow-hidden bg-[#1c1c1c]
+                                    border border-[#38362f]">
+
+                            <img
+                                src="${dados.fotoServico}"
+                                alt="${dados.servico}"
+                                class="w-full h-full object-cover"
+                                onerror="this.style.display='none'"
+                            >
+
+                        </div>
+
+                        <div class="min-w-0">
+                            <span class="block text-[10px] uppercase
+                                         tracking-wider text-[#C9A34A]
+                                         font-semibold">
+                                Serviço
+                            </span>
+
+                            <h3 class="font-semibold text-white truncate">
+                                ${dados.servico}
+                            </h3>
+
+                            <span class="text-xs text-[#888780]">
+                                ${dados.duracao} minutos
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <strong class="text-[#C9A34A] whitespace-nowrap">
+                        ${formatarMoeda(dados.valor)}
+                    </strong>
+
+                </div>
+            </div>
+
+            <!-- PROFISSIONAL -->
+            <div class="flex items-center gap-3">
+
+                <div class="w-12 h-12 shrink-0 rounded-full
+                            overflow-hidden bg-[#25241f]
+                            border border-[#38362f]">
+
+                    <img
+                        src="${dados.fotoProfissional}"
+                        alt="${dados.profissional}"
+                        class="w-full h-full object-cover"
+                        onerror="this.style.display='none'"
+                    >
+
+                </div>
+
+                <div class="min-w-0">
+                    <span class="block text-[10px] uppercase
+                                 tracking-wider text-[#888780]">
+                        Profissional
+                    </span>
+
+                    <strong class="text-sm text-white">
+                        ${dados.profissional}
+                    </strong>
+                </div>
+
+            </div>
+
+            <!-- DATA E HORÁRIO -->
+            <div class="grid grid-cols-2 gap-3">
+
+                <div class="bg-[#25241f] rounded-xl p-3
+                            border border-[#38362f]">
+
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fa-regular fa-calendar
+                                  text-[#C9A34A]"></i>
+
+                        <span class="text-[10px] uppercase
+                                     tracking-wider text-[#888780]">
+                            Data
+                        </span>
+                    </div>
+
+                    <strong class="text-sm text-white capitalize">
+                        ${dados.data}
+                    </strong>
+
+                </div>
+
+                <div class="bg-[#25241f] rounded-xl p-3
+                            border border-[#38362f]">
+
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fa-regular fa-clock
+                                  text-[#C9A34A]"></i>
+
+                        <span class="text-[10px] uppercase
+                                     tracking-wider text-[#888780]">
+                            Horário
+                        </span>
+                    </div>
+
+                    <strong class="text-sm text-white">
+                        ${dados.horario}
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <!-- TOTAL -->
+            <div class="border-t border-[#38362f] pt-4
+                        flex items-center justify-between gap-3">
+
+                <div>
+                    <span class="block text-sm font-semibold text-white">
+                        Total do atendimento
+                    </span>
+
+                    <span class="text-xs text-[#888780]">
+                        Valor do serviço selecionado
+                    </span>
+                </div>
+
+                <strong class="text-xl sm:text-2xl
+                               text-[#C9A34A] whitespace-nowrap">
+                    ${formatarMoeda(dados.valor)}
+                </strong>
+
+            </div>
+
+            <!-- AVISO -->
+            <div class="flex items-start gap-2 bg-[#C9A34A]/5
+                        border border-[#C9A34A]/20 rounded-lg p-3">
+
+                <i class="fa-solid fa-circle-info
+                          text-[#C9A34A] mt-0.5"></i>
+
+                <p class="text-xs text-[#aaa69a] leading-relaxed">
+                    Verifique todas as informações antes de confirmar.
+                    O agendamento estará sujeito à validação final
+                    de disponibilidade.
+                </p>
+
+            </div>
+
+        </div>
+    `;
+}
+
 
 /* ============================================================
    ETAPA 4 — RESUMO
    ============================================================ */
 
 function formatarData() {
-    const dias = obterProximosDias();
-    const data = dias[estado.diaSelecionado];
-    return data.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" });
-}
+    if (!estado.diaSelecionado) return "-";
 
-function renderizarResumo() {
-    if (!els.resumo) return;
-    const servico = SERVICOS.find(s => s.id === estado.servicoSelecionado);
-    const profissional = PROFISSIONAIS.find(p => p.id === estado.profissionalSelecionado);
+    const [ano, mes, dia] = estado.diaSelecionado
+        .split("-")
+        .map(Number);
 
-    els.resumo.innerHTML = `
-        <div class="divide-y divide-[#38362f] text-[14px]">
-            <div class="flex justify-between py-2.5">
-                <span class="text-[#888780]">Serviço</span>
-                <span class="font-medium text-[#f1efe8]">${servico?.name || '-'}</span>
-            </div>
-            <div class="flex justify-between py-2.5">
-                <span class="text-[#888780]">Profissional</span>
-                <span class="font-medium text-[#f1efe8]">${profissional?.name || '-'}</span>
-            </div>
-            <div class="flex justify-between py-2.5">
-                <span class="text-[#888780]">Data</span>
-                <span class="font-medium text-[#f1efe8]">${formatarData()}</span>
-            </div>
-            <div class="flex justify-between py-2.5">
-                <span class="text-[#888780]">Horário</span>
-                <span class="font-medium text-[#f1efe8]">${estado.horarioSelecionado || '-'}</span>
-            </div>
-            <div class="flex justify-between py-2.5">
-                <span class="text-[#888780]">Valor</span>
-                <span class="font-medium text-[#f1efe8]">R$ ${servico ? servico.price.toFixed(2).replace(".", ",") : "0,00"}</span>
-            </div>
-        </div>
-    `;
+    return new Date(ano, mes - 1, dia).toLocaleDateString("pt-BR", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long"
+    });
 }
 
 /* ============================================================
@@ -586,17 +949,23 @@ function renderizarResumo() {
    ============================================================ */
 
 function limparErro(input, erroEl) {
+
     input.classList.remove("invalido");
+
     erroEl.textContent = "";
 }
 
 function definirErro(input, erroEl, mensagem) {
+
     input.classList.add("invalido");
+
     erroEl.textContent = mensagem;
 }
 
 function validarFormulario() {
+
     let valido = true;
+
     return valido;
 }
 
@@ -604,38 +973,82 @@ function validarFormulario() {
    CONFIRMAÇÃO FINAL
    ============================================================ */
 
-function confirmarAgendamento() {
-    const servico = SERVICOS.find(s => s.id === estado.servicoSelecionado);
-    const profissional = PROFISSIONAIS.find(p => p.id === estado.profissionalSelecionado);
+async function confirmarAgendamento() {
 
-    const novoAgendamento = {
-        id: Date.now().toString(),
-        servico: servico.name,
-        profissional: profissional.name,
-        data: formatarData(),
-        horario: estado.horarioSelecionado,
-        valor: `R$ ${servico.price.toFixed(2).replace(".", ",")}`,
-        status: "Confirmado"
-    };
-    salvarNoHistorico(novoAgendamento);
+    const servico = obterServicoSelecionado();
+    const barbeiro = obterBarbeiroSelecionado();
 
-    for (let i = 1; i <= 4; i++) {
-        const painel = document.getElementById(`painel-${i}`);
-        if (painel) painel.hidden = true;
+    if (
+        !servico ||
+        !barbeiro ||
+        !estado.diaSelecionado ||
+        !estado.horarioSelecionado
+    ) {
+        mostrarAviso("Preencha todos os dados do agendamento.");
+        return;
     }
 
-    els.navEtapa.hidden = true;
-    els.etapa.hidden = true;
+    els.btnContinuar.disabled = true;
+    els.btnContinuar.textContent = "Agendando...";
 
-    estado.agendamentoConcluido = true;
+    try {
 
-    els.sucessoTexto.textContent =
-        `${estado.nome.trim()}, seu agendamento de ${servico.name.toLowerCase()} foi confirmado ` +
-        `para ${formatarData()} às ${estado.horarioSelecionado}. ` +
-        `Você receberá uma confirmação em breve.`;
+        const resposta = await fetch(URL_CADASTRAR_AGENDAMENTO, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id_servico: servico.id,
+                id_barbeiro: barbeiro.id,
+                data: estado.diaSelecionado,
+                horario: estado.horarioSelecionado
+            })
+        });
 
-    els.sucesso.hidden = false;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+        console.log("Status HTTP:", resposta.status);
+
+        const resultado = await resposta.json();
+
+        console.log("Resposta do Flask:", resultado);
+
+        if (!resposta.ok || !resultado.sucesso) {
+            throw new Error(
+                resultado.mensagem || "Erro ao realizar agendamento."
+            );
+        }
+
+        estado.agendamentoConcluido = true;
+
+        els.sucessoTexto.textContent =
+            `Seu agendamento foi confirmado para ${formatarData()} às ${estado.horarioSelecionado}.`;
+
+        for (let i = 1; i <= 4; i++) {
+            const painel = document.getElementById(`painel-${i}`);
+
+            if (painel) {
+                painel.hidden = true;
+            }
+        }
+
+        els.navEtapa.hidden = true;
+        els.etapa.hidden = true;
+        els.sucesso.hidden = false;
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    } catch (erro) {
+
+        mostrarAviso(erro.message);
+
+    } finally {
+
+        els.btnContinuar.disabled = false;
+        els.btnContinuar.textContent = "Finalizar";
+    }
 }
 
 /* ============================================================
@@ -643,30 +1056,53 @@ function confirmarAgendamento() {
    ============================================================ */
 
 function reiniciar() {
+
     estado.etapaAtual = 1;
+
     estado.servicoSelecionado = null;
+
     estado.profissionalSelecionado = null;
+
     estado.diaSelecionado = null;
+
     estado.horarioSelecionado = null;
+
     estado.agendamentoConcluido = false;
 
     if (els.navEtapa) els.navEtapa.hidden = false;
+
     if (els.etapa) els.etapa.hidden = false;
+
     if (els.sucesso) els.sucesso.hidden = true;
 
     carregarServicos();
+
     carregarProfissionais();
+
     mostrarPainel(1);
 }
 
 function iniciar() {
+
     carregarServicos();
+
     carregarProfissionais();
 
-    if (els.btnVoltar) els.btnVoltar.addEventListener("click", voltarEtapa);
-    if (els.btnContinuar) els.btnContinuar.addEventListener("click", avancarEtapa);
-    if (els.btnHistorico) els.btnHistorico.addEventListener("click", alternarHistorico);
-    if (els.btnVoltarInicio) els.btnVoltarInicio.addEventListener("click", reiniciar);
+    if (els.btnVoltar) {
+        els.btnVoltar.addEventListener("click", voltarEtapa);
+    }
+
+    if (els.btnContinuar) {
+        els.btnContinuar.addEventListener("click", avancarEtapa);
+    }
+
+    if (els.btnHistorico) {
+        els.btnHistorico.addEventListener("click", alternarHistorico);
+    }
+
+    if (els.btnVoltarInicio) {
+        els.btnVoltarInicio.addEventListener("click", reiniciar);
+    }
 
     mostrarPainel(estado.etapaAtual);
 }

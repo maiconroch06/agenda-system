@@ -38,8 +38,14 @@ class ClienteService(UsuarioService):
             session.permanent = True
             session['dados_cliente'] =  cliente
             return
-            
+
         raise Exception("E-mail inexistente. Verifique o email e tente novamente!")
+
+    def buscar_cliente_id(self, id_cliente):
+        try:
+            return self.__clienteRepositorio.consultarClienteId(id_cliente)
+        except Exception as error:
+                    flash(f"Erro ao buscar o cliente por id {error}")
 
     def definir_pasta_imagem_usuario(self):
             return EnumNomesPastaImagem.IMAGENS_CLIENTE

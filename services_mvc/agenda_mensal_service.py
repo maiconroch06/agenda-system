@@ -19,7 +19,12 @@ class AgendaMensalService:
     
     def excluir_agenda_mensal_service(self, id_agenda):
         return self.__agenda_mensal_repositorio.excluir(id_agenda)
-            
+
+    def verificar_agenda_mensal_atual(self, cnpj_barbearia):
+        return self.__agenda_mensal_repositorio.verificar_mes_atual(cnpj_barbearia)
+
+    def consultar_ultima_agenda_cadastrada(self, cnpj_barbearia):
+        return self.__agenda_mensal_repositorio.consultar_ultima_agenda(cnpj_barbearia)
             
     
             

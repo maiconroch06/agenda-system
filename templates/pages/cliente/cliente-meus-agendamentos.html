@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TMS Barbearia - Meus Agendamentos</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/output.css') }}">
+
+    <link rel="icon" type="image/png"
+        href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
+</head>
+
+<body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen antialiased">
+
+    <!-- HEADER -->
+    {% include "componetizacao/Header/header-cliente.html" %}
+
+    <main class="max-w-[1000px] mx-auto px-4 pt-8 pb-12">
+
+        <!-- CABEÇALHO -->
+        <section class="mb-8">
+
+            <div class="flex flex-col sm:flex-row sm:items-center
+                sm:justify-between gap-4">
+
+                <div>
+                    <span class="text-xs uppercase tracking-[2px]
+                        text-[#C9A34A] font-semibold">
+                        Área do cliente
+                    </span>
+
+                    <h1 class="text-2xl sm:text-3xl font-semibold mt-2">
+                        Meus Agendamentos
+                    </h1>
+
+                    <p class="text-sm text-[#888780] mt-2">
+                        Acompanhe seus horários e consulte seus atendimentos.
+                    </p>
+                </div>
+
+                <a href="#"
+                    class="flex items-center justify-center gap-2
+                    h-11 px-5 rounded-lg bg-brand-gold
+                    hover:bg-brand-gold-hover text-black
+                    text-sm font-bold transition-all">
+
+                    <span>+</span>
+                    Novo agendamento
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- RESUMO -->
+        <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+
+            <div class="bg-[#1c1c1c] border border-[#38362f]
+                rounded-xl p-5">
+
+                <div class="flex items-center justify-between">
+
+                    <span class="text-sm text-[#AAA69A]">
+                        Total de agendamentos
+                    </span>
+
+                    <span class="text-[#C9A34A] text-xl">▤</span>
+
+                </div>
+
+                <h2 class="text-3xl font-bold mt-3">
+                    {{ agendamentos|length }}
+                </h2>
+
+            </div>
+
+
+            <div class="bg-[#1c1c1c] border border-[#38362f]
+                rounded-xl p-5">
+
+                <div class="flex items-center justify-between">
+
+                    <span class="text-sm text-[#AAA69A]">
+                        Próximos atendimentos
+                    </span>
+
+                    <span class="text-[#C9A34A] text-xl">◷</span>
+
+                </div>
+
+                <h2 class="text-3xl font-bold mt-3">
+                    {{ total_proximos }}
+                </h2>
+
+            </div>
+
+
+            <div class="bg-[#1c1c1c] border border-[#38362f]
+                rounded-xl p-5">
+
+                <div class="flex items-center justify-between">
+
+                    <span class="text-sm text-[#AAA69A]">
+                        Atendimentos concluídos
+                    </span>
+
+                    <span class="text-[#C9A34A] text-xl">✓</span>
+
+                </div>
+
+                <h2 class="text-3xl font-bold mt-3">
+                    {{ total_concluidos }}
+                </h2>
+
+            </div>
+
+        </section>
+
+
+        <!-- FILTROS -->
+        <section class="mb-6">
+
+            <div class="flex gap-2 overflow-x-auto pb-2"
+                id="filtros-agendamentos">
+
+                <button type="button" data-filtro="todos"
+                    class="filtro-btn active whitespace-nowrap
+                    px-4 py-2 rounded-lg text-sm font-semibold
+                    border border-[#C9A34A] bg-[#C9A34A]/10
+                    text-[#C9A34A]">
+
+                    Todos
+
+                </button>
+
+                <button type="button" data-filtro="proximo"
+                    class="filtro-btn whitespace-nowrap
+                    px-4 py-2 rounded-lg text-sm font-semibold
+                    border border-[#38362f] text-[#AAA69A]
+                    hover:border-[#C9A34A]">
+
+                    Próximos
+
+                </button>
+
+                <button type="button" data-filtro="concluido"
+                    class="filtro-btn whitespace-nowrap
+                    px-4 py-2 rounded-lg text-sm font-semibold
+                    border border-[#38362f] text-[#AAA69A]
+                    hover:border-[#C9A34A]">
+
+                    Concluídos
+
+                </button>
+
+                <button type="button" data-filtro="cancelado"
+                    class="filtro-btn whitespace-nowrap
+                    px-4 py-2 rounded-lg text-sm font-semibold
+                    border border-[#38362f] text-[#AAA69A]
+                    hover:border-[#C9A34A]">
+
+                    Cancelados
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- LISTA DE AGENDAMENTOS -->
+        <section>
+
+            <div class="flex items-center justify-between mb-4">
+
+                <h2 class="text-lg font-semibold">
+                    Seus atendimentos
+                </h2>
+
+                <span class="text-xs text-[#888780]">
+                    {{ agendamentos|length }} registro(s)
+                </span>
+
+            </div>
+
+
+            {% if agendamentos %}
+
+                <div class="flex flex-col gap-4" id="lista-agendamentos">
+
+                    {% for agendamento in agendamentos %}
+
+                        <article
+                            data-status="{{ agendamento.status_agendamento }}"
+                            class="agendamento-card bg-[#1c1c1c]
+                            border border-[#38362f] rounded-xl
+                            overflow-hidden transition-all
+                            hover:border-[#C9A34A]/60">
+
+                            <div class="p-5">
+
+                                <!-- TOPO DO CARD -->
+                                <div class="flex flex-col sm:flex-row
+                                    sm:items-center sm:justify-between
+                                    gap-3 mb-5">
+
+                                    <div>
+                                        <span class="text-xs text-[#888780]">
+                                            Agendamento #{{ agendamento.id_agendamento }}
+                                        </span>
+
+                                        <h3 class="text-lg font-semibold mt-1">
+                                            #
+                                        </h3>
+                                    </div>
+
+
+                                    <!-- STATUS -->
+                                    {% if agendamento.status_agendamento == 'proximo' %}
+
+                                        <span class="w-fit px-3 py-1.5
+                                            rounded-full text-xs font-semibold
+                                            bg-[#C9A34A]/10 text-[#C9A34A]
+                                            border border-[#C9A34A]/30">
+                                            Próximo atendimento
+                                        </span>
+
+                                    {% elif agendamento.status_filtro == 'concluido' %}
+
+                                        <span class="w-fit px-3 py-1.5
+                                            rounded-full text-xs font-semibold
+                                            bg-green-500/10 text-green-400
+                                            border border-green-500/30">
+                                            Concluído
+                                        </span>
+
+                                    {% elif agendamento.status_filtro == 'cancelado' %}
+
+                                        <span class="w-fit px-3 py-1.5
+                                            rounded-full text-xs font-semibold
+                                            bg-red-500/10 text-red-400
+                                            border border-red-500/30">
+                                            Cancelado
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="w-fit px-3 py-1.5
+                                            rounded-full text-xs font-semibold
+                                            bg-[#888780]/10 text-[#AAA69A]
+                                            border border-[#888780]/30">
+                                            {{ agendamento.status }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <!-- INFORMAÇÕES -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2
+                                    lg:grid-cols-4 gap-5">
+
+                                    <div>
+                                        <span class="text-xs text-[#888780]">
+                                            Profissional
+                                        </span>
+
+                                        <p class="text-sm font-medium mt-1">
+                                            {{ agendamento.profissional }}
+                                        </p>
+                                    </div>
+
+
+                                    <div>
+                                        <span class="text-xs text-[#888780]">
+                                            Data
+                                        </span>
+
+                                        <p class="text-sm font-medium mt-1">
+                                            {{ agendamento.data.strftime('%d/%m/%Y') }}
+                                        </p>
+                                    </div>
+
+
+                                    <div>
+                                        <span class="text-xs text-[#888780]">
+                                            Horário
+                                        </span>
+
+                                        <p class="text-sm font-medium mt-1">
+                                            {{ agendamento.horario.strftime('%H:%M') }}
+                                        </p>
+                                    </div>
+
+
+                                    <div>
+                                        <span class="text-xs text-[#888780]">
+                                            Valor
+                                        </span>
+
+                                        <p class="text-sm font-bold
+                                            text-[#C9A34A] mt-1">
+
+                                            R$ {{ "%.2f"|format(agendamento.valor)|replace(".", ",") }}
+
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- RODAPÉ DO CARD -->
+                            <div class="border-t border-[#38362f]
+                                bg-[#232220]/50 px-5 py-3
+                                flex justify-between items-center">
+
+                                <span class="text-xs text-[#888780]">
+                                    TMS Barbearia
+                                </span>
+
+                                <span class="text-xs text-[#AAA69A]">
+                                    Atendimento profissional
+                                </span>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- MENSAGEM SEM RESULTADOS DO FILTRO -->
+                <div id="filtro-vazio" hidden
+                    class="text-center py-10 mt-4 bg-[#1c1c1c]
+                    rounded-xl border border-[#38362f]">
+
+                    <p class="text-[#AAA69A] text-sm">
+                        Nenhum agendamento encontrado nesta categoria.
+                    </p>
+
+                </div>
+
+            {% else %}
+
+                <!-- ESTADO VAZIO -->
+                <div class="bg-[#1c1c1c] border border-[#38362f]
+                    rounded-xl p-8 sm:p-12 text-center">
+
+                    <div class="w-16 h-16 mx-auto rounded-full
+                        bg-[#C9A34A]/10 flex items-center
+                        justify-center text-[#C9A34A] text-3xl mb-5">
+
+                        ◷
+
+                    </div>
+
+                    <h3 class="text-lg font-semibold mb-2">
+                        Você ainda não possui agendamentos
+                    </h3>
+
+                    <p class="text-sm text-[#888780] max-w-[400px]
+                        mx-auto leading-relaxed mb-6">
+
+                        Quando você realizar um agendamento,
+                        ele aparecerá aqui para que possa acompanhar
+                        todos os detalhes do seu atendimento.
+
+                    </p>
+
+                    <a href="#"
+                        class="inline-flex items-center justify-center
+                        h-11 px-6 rounded-lg bg-brand-gold
+                        hover:bg-brand-gold-hover text-black
+                        text-sm font-bold transition-all">
+
+                        Agendar agora
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+
+    <!-- JAVASCRIPT DOS FILTROS -->
+    <!-- <script src="{{ url_for('static', filename='js/cliente-meus-agendamentos.js') }}"></script> -->
+
+</body>
+</html>

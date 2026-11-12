@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
 from controladores import ControladorCliente
-from models import Cliente
+from models import Cliente, Agendamento
 from datetime import datetime, timezone
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 
@@ -29,7 +29,7 @@ def clientLogin():
         return controladorCliente.login(email_digitado,senha_digitada)
         
 
-@cliente.route('/logout', methods=["GET","POSt"])
+@cliente.route('/logout', methods=["GET","POST"])
 def logout():
     session.clear()
     return redirect('/')    
@@ -54,21 +54,55 @@ def clientRegister():
             cpf=None,
             email=request.form.get('email'),
             senha= request.form.get('senha'),
-            foto_nome= None,
+            foto_nome_usuario= None,
             endereco = None,
             status_usuario=1,
             data_cadastro=datetime.now(timezone.utc),
             data_atualizacao=datetime.now(timezone.utc)
     )
     
-    controladorCliente = ControladorCliente()
-    
+    controladorCliente = ControladorCliente() 
     return controladorCliente.cadastrarCliente(cliente)
             
    
-@cliente.route('/agendamento/servicos', methods=['GET','POST'])
+@cliente.route('/agendamento/servicos', methods=['GET'])
 def clientAgendamentoServicos():
-    return render_template('pages/cliente/cliente-agendamento-rp.html')
+    controladorCliente = ControladorCliente() 
+    return controladorCliente.gerenciarAgendamentoServico()
+
+@cliente.route('/agendamento/servicos/cadastro', methods=['POST'])
+def clientAgendamentoServicosCadastro():
+    dados = request.get_json(silent=True)
+    dados_session = session.get('dados_cliente')
+
+    cliente = Cliente(
+        id_usuario=dados_session.get('id_cliente'),
+        nome_completo=dados_session.get('nome_completo'), 
+        telefone=dados_session.get('telefone'), 
+        cpf=dados_session.get('cpf'), 
+        email=dados_session.get('email'), 
+        status_usuario=dados_session.get('status_usuario'), 
+        data_cadastro=dados_session.get('data_cadastro'), 
+        data_atualizacao=dados_session.get('data_atualizacao')
+    )
+
+    agendamento = Agendamento(
+        data_agendamento=dados.get('data'),
+        hora_inicio=dados.get('horario'),
+        hora_fim=dados.get('horario'),
+        status_agendamento=True,
+        data_atualizacao=datetime.now(),
+        servico=None,
+        barbeiro=None,
+        cliente=cliente
+    )
+    controladorCliente = ControladorCliente() 
+    return controladorCliente.cadastrarAgendamento(agendamento, id_servico = dados.get('id_servico'), id_barbeiro = dados.get('id_barbeiro'))
+
+@cliente.route('/agendamento/meus-agendamentos', methods=['GET'])
+def clientMeusAgendamentos():
+    controladorCliente = ControladorCliente() 
+    return controladorCliente.meusAgendamentos()
 
 @cliente.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():
@@ -76,7 +110,7 @@ def clientAgendamento():
 
 @cliente.route('/cadastro/sucesso', methods=['GET','POST'])
 def cadastroSucesso():
-   return render_template('pages/cliente/cadastro_realizado_rp.html')
+   return render_template('pages/cliente/cadastro-realizado-rp.html')
 
 @cliente.before_request
 def authentication():
