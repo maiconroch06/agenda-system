@@ -18,3 +18,10 @@ class ControladorAgendaMensal():
     @classmethod
     def excluir_agenda_mensal_service(cls, id_agenda_mensal):
         return cls.__agenda_mensal_service.cadastrar_agenda_mensal_service(id_agenda_mensal)
+    @classmethod
+    def excluir_agenda_mensal_service(cls, id_agenda_mensal):
+        return cls.__agenda_mensal_service.cadastrar_agenda_mensal_service(id_agenda_mensal)
+    
+    @classmethod
+    def atualizar_status_agenda_mensal_service(cls, agenda_mensal):
+        return cls.__agenda_mensal_service.atualizar_status_agenda_mensal_service(agenda_mensal)

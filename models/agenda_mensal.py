@@ -9,20 +9,22 @@ class AgendaMensal:
         data_inicial_mes = None,
         data_final_mes = None,
         titulo_agenda = None,
+        status_agenda_mensal = True
         
     ):
-        self.__id_mes_referencia = id_agenda_mensal
+        self.__id_agenda_mensal = id_agenda_mensal
         self.__data_inicial_mes = data_inicial_mes
         self.__data_final_mes = data_final_mes
         self.__titulo_agenda = titulo_agenda
+        self.__status_agenda_mensal = status_agenda_mensal
 
     @property
-    def id_mes_referencia(self):
-        return self.__id_mes_referencia
+    def id_agenda_mensal(self):
+        return self.__id_agenda_mensal
 
-    @id_mes_referencia.setter
-    def id_mes_referencia(self, value):
-        self.__id_mes_referencia = value
+    @id_agenda_mensal.setter
+    def id_agenda_mensal(self, value):
+        self.__id_agenda_mensal = value
 
     @property
     def data_inicial_mes(self):
@@ -55,3 +57,11 @@ class AgendaMensal:
     @horario_fim_intrajornada.setter
     def horario_fim_intrajornada(self, value):
         self.__horario_fim_intrajornada = value
+ 
+    @property
+    def status_agenda_mensal(self):
+        return self.__status_agenda_mensal
+
+    @status_agenda_mensal.setter
+    def status_agenda_mensal(self, value):
+        self.__status_agenda_mensal = value
