@@ -2,7 +2,7 @@
 from sqlalchemy import text
 from database import db
 from models import Barbeiro, Endereco, Cliente, Servico, Agendamento
-
+from utilitarios import FormatarHoras, FormatarTelefone
 
 class BarbeiroDAO:
 
@@ -333,12 +333,11 @@ class BarbeiroDAO:
             "id": str(registro["id_agendamento"]),
             "barbeiro": registro["nome_barbeiro"],
             "data": str(registro["data_agendamento"]),
-            "hora": BarbeiroDAO._formatar_hora(registro["hora_inicio"]),
+            "hora": FormatarHoras._formatar_hora(registro["hora_inicio"]),
             "cliente": registro["nome_cliente"],
-            "telefone": BarbeiroDAO._formatar_telefone(registro["telefone_cliente"]),
+            "telefone": FormatarTelefone._formatar_telefone(registro["telefone_cliente"]),
             "servico": registro["nome_servico"],
             "valor": float(registro["valor"] or 0),
             "status": registro["status_agendamento"]
         }
-        return mapa_status.get(int(status_agendamento), "")
-            
+        
