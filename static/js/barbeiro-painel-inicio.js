@@ -43,10 +43,10 @@ function badgeStatusHTML(status) {
 }
 
 function cardAgendamentoHTML(item) {
-    const concluidoClasse = item.status === "concluido" ? " opacity-65" : "";
+    const classe = (item.status === "concluido" || item.status === "cancelado") ? " opacity-65" : "";
     
     return `
-        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
+        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${classe}" onclick="abrirModalDetalhe('${item.id}')">
             <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${item.hora}</div>
 
             <div class="flex-1">
@@ -96,7 +96,7 @@ function atualizarInterfaceNavegacao() {
     const tituloLista = document.querySelector(".text-xs.font-medium.text-\\[\\#888780\\].uppercase.tracking-wider.mb-3");
     
     const stringDataFormatada = formatarDataNavegacao(dataExibicaoAtual);
-    const isHoje = formatarISO(dataExibicaoAtual) === hojeISO(); // hojeISO() deve estar definido em barbeiro-painel-utilitarios.js
+    const isHoje = formatarISO(dataExibicaoAtual) === hojeISO();
 
     // Atualiza o texto central entre os botões
     if (navDisplay) {
@@ -143,7 +143,6 @@ function renderizarInicio() {
     const dataAlvoStr = formatarISO(dataExibicaoAtual); 
     const doDia = agendamentos
         .filter(a => a.data === dataAlvoStr)
-        .filter(a => a.data === hoje)
         .sort((a, b) => {
             // Define o peso (prioridade) de cada status
             const pesoStatus = { agendado: 1, concluido: 2, cancelado: 3 };
@@ -152,11 +151,11 @@ function renderizarInicio() {
             if (pesoStatus[a.status] !== pesoStatus[b.status]) {
                 return pesoStatus[a.status] - pesoStatus[b.status];
             }
-            
+
             // 2º Critério: Se o status for igual, ordena pela hora mais próxima (crescente)
             return a.hora.localeCompare(b.hora);
         });
-
+        
     // Calcula os indicadores de progresso
     const concluidos = doDia.filter(a => a.status === "concluido").length;
     const cancelados = doDia.filter(a => a.status === "cancelado").length;

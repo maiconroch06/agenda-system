@@ -34,10 +34,10 @@ Object.assign(els, {
    ============================================================ */
 
 function cardAtendimentoHojeHTML(item) {
-    const concluidoClasse = item.status === "concluido" ? " opacity-65" : "";
+    const classe = (item.status === "concluido" || item.status === "cancelado") ? " opacity-65" : "";
 
     return `
-        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
+        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${classe}" onclick="abrirModalDetalhe('${item.id}')">
             <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${item.hora}</div>
 
             <div class="flex-1">
