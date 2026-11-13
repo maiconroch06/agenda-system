@@ -11,8 +11,7 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
 </head>
 
-<body
-    class="min-h-dvh w-screen  bg-[#161513] text-gray-100 font-sans antialiased flex items-center justify-center p-4 sm:p-6 md:p-8">
+<body class="min-h-dvh w-screen  bg-[#161513] text-gray-100 font-sans antialiased flex items-center justify-center p-4 sm:p-6 md:p-8">
 
     <div class="w-full h-full flex items-center justify-center">
 
@@ -45,8 +44,12 @@
                 </div>
 
                 <!-- Formulário com Inputs e Labels Maiores -->
-                <form id="barber-form-login" action="/barbeiro/painel" method="get" novalidate
+                <form id="barbeiro-form-login" action="{{ url_for('barbeiro.barbeiroLogin') }}" method="POST" novalidate
                     class="flex flex-col gap-4 md:gap-5 shrink-0">
+
+                    <!-- Mensagem de Erro -->
+                    {% set mensagens =  mensagens_status %}
+                    {% include "componetizacao/mensagens/mensagens.html" %}
 
                     <!-- E-mail -->
                     <div class="flex flex-col">
@@ -54,42 +57,44 @@
                             class="text-xs sm:text-sm font-semibold text-gray-300 mb-1 tracking-wider">
                             E-mail
                         </label>
-                        <input type="text" id="barber-login" placeholder="Digite seu usuário ou e-mail"
-                            autocomplete="off"
-                            class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm">
+                        
+                        <input class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm"
+                            type="text" id="barbeiro-email" name="barbeiro-email-2"
+                            placeholder="Digite seu usuário ou e-mail" autocomplete="off"
+                            value='maicon.harryr@gmail.com'>
+
                         <span class="campo__erro text-[11px] sm:text-xs text-red-500 mt-1 block"
                             id="erro-login-usuario"></span>
                     </div>
 
                     <!-- Senha -->
                     <div class="flex flex-col">
-                        <label for="login-senha"
-                            class="text-xs sm:text-sm font-semibold text-gray-300 mb-1 tracking-wider">
-                            Senha
+                        <label class="text-xs sm:text-sm font-semibold text-gray-300 mb-1 tracking-wider"
+                           for="login-senha"> Senha
                         </label>
 
-                        <input type="password" id="barber-senha" placeholder="Digite sua senha"
-                            class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm">
+                        <input class="w-full px-3.5 py-2.5 md:py-3 bg-[#111215] border border-brand-border rounded-lg text-white placeholder-brand-muted/50 focus:outline-none focus:border-brand-gold transition-colors text-xs sm:text-sm"
+                            type="password" id="barbeiro-senha" name="barbeiro-password"
+                            placeholder="Digite sua senha" autocomplete="off"
+                            value='1234'>
 
                         <!-- Mensagem de erro de validação -->
                         <span class="campo__erro text-[11px] sm:text-xs text-red-500 mt-1 block"
                             id="erro-login-senha"></span>
 
                         <!-- Link de recuperação alinhado à direita -->
-                        <a href="/barbeiro/esqueceu-senha"
-                            class="text-brand-muted hover:text-brand-gold text-[11px] sm:text-xs font-medium transition-colors hover:underline mt-1 self-end">
-                            Esqueceu a senha?
+                        <a class="text-brand-muted hover:text-brand-gold text-[11px] sm:text-xs font-medium transition-colors hover:underline mt-1 self-end"
+                           href="/barbeiro/esqueceu-senha"> Esqueceu a senha?
                         </a>
                     </div>
 
                     <!-- Botões -->
-                    <button type="submit"
-                        class="w-full py-3 md:py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-xs sm:text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer mt-2">
-                        Entrar
+                    <button class="w-full py-3 md:py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-bold text-xs sm:text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer mt-2"
+                       type="submit"> Entrar
                     </button>
-                    <a href="../tipo-usuario"
-                        class="w-full py-3 md:py-3.5 text-center text-white font-bold border border-transparent hover:border-white text-xs sm:text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer mt-2">
-                        Voltar
+
+                    <a class="w-full py-3 md:py-3.5 text-center text-white font-bold border border-transparent hover:border-white text-xs sm:text-sm uppercase tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer mt-2"
+                       href="../tipo-usuario"> Voltar
                     </a>
                 </form>
 

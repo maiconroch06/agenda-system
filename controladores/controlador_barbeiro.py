@@ -17,12 +17,26 @@ from services_mvc import BarbeiroService
 class ControladorBarbeiro:
 
     __barbeiroService = BarbeiroService()
+    
+    @classmethod
+    def login_barbeiro(cls, email:str, senha:str):
+        try:
+            cls.__barbeiroService.barbeiro_realizar_login_service(email,senha)   
+            return redirect(url_for('barbeiro.barbeiroPainel'))
+            
+        except Exception as error:
+            flash(f"{error}")
+            return redirect(url_for('barbeiro.barbeiroLoginPagina'))
 
     @classmethod
     def consultar_todos_barbeiros(cls):
         return cls.__barbeiroService.consultar_barbeiros()
         #return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = cls.__barbeiroService.consultar_barbeiros(), mensagens_status=EnumStatusMensagens)
 
+    @classmethod
+    def consultar_agendamentos_barbeiro(cls, barbeiro:dict):
+        return cls.__barbeiroService.consultar_agendamentos_barbeiro(barbeiro)
+    
     @classmethod
     def atualizar_endereco_barbeiro(cls, endereco):
         try:

@@ -1,11 +1,46 @@
 
 from sqlalchemy import text
 from database import db
-from models import Barbeiro, Endereco
-
+from models import Barbeiro, Endereco, Cliente, Servico, Agendamento
+from utilitarios import FormatarHoras, FormatarTelefone
 
 class BarbeiroDAO:
 
+    def realizar_login_dao(self, email: str):
+        sql = text("""
+            SELECT
+                u.id_usuario,
+                u.nome_completo,
+                u.telefone,
+                u.cpf,
+                u.email,
+                u.senha,
+                u.foto_nome_usuario,
+                u.status_usuario,
+                u.data_cadastro,
+                u.data_atualizacao,
+                b.id_barbeiro,
+                b.data_liberacao,
+                b.bio,
+                b.especialidade,
+                b.status_barbeiro,
+                b.data_inicio_carreira
+            FROM usuario u INNER JOIN barbeiro b
+            ON b.id_barbeiro = u.id_usuario
+            WHERE u.email = :email
+            
+        """)
+
+        registro = db.session.execute(
+            sql,
+            {"email": email}
+        ).mappings().first()
+
+        if registro is None:
+            return None
+
+        return dict(registro)
+    
     def cadastrar(self, barbeiro: Barbeiro):
         sql = text("""
             INSERT INTO barbeiro (
@@ -196,6 +231,94 @@ class BarbeiroDAO:
             for registro in registros
         ]
     
+    def consultar_agendamentos_barbeiro(self, id_barbeiro: int):
+        sql = text("""
+            # Consulta serviços ativos
+            WITH servicos_ativos AS (
+                SELECT 
+                    id_servico,
+                    descricao_servico AS nome_servico,
+                    valor,
+                    status_servico
+                FROM servico
+                
+                WHERE status_servico = 1
+            ),
+
+            # Consulta barbeiros ativos
+            barbeiros_ativos AS (
+                SELECT
+                    u.id_usuario,
+                    b.id_barbeiro,
+                    u.nome_completo AS nome_barbeiro,
+                    u.status_usuario,
+                    b.status_barbeiro
+                FROM usuario u
+                
+                JOIN barbeiro b
+                    ON u.id_usuario = b.id_barbeiro
+                    
+                WHERE b.status_barbeiro = 1
+                    AND id_barbeiro = :id_barbeiro
+            ),
+
+            # Consulta clientes ativos
+            clientes_ativos AS (
+                SELECT
+                    u.id_usuario,
+                    c.id_cliente,
+                    u.nome_completo AS nome_cliente,
+                    u.telefone AS telefone_cliente,
+                    u.status_usuario
+                    
+                FROM usuario u
+                
+                JOIN cliente c
+                    ON u.id_usuario = c.id_cliente
+            )
+
+            # Consulta todos os agendamentos validos de um barbeiro - Exibição para o BARBEIRO
+            SELECT
+                # Chave primaria e estranjeiras
+                a.id_agendamento,
+                a.fk_id_servico,
+                a.fk_id_barbeiro,
+                a.fk_id_cliente,
+                a.status_agendamento,
+                # Informações serviço
+                s.nome_servico,
+                s.valor,
+                # Informações data-hora agendamento
+                a.data_agendamento,
+                a.hora_inicio,
+                a.hora_fim,
+                # Informação barberio
+                b.nome_barbeiro,
+                # Informações cliete
+                c.nome_cliente,
+                c.telefone_cliente
+                
+            FROM agendamento a
+
+            JOIN servicos_ativos s
+                ON a.fk_id_servico = s.id_servico
+
+            JOIN barbeiros_ativos b
+                ON a.fk_id_barbeiro = b.id_barbeiro
+                
+            JOIN clientes_ativos c
+                ON a.fk_id_cliente = c.id_cliente
+        """)
+        
+        registros = db.session.execute(
+            sql,
+            {"id_barbeiro": id_barbeiro}
+        ).mappings().all()
+        
+        return [
+            self._mapear_agendamento(registro)
+            for registro in registros
+        ]
 
     def atualizar_informacoes_barbeiro(self, barbeiro: Barbeiro):
         sql = text("""
@@ -260,3 +383,18 @@ class BarbeiroDAO:
 
             endereco=endereco
         )
+
+    @staticmethod
+    def _mapear_agendamento(registro):
+        return {
+            "id": str(registro["id_agendamento"]),
+            "barbeiro": registro["nome_barbeiro"],
+            "data": str(registro["data_agendamento"]),
+            "hora": FormatarHoras._formatar_hora(registro["hora_inicio"]),
+            "cliente": registro["nome_cliente"],
+            "telefone": FormatarTelefone._formatar_telefone(registro["telefone_cliente"]),
+            "servico": registro["nome_servico"],
+            "valor": float(registro["valor"] or 0),
+            "status": registro["status_agendamento"]
+        }
+        

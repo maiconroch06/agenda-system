@@ -3,14 +3,19 @@
     <div class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden hover:bg-[#2c2b27] transition-all cursor-pointer">
 
         <!-- FOTO DO USUÁRIO -->
-        { if session.get('dados_barbeiro') and session.get('dados_barbeiro').get('foto_path') %}
-            <img class="w-full h-full object-cover">
-                src="{ url_for('static', filename=session.get('dados_barbeiro')['foto_path']) }}" alt="Avatar"
-        { else %}
+        {% if session.get('dados_barbeiro') and session.get('dados_barbeiro').get('foto_path') %}
+            <img class="w-full h-full object-cover"
+                src="{{ url_for('static', filename='assets/img_uploads/barbeiros/' ~ session.get('dados_barbeiro')['foto_nome_usuario']) }}" alt="Avatar">
+        {% elif session.get('dados_barbeiro') and session.get('dados_barbeiro').get('nome_completo') %}
             <span class="text-sm font-bold text-[#f1efe8]">
-                { session.get('dados_barbeiro')['nome_completo'][0]|upper }}
+                {{ session.get("dados_barbeiro")["nome_completo"][0] | upper }}
             </span>
-        { endif %}
+        {% else %}
+            <span class="text-sm font-bold text-[#f1efe8]">
+                B
+            </span>
+        {% endif %}
+        
     </div>
 
     <!-- SETA PARA BAIXO -->

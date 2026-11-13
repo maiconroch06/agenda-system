@@ -26,8 +26,8 @@ def gestorLoginPagina():
 # Envio dos dados a partid da Tela de Login
 @gestor.route('/login', methods=["POST"])
 def gestorLogin():
-    email_digitado = request.form.get('manager-email-2')
-    senha_digitada = request.form.get('manager-password')
+    email_digitado = request.form.get('gestor-email-2')
+    senha_digitada = request.form.get('gestor-password')
     
     return ControladorGestor.login_gestor(email_digitado,senha_digitada)
 
@@ -84,6 +84,36 @@ def gestor_agenda_mensal_cadastrar():
     )
      
     return ControladorGestor.cadastrar_agenda_mensal_barbearia(agenda_mensal)
+
+@gestor.route('/painel/agenda_mensal/atualizar', methods=['POST'])
+def gestor_agenda_mensal_atualizar():
+    
+    agenda_mensal = AgendaMensal(
+        id_agenda_mensal=request.form.get("agenda_id", type=int),
+        data_inicial_mes= datetime.strptime(request.form.get("data_inicio"),  "%Y-%m-%d").date(),
+        data_final_mes=datetime.strptime(request.form.get("data_fim"),  "%Y-%m-%d").date(),
+        titulo_agenda=request.form.get("titulo_agenda")
+    )
+     
+    return ControladorGestor.atualizar_agenda_mensal_barbearia(agenda_mensal)
+
+@gestor.route('/painel/agenda_mensal/alterar_status', methods=['POST'])
+def gestor_agenda_mensal_alterar_status():
+        
+   
+    status_agenda_mensal = request.form.get("agenda-mensal-status", type=int)
+   
+    agenda_mensal = AgendaMensal(
+        
+            id_agenda_mensal=request.form.get("agenda-mensal-id", type=int),
+            data_inicial_mes= datetime.strptime(request.form.get("data_inicio"),  "%Y-%m-%d").date(),
+            data_final_mes=datetime.strptime(request.form.get("data_fim"),  "%Y-%m-%d").date(),
+            titulo_agenda=request.form.get("titulo_agenda"),
+            status_agenda_mensal= not status_agenda_mensal
+    )
+    
+    return ControladorGestor.atualizar_status_agenda_mensal_barbearia(agenda_mensal)
+
 
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados
@@ -248,9 +278,6 @@ def gestor_excluir_barbeiro():
                
     return ControladorGestor.excluir_barbeiro(id_barbeiro, foto_nome)
 
-    
-
-
 
 ##################################################################################
 #  CLIENTES
@@ -271,6 +298,9 @@ def authentication():
     #Varifica se o cliente tem sessão
     if 'dados_cliente' in session:
             return redirect(url_for('cliente.clientAgendamentoServicos'))
+    
+    if 'dados_barbeiro' in session:
+                return redirect(url_for('barbeiro.barbeiroPainel'))
         
     #Criando as rotas publicas para gestor
     routers_publics = ['gestor.gestorSource','gestor.gestorLoginPagina', 'gestor.gestorLogin']

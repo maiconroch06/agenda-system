@@ -5,9 +5,9 @@
     <div class="px-4 py-3 border-b border-[#38362f]">
 
         <p class="text-sm font-medium text-[#f1efe8]">
-            { if session.get('dados_barbeiro') %}
-            { session.get('dados_barbeiro')['nome_completo'] }}
-            { endif %}
+            {% if session.get('dados_barbeiro') %}
+            {{ session.get('dados_barbeiro')['nome_completo'] }}
+            {% endif %}
         </p>
 
         <p class="text-xs text-[#888780] mt-1">

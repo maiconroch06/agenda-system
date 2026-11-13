@@ -15,7 +15,7 @@
                 </button>
             </div>
 
-            <div class="flex items-center gap-3 py-2 border-b border-[#38362f]">
+            <div id="container-detalhe-barbeiro" class="flex items-center gap-3 py-2 border-b border-[#38362f]">
                 <span class="text-sm w-5">{% include "componetizacao/icones/icone-barbeiro.html" %}</span>
                 <div>
                     <div class="text-[11px] text-[#888780]">Barbeiro</div>
@@ -67,3 +67,100 @@
         <div class="flex flex-col gap-2 mt-4" id="detalhe-acoes"></div>
     </div>
 </div>
+
+<script>
+    const elsModal = {
+        // Modal: Detalhes do Agendamento
+        detalheStatusBadge: document.getElementById("detalhe-status-badge"),
+        detalheCliente: document.getElementById("detalhe-cliente"),
+        detalheServico: document.getElementById("detalhe-servico"),
+        detalheHorario: document.getElementById("detalhe-horario"),
+        detalheValor: document.getElementById("detalhe-valor"),
+        detalheTelefone: document.getElementById("detalhe-telefone"),
+        detalheObs: document.getElementById("detalhe-obs"),
+        detalheAcoes: document.getElementById("detalhe-acoes"),
+        overlayDetalhe: document.getElementById("overlay-detalhe"),
+        detalheBarbeiro: document.getElementById("detalhe-barbeiro"),
+        modalDetalhe: document.getElementById("modal-detalhe"),
+        containerBarbeiro: document.getElementById("container-detalhe-barbeiro"),
+    };
+    
+    function abrirModalDetalhe(id) {
+        const a = agendamentos.find(a => a.id === id);
+        if (!a) return;
+
+        elsModal.detalheStatusBadge.innerHTML = badgeStatusHTML(a.status);
+    
+        // Captura a URL completa em minúsculas para evitar falha com maiúsculas
+        const urlAtual = window.location.pathname.toLowerCase();
+        
+        // Identifica se está no painel do barbeiro (via URL ou pelo objeto global funcionario)
+        const ehRotaBarbeiro = urlAtual.includes("barbeiro") || (typeof funcionario !== "undefined" && !urlAtual.includes("gestor"));
+
+        // Oculta se estiver no painel do barbeiro OU se o nome do barbeiro não existir
+        const deveOcultar = ehRotaBarbeiro || !a.barbeiro || String(a.barbeiro).trim() === "";
+
+        const elContainer = document.getElementById("container-detalhe-barbeiro");
+        
+        if (elContainer) {
+            if (deveOcultar) {
+                elContainer.style.display = "none";
+            } else {
+                elContainer.style.display = "flex";
+                if (elsModal.detalheBarbeiro) elsModal.detalheBarbeiro.textContent = a.barbeiro;
+            }
+        }
+
+        elsModal.detalheCliente.textContent = a.cliente;
+        elsModal.detalheServico.textContent = a.servico;
+        elsModal.detalheHorario.textContent = `${formatarDataExtenso(a.data)} às ${a.hora}`;
+        elsModal.detalheValor.textContent = formatarMoeda(a.valor);
+        elsModal.detalheTelefone.textContent = a.telefone;
+        elsModal.detalheObs.textContent = a.observacoes || "Nenhuma observação";
+
+        let html = "";
+        if (a.status === 1) {
+            html += `<button class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity" onclick="concluirAgendamento('${a.id}')">Concluir agendamento</button>`;
+            html += `<button class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors" onclick="cancelarAgendamento('${a.id}')">Cancelar</button>`;
+        }
+        if (a.status === 2) {
+            html = `<p class="text-center text-[#888780] text-xs">Agendamento já concluído</p>`;
+            html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="resetarStatus('${a.id}')">Voltar status</button>`;
+        }
+        if (a.status === 0) {
+            html = `<p class="text-center text-[#888780] text-xs">Este agendamento foi cancelado</p>`;
+            html += `<button class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all" onclick="resetarStatus('${a.id}')">Voltar status</button>`;
+        }
+        elsModal.detalheAcoes.innerHTML = html;
+
+        elsModal.overlayDetalhe.classList.remove("hidden");
+        elsModal.modalDetalhe.classList.remove("hidden");
+    }
+
+    function fecharModalDetalhe() {
+        elsModal.overlayDetalhe.classList.add("hidden");
+        elsModal.modalDetalhe.classList.add("hidden");
+    }
+
+    function resetarStatus(id) { atualizarStatus(id, 1); mostrarAviso("Agendamento resetado!"); }
+
+    function concluirAgendamento(id) { atualizarStatus(id, 2); mostrarAviso("Agendamento concluído!"); }
+
+    function cancelarAgendamento(id) {
+        if (!confirm("Deseja realmente cancelar este agendamento?")) return;
+        atualizarStatus(id, 0);
+        mostrarAviso("Agendamento cancelado");
+    }
+
+    function atualizarStatus(id, novoStatus) {
+        const a = agendamentos.find(a => a.id === id);
+        if (a) a.status = novoStatus;
+        salvarAgendamentos();
+        fecharModalDetalhe();
+        
+        // Atualiza interface dependendo de onde o usuário está
+        if (typeof renderizarInicio === "function") renderizarInicio();
+        if (typeof atualizarAgendaGeral === "function") atualizarAgendaGeral();
+    }
+
+</script>
