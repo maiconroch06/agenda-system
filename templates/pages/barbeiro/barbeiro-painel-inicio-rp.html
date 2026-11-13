@@ -41,8 +41,34 @@
 
                     <div class="text-xs font-medium text-[#888780] uppercase tracking-wider mb-3">Atendimentos de hoje</div>
 
-                    <!-- Listagem dos agendamentos de hoje -->
-                    <div class="flex flex-col gap-2" id="lista-inicio-hoje"></div>
+                    <!-- Listagem dos agendamentos de hoje via Jinja -->
+                    <div class="flex flex-col gap-2" id="lista-inicio-hoje">
+                        {% for item in agendamentos_flask %}
+                            <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f] {% if item.status in [0, 2, 'cancelado', 'concluído', 'concluido'] %}opacity-65{% endif %}" onclick="abrirModalDetalhe('{{ item.id }}')">
+                                
+                                <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">{{ item.hora }}</div>
+
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium">{{ item.cliente }}</div>
+                                    <div class="text-xs text-[#888780] mt-0.5">{{ item.servico }}</div>
+                                </div>
+
+                                <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                                    {% if item.status == 1 or item.status == 'agendado' %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]">Agendado</span>
+                                    {% elif item.status == 2 or item.status == 'concluído' or item.status == 'concluido' %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#085041] text-[#9fe1cb] border-[#0f6e56]">Concluído</span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3a1510] text-[#f0997b] border-[#993c1d]">Cancelado</span>
+                                    {% endif %}
+                                    <div class="text-xs font-medium">Total: R$ {{ "%.2f"|format(item.valor)|replace('.', ',') }}</div>
+                                </div>
+                                
+                            </div>
+                        {% else %}
+                            <p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento para hoje.</p>
+                        {% endfor %}
+                    </div>
 
                     <div class="flex justify-center items-center mt-6 mb-2">
                         <!-- Botão de Voltar Dia -->

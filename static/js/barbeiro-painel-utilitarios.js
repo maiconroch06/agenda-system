@@ -94,26 +94,6 @@ function confirmarFiltro() {
 }
 
 /* ============================================================
-   CARREGAMENTO DE DADOS (JINJA/FLASK)
-   ============================================================ */
-let agendamentos = [];
-let barbeiros = [];
-let funcionario = { nome: "Barbeiro", telefone: "", descricao: "" };
-
-try {
-    const jsonAgend = document.getElementById("dados-agendamentos-json");
-    if (jsonAgend) agendamentos = JSON.parse(jsonAgend.textContent);
-
-    const jsonBarb = document.getElementById("dados-barbeiros-json");
-    if (jsonBarb) {
-        barbeiros = JSON.parse(jsonBarb.textContent);
-        if (barbeiros.length > 0) funcionario = barbeiros[0]; // Puxa o 1º barbeiro do Mock/Flask
-    }
-} catch (e) {
-    console.warn("Não foi possível carregar os dados JSON do Jinja.", e);
-}
-
-/* ============================================================
    PERSISTÊNCIA (localStorage)
    ============================================================ */
 
@@ -134,10 +114,5 @@ function salvarNoStorage(chave, valor) {
         console.warn(`Não foi possível salvar "${chave}".`, erro);
     }
 }
-
-function salvarFuncionario()   { salvarNoStorage("profissional", funcionario); }
-function salvarAgendamentos()  { salvarNoStorage("agendamentos", agendamentos); }
-function salvarServicos()      { salvarNoStorage("servicosFunc", servicosFunc); }
-function salvarBloqueios()     { salvarNoStorage("bloqueios", bloqueios); }
 
 carregarData();

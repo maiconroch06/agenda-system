@@ -10,7 +10,6 @@ const els = {
     progressoFill: document.getElementById("progresso-fill"),
     progressoCancelados: document.getElementById("progresso-cancelados"),
     progressoPendentes: document.getElementById("progresso-pendente"),
-    listaInicioHoje: document.getElementById("lista-inicio-hoje"),
 };
 
 /* ============================================================
@@ -26,40 +25,6 @@ function mostrarAviso(msg) {
         els.aviso.classList.remove("opacity-100", "translate-y-0");
         els.aviso.classList.add("opacity-0", "translate-y-2.5", "pointer-events-none");
     }, 2500);
-}
-
-/* ============================================================
-   CARD DE AGENDAMENTO
-   ============================================================ */
-
-function badgeStatusHTML(status) {
-    const mapa = { 1: "Agendado", 2: "Concluído", 0: "Cancelado" };
-    const classes = {
-        1: "bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]",
-        2: "bg-[#085041] text-[#9fe1cb] border-[#0f6e56]",
-        0: "bg-[#3a1510] text-[#f0997b] border-[#993c1d]"
-    };
-    return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${classes[status] || ''}">${mapa[status]}</span>`;
-}
-
-function cardAgendamentoHTML(item) {
-    const classe = (item.status === 2 || item.status === 0) ? " opacity-65" : "";
-    
-    return `
-        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${classe}" onclick="abrirModalDetalhe('${item.id}')">
-            <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${item.hora}</div>
-
-            <div class="flex-1">
-                <div class="text-sm font-medium">${item.cliente}</div>
-                <div class="text-xs text-[#888780] mt-0.5">${item.servico}</div>
-            </div>
-
-            <div class="flex flex-col items-end gap-1 flex-shrink-0">
-                ${badgeStatusHTML(item.status)}
-                <div class="text-xs font-medium">Total: ${formatarMoeda(item.valor)}</div>
-            </div>
-        </div>
-    `;
 }
 
 /* ============================================================
@@ -118,7 +83,7 @@ function atualizarInterfaceNavegacao() {
     }
 
     // Re-renderiza a lista de cards baseada na nova data
-    renderizarInicio(); 
+    //renderizarInicio(); 
 }
 
 function mudarDia(delta) {
@@ -157,9 +122,9 @@ function renderizarInicio() {
         });
         
     // Calcula os indicadores de progresso
-    const concluidos = doDia.filter(a => a.status === "concluido").length;
-    const cancelados = doDia.filter(a => a.status === "cancelado").length;
-    const pendentes = doDia.filter(a => a.status === "agendado").length;
+    const concluidos = doDia.filter(a => a.status === 2).length;
+    const cancelados = doDia.filter(a => a.status === 0).length;
+    const pendentes = doDia.filter(a => a.status === 1).length;
     
     const totalGeral = doDia.length;
     const totalValidos = totalGeral - cancelados;
@@ -177,30 +142,7 @@ function renderizarInicio() {
     if (els.progressoCancelados) els.progressoCancelados.style.width = `${pctCancelados}%`;
     if (els.progressoPendentes) els.progressoPendentes.style.width = `${pctPendentes}%`;
 
-    // Renderização dos cards da lista
-    if (els.listaInicioHoje) {
-        els.listaInicioHoje.innerHTML = totalGeral === 0
-            ? `<p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento agendado para hoje.</p>`
-            : doDia.map(cardAgendamentoHTML).join("");
-    }
 }
-
-/* ============================================================
-   MODAL: DETALHES DO ATENDIMENTO
-   ============================================================ 
-
-function abrirModalDetalhe(id) {
-    const a = agendamentos.find(a => a.id === id);
-    if (!a) return;
-
-    els.detalheStatusBadge.innerHTML = badgeStatusHTML(a.status);
-    els.detalheCliente.textContent = a.cliente;
-    els.detalheServico.textContent = a.servico;
-    els.detalheHorario.textContent = `${formatarDataExtenso(a.data)} às ${a.hora}`;
-    els.detalheValor.textContent = formatarMoeda(a.valor);
-    els.detalheTelefone.textContent = a.telefone;
-    els.detalheObs.textContent = a.observacoes || "Nenhuma observação";
-}*/
 
 /* ============================================================
    INICIALIZAÇÃO
