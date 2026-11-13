@@ -1,6 +1,6 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
 from controladores import ControladorGestor, ControladorBarbeiro
-from models import Cliente, Servico, Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal
+from models import Cliente, Servico, Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal, Recesso
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
 from datetime import datetime, timezone
@@ -72,10 +72,52 @@ def gestor_horario_funcionamento_barbearia_atualizar():
     return ControladorGestor.atualizar_horario_funcionamento_barbearia(horario_funcionamento)
 
 ##################################################################################
+# RECESSOS DA BARBEARIA
+
+@gestor.route('/painel/recessos/cadastrar', methods=['POST'])
+def gestor_recesso_cadastrar():
+    
+    recesso = Recesso(
+        data_inicio_recesso= datetime.strptime(request.form.get("data_inicio_recesso"),  "%Y-%m-%d").date(),
+        data_fim_recesso=datetime.strptime(request.form.get("data_fim_recesso"),  "%Y-%m-%d").date(),
+        descricao_recesso=request.form.get("descricao_recesso")
+    )
+     
+    return ControladorGestor.cadastrar_recessos_barbearia_por_mes(recesso)
+
+@gestor.route('/painel/recessos', methods=['GET'])
+def gestor_recesso_consultar():   
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', recessos = ControladorGestor.consultar_recessos_barbearia_por_mes(), mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/recessos/excluir', methods=['POST'])
+def gestor_recesso_excluir():  
+    recesso = Recesso(
+        id_recesso=request.form.get("recesso-id", type=int),
+        descricao_recesso=request.form.get("recesso-descricao")
+    ) 
+    return ControladorGestor.excluir_recessos_barbearia_por_mes(recesso)
+
+@gestor.route('/painel/recessos/atualizar', methods=['POST'])
+def gestor_recesso_atualizar():  
+    
+    print("DADOS VINDOS DO MODAL: ", request.form.get("id_recesso", type=int))
+    
+    
+    recesso = Recesso(
+        id_recesso=request.form.get("id_recesso", type=int),
+        data_inicio_recesso= datetime.strptime(request.form.get("data_inicio_recesso"),  "%Y-%m-%d").date(),
+        data_fim_recesso=datetime.strptime(request.form.get("data_fim_recesso"),  "%Y-%m-%d").date(),
+        descricao_recesso=request.form.get("descricao_recesso")
+    ) 
+    return ControladorGestor.atualizar_recessos_barbearia(recesso)
+
+     
+
+##################################################################################
 # AGENDA MENSAL 
 
 @gestor.route('/painel/agenda_mensal/cadastrar', methods=['POST'])
-def gestor_agenda_mensal_cadastrar():
+def gestor_agenda_cadastrar():
     
     agenda_mensal = AgendaMensal(
         data_inicial_mes= datetime.strptime(request.form.get("data_inicio"),  "%Y-%m-%d").date(),

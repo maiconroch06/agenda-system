@@ -14,13 +14,13 @@ class FaltaJustificadaBarbeiroDAO:
                 horario_inicio_falta,
                 horario_final_falta,
                 motivo_falta,
-                fk_id_barbeiro
+                fk_falta_justificada_barbeiro
             ) VALUES (
                 :data_falta,
                 :horario_inicio_falta,
                 :horario_final_falta,
                 :motivo_falta,
-                :fk_id_barbeiro
+                :fk_falta_justificada_barbeiro
             )
         """)
 
@@ -29,7 +29,7 @@ class FaltaJustificadaBarbeiroDAO:
             "horario_inicio_falta": falta.horario_inicio_falta,
             "horario_final_falta": falta.horario_final_falta,
             "motivo_falta": falta.motivo_falta,
-            "fk_id_barbeiro": falta.barbeiro.id
+            "fk_falta_justificada_barbeiro": falta.barbeiro.id
         })
 
         db.session.commit()
@@ -44,7 +44,7 @@ class FaltaJustificadaBarbeiroDAO:
                 horario_inicio_falta,
                 horario_final_falta,
                 motivo_falta,
-                fk_id_barbeiro
+                fk_falta_justificada_barbeiro
             FROM faltas_justificadas_barbeiro
             WHERE id_falta_justificada = :id_falta_justificada
         """)
@@ -67,9 +67,9 @@ class FaltaJustificadaBarbeiroDAO:
                 horario_inicio_falta,
                 horario_final_falta,
                 motivo_falta,
-                fk_id_barbeiro
+                fk_falta_justificada_barbeiro
             FROM faltas_justificadas_barbeiro
-            WHERE fk_id_barbeiro = :id_barbeiro
+            WHERE fk_falta_justificada_barbeiro = :id_barbeiro
             ORDER BY data_falta DESC, horario_inicio_falta
         """)
 
@@ -92,7 +92,7 @@ class FaltaJustificadaBarbeiroDAO:
                 horario_final_falta = :horario_final_falta,
                 motivo_falta = :motivo_falta
             WHERE id_falta_justificada = :id_falta_justificada
-              AND fk_id_barbeiro = :fk_id_barbeiro
+              AND fk_falta_justificada_barbeiro = :fk_falta_justificada_barbeiro
         """)
 
         resultado = db.session.execute(sql, {
@@ -101,7 +101,7 @@ class FaltaJustificadaBarbeiroDAO:
             "horario_inicio_falta": falta.horario_inicio_falta,
             "horario_final_falta": falta.horario_final_falta,
             "motivo_falta": falta.motivo_falta,
-            "fk_id_barbeiro": falta.barbeiro.id
+            "fk_falta_justificada_barbeiro": falta.barbeiro.id
         })
 
         db.session.commit()
@@ -125,7 +125,7 @@ class FaltaJustificadaBarbeiroDAO:
 
     def _mapear_falta(self, registro):
         barbeiro = BarbeiroDAO().buscar_por_id(
-            registro["fk_id_barbeiro"]
+            registro["fk_falta_justificada_barbeiro"]
         )
 
         return FaltaJustificadaBarbeiro(
