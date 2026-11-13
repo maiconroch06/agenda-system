@@ -54,10 +54,12 @@
                                 </div>
 
                                 <div class="flex flex-col items-end gap-1 flex-shrink-0">
-                                    {% if item.status == 1 or item.status == 'agendado' %}
+                                    {% if item.status == 1 %}
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]">Agendado</span>
-                                    {% elif item.status == 2 or item.status == 'concluído' or item.status == 'concluido' %}
+                                    {% elif item.status == 2 %}
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#085041] text-[#9fe1cb] border-[#0f6e56]">Concluído</span>
+                                    {% elif item.status == 3 %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#0c2d48] text-[#7cc4fa] border-[#1d5b8c]">Em andamento</span>    
                                     {% else %}
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3a1510] text-[#f0997b] border-[#993c1d]">Cancelado</span>
                                     {% endif %}
