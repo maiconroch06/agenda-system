@@ -65,7 +65,7 @@ class ControladorCliente():
 
     def meusAgendamentos(self, id_cliente):
         try:
-            return render_template('pages/cliente/cliente-meus-agendamentos.html', agendamentos = self.__agendamentoService.consultar_agendamento_agendados(1))
+            return render_template('pages/cliente/cliente-meus-agendamentos.html', agendamentos = self.__agendamentoService.consultar_agendamento_agendados(id_cliente))
             
         except Exception as erros:
                     flash(f"{erros}", EnumStatusMensagens.ERRO.value)

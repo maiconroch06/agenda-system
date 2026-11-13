@@ -1,4 +1,4 @@
-from datetime import date, time, datetime
+from datetime import date, time, datetime, timedelta
 from .barbeiros import Barbeiro
 from .cliente import Cliente
 from .servicos import Servico
@@ -11,8 +11,9 @@ class Agendamento:
         data_agendamento: date,
         hora_inicio: time,
         hora_fim: time,
-        status_agendamento: bool,
         data_atualizacao: datetime,
+        status_agendamento: None,
+        motivo_cancelamento: None,
         servico: Servico= None,
         barbeiro: Barbeiro= None,
         cliente: Cliente= None,
@@ -22,6 +23,7 @@ class Agendamento:
         self.__data_agendamento = data_agendamento
         self.__hora_inicio = hora_inicio
         self.__hora_fim = hora_fim
+        self.__motivo_cancelamento = motivo_cancelamento
         self.__status_agendamento = status_agendamento
         self.__data_atualizacao = data_atualizacao
         self.__servico = servico
@@ -43,6 +45,14 @@ class Agendamento:
     @data_agendamento.setter
     def data_agendamento(self, value):
         self.__data_agendamento = value
+
+    @property
+    def motivo_cancelamento(self):
+        return self.__motivo_cancelamento
+
+    @motivo_cancelamento.setter
+    def motivo_cancelamento(self, value):
+        self.__motivo_cancelamento = value
 
     @property
     def hora_inicio(self):
@@ -108,3 +118,17 @@ class Agendamento:
             f"fim={self.__hora_fim}, "
             
         )
+
+    # Validações
+    @staticmethod
+    def _converter_timedelta_para_time(valor):
+
+        if isinstance(valor, timedelta):
+            segundos = int(valor.total_seconds())
+
+            horas, resto = divmod(segundos, 3600)
+            minutos, segundos = divmod(resto, 60)
+
+            return time(horas, minutos, segundos)
+
+        return valor

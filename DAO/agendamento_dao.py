@@ -1,7 +1,7 @@
 
 from sqlalchemy import text
 from database import db
-from models import Agendamento
+from models import Agendamento, Barbeiro, Servico
 from datetime import date, datetime
 
 
@@ -108,27 +108,55 @@ class AgendamentoDAO:
     def consultar_todos_os_agendamento_do_cliente(id_cliente):
         sql = text("""
             SELECT
-                id_agendamento,
-                data_agendamento,
-                hora_inicio,
-                hora_fim,
-                status_agendamento,
-                data_atualizacao,
-                fk_id_servico,
-                fk_id_barbeiro,
-                fk_id_cliente
-            FROM agendamento
-            WHERE 
-             fk_id_cliente=:fk_id_cliente
-            ORDER BY data_agendamento, hora_inicio ASC
+                -- Dados do agendamento
+                a.id_agendamento,
+                a.data_agendamento,
+                a.hora_inicio,
+                a.hora_fim,
+                a.status_agendamento,
+                a.data_atualizacao,
+                a.fk_id_servico,
+                a.fk_id_barbeiro,
+                a.fk_id_cliente,
+                a.motivo_cancelamento,
+
+                -- Dados do barbeiro
+                b.id_barbeiro,
+                u.nome_completo,
+                u.email,
+                u.telefone,
+                u.cpf,
+                u.data_atualizacao,
+                b.bio,
+
+                -- Dados do serviço
+                s.id_servico,
+                s.descricao_servico,
+                s.valor,
+                s.duracao
+
+            FROM agendamento a
+
+            INNER JOIN barbeiro b
+                ON a.fk_id_barbeiro = b.id_barbeiro
+
+            INNER JOIN usuario u
+                ON b.id_barbeiro = u.id_usuario
+
+            INNER JOIN servico s
+                ON a.fk_id_servico = s.id_servico
+
+            WHERE a.fk_id_cliente = :fk_id_cliente
+
+            ORDER BY a.data_agendamento ASC, a.hora_inicio ASC
         """)
 
         resultados = db.session.execute(
-                    sql,
-                    {
-                     "fk_id_cliente": id_cliente
-                     }              
-                    ).mappings().all()
+            sql,
+            {
+                "fk_id_cliente": id_cliente
+            }
+        ).mappings().all()
 
         return [
             AgendamentoDAO._mapear_agendamento(registro)
@@ -208,6 +236,7 @@ class AgendamentoDAO:
                 data_agendamento = :data_agendamento,
                 hora_inicio = :hora_inicio,
                 hora_fim = :hora_fim,
+                motivo_cancelamento = :motivo_cancelamento,
                 status_agendamento = :status_agendamento,
                 data_atualizacao = :data_atualizacao,
                 fk_id_servico = :fk_id_servico,
@@ -221,6 +250,7 @@ class AgendamentoDAO:
             "data_agendamento": agendamento.data_agendamento,
             "hora_inicio": agendamento.hora_inicio,
             "hora_fim": agendamento.hora_fim,
+            "motivo_cancelamento": agendamento.motivo_cancelamento,
             "status_agendamento": agendamento.status_agendamento,
             "data_atualizacao": agendamento.data_atualizacao,
             "fk_id_servico": agendamento.fk_id_servico,
@@ -250,11 +280,35 @@ class AgendamentoDAO:
 
     @staticmethod
     def _mapear_agendamento(registro):
-        return Agendamento(
+
+        barbeiro = Barbeiro(
+            id_usuario=registro["id_barbeiro"],
+            nome_completo=registro["nome_completo"],
+            email=registro["email"],
+            telefone=registro["telefone"],
+            bio=registro["bio"],
+            cpf=registro["cpf"],
+            data_atualizacao=registro["data_atualizacao"]
+        )
+
+        servico = Servico(
+            id_servico=registro["id_servico"],
+            descricao_servico=registro["descricao_servico"],
+            valor=registro["valor"],
+            duracao=registro["duracao"]
+        )
+
+        agendamento = Agendamento(
             id_agendamento=registro["id_agendamento"],
             data_agendamento=registro["data_agendamento"],
             hora_inicio=(datetime.min + registro["hora_inicio"]).time(),
-            hora_fim=(datetime.min +registro["hora_fim"]).time(),
+            hora_fim=(datetime.min + registro["hora_fim"]).time(),
+            motivo_cancelamento=registro["motivo_cancelamento"],
             status_agendamento=registro["status_agendamento"],
             data_atualizacao=registro["data_atualizacao"],
+            barbeiro = barbeiro,
+            servico = servico,
+            cliente = None
         )
+
+        return agendamento

@@ -92,6 +92,7 @@ def clientAgendamentoServicosCadastro():
         hora_fim=dados.get('horario'),
         status_agendamento=True,
         data_atualizacao=datetime.now(),
+        motivo_cancelamento=None,
         servico=None,
         barbeiro=None,
         cliente=cliente

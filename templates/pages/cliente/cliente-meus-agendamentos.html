@@ -217,7 +217,7 @@
                                         </span>
 
                                         <h3 class="text-lg font-semibold mt-1">
-                                            #
+                                            {{ agendamento.barbeiro.nome_completo }}
                                         </h3>
                                     </div>
 
@@ -318,6 +318,23 @@
 
                             </div>
 
+                            <!-- RODAPÉ DO CARD -->
+                            {% if agendamento.motivo_cancelamento %}
+                            <div class="border border-red-500 rounded-2xl
+                                bg-red-500/10 px-5 py-3 mx-5 my-5
+                                flex justify-start items-center">
+
+                                <span class="text-xs font-normal text-red-400 mr-3">
+                                    Motivo:
+                                </span>
+
+                                <span class="text-xs font-bold text-[#AAA69A]">
+                                    Desativação por a agenda foi cancelada
+                                </span>
+
+                            </div>
+                            {% endif %}
+
 
                             <!-- RODAPÉ DO CARD -->
                             <div class="border-t border-[#38362f]
@@ -333,6 +350,7 @@
                                 </span>
 
                             </div>
+
 
                         </article>
 
