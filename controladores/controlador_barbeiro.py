@@ -34,6 +34,10 @@ class ControladorBarbeiro:
         #return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = cls.__barbeiroService.consultar_barbeiros(), mensagens_status=EnumStatusMensagens)
 
     @classmethod
+    def consultar_agendamentos_barbeiro(cls, barbeiro:dict):
+        return cls.__barbeiroService.consultar_agendamentos_barbeiro(barbeiro)
+    
+    @classmethod
     def atualizar_endereco_barbeiro(cls, endereco):
         try:
             cls.__barbeiroService.atualizar_endereco(endereco)

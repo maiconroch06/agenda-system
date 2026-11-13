@@ -12,7 +12,7 @@ class AgendaMensal:
         status_agenda_mensal = True
         
     ):
-        self.__id_agenda_mensal = id_agenda_mensal
+        self.id_agenda_mensal = id_agenda_mensal
         self.__data_inicial_mes = data_inicial_mes
         self.__data_final_mes = data_final_mes
         self.__titulo_agenda = titulo_agenda

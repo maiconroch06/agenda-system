@@ -33,20 +33,20 @@ function mostrarAviso(msg) {
    ============================================================ */
 
 function badgeStatusHTML(status) {
-    const mapa = { agendado: "Agendado", concluido: "Concluído", cancelado: "Cancelado" };
+    const mapa = { 1: "Agendado", 2: "Concluído", 0: "Cancelado" };
     const classes = {
-        agendado: "bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]",
-        concluido: "bg-[#085041] text-[#9fe1cb] border-[#0f6e56]",
-        cancelado: "bg-[#3a1510] text-[#f0997b] border-[#993c1d]"
+        1: "bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]",
+        2: "bg-[#085041] text-[#9fe1cb] border-[#0f6e56]",
+        0: "bg-[#3a1510] text-[#f0997b] border-[#993c1d]"
     };
     return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${classes[status] || ''}">${mapa[status]}</span>`;
 }
 
 function cardAgendamentoHTML(item) {
-    const concluidoClasse = item.status === "concluido" ? " opacity-65" : "";
+    const classe = (item.status === 2 || item.status === 0) ? " opacity-65" : "";
     
     return `
-        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${concluidoClasse}" onclick="abrirModalDetalhe('${item.id}')">
+        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f]${classe}" onclick="abrirModalDetalhe('${item.id}')">
             <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">${item.hora}</div>
 
             <div class="flex-1">
@@ -96,7 +96,7 @@ function atualizarInterfaceNavegacao() {
     const tituloLista = document.querySelector(".text-xs.font-medium.text-\\[\\#888780\\].uppercase.tracking-wider.mb-3");
     
     const stringDataFormatada = formatarDataNavegacao(dataExibicaoAtual);
-    const isHoje = formatarISO(dataExibicaoAtual) === hojeISO(); // hojeISO() deve estar definido em barbeiro-painel-utilitarios.js
+    const isHoje = formatarISO(dataExibicaoAtual) === hojeISO();
 
     // Atualiza o texto central entre os botões
     if (navDisplay) {
@@ -143,7 +143,6 @@ function renderizarInicio() {
     const dataAlvoStr = formatarISO(dataExibicaoAtual); 
     const doDia = agendamentos
         .filter(a => a.data === dataAlvoStr)
-        .filter(a => a.data === hoje)
         .sort((a, b) => {
             // Define o peso (prioridade) de cada status
             const pesoStatus = { agendado: 1, concluido: 2, cancelado: 3 };
@@ -152,11 +151,11 @@ function renderizarInicio() {
             if (pesoStatus[a.status] !== pesoStatus[b.status]) {
                 return pesoStatus[a.status] - pesoStatus[b.status];
             }
-            
+
             // 2º Critério: Se o status for igual, ordena pela hora mais próxima (crescente)
             return a.hora.localeCompare(b.hora);
         });
-
+        
     // Calcula os indicadores de progresso
     const concluidos = doDia.filter(a => a.status === "concluido").length;
     const cancelados = doDia.filter(a => a.status === "cancelado").length;

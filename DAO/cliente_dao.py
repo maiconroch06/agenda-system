@@ -28,6 +28,7 @@ class ClienteDAO:
         return resultado.rowcount > 0
 
     def consultarClienteId(self, id_cliente: int):
+
         sql = text("""
             SELECT
                 u.id_usuario,
@@ -36,7 +37,7 @@ class ClienteDAO:
                 u.cpf,
                 u.email,
                 u.senha,
-                u.foto_nome,
+                u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_atualizacao,
@@ -68,7 +69,7 @@ class ClienteDAO:
                 u.cpf,
                 u.email,
                 u.senha,
-                u.foto_nome,
+                u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_atualizacao,
@@ -117,7 +118,7 @@ class ClienteDAO:
                 cpf = :cpf,
                 email = :email,
                 senha = :senha,
-                foto_nome = :foto_nome,
+                foto_nome_usuario = :foto_nome_usuario,
                 status_usuario = :status_usuario,
                 data_atualizacao = :data_atualizacao,
                 fk_id_endereco = :fk_id_endereco
@@ -139,7 +140,7 @@ class ClienteDAO:
             "cpf": cliente.cpf,
             "email": cliente.email,
             "senha": cliente.senha,
-            "foto_nome": cliente.foto_nome,
+            "foto_nome_usuario": cliente.foto_nome_usuario,
             "status_usuario": cliente.status_usuario,
             "data_atualizacao": cliente.data_atualizacao,
             "fk_id_endereco": cliente.fk_id_endereco,
@@ -151,6 +152,7 @@ class ClienteDAO:
         )
 
         if resultado_usuario.rowcount == 0:
+            db.session.rollback()
             return False
 
         resultado_cliente = db.session.execute(
@@ -180,3 +182,18 @@ class ClienteDAO:
         db.session.commit()
 
         return resultado.rowcount > 0
+
+    @staticmethod
+    def _mapear_cliente(registro):
+        return Cliente(
+            nome_completo=registro["nome_completo"],
+            telefone=registro["telefone"],
+            cpf=registro["cpf"],
+            email=registro["email"],
+            senha=registro["senha"],
+            foto_nome_usuario=registro["foto_nome_usuario"],
+            status_usuario=bool(registro["status_usuario"]),
+            data_cadastro=registro["data_cadastro"],
+            data_atualizacao=registro["data_atualizacao"],
+            data_ultimo_servico=registro["data_ultimo_servico"]
+        )

@@ -67,7 +67,6 @@
             </li>
         </ol>
 
-
         <!-- PAINEL 1: SERVIÇO -->
         <section id="painel-1">
 
@@ -79,35 +78,142 @@
                 Selecione o serviço que você deseja agendar
             </p>
 
+            {% if agenda_mensal is none %}
+
+                <!-- AVISO: AGENDA NÃO DISPONÍVEL -->
+                <div class="bg-[#C9A34A]/10 border border-[#C9A34A]/40
+                    rounded-xl p-4 mb-5 flex items-start gap-3">
+
+                    <i class="fa-solid fa-calendar-xmark
+                        text-[#C9A34A] text-xl mt-1"></i>
+
+                    <div>
+                        <h2 class="text-sm font-semibold text-[#C9A34A] mb-1">
+                            Agendamentos temporariamente indisponíveis
+                        </h2>
+
+                        <p class="text-sm text-[#AAA69A] leading-relaxed">
+                            Nossa agenda de serviços para este mês ainda não foi
+                            disponibilizada. Você pode consultar nossos serviços,
+                            mas ainda não é possível realizar um agendamento.
+                        </p>
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+            <!-- LISTA DE SERVIÇOS -->
             <div id="lista-servico"
-                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full">
 
+                {% if agenda_mensal is not none %}
                 {% for servico in servicos %}
-                    <label class="cursor-pointer w-full group">
-                        <input type="checkbox" name="inputCorte" id="selecionar-servico" class="peer hidden" value="servico.id">
-                        <div class="w-full h-full bg-[#1c1c1c] border-2 border-brand-border rounded-xl p-4 sm:p-3.5 lg:p-4 flex flex-col justify-between items-center gap-3 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-gold/10 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 hover:border-brand-gold/50 active:scale-[0.98]">
 
-                            <div class="w-full aspect-square rounded-xl bg-[#232220] flex items-center justify-center overflow-hidden border border-brand-border/40 shrink-0">
-                                <img_uploads src="{{ url_for('static', filename='assets/dados/post-imagens/{}'.format(servico.foto_nome))}}" class="w-full h-full object-cover">
-                                
+                    <label class="cursor-pointer group">
+
+                        <input
+                            type="radio"
+                            name="inputCorte"
+                            id="servico-{{ servico.id_servico }}"
+                            class="peer hidden"
+                            value="{{ servico.id_servico }}"
+                            data-nome="{{ servico.descricao_servico }}"
+                            data-valor="{{ servico.valor }}"
+                            data-duracao="{{ servico.duracao }}"
+                            data-foto="{{ url_for(
+                                'static',
+                                filename=config['UPLOAD_FILES'].replace('static/', '') ~
+                                '/servicos-imagens/' ~ servico.foto_nome_servico
+                            ) }}"
+                        >
+
+                        <div class="bg-[#1c1c1c] border-2 border-[#38362f]
+                            rounded-xl p-3 flex flex-col gap-3
+                            transition-all duration-300
+                            hover:border-[#C9A34A]/60
+                            peer-checked:border-[#C9A34A]
+                            peer-checked:bg-[#C9A34A]/10
+                            {% if not agenda_mensal %}opacity-60 cursor-not-allowed{% endif %}">
+
+                            <!-- IMAGEM -->
+                            <div class="aspect-square rounded-lg overflow-hidden
+                                bg-[#232220]">
+
+                                <img
+                                    src="{{ url_for(
+                                        'static',
+                                        filename=config['UPLOAD_FILES'].replace('static/', '') ~
+                                        '/servicos-imagens/' ~ servico.foto_nome_servico
+                                    ) }}"
+                                    alt="{{ servico.descricao_servico }}"
+                                    class="w-full h-full object-cover object-center
+                                    transition-transform duration-300
+                                    group-hover:scale-105"
+                                >
+
                             </div>
 
-                            <span class="font-semibold text-base sm:text-sm md:text-base lg:lg-text-base text-white text-center peer-checked:text-brand-gold line-clamp-2 leading-tight w-full min-h-[2.5rem] flex items-center justify-center">
-                            {{servico.descricao}}
-                            </span>
+                            <!-- DESCRIÇÃO -->
+                            <div class="flex flex-col gap-1 min-w-0 w-full">
 
-                            <div class="flex justify-between items-center w-full text-sm sm:text-xs md:text-sm lg-text-base text-brand-muted pt-2 border-t border-brand-border/50 mt-auto">
-                                <span>{{servico.duracao}} min</span>
-                                <span class="font-semibold text-white">R$ {{"%.2f" | format (servico.valor) | replace(".", ",")}}</span>
+                                <h3 class="font-semibold text-white truncate">
+                                    {{ servico.descricao_servico }}
+                                </h3>
+
+                                <p class="text-xs text-[#888780] truncate">
+                                    Serviço profissional de barbearia
+                                </p>
+
                             </div>
+
+                            <!-- PREÇO E DURAÇÃO -->
+                            <div class="flex justify-between items-center
+                                border-t border-[#38362f] pt-3">
+
+                                <span class="text-sm text-[#AAA69A]">
+                                    <i class="fa-regular fa-clock"></i>
+                                    {{ servico.duracao }} min
+                                </span>
+
+                                <span class="text-[#C9A34A] font-bold">
+                                    R$ {{ "%.2f"|format(servico.valor)|replace(".", ",") }}
+                                </span>
+
+                            </div>
+
+                            <!-- INDICADOR DE SELEÇÃO -->
+                            <div class="flex items-center justify-end gap-1
+                                text-xs text-[#C9A34A] opacity-0
+                                peer-checked:opacity-100">
+
+                                <i class="fa-solid fa-circle-check"></i>
+                                Selecionado
+
+                            </div>
+
                         </div>
+
                     </label>
-                {%endfor %}
+
+                {% else %}
+
+                    <div class="col-span-full text-center py-10
+                        bg-[#1c1c1c] rounded-xl border border-[#38362f]">
+
+                        <p class="text-[#888780]">
+                            Nenhum serviço disponível no momento.
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+                {% endif %}
+
             </div>
 
         </section>
-
-
+        
         <!-- PAINEL 2: PROFISSIONAL -->
         <section id="painel-2" hidden>
 
@@ -119,8 +225,118 @@
                 Selecione quem irá realizar o seu atendimento
             </p>
 
+            <!-- LISTA DE PROFISSIONAIS -->
             <div id="lista-profissionais"
-                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 w-full">
+
+                {% for barbeiro in barbeiros %}
+
+                    <label class="cursor-pointer group">
+
+                        <input
+                            type="radio"
+                            name="inputBarbeiro"
+                            id="barbeiro-{{ barbeiro.id_usuario }}"
+                            class="peer hidden"
+                            value="{{ barbeiro.id_usuario }}"
+                            data-nome="{{ barbeiro.nome_completo }}"
+                            data-foto="{{ url_for(
+                                'static',
+                                filename=config['UPLOAD_FILES'].replace('static/', '') ~
+                                '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario
+                            ) }}"
+                        >
+
+                        <div class="h-full bg-[#1c1c1c] border-2 border-[#38362f]
+                            rounded-xl p-4 flex flex-col gap-3
+                            transition-all duration-300
+                            hover:border-[#C9A34A]/60
+                            peer-checked:border-[#C9A34A]
+                            peer-checked:bg-[#C9A34A]/10">
+
+                            <!-- FOTO DO BARBEIRO -->
+                            <div class="aspect-square w-full rounded-lg overflow-hidden bg-[#232220]">
+
+                                <img
+                                    src="{{ url_for(
+                                        'static',
+                                        filename=config['UPLOAD_FILES'].replace('static/', '') ~
+                                        '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario
+                                    ) }}"
+                                    alt="{{ barbeiro.nome }}"
+                                    class="w-full h-full object-cover object-center
+                                    transition-transform duration-300
+                                    group-hover:scale-105"
+                                >
+
+                            </div>
+
+                            <!-- INFORMAÇÕES DO PROFISSIONAL -->
+                            <div class="flex flex-col gap-3 min-w-0 w-full">
+
+                                <!-- NOME -->
+                                <div class="flex flex-col gap-1">
+
+                                    <span class="text-[10px] uppercase tracking-wider
+                                        text-[#C9A34A] font-semibold">
+                                        Profissional
+                                    </span>
+
+                                    <h3
+                                        class="font-semibold text-white text-base truncate cursor-help"
+                                        title="{{ barbeiro.nome_completo }}"
+                                    >
+                                        {{ barbeiro.nome_completo }}
+                                    </h3>
+
+                                </div>
+
+                                <!-- ESPECIALIDADE -->
+                                <div class="flex flex-col gap-1">
+
+                                    <span class="text-[10px] uppercase tracking-wider
+                                        text-[#C9A34A] font-semibold">
+                                        Especialidade
+                                    </span>
+
+                                    <p
+                                        class="text-sm text-[#f1efe8] truncate cursor-help"
+                                        title="{{ barbeiro.especialidade or 'Não informada' }}"
+                                    >
+                                        {{ barbeiro.especialidade or 'Não informada' }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <!-- INDICADOR DE SELEÇÃO -->
+                            <div class="flex items-center justify-end gap-1
+                                text-xs text-[#C9A34A] opacity-0
+                                peer-checked:opacity-100 mt-auto">
+
+                                <i class="fa-solid fa-circle-check"></i>
+                                Selecionado
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                {% else %}
+
+                    <div class="col-span-full text-center py-10
+                        bg-[#1c1c1c] rounded-xl border border-[#38362f]">
+
+                        <p class="text-[#888780]">
+                            Nenhum barbeiro disponível no momento.
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
             </div>
 
         </section>
@@ -234,19 +450,23 @@
 
     </div>
 
-
     <!-- NAVEGAÇÃO FIXA INFERIOR -->
     <nav id="nav-etapa"
         class="fixed bottom-0 left-0 right-0 flex justify-between gap-3 p-3 px-4 bg-[#232220] border-t border-[#38362f] z-20">
 
         <button id="btn-voltar"
             class="w-full sm:flex-1 h-11 rounded-lg border border-brand-border bg-transparent text-gray-300 text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-[#111215] hover:text-white active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed">
+
             Voltar
+
         </button>
 
         <button id="btn-continuar"
+            {% if not agenda_mensal %}disabled{% endif %}
             class="w-full sm:flex-1 h-11 rounded-lg bg-brand-gold hover:bg-brand-gold-hover text-black text-sm font-bold cursor-pointer transition-all duration-300 shadow-md hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed">
+
             Continuar
+
         </button>
 
     </nav>
@@ -256,6 +476,16 @@
     <div class="fixed bottom-[80px] left-1/2 -translate-x-1/2 translate-y-[10px] bg-[#f1efe8] text-[#161513] px-[18px] py-[10px] rounded-[10px] text-[13px] opacity-0 pointer-events-none transition-all duration-200 z-[100] whitespace-nowrap"
         id="aviso"></div>
 
+    <script>
+        const AGENDA_DISPONIVEL = {{ (agenda_mensal is not none) | tojson }};
+        const AGENDA_MENSAL = {{ {
+            "id": agenda_mensal.id_agenda_mensal,
+            "dataInicial": agenda_mensal.data_inicial_mes.isoformat(),
+            "dataFinal": agenda_mensal.data_final_mes.isoformat()
+        } | tojson if agenda_mensal else 'null' }};
+        const URL_CADASTRAR_AGENDAMENTO = {{ url_for('cliente.clientAgendamentoServicosCadastro') | tojson }};
+        const URL_MEUS_AGENDAMENTOS = {{ url_for('cliente.clientMeusAgendamentos') | tojson }};
+    </script>
 
     <!-- JAVASCRIPT -->
     <script src="{{ url_for('static', filename='js/cliente-agendamento.js') }}"></script>

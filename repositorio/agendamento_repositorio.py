@@ -13,8 +13,8 @@ class AgendamentoRepositorio:
         return AgendamentoDAO.buscar_por_id(id_agendamento)
 
     @staticmethod
-    def listar_todos():
-        return AgendamentoDAO.listar_todos()
+    def consultar_agendamento_status_agendados(id_cliente):
+        return AgendamentoDAO.consultar_todos_os_agendamento_do_cliente(id_cliente)
 
     @staticmethod
     def listar_por_cliente(id_cliente):

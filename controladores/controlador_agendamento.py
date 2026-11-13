@@ -5,4 +5,4 @@ class ControladorAgendamento:
     
     @classmethod
     def consultar_agendamento(cls, status_agendamento):
-        return cls.__agendamentos.consultar_agendamento(status_agendamento)
+        return cls.__agendamentos.consultar_agendamento_agendados(status_agendamento)

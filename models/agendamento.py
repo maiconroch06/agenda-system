@@ -13,9 +13,9 @@ class Agendamento:
         hora_fim: time,
         status_agendamento: bool,
         data_atualizacao: datetime,
-        servico: Servico,
-        barbeiro: Barbeiro,
-        cliente: Cliente,
+        servico: Servico= None,
+        barbeiro: Barbeiro= None,
+        cliente: Cliente= None,
         id_agendamento = None,
     ):
         self.__id_agendamento = id_agendamento
