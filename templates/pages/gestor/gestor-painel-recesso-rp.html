@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMS Barbearia - Painel Administrativo</title>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
+</head>
+
+<body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
+    <p id="titulo-modal" class="hidden">Recesso</p>
+
+    <!-- Header (Exibe apenas para o mobile)-->
+    {% include "componetizacao/Header/header-painel.html" %}
+
+    <div class="flex flex-col min-h-screen">
+
+        <div class="flex flex-1">
+
+            <!-- SIDEBAR DESKTOP -->
+            {% include "componetizacao/SiderBar/sider-bar-gestor.html" %}
+
+            <!-- CONTEÚDO PRINCIPAL -->
+            <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+               
+                {% set mensagens=mensagens_status %}
+                {% include "componetizacao/mensagens/mensagens.html" %}
+
+                <!-- ABA AGENDA -->
+                <section id="aba-agenda" class="pb-28 md:pb-0">
+                            
+
+                    <div class="flex items-center justify-between mb-5 gap-3">
+                        <div>
+                            <h1 class="text-lg lg:text-xl font-semibold">Recessos da barbearia</h1>
+                    
+                        </div>
+
+                        <button type="button" id="btn-abrir-modal-recesso" class="px-4 py-2.5 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold cursor-pointer">
+                            + Cadastrar recesso
+                        </button>
+                    </div>
+
+                    <span class="text-xs font-semibold uppercase tracking-wider text-[#888780] block mb-3">
+                        Recessos Cadastrados
+                    </span>
+                        
+                        <div id="lista-profissionais-painel" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 w-full">
+
+                                {% for recesso in recessos or [] %}
+                                    <div id="card_servicos" class="flex flex-col items-center min-w-0 bg-[#232220] rounded-2xl p-4 border border-zinc-700/60 hover:border-amber-500/40 transition-all">
+
+                                        <p id="campo-padrao" class="text-lg text-gray-300 text-center font-semibold mb-3">
+                                           {{ recesso.descricao_recesso }}
+                                        </p>
+
+                                        <div class="w-full bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-4">
+                                            <div class="flex items-center justify-between gap-4">
+                                                
+                                                <!-- Data Início (Esquerda) -->
+                                                <div class="flex-1 min-w-0">
+                                                    <span class="block text-[11px] font-semibold uppercase tracking-wider text-[#888780] mb-0.5">
+                                                        Dia Início
+                                                    </span>
+                                                    <p class="text-xs sm:text-sm font-medium text-[#f1efe8] truncate">
+                                                     {{ recesso.data_inicio_recesso.strftime('%d/%m/%Y') }}
+                                                    </p>
+                                                </div>
+
+                                                <!-- Divisória Central -->
+                                                <div class="flex items-center justify-center shrink-0 px-1">
+                                                    <span class="h-6 md:h-10 w-[1px] bg-[#38362f]"></span>
+                                                </div>
+
+                                                <!-- Data Fim (Direita) -->
+                                                <div class="flex-1 min-w-0 text-right">
+                                                    <span class="block text-[11px] font-semibold uppercase tracking-wider text-[#888780] mb-0.5">
+                                                        Dia Fim
+                                                    </span>
+                                                    <p class="text-xs sm:text-sm font-medium text-[#f1efe8] truncate">
+                                                        {{ recesso.data_fim_recesso.strftime('%d/%m/%Y') }}
+                                                    </p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
+
+                                            <button type="button" id="editar-recesso-mensal" value="{{ recesso.id_recesso }}#{{ recesso.descricao_recesso }}#{{ recesso.data_inicio_recesso}}#{{ recesso.data_fim_recesso}}"
+                                                    class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
+                                                Editar recesso
+                                            </button>
+
+                                            <form action="/gestor/painel/recessos/excluir" id="form-confirmar-exclusao" method="POST" class="flex-1 min-w-0">
+                                                
+                                                <input type="hidden" name="recesso-id" value="{{recesso.id_recesso}}">
+                                                <input type="hidden" name="recesso-descricao" value="{{recesso.descricao_recesso}}">
+
+                                                <button type="submit" class="w-full py-2 px-2 rounded-lg bg-amber-500 border border-black text-black hover:bg-amber-600 text-xs font-bold transition-colors">
+                                                   {{ 'Excluir'}} 
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                        </div>
+                    
+                    {% if not recessos %}
+                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-3 md:p-6 flex flex-col gap-5">
+                            <h1 class="text-lg lg:text-xl font-semibold text-amber-400">Nenhuma agenda cadastrada</h1>
+                        </div>
+                    {%endif%}
+                    {% include "componetizacao/modals/modal-confimacao-excluir-padrao.html" %}    
+                    {% include "componetizacao/modals/modal-cadastrar-editar-recesso.html" %}
+                </section>
+            </main>
+        </div>
+
+        <!-- NAVEGAÇÃO INFERIOR MOBILE -->
+        {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
+
+    </div>
+
+    <!-- TOAST AVISO -->
+    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+        id="aviso"></div>
+        
+  
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_cadastrar_editar_recesso.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
+
+</body>
+
+</html>

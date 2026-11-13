@@ -58,7 +58,7 @@ class ClienteDAO:
         if registro is None:
             return None
 
-        return self._mapear_cliente(registro)
+        return dict(registro)
 
     def login_cliente_email(self, email: str):
         sql = text("""

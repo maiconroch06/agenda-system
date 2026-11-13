@@ -29,3 +29,6 @@ class BarbeiroRepositorio:
     
     def atualizar(self, barbeiro):
         return self.__barbeiroDao.atualizar_informacoes_barbeiro(barbeiro)
+
+    def atualizar_status_agendamento(self, id_agendamento, status_agendamento):
+        return self.__barbeiroDao.atualizar_status_agendamento(id_agendamento, status_agendamento)

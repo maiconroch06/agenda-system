@@ -265,13 +265,15 @@ class AgendaMensalDAO:
                 status_agenda_mensal
             FROM agenda_mensal
             WHERE fk_barbearia_cnpj = :cnpj_barbearia
+            and status_agenda_mensal=:status_agenda_mensal
             ORDER BY id_agenda_mensal ASC
             LIMIT 1
         """)
 
         resultado = db.session.execute(
             sql,
-            {"cnpj_barbearia": cnpj_barbearia}
+            {"cnpj_barbearia": cnpj_barbearia,
+            "status_agenda_mensal": True}
         ).mappings().first()
 
         if not resultado:

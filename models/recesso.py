@@ -6,12 +6,13 @@ class Recesso:
     def __init__(
         self,
         id_recesso = None,
-        data_recesso = None,
-        descricao_recesso = None, 
-       
+        descricao_recesso = None,
+        data_inicio_recesso = None,
+        data_fim_recesso = None 
     ):
         self.__id_recesso = id_recesso
-        self.__data_recesso = data_recesso
+        self.__data_inicio_recesso = data_inicio_recesso
+        self.__data_fim_recesso = data_fim_recesso
         self.__descricao_recesso = descricao_recesso
         
        
@@ -25,20 +26,20 @@ class Recesso:
         self.__id_recesso = value
 
     @property
-    def data_recesso(self):
-        return self.__data_recesso
+    def data_inicio_recesso(self):
+        return self.__data_inicio_recesso
 
-    @data_recesso.setter
-    def data_recesso(self, value):
-        self.__data_recesso = value
+    @data_inicio_recesso.setter
+    def data_inicio_recesso(self, value):
+        self.__data_inicio_recesso = value
 
     @property
-    def descricao_recesso(self):
-        return self.__descricao_recesso
+    def data_fim_recesso(self):
+        return self.__data_fim_recesso
 
-    @descricao_recesso.setter
-    def descricao_recesso(self, value):
-        self.__descricao_recesso = value
+    @data_fim_recesso.setter
+    def data_fim_recesso(self, value):
+        self.__data_fim_recesso = value
         
     @property
     def horario_fim_intrajornada(self):
@@ -47,3 +48,11 @@ class Recesso:
     @horario_fim_intrajornada.setter
     def horario_fim_intrajornada(self, value):
         self.__horario_fim_intrajornada = value
+   
+    @property
+    def descricao_recesso(self):
+        return self.__descricao_recesso
+
+    @descricao_recesso.setter
+    def hordescricao_recessoario_fim_intrajornada(self, value):
+        self.__descricao_recesso = value

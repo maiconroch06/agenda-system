@@ -31,6 +31,12 @@
                 <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-agenda.html" %}</span> Agendas e horarios
             </button>
         </a>
+        <!-- Recessos -->
+        <a href="/gestor/painel/recessos">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/agenda' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-agenda.html" %}</span> Recessos
+            </button>
+        </a>
         <!-- Serviços -->
         <a href="/gestor/painel/servicos">
             <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/servicos' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">

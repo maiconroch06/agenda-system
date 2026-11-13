@@ -76,7 +76,7 @@
                 </div>
 
                 <h2 class="text-3xl font-bold mt-3">
-                    {{ agendamentos|length }}
+                    {{ agendamentos |length }}
                 </h2>
 
             </div>
@@ -223,25 +223,7 @@
 
 
                                     <!-- STATUS -->
-                                    {% if agendamento.status_agendamento == 'proximo' %}
-
-                                        <span class="w-fit px-3 py-1.5
-                                            rounded-full text-xs font-semibold
-                                            bg-[#C9A34A]/10 text-[#C9A34A]
-                                            border border-[#C9A34A]/30">
-                                            Próximo atendimento
-                                        </span>
-
-                                    {% elif agendamento.status_filtro == 'concluido' %}
-
-                                        <span class="w-fit px-3 py-1.5
-                                            rounded-full text-xs font-semibold
-                                            bg-green-500/10 text-green-400
-                                            border border-green-500/30">
-                                            Concluído
-                                        </span>
-
-                                    {% elif agendamento.status_filtro == 'cancelado' %}
+                                    {% if agendamento.status_agendamento == 0 %}
 
                                         <span class="w-fit px-3 py-1.5
                                             rounded-full text-xs font-semibold
@@ -250,13 +232,31 @@
                                             Cancelado
                                         </span>
 
-                                    {% else %}
+                                    {% elif agendamento.status_agendamento == 1 %}
 
                                         <span class="w-fit px-3 py-1.5
                                             rounded-full text-xs font-semibold
-                                            bg-[#888780]/10 text-[#AAA69A]
-                                            border border-[#888780]/30">
-                                            {{ agendamento.status }}
+                                            bg-blue-700/10 text-cyan-300
+                                            border border-blue-700-500/30">
+                                            Agendado
+                                        </span>
+
+                                    {% elif agendamento.status_agendamento == 2 %}
+
+                                       <span class="w-fit px-3 py-1.5
+                                            rounded-full text-xs font-semibold
+                                            bg-green-500/10 text-green-400
+                                            border border-green-500/30">
+                                            Concluído
+                                        </span>
+
+                                    {% else %}
+
+                                         <span class="w-fit px-3 py-1.5
+                                            rounded-full text-xs font-semibold
+                                            bg-[#C9A34A]/10 text-[#C9A34A]
+                                            border border-[#C9A34A]/30">
+                                            Em andamento
                                         </span>
 
                                     {% endif %}
@@ -274,7 +274,7 @@
                                         </span>
 
                                         <p class="text-sm font-medium mt-1">
-                                            {{ agendamento.profissional }}
+                                           barbeiro
                                         </p>
                                     </div>
 
@@ -285,7 +285,7 @@
                                         </span>
 
                                         <p class="text-sm font-medium mt-1">
-                                            {{ agendamento.data.strftime('%d/%m/%Y') }}
+                                            {{ agendamento.data_agendamento.strftime('%d/%m/%Y') }}
                                         </p>
                                     </div>
 
@@ -296,7 +296,7 @@
                                         </span>
 
                                         <p class="text-sm font-medium mt-1">
-                                            {{ agendamento.horario.strftime('%H:%M') }}
+                                            {{ agendamento.hora_inicio.strftime('%H:%M') }}
                                         </p>
                                     </div>
 
@@ -309,7 +309,7 @@
                                         <p class="text-sm font-bold
                                             text-[#C9A34A] mt-1">
 
-                                            R$ {{ "%.2f"|format(agendamento.valor)|replace(".", ",") }}
+                                            R$ pendente
 
                                         </p>
                                     </div>

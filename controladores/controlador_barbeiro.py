@@ -48,6 +48,15 @@ class ControladorBarbeiro:
         return redirect(url_for('gestor.gestorAbaBarbeiros'))   
     
     @classmethod
+    def atualizar_status_agendamento(cls, id_agendamento:int, status_agendamento:int):
+        try:
+            cls.__barbeiroService.alterar_status_agendamento(id_agendamento, status_agendamento)
+            flash("Agendamento alterado com sucesso", EnumStatusMensagens.SUCESSO.value)
+        except Exception as erros:
+            flash(f"Não foi possivel alterar o status do agendamento, contate o suporte", EnumStatusMensagens.AVISO.value)
+            flash(f"{erros}")
+    
+    @classmethod
     def atualizar_informacoes_barbeiro(cls, imagem_form, img_padrao, imagem_anterior, usuario):
         try:
             cls.__barbeiroService.alterar_usuario_barbearia(imagem_form, img_padrao, imagem_anterior, usuario)
@@ -56,4 +65,3 @@ class ControladorBarbeiro:
             flash(f"{erros}")
             flash(f"Não foi possivel alterar o barbeiro, contate o suporte", EnumStatusMensagens.AVISO.value)
           
-    

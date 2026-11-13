@@ -42,6 +42,8 @@ def barbeiroLoginPagina():
 @barbeiro.route('/painel')
 def barbeiroPainel():
     barbeiro = session.get('dados_barbeiro')
+    if not barbeiro:
+        return redirect(url_for('barbeiro.barbeiroLoginPagina'))
 
     agendamentos_flask = ControladorBarbeiro.consultar_agendamentos_barbeiro(barbeiro)
     
@@ -49,3 +51,12 @@ def barbeiroPainel():
     #print("\n 2. AGENDAMENTOS RETORNADOS: ", agendamentos_flask)
 
     return render_template('pages/barbeiro/barbeiro-painel-inicio-rp.html', barbeiro=barbeiro, agendamentos_flask=agendamentos_flask)
+
+@barbeiro.route('/atualizar_status/<id_agendamento>', methods=['POST'])
+def atualizar_status(id_agendamento):
+    status_agendamento = request.form.get('status')
+    
+    ControladorBarbeiro.atualizar_status_agendamento(id_agendamento, status_agendamento)
+    
+    # Recarrega o painel após a alteração de status
+    return redirect(url_for('barbeiro.barbeiroPainel'))

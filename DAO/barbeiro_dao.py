@@ -344,6 +344,25 @@ class BarbeiroDAO:
         db.session.commit()
 
         return resultado.rowcount > 0
+    
+    def atualizar_status_agendamento(self, id_agendamento:int, status_agendamento:int):
+        sql = text("""
+                UPDATE agendamento
+                SET
+                    status_agendamento = :status_agendamento,
+                    data_atualizacao = NOW()
+                    
+                WHERE id_agendamento = :id_agendamento
+        """)
+        
+        resultado = db.session.execute(sql, {
+            "id_agendamento": id_agendamento,
+            "status_agendamento": status_agendamento
+        })
+        
+        db.session.commit()
+
+        return resultado.rowcount > 0 #oq isso faz?
 
     @staticmethod
     def _mapear_barbeiro(registro):

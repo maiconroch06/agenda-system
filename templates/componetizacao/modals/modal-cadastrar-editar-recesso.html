@@ -1,0 +1,62 @@
+<!-- MODAL: BLOQUEIO DE HORÁRIO - Deve ser ATUALIZADO -->
+<dialog id="janela_modal_cadastrar_editar_recesso"
+     class="fixed inset-2 sm:inset-4 md:inset-8 w-auto h-auto lg:mx-40 lg:my-10 max-h-[calc(100dvh-1rem)] overflow-y-auto overflow-x-hidden rounded-xl border-0 bg-transparent p-0 shadow-xl backdrop:bg-black/50 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
+    <!-- Mensagens de Erro / Aviso -->
+    <div id="exibir-menssagem-erros-agenda"
+        class="bg-red-500/10 border border-red-500/30 mb-8 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide hidden">
+        <p id="menssagem-erros-agenda"></p>
+    </div>
+
+    <!-- Container externo -->
+    <div class="w-full max-w-2xl m-auto bg-[#232220] border border-[#38362f] rounded-[14px] p-5 sm:p-6 shadow-xl">
+
+        <!-- Logo -->
+        <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
+            {% set logo_class="h-20 sm:h-20 md:h-24" %}
+            {% include "componetizacao/logo/logo-top-horizontal.html" %}
+        </div>
+
+        <h1 id="form-title-recesso" class="text-center text-xl font-medium mb-1 text-white">Cadastrar Recesso</h1>
+                
+        <!-- Mensagens -->
+            <div id='div-validation-message'
+                    class="bg-red-500/10 border border-red-500/30 mb-8 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide hidden ">
+                    <p id="validation-menssage"></p>
+        </div>
+
+        <!-- Formulário de Agenda -->
+        <form id="form-agenda-recesso" class="bg-[#2a2825] border border-[#38362f] rounded-[14px] p-4 mb-4" action="" method="post" novalidate>
+            
+            <!-- Campo Oculto para ID (Edição) -->
+            <input type="hidden" id="id_recesso" name="id_recesso" value="">
+            
+            <!-- Motivo do recesso -->
+           <div class="flex flex-col gap-1">
+               <label for="agenda-motivo" class="text-[12px] font-medium text-[#888780]">Informe o motivo do recesso*</label>
+               <input type="text" name="descricao_recesso" id="motivo_recesso" placeholder="Informe o motivo para o recesso: feriado, reforma..." style="color-scheme: dark;" class="w-full h-10 px-3 border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+           </div>
+           
+           <!-- Dia de Início -->
+           <div class="flex flex-col gap-1 mt-2">
+                <label for="agenda-data-inicio" class="text-[12px] font-medium text-[#888780]">Data do inicio do recesso*</label>
+                <input type="date" name="data_inicio_recesso" id="data_inicio_recesso" style="color-scheme: dark;" class="w-full h-10 px-3 border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+            </div>
+
+            <!-- Dia de FIM -->
+           <div class="flex flex-col gap-1  mt-2">
+                <label for="agenda-data-inicio" class="text-[12px] font-medium text-[#888780]">Data do fim do recesso*</label>
+                <input type="date" name="data_fim_recesso" id="data_fim_recesso" style="color-scheme: dark;" class="w-full h-10 px-3 border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+            </div>
+            
+            <!-- Botões de Ação -->
+            <div class="flex flex-col-reverse mt-6 sm:flex-row justify-between gap-3">
+                <button type="button" id="btn-cancelar-recesso" class="h-10 px-4 border-none bg-transparent text-[#888780] text-[14px] hover:text-[#f1efe8] transition-colors cursor-pointer">Cancelar</button>
+                <button type="submit" id="btn-cadastrar-recesso" class="h-10 px-5 bg-brand-gold hover:bg-brand-gold-hover text-[#161513] text-[14px] font-semibold hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer">Cadastrar Recesso</button>
+            </div>
+            
+
+        </form>
+
+    </div>
+</dialog>

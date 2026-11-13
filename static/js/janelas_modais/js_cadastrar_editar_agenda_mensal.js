@@ -44,8 +44,6 @@ btn_editar_agenda_mensal.forEach((editar)=>{
 });
 
 
-
-
 btn_fechar_modal.addEventListener("click", ()=>{
     dlg_modal_cadastrar_editar_agenda_mensal.close();
 });
@@ -57,8 +55,7 @@ dlg_form_agenda_mensal.addEventListener("submit", (event)=>{
     message.textContent = '';
    
     const erros = validacoes();
-    console.log("erros passou ");
-
+   
     if (erros.length > 0){
         event.preventDefault();
         erros.forEach(
@@ -90,8 +87,6 @@ function validacoes(){
     else if(ipt_data_inicio.value > ipt_data_fim.value){
         erros.push('ATENÇÃO, A data inicio da agenda não pode ser maior que a data fim.');
     }
-
-    
 
     return erros;
 }

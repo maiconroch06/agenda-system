@@ -2,7 +2,7 @@
 from sqlalchemy import text
 from database import db
 from models import Agendamento
-from datetime import date
+from datetime import date, datetime
 
 
 class AgendamentoDAO:
@@ -105,7 +105,7 @@ class AgendamentoDAO:
         return AgendamentoDAO._mapear_agendamento(resultado)
 
     @staticmethod
-    def listar_todos(status_agendamento):
+    def consultar_todos_os_agendamento_do_cliente(id_cliente):
         sql = text("""
             SELECT
                 id_agendamento,
@@ -118,13 +118,16 @@ class AgendamentoDAO:
                 fk_id_barbeiro,
                 fk_id_cliente
             FROM agendamento
-            WHERE status_agendamento = :status_agendamento
-            ORDER BY data_agendamento, hora_inicio
+            WHERE 
+             fk_id_cliente=:fk_id_cliente
+            ORDER BY data_agendamento, hora_inicio ASC
         """)
 
         resultados = db.session.execute(
                     sql,
-                    {"status_agendamento": status_agendamento}              
+                    {
+                     "fk_id_cliente": id_cliente
+                     }              
                     ).mappings().all()
 
         return [
@@ -250,8 +253,8 @@ class AgendamentoDAO:
         return Agendamento(
             id_agendamento=registro["id_agendamento"],
             data_agendamento=registro["data_agendamento"],
-            hora_inicio=registro["hora_inicio"],
-            hora_fim=registro["hora_fim"],
-            status_agendamento=bool(registro["status_agendamento"]),
+            hora_inicio=(datetime.min + registro["hora_inicio"]).time(),
+            hora_fim=(datetime.min +registro["hora_fim"]).time(),
+            status_agendamento=registro["status_agendamento"],
             data_atualizacao=registro["data_atualizacao"],
         )

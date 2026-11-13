@@ -74,8 +74,17 @@ class BarbeiroService(UsuarioService):
 
     def buscar_barbeiro_id(self, id_barbeiro):
         return self.__barbeiroRepositorio.buscar_por_id(id_barbeiro)
+    
+    def alterar_status_agendamento(self, id_agendamento:int, status_agendamento:int):
+        try:
+            return self.__barbeiroRepositorio.atualizar_status_agendamento(id_agendamento, status_agendamento)
+        except Exception as erros: 
+            print(f"\n ERRO NO SERVICE: {repr(erros)}\n\n") # <-- Vai mostrar o erro exato no terminal
+            flash(f"\n\n # ERRO AO #\n {erros}\n\n")
+            return 
+         
 
     # def validarDadosBarbeiro(self, barbeiro, fotoTemp):
     def definir_pasta_imagem_usuario(self):
         return EnumNomesPastaImagem.IMAGENS_BARBEIRO
-            
+    

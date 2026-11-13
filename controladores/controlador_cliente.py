@@ -28,10 +28,12 @@ class ControladorCliente():
     def cadastrarCliente(self, cliente:Cliente):      
         try:
             cliente.id  =  self.__clienteService.cadastrarUsuarioService(cliente, cliente.foto_nome_usuario)
-                     
-            if self.__clienteService.salvar_dados_especificos(cliente):                                      
-                return redirect(url_for('cliente.cadastroSucesso'))
-        
+               
+            if cliente.id:     
+                if self.__clienteService.salvar_dados_especificos(cliente):                                      
+                    return redirect(url_for('cliente.cadastroSucesso'))
+            else:
+                flash(f"Erro ao cadastrar o cliente", EnumStatusMensagens.ERRO.value)
         except Exception as erros:
             flash(f"{erros}", EnumStatusMensagens.ERRO.value)
             return redirect(url_for('cliente.clientRegisterPage'))
@@ -61,9 +63,9 @@ class ControladorCliente():
         except Exception as erros:
             flash(f"erros: {erros}")
 
-    def meusAgendamentos(self):
+    def meusAgendamentos(self, id_cliente):
         try:
-            return render_template('pages/cliente/cliente-meus-agendamentos.html', agendamentos=self.__agendamentoService.consultar_agendamento())
+            return render_template('pages/cliente/cliente-meus-agendamentos.html', agendamentos = self.__agendamentoService.consultar_agendamento_agendados(1))
             
         except Exception as erros:
                     flash(f"{erros}", EnumStatusMensagens.ERRO.value)

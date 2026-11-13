@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, session, request, redirect, url_fo
 from controladores import ControladorCliente
 from models import Cliente, Agendamento
 from datetime import datetime, timezone
-from enums import EnumStatusMensagens, EnumNomesPastaImagem
+from enums import EnumStatusMensagens, EnumStatusAgendamento
 
 cliente = Blueprint('cliente', __name__, template_folder='templates')
 
@@ -102,7 +102,8 @@ def clientAgendamentoServicosCadastro():
 @cliente.route('/agendamento/meus-agendamentos', methods=['GET'])
 def clientMeusAgendamentos():
     controladorCliente = ControladorCliente() 
-    return controladorCliente.meusAgendamentos()
+    dados_session = session.get('dados_cliente')
+    return controladorCliente.meusAgendamentos(dados_session.get("id_cliente"))
 
 @cliente.route('/agendamentos', methods=['GET','POST'])
 def clientAgendamento():
