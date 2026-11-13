@@ -9,6 +9,7 @@ class AgendamentoDAO:
 
     @staticmethod
     def salvar(agendamento: Agendamento):
+
         sql = text("""
             INSERT INTO agendamento (
                 data_agendamento,
@@ -31,7 +32,7 @@ class AgendamentoDAO:
             )
         """)
 
-        resultado = db.session.execute(sql, {
+        parametros = {
             "data_agendamento": agendamento.data_agendamento,
             "hora_inicio": agendamento.hora_inicio,
             "hora_fim": agendamento.hora_fim,
@@ -40,9 +41,10 @@ class AgendamentoDAO:
             "fk_id_servico": agendamento.servico.id_servico,
             "fk_id_barbeiro": agendamento.barbeiro.id_usuario,
             "fk_id_cliente": agendamento.cliente.id_usuario
-        })
+        }
 
-        print("passou aqui")
+
+        resultado = db.session.execute(sql, parametros)
 
         db.session.commit()
 

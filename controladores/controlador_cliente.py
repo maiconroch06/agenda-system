@@ -48,7 +48,7 @@ class ControladorCliente():
             return render_template('pages/cliente/cliente-agendamento-rp.html', servicos=servicos, barbeiros=barbeiros, agenda_mensal=agenda_mensal)
         except Exception as erros:
             flash(f"{erros}", EnumStatusMensagens.ERRO.value)
-            return  redirect(url_for('cliente.clientLoginPage'))
+            return redirect(url_for('cliente.clientLoginPage'))
 
     def cadastrarAgendamento(self, agendamento: Agendamento, id_servico, id_barbeiro):
         try:
@@ -56,10 +56,7 @@ class ControladorCliente():
             agendamento.barbeiro= self.__barbeiroService.buscar_barbeiro_id(id_barbeiro)
             self.__agendamentoService.cadastrar_agendamento(agendamento)
 
-            return jsonify({
-                "sucesso": True,
-                "mensagem": "Agendamento realizado com sucesso!"
-            }), 201
+            return redirect(url_for('cliente.clientMeusAgendamentos'))
 
         except Exception as erros:
             flash(f"erros: {erros}")

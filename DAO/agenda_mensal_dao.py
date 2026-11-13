@@ -261,7 +261,8 @@ class AgendaMensalDAO:
                 id_agenda_mensal,
                 data_inicial_mes,
                 data_final_mes,
-                titulo_agenda
+                titulo_agenda,
+                status_agenda_mensal
             FROM agenda_mensal
             WHERE fk_barbearia_cnpj = :cnpj_barbearia
             ORDER BY id_agenda_mensal ASC

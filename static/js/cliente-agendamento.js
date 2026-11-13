@@ -1006,45 +1006,16 @@ async function confirmarAgendamento() {
             })
         });
 
-        console.log("Status HTTP:", resposta.status);
-
-        const resultado = await resposta.json();
-
-        console.log("Resposta do Flask:", resultado);
-
-        if (!resposta.ok || !resultado.sucesso) {
-            throw new Error(
-                resultado.mensagem || "Erro ao realizar agendamento."
-            );
+        if (!resposta.ok) {
+            throw new Error("Não foi possível realizar o agendamento.");
         }
 
-        estado.agendamentoConcluido = true;
-
-        els.sucessoTexto.textContent =
-            `Seu agendamento foi confirmado para ${formatarData()} às ${estado.horarioSelecionado}.`;
-
-        for (let i = 1; i <= 4; i++) {
-            const painel = document.getElementById(`painel-${i}`);
-
-            if (painel) {
-                painel.hidden = true;
-            }
-        }
-
-        els.navEtapa.hidden = true;
-        els.etapa.hidden = true;
-        els.sucesso.hidden = false;
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
+        // Navega para a página para a qual o Flask redirecionou.
+        window.location.href = resposta.url;
 
     } catch (erro) {
 
         mostrarAviso(erro.message);
-
-    } finally {
 
         els.btnContinuar.disabled = false;
         els.btnContinuar.textContent = "Finalizar";

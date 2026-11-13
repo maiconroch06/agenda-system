@@ -129,7 +129,10 @@ class ServicoDAO:
             {"status": status_servicos}
         ).mappings().all()
 
-        return [dict(registro) for registro in registros]
+        return [
+            self._mapear_servico(registro) 
+            for registro in registros
+        ]
 
     def atualizar(self, servico: Servico):
         sql = text("""
@@ -210,3 +213,16 @@ class ServicoDAO:
         db.session.commit()
 
         return resultado.rowcount > 0
+
+    @staticmethod
+    def _mapear_servico(registro):
+        return Servico(
+            id_servico=registro['id_servico'],
+            descricao_servico=registro['descricao_servico'],
+            valor=registro['valor'],
+            duracao=registro['duracao'],
+            foto_nome_servico=registro['foto_nome_servico'],
+            status_servico=registro['status_servico'],
+            data_cadastro=registro['data_cadastro'],
+            data_atualizacao=registro['data_atualizacao']
+        )
