@@ -26,7 +26,7 @@
         </div>
 
         {% if a.barbeiro %}
-        <div class="flex items-center gap-3 py-2 border-b border-[#38362f]">
+        <div class="flex items-center gap-3 py-2 border-b border-[#38362f]" id="container-detalhe-barbeiro">
             <span class="text-sm w-5">{% include "componetizacao/icones/icone-barbeiro.html" %}</span>
             <div>
                 <div class="text-[11px] text-[#888780]">Barbeiro</div>
@@ -86,18 +86,15 @@
         <div class="flex flex-col gap-2 mt-4">
             <form method="POST" action="{{ url_for('barbeiro.atualizar_status', id_agendamento=a.id) }}" class="flex flex-col gap-2 w-full">
                 {% if a.status == 1 %}
-                    <button type="submit" name="status" value=2 class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity">Concluir agendamento</button>
-                    <button type="submit" name="status" value=0 class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors" onclick="return confirm('Deseja realmente cancelar este agendamento?');">Cancelar</button>
+                    <button type="submit" name="status" value=3 class="w-full h-10 px-4 rounded-lg border border-[#1d5b8c] bg-transparent text-[#7cc4fa] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity">Iniciar serviço</button>
+                    <button type="submit" name="status" value=0 class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors">Cancelar</button>
                 {% elif a.status == 2 %}
-                    <p class="text-center text-[#888780] text-xs">Agendamento já concluído</p>
-                    <button type="submit" name="status" value=1 class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all">Voltar status</button>
+                    <button type="submit" name="status" value=3 class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all">Voltar status</button>
                 {% elif a.status == 3 %}
-                    <p class="text-center text-[#7cc4fa] text-xs mb-1">Atendimento em andamento</p>
                     <button type="submit" name="status" value=2 class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity">Concluir agendamento</button>
+                    <button type="submit" name="status" value=0 class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors">Cancelar</button>
                     <button type="submit" name="status" value=1 class="w-full h-10 px-4 rounded-lg border border-[#4a473f] bg-[#2a2825] text-[#f1efe8] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#38362f] transition-colors">Voltar para agendado</button>
-                    <button type="submit" name="status" value=0 class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors" onclick="return confirm('Deseja realmente cancelar este agendamento?');">Cancelar</button>
                 {% else %}
-                    <p class="text-center text-[#888780] text-xs">Este agendamento foi cancelado</p>
                     <button type="submit" name="status" value=1 class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all">Voltar status</button>
                 {% endif %}
             </form>
@@ -108,6 +105,27 @@
 
 <script>
     function abrirModalDetalhe(id) {
+        
+        // Captura a URL completa em minúsculas para evitar falha com maiúsculas
+        const urlAtual = window.location.pathname.toLowerCase();
+        
+        // Identifica se está no painel do barbeiro (via URL ou pelo objeto global funcionario)
+        const ehRotaBarbeiro = urlAtual.includes("barbeiro") || urlAtual.includes("atualizar_status") || (typeof funcionario !== "undefined" && !urlAtual.includes("gestor"));
+
+        // Oculta se estiver no painel do barbeiro OU se o nome do barbeiro não existir
+        const deveOcultar = ehRotaBarbeiro || !a.barbeiro || String(a.barbeiro).trim() === "";
+
+        const elContainer = document.getElementById("container-detalhe-barbeiro");
+        
+        if (elContainer) {
+            if (deveOcultar) {
+                elContainer.style.display = "none";
+            } else {
+                elContainer.style.display = "flex";
+                if (elsModal.detalheBarbeiro) elsModal.detalheBarbeiro.textContent = a.barbeiro;
+            }
+        }
+
         document.getElementById('overlay-detalhe-' + id).classList.remove('hidden');
         document.getElementById('modal-detalhe-' + id).classList.remove('hidden');
     }
