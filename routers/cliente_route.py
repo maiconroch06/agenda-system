@@ -112,7 +112,7 @@ def clientAgendamento():
 
 @cliente.route('/cadastro/sucesso', methods=['GET','POST'])
 def cadastroSucesso():
-   return render_template('pages/cliente/cadastro-realizado-rp.html')
+   return redirect(url_for("cliente.clientAgendamentoServicos"))
 
 @cliente.before_request
 def authentication():

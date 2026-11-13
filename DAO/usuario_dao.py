@@ -230,8 +230,7 @@ class UsuarioDAO:
                 senha = :senha,
                 foto_nome_usuario = :foto_nome_usuario,
                 status_usuario = :status_usuario,
-                data_atualizacao = :data_atualizacao,
-                fk_id_endereco = :fk_id_endereco
+                data_atualizacao = :data_atualizacao
             WHERE id_usuario = :id_usuario
         """)
 
@@ -245,7 +244,6 @@ class UsuarioDAO:
             "foto_nome_usuario": usuario.foto_nome_usuario,
             "status_usuario": usuario.status_usuario,
             "data_atualizacao": usuario.data_atualizacao,
-            "fk_id_endereco": usuario.fk_id_endereco
         })
 
         db.session.flush()

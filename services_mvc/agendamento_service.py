@@ -13,4 +13,5 @@ class AgendamentoService:
     def cadastrar_agendamento(self, agendamento):
         return self.__agendamento_repositorio.salvar(agendamento)
         
-    
+    def atualizar_status_e_motivo_do_cancelamento_service(self, motivo_cancelamento, status_agendamento,agenda_mensal):
+        return self.__agendamento_repositorio.atualizar_status_e_motivo_do_cancelamento(motivo_cancelamento, status_agendamento,agenda_mensal)

@@ -2,8 +2,8 @@
 from sqlalchemy import text
 from database import db
 from models import Agendamento, Barbeiro, Servico
-from datetime import date, datetime
-
+from datetime import date, datetime, timezone
+from enums import EnumStatusAgendamento
 
 class AgendamentoDAO:
 
@@ -227,6 +227,33 @@ class AgendamentoDAO:
             AgendamentoDAO._mapear_agendamento(registro)
             for registro in resultados
         ]
+
+    @staticmethod
+    def atualizar_status_e_motivo_do_cancelamento(motivo_cancelamento, status_agendamento, agenda_mensal):
+        sql = text("""
+            UPDATE agendamento
+            SET
+                motivo_cancelamento = :motivo_cancelamento,
+                status_agendamento = :status_agendamento,
+                data_atualizacao = :data_atualizacao
+            WHERE data_agendamento between :data_inicial_agenda and :data_final_agenda
+            and status_agendamento!=:status_agendamento_concluido
+        """)
+
+        resultado = db.session.execute(sql, {
+            "motivo_cancelamento": motivo_cancelamento,
+            "status_agendamento": status_agendamento,
+            "data_atualizacao": datetime.now(timezone.utc),
+            "data_inicial_agenda": agenda_mensal.data_inicial_mes,
+            "data_final_agenda": agenda_mensal.data_final_mes,       
+            "status_agendamento_concluido": EnumStatusAgendamento.CONCLUIDO.value       
+        })
+
+        db.session.commit()
+
+        return resultado.rowcount > 0
+    
+
 
     @staticmethod
     def atualizar(agendamento: Agendamento):

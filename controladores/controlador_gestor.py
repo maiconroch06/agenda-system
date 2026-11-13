@@ -61,10 +61,9 @@ class ControladorGestor():
     @classmethod
     def atualizar_barbeiro(cls, imagem_form, img_padrao, imagem_anterior, barbeiro):
             try:
-                if cls.__controlador_barbeiro.atualizar_informacoes_barbeiro(imagem_form, img_padrao, imagem_anterior, barbeiro):   
-                    flash(f"As infomações do barbeiro {barbeiro.nome_completo} foi alterada com sucesso!",EnumStatusMensagens.SUCESSO.value)
+                cls.__controlador_barbeiro.atualizar_informacoes_barbeiro(imagem_form, img_padrao, imagem_anterior, barbeiro)         
             except Exception:
-                flash(f"Nenhuma informação do babeiro foi feita!", EnumStatusMensagens.ERRO.value)
+                flash(f"Nenhuma informação do babeiro foi atualizada.", EnumStatusMensagens.ERRO.value)
                 
             return redirect(url_for('gestor.gestorAbaBarbeiros'))  
 

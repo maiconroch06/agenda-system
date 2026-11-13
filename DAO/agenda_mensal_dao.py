@@ -97,7 +97,7 @@ class AgendaMensalDAO:
                 titulo_agenda,
                 status_agenda_mensal
             FROM agenda_mensal
-            ORDER BY data_inicial_mes
+            ORDER BY data_inicial_mes DESC
         """)
 
         resultados = db.session.execute(sql).mappings().all()
@@ -140,21 +140,6 @@ class AgendaMensalDAO:
             "data_final_mes": agenda_mensal.data_final_mes,
             "titulo_agenda": agenda_mensal.titulo_agenda,
         })
-
-        db.session.commit()
-
-        return resultado.rowcount > 0
-
-    def excluir(self, id_agenda_mensal: int):
-        sql = text("""
-            DELETE FROM agenda_mensal
-            WHERE id_agenda_mensal = :id_agenda_mensal
-        """)
-
-        resultado = db.session.execute(
-            sql,
-            {"id_agenda_mensal": id_agenda_mensal}
-        )
 
         db.session.commit()
 

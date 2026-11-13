@@ -27,6 +27,9 @@ class UsuarioRepositorio:
     
     def atualizar_usuario_sem_senha(self,usuario):
         return self.__usuarioDao.atualizar_usuario_sem_senha(usuario)
+    
+    def atualizar_usuario_com_senha(self,usuario):
+        return self.__usuarioDao.atualizar_usuario_com_senha(usuario)
 
     def alterar_status(self,id_usuario, status):
         return self.__usuarioDao.alterar_status(id_usuario, status)

@@ -2,10 +2,10 @@ from flask import flash
 from repositorio import UsuarioRepositorio
 from .endereco_service import EnderecoService
 from utilitarios import ValidadorDeImagens
-from enums import EnumNomesPastaImagem
+from enums import EnumStatusMensagens
 from models import Usuario
 from sqlalchemy.exc import IntegrityError
-from werkzeug.security import generate_password_hash
+from utilitarios import Senha
 
 class UsuarioService:
 
@@ -16,7 +16,7 @@ class UsuarioService:
         try:
             
             usuario.nomeVazioUsuario()
-            usuario.senha = generate_password_hash(usuario.senha)
+            usuario.senha = Senha.gerar_senha(usuario.senha)
             usuario.endereco = EnderecoService.cadastrar_endereco(usuario.endereco)
            
             usuario.foto_nome_usuario = ValidadorDeImagens.nomeImagem(fotoTemp, usuario.getTipo())   
@@ -41,8 +41,18 @@ class UsuarioService:
                                                      
         usuario.foto_nome_usuario = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,self.definir_pasta_imagem_usuario(), img_padrao, usuario.getTipo())
         
-        if not self.__usuarioRepositorio.atualizar_usuario_sem_senha(usuario):
-            raise Exception("Error ao tentar atualizar o usuario, tente novamente!")
+        if not usuario.senha.strip():
+            if self.__usuarioRepositorio.atualizar_usuario_sem_senha(usuario):
+                flash(f"As infomações do barbeiro {usuario.nome_completo} foi alterada com sucesso!",EnumStatusMensagens.SUCESSO.value)
+            else:
+                raise Exception()   
+        else:
+            usuario.senha = Senha.gerar_senha(usuario.senha.strip()) 
+            if self.__usuarioRepositorio.atualizar_usuario_com_senha(usuario):
+               flash(f"A senha e as infomaações do barbeiro {usuario.nome_completo} foi atualizada com sucesso!", EnumStatusMensagens.SUCESSO.value)
+            else:
+                raise Exception()
+           
            
         
    

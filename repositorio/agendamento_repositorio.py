@@ -31,5 +31,9 @@ class AgendamentoRepositorio:
         return AgendamentoDAO.atualizar(agendamento)
 
     @staticmethod
+    def atualizar_status_e_motivo_do_cancelamento(motivo_cancelamento, status_agendamento,agenda_mensal):
+        return AgendamentoDAO.atualizar_status_e_motivo_do_cancelamento(motivo_cancelamento, status_agendamento,agenda_mensal)
+
+    @staticmethod
     def excluir(id_agendamento):
         return AgendamentoDAO.excluir(id_agendamento)

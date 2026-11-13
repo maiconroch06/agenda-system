@@ -36,7 +36,7 @@ def gestorLogin():
 @gestor.route('/logout', methods=['POST','GET'])
 def gestorLogout():
     session.clear()
-    return redirect('/')
+    return redirect(url_for('gestor.gestorLogin'))
 
 
 # Painel Gestor - Aba inicial
@@ -54,7 +54,8 @@ def gestorAbaAgendamento():
 
 @gestor.route('/painel/horario_funcionamento')
 def gestor_horario_funcionamento_barbearia():
-    return render_template('pages/gestor/gestor-painel-agenda-rp.html', horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_mensal_barbearia() ,mensagens_status=EnumStatusMensagens)
+    data_atual = datetime.now(timezone.utc).date()
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual, horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_mensal_barbearia() ,mensagens_status=EnumStatusMensagens)
 
 
 @gestor.route('/painel/horario_funcionamento/atualizar', methods=['POST'])
@@ -223,7 +224,7 @@ def gestorBarbeiroPage():
 
 # Gerenciar Barbeiro (Cadastro->Validação) - Validando dados informados no cadastro do Barbeiro
 @gestor.route('painel/barbeiro/cadastrar', methods=['POST'])
-def gestorBarbeiroValidar():
+def gestor_barbeiro_cadastrar():
 
     #remove a pontuação do telefone    
   
