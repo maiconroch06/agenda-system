@@ -7,8 +7,8 @@ class AgendamentoService:
         self.__agendamento_repositorio = AgendamentoRepositorio()
         
         
-    def consultar_agendamento(self): 
-        return self.__agendamento_repositorio.listar_todos()
+    def consultar_agendamento(self, status_agendamento): 
+        return self.__agendamento_repositorio.listar_todos(status_agendamento)
 
     def cadastrar_agendamento(self, agendamento):
         return self.__agendamento_repositorio.salvar(agendamento)

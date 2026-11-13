@@ -103,7 +103,7 @@ class AgendamentoDAO:
         return AgendamentoDAO._mapear_agendamento(resultado)
 
     @staticmethod
-    def listar_todos():
+    def listar_todos(status_agendamento):
         sql = text("""
             SELECT
                 id_agendamento,
@@ -116,10 +116,14 @@ class AgendamentoDAO:
                 fk_id_barbeiro,
                 fk_id_cliente
             FROM agendamento
+            WHERE status_agendamento = :status_agendamento
             ORDER BY data_agendamento, hora_inicio
         """)
 
-        resultados = db.session.execute(sql).mappings().all()
+        resultados = db.session.execute(
+                    sql,
+                    {"status_agendamento": status_agendamento}              
+                    ).mappings().all()
 
         return [
             AgendamentoDAO._mapear_agendamento(registro)
