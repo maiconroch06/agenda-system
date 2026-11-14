@@ -69,7 +69,9 @@ class BarbeiroService(UsuarioService):
             raise Exception ("Não foi possivel cadastrar o Barbeiro")
         
     def alterar_barbeiro_barbearia(self, usuario):
-        return self.__barbeiroRepositorio.atualizar(usuario)            
+        status = self.__barbeiroRepositorio.atualizar(usuario)
+        print(f"=========STATUS=======", status)
+        return status            
                 
 
     def buscar_barbeiro_id(self, id_barbeiro):

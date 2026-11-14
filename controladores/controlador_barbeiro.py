@@ -59,9 +59,10 @@ class ControladorBarbeiro:
     @classmethod
     def atualizar_informacoes_barbeiro(cls, imagem_form, img_padrao, imagem_anterior, usuario):
         try:
+           
             if cls.__barbeiroService.alterar_usuario_barbearia(imagem_form, img_padrao, imagem_anterior, usuario):
+                
                 return cls.__barbeiroService.alterar_barbeiro_barbearia(usuario)
-            
             return None   
         except Exception as erros:
             flash(f"{erros}")

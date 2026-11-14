@@ -100,10 +100,7 @@ def gestor_recesso_excluir():
 
 @gestor.route('/painel/recessos/atualizar', methods=['POST'])
 def gestor_recesso_atualizar():  
-    
-    print("DADOS VINDOS DO MODAL: ", request.form.get("id_recesso", type=int))
-    
-    
+       
     recesso = Recesso(
         id_recesso=request.form.get("id_recesso", type=int),
         data_inicio_recesso= datetime.strptime(request.form.get("data_inicio_recesso"),  "%Y-%m-%d").date(),
@@ -188,8 +185,9 @@ def gestorServicoCadastrar():
 def gestor_excluir_servico(): 
     id_servico = request.form.get('srv-id-deletar')
     foto_nome = request.form.get('srv-foto_nome') 
+    nome_servico = request.form.get('srv-nome') 
         
-    return ControladorGestor.excluir_servico(id_servico, foto_nome)
+    return ControladorGestor.excluir_servico(id_servico, foto_nome,nome_servico)
   
 
 # SERVIÇOS - Salvar edição do serviço no banco de dados

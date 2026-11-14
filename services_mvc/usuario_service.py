@@ -44,12 +44,14 @@ class UsuarioService:
         if not usuario.senha.strip():
             if self.__usuarioRepositorio.atualizar_usuario_sem_senha(usuario):
                 flash(f"As infomações do barbeiro {usuario.nome_completo} foi alterada com sucesso!",EnumStatusMensagens.SUCESSO.value)
+                return True
             else:
                 raise Exception()   
         else:
             usuario.senha = Senha.gerar_senha(usuario.senha.strip()) 
             if self.__usuarioRepositorio.atualizar_usuario_com_senha(usuario):
-               flash(f"A senha e as infomaações do barbeiro {usuario.nome_completo} foi atualizada com sucesso!", EnumStatusMensagens.SUCESSO.value)
+                flash(f"A senha e as infomaações do barbeiro {usuario.nome_completo} foi atualizada com sucesso!", EnumStatusMensagens.SUCESSO.value)
+                return True
             else:
                 raise Exception()
            

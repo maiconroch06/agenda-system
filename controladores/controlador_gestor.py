@@ -60,8 +60,10 @@ class ControladorGestor():
     
     @classmethod
     def atualizar_barbeiro(cls, imagem_form, img_padrao, imagem_anterior, barbeiro):
-            try:
-                cls.__controlador_barbeiro.atualizar_informacoes_barbeiro(imagem_form, img_padrao, imagem_anterior, barbeiro)         
+            try:              
+                                
+                if not cls.__controlador_barbeiro.atualizar_informacoes_barbeiro(imagem_form, img_padrao, imagem_anterior, barbeiro):
+                       flash(f"Erro ao atualizar o barbeiro", EnumStatusMensagens.ERRO.value)      
             except Exception:
                 flash(f"Nenhuma informação do babeiro foi atualizada.", EnumStatusMensagens.ERRO.value)
                 
@@ -83,12 +85,15 @@ class ControladorGestor():
             return redirect(url_for('gestor.gestorAbaServicos'))
              
     @classmethod
-    def excluir_servico(cls, id_servico, foto_nome):
+    def excluir_servico(cls, id_servico, foto_nome,nome_servico):
         try:
             cls.__servicos_barbearia_service_mvc.excluir_servico_barbearia(id_servico,foto_nome ) 
-            flash(f"O servico foi excluido com sucesso!", EnumStatusMensagens.SUCESSO.value)  
-        except Exception as error:
-            flash(f"{error}", EnumStatusMensagens.ERRO.value)
+            flash(f"O servico foi excluido com sucesso!", EnumStatusMensagens.SUCESSO.value)
+                              
+        except IntegrityError :
+            flash(f"O serviço [ {nome_servico}] não pode ser excluido, pois ele pertence a um agendamento.", EnumStatusMensagens.ERRO.value)
+        except Exception :
+            flash(f"Erro o excluir o serviço [ {nome_servico}], contate o suporte", EnumStatusMensagens.ERRO.value)
             
         return redirect(url_for('gestor.gestorAbaServicos'))  
            

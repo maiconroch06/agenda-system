@@ -70,6 +70,7 @@
                                     <form action="/gestor/painel/servicos/excluir" id="form-confirmar-exclusao" method="POST" class="py-1.5 bg-red-800 rounded-lg border border-[#38362f]  text-white hover:bg-red-700  text-xs font-medium transition-colors cursor-pointer text-center">
                                         <input class="hidden" type="number" name="srv-id-deletar" value="{{servico.id_servico}}">
                                         <input class="hidden" type="text" name="srv-foto_nome" value="{{servico.foto_nome_servico}}">
+                                        <input class="hidden" type="text" name="srv-nome" value="{{servico.descricao_servico}}">
                                         <button  type="submit"> Excluir </button> 
                                     </form>
                                 
