@@ -213,7 +213,7 @@ class AgendamentoDAO:
         ]
 
     @staticmethod
-    def atualizar_status_e_motivo_do_cancelamento(motivo_cancelamento, status_agendamento, agenda_mensal):
+    def atualizar_status_e_motivo_do_cancelamento_agenda_mensal(motivo_cancelamento, status_agendamento, agenda_mensal):
         sql = text("""
             UPDATE agendamento
             SET
@@ -237,7 +237,36 @@ class AgendamentoDAO:
 
         return resultado.rowcount > 0
     
+    @staticmethod
+    def atualizar_status_e_motivo_do_cancelamento_faltas_justificadas_dao(motivo_cancelamento, status_agendamento, falta_justifica, id_barbeiro):
+        sql = text("""
+            UPDATE agendamento
+            SET
+                motivo_cancelamento = :motivo_cancelamento,
+                status_agendamento = :status_agendamento,
+                data_atualizacao = :data_atualizacao
+            WHERE 
+            data_agendamento = :data_falta
+            and fk_id_barbeiro = :id_barbeiro
+            and hora_inicio >= :horario_inicio_falta
+            and hora_fim <= :horario_final_falta
+            and status_agendamento!=:status_agendamento_concluido
+        """)
 
+        resultado = db.session.execute(sql, {
+            "motivo_cancelamento": motivo_cancelamento,
+            "status_agendamento": status_agendamento,
+            "data_atualizacao": datetime.now(timezone.utc),
+            "data_falta": falta_justifica.data_falta,
+            "id_barbeiro": id_barbeiro,       
+            "horario_inicio_falta": falta_justifica.horario_inicio_falta,       
+            "horario_final_falta": falta_justifica.horario_final_falta,       
+            "status_agendamento_concluido": EnumStatusAgendamento.CONCLUIDO.value       
+        })
+
+        db.session.commit()
+
+        return resultado.rowcount > 0
 
     @staticmethod
     def atualizar(agendamento: Agendamento):

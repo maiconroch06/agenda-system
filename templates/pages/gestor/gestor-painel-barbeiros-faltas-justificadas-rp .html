@@ -54,7 +54,7 @@
 
                         {% if barbeiros_faltas_justificadas %}
                             {% for barbeiro in barbeiros_faltas_justificadas %}
-                                <div id="card_servicos" class="flex flex-row items-center justify-between gap-4 w-full min-w-0 bg-[#232220] rounded-2xl border border-zinc-700/60 transition-all">
+                                <div id="card_servicos" class="flex flex-row items-center justify-stretch gap-4 w-full min-w-0 bg-[#232220] rounded-2xl border border-zinc-700/60 transition-all">
 
                                     <div class="flex flex-row gap-4 my-0.5 items-center">
 
@@ -105,11 +105,12 @@
                                                                 </button>
                                                                 <form action="/gestor/painel/barbeiros/faltas-justificadas/excluir" id="form-confirmar-exclusao" method="POST" class="ml-10 flex-1 min-w-0">
                                                                     
-                                                                    <input type="hidden" name="falta-id" value="{{ falta.id_falta_justificada }}">
-                                                                    <input type="hidden" name="falta-data" value="{{ falta.data_falta.strftime('%d/%m/%Y') }}">
-                                                                    <input type="hidden" name="falta-motivo" value="{{ falta.motivo_falta }}">
-                                            
-                                                                    
+                                                                    <input type="hidden" name="falta-id-excluir" value="{{ falta.id_falta_justificada }}">
+                                                                    <input type="hidden" name="falta-data-excluir" value="{{ falta.data_falta}}">
+                                                                    <input type="hidden" name="falta-hora-inicial-excluir" value="{{ falta.horario_inicio_falta }}">
+                                                                    <input type="hidden" name="falta-hora-final-excluir" value="{{ falta.horario_final_falta}}">
+                                                                    <input type="hidden" name="falta-id-barbeiro-excluir" value="{{ barbeiro.id_usuario}}">
+                        
                                                                     <button type="submit" class="w-full h-full py-2 px-2 rounded-lg bg-red-600 border border-[#38362f] text-white hover:bg-red-800 text-xs font-bold transition-colors">
                                                                         Excluir
                                                                     </button>

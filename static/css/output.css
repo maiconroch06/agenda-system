@@ -535,6 +535,9 @@
   .ml-3 {
     margin-left: calc(var(--spacing) * 3);
   }
+  .ml-4 {
+    margin-left: calc(var(--spacing) * 4);
+  }
   .ml-10 {
     margin-left: calc(var(--spacing) * 10);
   }
@@ -1008,6 +1011,9 @@
   }
   .justify-start {
     justify-content: flex-start;
+  }
+  .justify-stretch {
+    justify-content: stretch;
   }
   .gap-0 {
     gap: 0px;

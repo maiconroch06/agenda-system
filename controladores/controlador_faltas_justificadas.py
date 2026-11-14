@@ -9,8 +9,8 @@ class FaltasJustificadaBarbeiro:
             return cls.__faltas_justificadas.cadastrar_falta_justificada(id_barbeiro, falta_justificada)   
     
     @classmethod
-    def excluir_falta_justificada_do_barbeiro(cls, id_falta_justificada):
-            return cls.__faltas_justificadas.excluir(id_falta_justificada)   
+    def excluir_falta_justificada_do_barbeiro(cls,id_barbeiro, id_falta_justificada):
+            return cls.__faltas_justificadas.excluir(id_barbeiro, id_falta_justificada)   
     
     @classmethod
     def atualizar_falta_justificada_do_barbeiro(cls, id_barbeiro,falta_justificada):

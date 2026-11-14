@@ -92,10 +92,10 @@ class ControladorBarbeiro:
             return redirect(url_for('gestor.gestor_fatas_justificadas_barbeiro'))
             
     @classmethod
-    def excluir_faltas_do_barbeiro_ativos(cls, falta_justificada):
+    def excluir_faltas_do_barbeiro_ativos(cls, id_barbeiro, falta_justificada):
             try: 
                
-                if FaltasJustificadaBarbeiro.excluir_falta_justificada_do_barbeiro( falta_justificada.id_falta_justificada):
+                if FaltasJustificadaBarbeiro.excluir_falta_justificada_do_barbeiro( id_barbeiro, falta_justificada):
                     flash(f"Falta justificada da data: [ {falta_justificada.data_falta} | motivo: {falta_justificada.motivo_falta} ] excluida com sucesso", EnumStatusMensagens.SUCESSO.value)
             except Exception:
             

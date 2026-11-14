@@ -233,15 +233,17 @@ def gestor_cadastrar_faltas_justificadas_barbeiro():
 
 @gestor.route('/painel/barbeiros/faltas-justificadas/excluir', methods=['POST'])
 def gestor_excluir_faltas_justificadas_barbeiro():
+    id_barbeiro = request.form.get("falta-id-barbeiro-excluir")
       
     falta_justificada = FaltaJustificadaBarbeiro(
-        data_falta=request.form.get("falta-data"),
-        motivo_falta=request.form.get("falta-motivo"),
-        id_falta_justificada=request.form.get("falta-id", type=int)
-    )
+        id_falta_justificada=request.form.get("falta-id-excluir", type=int),
+        data_falta=datetime.strptime(request.form.get("falta-data-excluir"),  "%Y-%m-%d").date(),
+        horario_inicio_falta=request.form.get("falta-hora-inicial-excluir"),
+        horario_final_falta=request.form.get("falta-hora-final-excluir")
+        )
     
    
-    return ControladorBarbeiro.excluir_faltas_do_barbeiro_ativos(falta_justificada)
+    return ControladorBarbeiro.excluir_faltas_do_barbeiro_ativos(id_barbeiro, falta_justificada)
 
 @gestor.route('/painel/barbeiros/faltas-justificadas/atualizar', methods=['POST'])
 def gestor_atualizar_faltas_justificadas_barbeiro():
