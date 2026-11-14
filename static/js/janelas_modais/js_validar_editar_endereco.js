@@ -37,10 +37,10 @@ botao_editar_barbeiro_endereco.forEach(
           
             cep_end.value = detalhes_endereco_barbeiro[1].slice(0,5)+"-"+detalhes_endereco_barbeiro[1].slice(5,8) ?? "";
             id_end.value = detalhes_endereco_barbeiro[0] ?? "";
-            uf_end.value = detalhes_endereco_barbeiro[3] ?? "";
-            cidade.value = detalhes_endereco_barbeiro[2] ?? "";
-            bairro_end.value = detalhes_endereco_barbeiro[6] ?? "";
-            logradouro_end.value = detalhes_endereco_barbeiro[4] ?? "";
+            uf_end.value = detalhes_endereco_barbeiro[3].trim() ?? "";
+            cidade.value = detalhes_endereco_barbeiro[2].trim() ?? "";
+            bairro_end.value = detalhes_endereco_barbeiro[6].trim() ?? "";
+            logradouro_end.value = detalhes_endereco_barbeiro[4].trim() ?? "";
             numero_end.value = detalhes_endereco_barbeiro[5] ?? "";
             sequencia.value = detalhes_endereco_barbeiro[7] ?? "";
             complemento.value = detalhes_endereco_barbeiro[8] ?? "";
@@ -105,12 +105,6 @@ function validarValores(){
         errors.push("campo logradouro vazio ou nulo, por favor preencha!");
     }
      
-    if (isNaN(numero_end.value)) {
-       errors.push("O campo número aceita apenas valores numéricos!"); 
-    }else if (Number(numero_end.value)<=0){
-         errors.push("O campo número aceita apenas valores maior que zero!"); 
-    }
-
     return errors;             
 }
 

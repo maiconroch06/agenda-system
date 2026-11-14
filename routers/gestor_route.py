@@ -311,6 +311,7 @@ def gestor_barbeiro_editar_endereco():
         complemento=request.form.get('complemento')
     )
    
+    
     return ControladorBarbeiro.atualizar_endereco_barbeiro(endereco)
 
 

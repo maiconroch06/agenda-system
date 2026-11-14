@@ -6,8 +6,8 @@ class Endereco:
         cidade: str,
         uf: str,
         logradouro: str,
-        numero: int,
         bairro: str,
+        numero = None,
         id_endereco = None,
         sequencia = None,
         complemento = None

@@ -77,7 +77,7 @@
                                 <p class="break-all"><strong>E-mail:</strong> {{ barbeiro.email }}</p>
                                 <p class="flex items-center gap-2 text-gray-300 mt-2 pt-2 border-t border-zinc-700 break-words">
                                     <i data-lucide="map-pin" class="w-8 h-8 "></i>
-                                    {{ barbeiro.endereco.logradouro}}, nº {{ barbeiro.endereco.numero}} - {{barbeiro.endereco.bairro}} {{ ', ' ~ barbeiro.endereco.sequencia if barbeiro.endereco.sequencia else ""}}{{', ' ~ barbeiro.endereco.complemento if barbeiro.endereco.complemento else ""}} | {{barbeiro.endereco.cidade}}({{barbeiro.endereco.uf}}) | CEP: {{ barbeiro.endereco.cep[:5] }}-{{barbeiro.endereco.cep[5:8]}} </p>
+                                    {{ barbeiro.endereco.logradouro}},  {{'nº' ~ barbeiro.endereco.numero if  barbeiro.endereco.numero else 'sn'}} - {{barbeiro.endereco.bairro}} {{ ', ' ~ barbeiro.endereco.sequencia if barbeiro.endereco.sequencia else ""}}{{', ' ~ barbeiro.endereco.complemento if barbeiro.endereco.complemento else ""}} | {{barbeiro.endereco.cidade}}({{barbeiro.endereco.uf}}) | CEP: {{ barbeiro.endereco.cep[:5] }}-{{barbeiro.endereco.cep[5:8]}} </p>
                             </div>
 
                             <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
@@ -88,7 +88,7 @@
                                 </button>
                 
                                 <button type="button" id="editar-endereco" 
-                                value="{{ barbeiro.endereco.id_endereco}}#{{barbeiro.endereco.cep}}#{{barbeiro.endereco.cidade}}#{{barbeiro.endereco.uf}}#{{barbeiro.endereco.logradouro}}#{{barbeiro.endereco.numero}}#
+                                value="{{ barbeiro.endereco.id_endereco}}#{{barbeiro.endereco.cep}}#{{barbeiro.endereco.cidade}}#{{barbeiro.endereco.uf}}#{{barbeiro.endereco.logradouro}}#{{barbeiro.endereco.numero if barbeiro.endereco.numero else 'sn'}}#
                                 {{barbeiro.endereco.bairro}}#{{barbeiro.endereco.sequencia if barbeiro.endereco.sequencia else '' }}#{{barbeiro.endereco.complemento if barbeiro.endereco.complemento else ''}}"
                                         class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
                                     Editar endereço

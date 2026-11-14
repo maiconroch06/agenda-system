@@ -35,10 +35,10 @@ class EnderecoDAO:
             "cidade": endereco.cidade,
             "uf": endereco.uf,
             "logradouro": endereco.logradouro,
-            "numero": endereco.numero,
+           "numero":endereco.numero if endereco.numero else None,
             "bairro": endereco.bairro,
-            "sequencia": endereco.sequencia,
-            "complemento": endereco.complemento
+            "sequencia": endereco.sequencia if endereco.sequencia else None,
+            "complemento": endereco.complemento if endereco.complemento else None
         })
 
         db.session.flush()
@@ -146,11 +146,13 @@ class EnderecoDAO:
             "cidade": endereco.cidade,
             "uf": endereco.uf,
             "logradouro": endereco.logradouro,
-            "numero": endereco.numero,
+            "numero":endereco.numero if endereco.numero else None,
             "bairro": endereco.bairro,
-            "sequencia": endereco.sequencia,
-            "complemento": endereco.complemento
+            "sequencia": endereco.sequencia if endereco.sequencia else None,
+            "complemento": endereco.complemento if endereco.complemento else None
         })
+        
+        
 
         db.session.commit()
 
