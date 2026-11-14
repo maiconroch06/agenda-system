@@ -17,7 +17,6 @@ class AgendamentoDAO:
                 hora_fim,
                 status_agendamento,
                 data_atualizacao,
-                fk_id_servico,
                 fk_id_barbeiro,
                 fk_id_cliente
             ) VALUES (
@@ -26,7 +25,6 @@ class AgendamentoDAO:
                 :hora_fim,
                 :status_agendamento,
                 :data_atualizacao,
-                :fk_id_servico,
                 :fk_id_barbeiro,
                 :fk_id_cliente
             )
@@ -38,7 +36,6 @@ class AgendamentoDAO:
             "hora_fim": agendamento.hora_fim,
             "status_agendamento": agendamento.status_agendamento,
             "data_atualizacao": agendamento.data_atualizacao,
-            "fk_id_servico": agendamento.servico.id_servico,
             "fk_id_barbeiro": agendamento.barbeiro.id_usuario,
             "fk_id_cliente": agendamento.cliente.id_usuario
         }
@@ -87,7 +84,7 @@ class AgendamentoDAO:
                 hora_fim,
                 status_agendamento,
                 data_atualizacao,
-                fk_id_servico,
+               
                 fk_id_barbeiro,
                 fk_id_cliente
             FROM agendamento
@@ -115,7 +112,6 @@ class AgendamentoDAO:
                 a.hora_fim,
                 a.status_agendamento,
                 a.data_atualizacao,
-                a.fk_id_servico,
                 a.fk_id_barbeiro,
                 a.fk_id_cliente,
                 a.motivo_cancelamento,
@@ -127,14 +123,7 @@ class AgendamentoDAO:
                 u.telefone,
                 u.cpf,
                 u.data_atualizacao,
-                b.bio,
-
-                -- Dados do serviço
-                s.id_servico,
-                s.descricao_servico,
-                s.valor,
-                s.duracao
-
+                b.bio
             FROM agendamento a
 
             INNER JOIN barbeiro b
@@ -142,9 +131,6 @@ class AgendamentoDAO:
 
             INNER JOIN usuario u
                 ON b.id_barbeiro = u.id_usuario
-
-            INNER JOIN servico s
-                ON a.fk_id_servico = s.id_servico
 
             WHERE a.fk_id_cliente = :fk_id_cliente
 
@@ -173,7 +159,6 @@ class AgendamentoDAO:
                 hora_fim,
                 status_agendamento,
                 data_atualizacao,
-                fk_id_servico,
                 fk_id_barbeiro,
                 fk_id_cliente
             FROM agendamento
@@ -201,7 +186,6 @@ class AgendamentoDAO:
                 hora_fim,
                 status_agendamento,
                 data_atualizacao,
-                fk_id_servico,
                 fk_id_barbeiro,
                 fk_id_cliente
             FROM agendamento
@@ -266,7 +250,6 @@ class AgendamentoDAO:
                 motivo_cancelamento = :motivo_cancelamento,
                 status_agendamento = :status_agendamento,
                 data_atualizacao = :data_atualizacao,
-                fk_id_servico = :fk_id_servico,
                 fk_id_barbeiro = :fk_id_barbeiro,
                 fk_id_cliente = :fk_id_cliente
             WHERE id_agendamento = :id_agendamento
@@ -280,7 +263,6 @@ class AgendamentoDAO:
             "motivo_cancelamento": agendamento.motivo_cancelamento,
             "status_agendamento": agendamento.status_agendamento,
             "data_atualizacao": agendamento.data_atualizacao,
-            "fk_id_servico": agendamento.fk_id_servico,
             "fk_id_barbeiro": agendamento.fk_id_barbeiro,
             "fk_id_cliente": agendamento.fk_id_cliente
         })
@@ -318,12 +300,12 @@ class AgendamentoDAO:
             data_atualizacao=registro["data_atualizacao"]
         )
 
-        servico = Servico(
-            id_servico=registro["id_servico"],
-            descricao_servico=registro["descricao_servico"],
-            valor=registro["valor"],
-            duracao=registro["duracao"]
-        )
+        #servico = Servico(
+        #    id_servico=registro["id_servico"],
+         #   descricao_servico=registro["descricao_servico"],
+        #    valor=registro["valor"],
+        #    duracao=registro["duracao"]
+        #)
 
         agendamento = Agendamento(
             id_agendamento=registro["id_agendamento"],
@@ -334,7 +316,6 @@ class AgendamentoDAO:
             status_agendamento=registro["status_agendamento"],
             data_atualizacao=registro["data_atualizacao"],
             barbeiro = barbeiro,
-            servico = servico,
             cliente = None
         )
 

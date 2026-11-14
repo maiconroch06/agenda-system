@@ -74,7 +74,7 @@
                             </p>
 
                             <div class="w-full min-w-0 text-xs text-gray-300 mb-4 bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/40">
-                                <p class="break-all"><strong>E-mail:</strong> {{ barbeiro.endereco.email }}</p>
+                                <p class="break-all"><strong>E-mail:</strong> {{ barbeiro.email }}</p>
                                 <p class="flex items-center gap-2 text-gray-300 mt-2 pt-2 border-t border-zinc-700 break-words">
                                     <i data-lucide="map-pin" class="w-8 h-8 "></i>
                                     {{ barbeiro.endereco.logradouro}}, nº {{ barbeiro.endereco.numero}} - {{barbeiro.endereco.bairro}} {{ ', ' ~ barbeiro.endereco.sequencia if barbeiro.endereco.sequencia else ""}}{{', ' ~ barbeiro.endereco.complemento if barbeiro.endereco.complemento else ""}} | {{barbeiro.endereco.cidade}}({{barbeiro.endereco.uf}}) | CEP: {{ barbeiro.endereco.cep[:5] }}-{{barbeiro.endereco.cep[5:8]}} </p>
