@@ -27,8 +27,6 @@
     --color-amber-800: oklch(47.3% 0.137 46.201);
     --color-amber-900: oklch(41.4% 0.112 45.904);
     --color-amber-950: oklch(27.9% 0.077 45.635);
-    --color-green-50: oklch(98.2% 0.018 155.826);
-    --color-green-300: oklch(87.1% 0.15 154.449);
     --color-green-400: oklch(79.2% 0.209 151.711);
     --color-green-500: oklch(72.3% 0.219 149.579);
     --color-green-800: oklch(44.8% 0.119 151.328);
@@ -36,31 +34,15 @@
     --color-emerald-300: oklch(84.5% 0.143 164.978);
     --color-emerald-800: oklch(43.2% 0.095 166.913);
     --color-emerald-950: oklch(26.2% 0.051 172.552);
-    --color-cyan-200: oklch(91.7% 0.08 205.041);
     --color-cyan-300: oklch(86.5% 0.127 207.078);
-    --color-cyan-500: oklch(71.5% 0.143 215.221);
-    --color-cyan-700: oklch(52% 0.105 223.128);
-    --color-cyan-800: oklch(45% 0.085 224.283);
-    --color-cyan-900: oklch(39.8% 0.07 227.392);
-    --color-blue-50: oklch(97% 0.014 254.604);
-    --color-blue-200: oklch(88.2% 0.059 254.128);
-    --color-blue-300: oklch(80.9% 0.105 251.813);
-    --color-blue-400: oklch(70.7% 0.165 254.624);
-    --color-blue-500: oklch(62.3% 0.214 259.815);
     --color-blue-700: oklch(48.8% 0.243 264.376);
-    --color-blue-800: oklch(42.4% 0.199 265.638);
-    --color-blue-900: oklch(37.9% 0.146 265.522);
-    --color-blue-950: oklch(28.2% 0.091 267.935);
-    --color-fuchsia-800: oklch(45.2% 0.211 324.591);
     --color-gray-100: oklch(96.7% 0.003 264.542);
     --color-gray-200: oklch(92.8% 0.006 264.531);
     --color-gray-300: oklch(87.2% 0.01 258.338);
-    --color-gray-400: oklch(70.7% 0.022 261.325);
     --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-gray-600: oklch(44.6% 0.03 256.802);
     --color-gray-700: oklch(37.3% 0.034 259.733);
     --color-gray-800: oklch(27.8% 0.033 256.848);
-    --color-gray-900: oklch(21% 0.034 264.665);
     --color-zinc-50: oklch(98.5% 0 none);
     --color-zinc-100: oklch(96.7% 0.001 286.375);
     --color-zinc-200: oklch(92% 0.004 286.32);
@@ -70,7 +52,6 @@
     --color-zinc-600: oklch(44.2% 0.017 285.786);
     --color-zinc-700: oklch(37% 0.013 285.805);
     --color-zinc-800: oklch(27.4% 0.006 286.033);
-    --color-neutral-700: oklch(37.1% 0 none);
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
@@ -461,14 +442,8 @@
   .my-0\.5 {
     margin-block: calc(var(--spacing) * 0.5);
   }
-  .my-1 {
-    margin-block: var(--spacing);
-  }
   .my-2 {
     margin-block: calc(var(--spacing) * 2);
-  }
-  .my-3 {
-    margin-block: calc(var(--spacing) * 3);
   }
   .my-5 {
     margin-block: calc(var(--spacing) * 5);
@@ -853,9 +828,6 @@
   .flex-1 {
     flex: 1;
   }
-  .flex-2 {
-    flex: 2;
-  }
   .flex-\[1\] {
     flex: 1;
   }
@@ -1175,14 +1147,6 @@
     border-top-left-radius: var(--radius-2xl);
     border-top-right-radius: var(--radius-2xl);
   }
-  .rounded-t-xs {
-    border-top-left-radius: var(--radius-xs);
-    border-top-right-radius: var(--radius-xs);
-  }
-  .rounded-l-lg {
-    border-top-left-radius: var(--radius-lg);
-    border-bottom-left-radius: var(--radius-lg);
-  }
   .rounded-l-xs {
     border-top-left-radius: var(--radius-xs);
     border-bottom-left-radius: var(--radius-xs);
@@ -1190,10 +1154,6 @@
   .rounded-r-xs {
     border-top-right-radius: var(--radius-xs);
     border-bottom-right-radius: var(--radius-xs);
-  }
-  .rounded-b-2xl {
-    border-bottom-right-radius: var(--radius-2xl);
-    border-bottom-left-radius: var(--radius-2xl);
   }
   .rounded-b-xs {
     border-bottom-right-radius: var(--radius-xs);
@@ -1234,10 +1194,6 @@
   .border-r-2 {
     border-right-style: var(--tw-border-style);
     border-right-width: 2px;
-  }
-  .border-r-8 {
-    border-right-style: var(--tw-border-style);
-    border-right-width: 8px;
   }
   .border-b {
     border-bottom-style: var(--tw-border-style);
@@ -1306,9 +1262,6 @@
   }
   .border-\[\#f34747\] {
     border-color: #f34747;
-  }
-  .border-amber-50 {
-    border-color: var(--color-amber-50);
   }
   .border-amber-400 {
     border-color: var(--color-amber-400);
@@ -1469,9 +1422,6 @@
   .bg-\[\#0b0b0c\] {
     background-color: #0b0b0c;
   }
-  .bg-\[\#0c0c0b\] {
-    background-color: #0c0c0b;
-  }
   .bg-\[\#0c2d48\] {
     background-color: #0c2d48;
   }
@@ -1501,9 +1451,6 @@
   }
   .bg-\[\#9fe1cb\] {
     background-color: #9fe1cb;
-  }
-  .bg-\[\#003780\] {
-    background-color: #003780;
   }
   .bg-\[\#04342c\] {
     background-color: #04342c;
@@ -1880,9 +1827,6 @@
   .pb-\[90px\] {
     padding-bottom: 90px;
   }
-  .pl-1 {
-    padding-left: var(--spacing);
-  }
   .pl-3 {
     padding-left: calc(var(--spacing) * 3);
   }
@@ -2136,9 +2080,6 @@
   }
   .text-green-400 {
     color: var(--color-green-400);
-  }
-  .text-red-200 {
-    color: var(--color-red-200);
   }
   .text-red-300 {
     color: var(--color-red-300);
@@ -2519,20 +2460,19 @@
     .hover\:scale-\[1\.02\]:hover {
       scale: 1.02;
     }
-    .hover\:border-\[\#0c0c0b\]:hover {
-      border-color: #0c0c0b;
+    .hover\:border-0:hover {
+      border-style: var(--tw-border-style);
+      border-width: 0px;
     }
-    .hover\:border-\[\#1e2330\]:hover {
-      border-color: #1e2330;
+    .hover\:border-2:hover {
+      border-style: var(--tw-border-style);
+      border-width: 2px;
+    }
+    .hover\:border-\[\#1b1b19\]:hover {
+      border-color: #1b1b19;
     }
     .hover\:border-\[\#4a473f\]:hover {
       border-color: #4a473f;
-    }
-    .hover\:border-\[\#4576fd\]:hover {
-      border-color: #4576fd;
-    }
-    .hover\:border-\[\#30301e\]:hover {
-      border-color: #30301e;
     }
     .hover\:border-\[\#888780\]:hover {
       border-color: #888780;
@@ -2588,6 +2528,12 @@
     .hover\:bg-\[\#0c0c0b\]:hover {
       background-color: #0c0c0b;
     }
+    .hover\:bg-\[\#1b1b19\]:hover {
+      background-color: #1b1b19;
+    }
+    .hover\:bg-\[\#1b1b19\]\/10:hover {
+      background-color: color-mix(in oklab, #1b1b19 10%, transparent);
+    }
     .hover\:bg-\[\#2a2825\]:hover {
       background-color: #2a2825;
     }
@@ -2600,20 +2546,51 @@
     .hover\:bg-\[\#3a1510\]:hover {
       background-color: #3a1510;
     }
+    .hover\:bg-\[\#4a473f\]:hover {
+      background-color: #4a473f;
+    }
     .hover\:bg-\[\#38362f\]:hover {
       background-color: #38362f;
     }
     .hover\:bg-\[\#111215\]:hover {
       background-color: #111215;
     }
+    .hover\:bg-\[\#161513\]:hover {
+      background-color: #161513;
+    }
     .hover\:bg-\[\#232220\]:hover {
       background-color: #232220;
+    }
+    .hover\:bg-\[\#cac9c4\]:hover {
+      background-color: #cac9c4;
     }
     .hover\:bg-\[\#e2dfd7\]:hover {
       background-color: #e2dfd7;
     }
+    .hover\:bg-\[\#f1efe8\]:hover {
+      background-color: #f1efe8;
+    }
+    .hover\:bg-amber-50:hover {
+      background-color: var(--color-amber-50);
+    }
+    .hover\:bg-amber-50\/10:hover {
+      background-color: color-mix(in srgb, oklch(98.7% 0.022 95.277) 10%, transparent);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-amber-50\/10:hover {
+        background-color: color-mix(in oklab, var(--color-amber-50) 10%, transparent);
+      }
+    }
     .hover\:bg-amber-600:hover {
       background-color: var(--color-amber-600);
+    }
+    .hover\:bg-black\/50:hover {
+      background-color: color-mix(in srgb, #000 50%, transparent);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-black\/50:hover {
+        background-color: color-mix(in oklab, var(--color-black) 50%, transparent);
+      }
     }
     .hover\:bg-brand-gold:hover {
       background-color: var(--color-brand-gold);
@@ -2626,9 +2603,6 @@
     }
     .hover\:bg-red-100:hover {
       background-color: var(--color-red-100);
-    }
-    .hover\:bg-red-500:hover {
-      background-color: var(--color-red-500);
     }
     .hover\:bg-red-500\/10:hover {
       background-color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 10%, transparent);
@@ -2647,20 +2621,15 @@
     .hover\:bg-red-800:hover {
       background-color: var(--color-red-800);
     }
+    .hover\:bg-white:hover {
+      background-color: var(--color-white);
+    }
     .hover\:bg-zinc-200:hover {
       background-color: var(--color-zinc-200);
     }
-    .hover\:text-\[\#0f0f0f\]:hover {
-      color: #0f0f0f;
-    }
-    .hover\:text-\[\#3a3a39\]:hover {
-      color: #3a3a39;
-    }
-    .hover\:text-\[\#9c9c9c\]:hover {
-      color: #9c9c9c;
-    }
-    .hover\:text-\[\#888780\]:hover {
-      color: #888780;
+    .hover\:font-bold:hover {
+      --tw-font-weight: var(--font-weight-bold);
+      font-weight: var(--font-weight-bold);
     }
     .hover\:text-\[\#cecece\]:hover {
       color: #cecece;

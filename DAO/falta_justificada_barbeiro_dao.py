@@ -36,28 +36,7 @@ class FaltaJustificadaBarbeiroDAO:
 
         return resultado.lastrowid > 0
 
-    def buscar_por_id(self, id_falta_justificada: int):
-        sql = text("""
-            SELECT
-                id_falta_justificada,
-                data_falta,
-                horario_inicio_falta,
-                horario_final_falta,
-                motivo_falta,
-                fk_barbeiro_falta_justificada
-            FROM falta_justificada_barbeiro
-            WHERE id_falta_justificada = :id_falta_justificada
-        """)
-
-        registro = db.session.execute(
-            sql,
-            {"id_falta_justificada": id_falta_justificada}
-        ).mappings().first()
-
-        if registro is None:
-            return None
-
-        return self._mapear_falta(registro)
+    
 
     def consultar_todos_por_barbeiro(self, id_barbeiro: int):
         sql = text("""
@@ -70,7 +49,7 @@ class FaltaJustificadaBarbeiroDAO:
                 fk_barbeiro_falta_justificada
             FROM falta_justificada_barbeiro
             WHERE fk_barbeiro_falta_justificada = :id_barbeiro
-            ORDER BY data_falta DESC, horario_inicio_falta
+            ORDER BY data_falta DESC, horario_inicio_falta asc
         """)
 
         registros = db.session.execute(
@@ -120,6 +99,52 @@ class FaltaJustificadaBarbeiroDAO:
         db.session.commit()
 
         return resultado.rowcount > 0
+    
+    def verificar_falta_justificativa_existente_barbeiro_dao(self, id_barbeiro, falta_justificada):
+        sql = text("""
+            SELECT count(id_falta_justificada) 
+            FROM falta_justificada_barbeiro
+            where data_falta = :data_falta 
+            and horario_final_falta >= :hora_inicial_falta
+            AND horario_inicio_falta <= :horario_final_falta
+            and fk_barbeiro_falta_justificada = :fk_barbeiro_falta_justificada;
+        """)
+
+        resultado = db.session.execute(
+            sql,
+            {
+                "data_falta": falta_justificada.data_falta,
+                "hora_inicial_falta": falta_justificada.horario_inicio_falta,
+                "horario_final_falta": falta_justificada.horario_final_falta,
+                "fk_barbeiro_falta_justificada": id_barbeiro
+                }
+        )
+
+        return resultado.scalar() > 0
+    
+    def verificar_atualizacao_falta_justificativa_existente_barbeiro_dao(self, id_barbeiro, falta_justificada):
+            sql = text("""
+                SELECT count(id_falta_justificada) 
+                FROM falta_justificada_barbeiro
+                where data_falta = :data_falta 
+                AND horario_final_falta >= :hora_inicial_falta
+                AND horario_inicio_falta <= :horario_final_falta
+                and id_falta_justificada != :id_falta_justificada and fk_barbeiro_falta_justificada = :fk_barbeiro_falta_justificada
+            """)
+    
+            resultado = db.session.execute(
+                sql,
+                {   "id_falta_justificada":falta_justificada.id_falta_justificada,
+                    "data_falta": falta_justificada.data_falta,
+                    "hora_inicial_falta": falta_justificada.horario_inicio_falta,
+                    "horario_final_falta": falta_justificada.horario_final_falta,
+                    "fk_barbeiro_falta_justificada": id_barbeiro
+                    }
+            )
+    
+            return resultado.scalar() > 0
+    
+    
 
     def _mapear_falta(self, registro):
         barbeiro = BarbeiroDAO().buscar_por_id(

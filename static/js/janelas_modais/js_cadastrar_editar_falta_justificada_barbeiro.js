@@ -1,6 +1,7 @@
 const modal_editar_faltas_justificadas_barbeiro = document.getElementById("janela_modal_cadastrar_editar_faltas_justificadas_barbeiro");
 const botao_editar = document.querySelectorAll("#editar-servico");
 const botao_fechar_modal_faltas_justificadas = document.querySelector("#fechar-modal-falta-justificada");
+const botao_fechar_modal_faltas_justificadas_local = document.querySelector("#fechar_modal_falta_justificada");
 const botao_cadastrar_faltas_justificadas_global = document.querySelectorAll("#botao_cadastrar_falta_barbeiro");
 const botao_editar_faltas_justificadas_global = document.querySelectorAll("#editar-agenda-mensal");
 const titulo_modal_faltas_justificadas = document.querySelector("#titulo_modal_faltas_justificadas");
@@ -11,6 +12,7 @@ const formulario_faltas_justificadas = document.querySelector("#form_faltas_just
 
 // campos do html do MODAL
 const form_campo_id_barbeiro = document.getElementById("id_barbeiro_falta");
+const form_campo_id_falta_justificativa = document.getElementById("id_falta_justificativa");
 const form_campo_nome_barbeiro = document.getElementById("nome_barbeiro_falta");
 const form_campo_data_falta_justificada = document.getElementById("data_falta");
 const form_campo_hora_inicio_falta = document.getElementById("hora_inicio_falta");
@@ -22,7 +24,8 @@ botao_editar_faltas_justificadas_global.forEach((editar)=>{
     editar.addEventListener("click", ()=>{
        const dados_barbeiro =editar.value.split("#");
 
-        form_campo_id_barbeiro.value = dados_barbeiro[2];
+        form_campo_id_barbeiro.value = dados_barbeiro[0];
+        form_campo_id_falta_justificativa.value = dados_barbeiro[2];
         form_campo_nome_barbeiro.value = dados_barbeiro[1];
         form_campo_data_falta_justificada.value=dados_barbeiro[3];
         form_campo_hora_inicio_falta.value=dados_barbeiro[4];
@@ -58,6 +61,10 @@ botao_cadastrar_faltas_justificadas_global.forEach((cadastrar)=>{
 
 
 botao_fechar_modal_faltas_justificadas.addEventListener("click", ()=>{
+    modal_editar_faltas_justificadas_barbeiro.close();
+});
+
+botao_fechar_modal_faltas_justificadas_local.addEventListener("click", ()=>{
     modal_editar_faltas_justificadas_barbeiro.close();
 });
 

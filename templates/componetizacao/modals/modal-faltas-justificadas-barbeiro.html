@@ -24,6 +24,7 @@
                 </div>    
             <form id="form_faltas_justificadas" action="" class="flex flex-col gap-3" method="post">
                 <input type="hidden" id="id_barbeiro_falta" name="id_barbeiro_falta" >
+                <input type="hidden" id="id_falta_justificativa" name="id_falta_justificativa" >
                
                 
                 <label class="text-xs font-medium text-[#888780]" for="bloq-barbeiro">Barbeiro</label>
@@ -44,7 +45,7 @@
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium text-[#888780]" for="bloq-fim">Fim</label>
-                        <input id="hora_fim_falta" name="hora_fim_falta" value="18:00" class="text-white h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;">
+                        <input id="hora_fim_falta" name="hora_fim_falta" value="12:00" class="text-white h-10 px-3 rounded-lg border border-[#4a473f] bg-[#161513] focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;">
                     </div>
                 </div>
                 <div class="flex flex-col gap-1">
@@ -54,8 +55,12 @@
                     <small class="mt-2 text-[10px] font-normal text-amber-200" for="bloq-motivo">Esse motivo vai aparecer aos clientes com justificativa para o cancelamento do agendamento dele caso exista agendamentos para essa data e horário </small>
                 </div>
                 <button type="submit" id="cadastrar-editar-falta"
-                    class="w-full h-10 px-4 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm cursor-pointer mt-2"
+                    class="w-full h-10 px-4 rounded-lg bg-[#f1efe8] text-[#161513] hover:bg-[#cac9c4] font-semibold text-sm cursor-pointer mt-2"
                     >Bloquear horário
+                </button>
+                <button type="button" id="fechar_modal_falta_justificada"
+                    class="w-full h-10 px-4 rounded-lg border border-[#4a473f] bg-transparent text-white font-normal hover:border-0  hover:bg-[#1b1b19]  text-sm cursor-pointer mt-2"
+                    >Fechar
                 </button>
             </form>
     </div>

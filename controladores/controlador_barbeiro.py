@@ -83,9 +83,11 @@ class ControladorBarbeiro:
                
                 if FaltasJustificadaBarbeiro.cadastrar_falta_justificada_do_barbeiro(id_barbeiro, falta_justificada):
                     flash(f"Falta justificada do barbeiro {nome_barbeiro} cadastrado com sucesso", EnumStatusMensagens.SUCESSO.value)
-            except Exception as erros:
-            
-                flash(f"Não foi possivel cadastrar a falta justificada do barbeiro {nome_barbeiro}, {erros}contate o suporte", EnumStatusMensagens.ERRO.value)
+                else:
+                     flash(f"Não foi possivel cadastrar a falta justificada do barbeiro {nome_barbeiro}, pois ele ja tem um falta cadastrada com a mesma data e horario", EnumStatusMensagens.AVISO.value)       
+                
+            except Exception :
+                flash(f"Não foi possivel cadastrar a falta justificada do barbeiro {nome_barbeiro}, contate o suporte", EnumStatusMensagens.ERRO.value)
                 
             return redirect(url_for('gestor.gestor_fatas_justificadas_barbeiro'))
             
@@ -102,13 +104,16 @@ class ControladorBarbeiro:
             return redirect(url_for('gestor.gestor_fatas_justificadas_barbeiro'))
         
     @classmethod
-    def atualizar_faltas_do_barbeiro_ativos(cls, falta_justificada):
+    def atualizar_faltas_do_barbeiro_ativos(cls, id_barbeiro, falta_justificada,nome_barbeiro):
         try:
-            if FaltasJustificadaBarbeiro.atualizar_falta_justificada_do_barbeiro( falta_justificada):
+            if FaltasJustificadaBarbeiro.atualizar_falta_justificada_do_barbeiro(id_barbeiro,falta_justificada):
                 flash(f"Falta justificada da data: [ {falta_justificada.data_falta} | motivo: {falta_justificada.motivo_falta} ] atualizada com sucesso", EnumStatusMensagens.SUCESSO.value)
-        except Exception:
+            else:
+                flash(f"Falta justificada [ {falta_justificada.data_falta} | motivo: {falta_justificada.motivo_falta} ] não atualizada, já consta um registro de falta cadastrada com a mesma data e horario para  {nome_barbeiro}", EnumStatusMensagens.AVISO.value)       
+                            
+        except Exception as erros:
         
-            flash(f"Não foi possivel atualizar a falta justificada da data: [ {falta_justificada.data_falta} | motivo: {falta_justificada.motivo_falta} ], contate o suporte", EnumStatusMensagens.ERRO.value)
+            flash(f"{erros} Não foi possivel atualizar a falta justificada da data: [ {falta_justificada.data_falta} | motivo: {falta_justificada.motivo_falta} ], contate o suporte", EnumStatusMensagens.ERRO.value)
             
         return redirect(url_for('gestor.gestor_fatas_justificadas_barbeiro'))
 

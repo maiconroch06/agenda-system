@@ -377,7 +377,8 @@ class BarbeiroDAO:
                 on f.fk_barbeiro_falta_justificada = b.id_barbeiro 
                     inner join usuario u 
                 on u.id_usuario = b.id_barbeiro 
-                    and b.status_barbeiro = :status;
+                    and b.status_barbeiro = :status
+                order by u.foto_nome_usuario asc, f.data_falta asc, f.horario_inicio_falta asc
                    """)
         
         resultado = db.session.execute(sql,{
