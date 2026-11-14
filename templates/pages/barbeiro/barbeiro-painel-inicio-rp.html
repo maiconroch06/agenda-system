@@ -44,7 +44,7 @@
                     <!-- Listagem dos agendamentos de hoje via Jinja -->
                     <div class="flex flex-col gap-2" id="lista-inicio-hoje">
                         {% for item in agendamentos_flask %}
-                            <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f] {% if item.status in [0, 2, 'cancelado', 'concluído', 'concluido'] %}opacity-65{% endif %}" onclick="abrirModalDetalhe('{{ item.id }}')">
+                            <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f] {% if item.status in [0, 3] %}opacity-65{% endif %}" onclick="abrirModalDetalhe('{{ item.id }}')">
                                 
                                 <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">{{ item.hora }}</div>
 
