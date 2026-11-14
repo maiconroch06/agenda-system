@@ -21,6 +21,13 @@ const anos_experiencia = document.getElementById("bar-anos_experiencia");
 const campo_imagem_anterior = document.querySelector("#bar-foto_nome_anterior");
 const imagem_preview = document.querySelector('#img_srv-preview');
 
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+function init() {
+ aplicarMascaras();
+}
+
 botao_editar_barbeiro.forEach(
     (editar)=>{
         editar.addEventListener("click", (event)=>{
@@ -153,6 +160,9 @@ function validacoesBarbeiros(){
     if (anos_experiencia.value === ""){
         anos_experiencia.classList.add("border-red-400");
         errors.push("O campo anos de experiencia deve ser preenchido!");
+    }else if(anos_experiencia.value < 0){
+        anos_experiencia.classList.add("border-red-400");
+        errors.push("O campo anos de experiencia deve maior que zero!");
     }
 
     return errors;     
@@ -173,6 +183,27 @@ function limparCampos(){
     document.getElementById("div-validation-message").classList.add("hidden");
     
 }
+
+/* ============================================================
+   MÁSCARAS
+   ============================================================ */
+function aplicarMascaras() {
+    telefone?.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, "").slice(0, 11);
+        value = value.replace(/^(\d{2})(\d)/, "($1) $2").replace(/(\d{4,5})(\d{4})$/, "$1-$2");
+        e.target.value = value;
+    });
+
+    cpf?.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, "").slice(0, 11);
+        value = value.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        e.target.value = value;
+    });
+
+}
+
+// Inicializa a aplicação
+init();
 
 
 

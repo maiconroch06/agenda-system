@@ -275,12 +275,14 @@ def gestorBarbeiroPageUpdate():
     cpf_temp = ''.join(filter(str.isdigit,request.form.get('cpf')))
     agora_utc = datetime.now(timezone.utc)
     
+    telefone_temp = ''.join(filter(str.isdigit,request.form.get('telefone')))
+    
      
     barbeiro = Barbeiro(
         id_usuario=request.form.get('srv-id'),
         nome_completo=request.form.get('nome'),
         cpf=cpf_temp,
-        telefone=request.form.get('telefone'),
+        telefone=telefone_temp,
         email=request.form.get('email'),
         senha=request.form.get('senha', None),
         data_atualizacao=datetime.now(timezone.utc),

@@ -19,6 +19,13 @@ const numero_end = document.getElementById("bar-end-numero");
 const complemento = document.getElementById("bar-end-complemento");
 const sequencia = document.getElementById("bar-end-sequencia");
 
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+function init() {
+ aplicarMascaras();
+}
+
 
 botao_editar_barbeiro_endereco.forEach(
     (editar_endereco)=>{
@@ -28,7 +35,7 @@ botao_editar_barbeiro_endereco.forEach(
 
            inicializarMensagensErros();
           
-            cep_end.value = detalhes_endereco_barbeiro[1] ?? "";
+            cep_end.value = detalhes_endereco_barbeiro[1].slice(0,5)+"-"+detalhes_endereco_barbeiro[1].slice(5,8) ?? "";
             id_end.value = detalhes_endereco_barbeiro[0] ?? "";
             uf_end.value = detalhes_endereco_barbeiro[3] ?? "";
             cidade.value = detalhes_endereco_barbeiro[2] ?? "";
@@ -106,3 +113,17 @@ function validarValores(){
 
     return errors;             
 }
+
+/* ============================================================
+   MÁSCARAS
+   ============================================================ */
+function aplicarMascaras() {
+    cep_end?.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, "").slice(0, 8);
+        value = value.replace(/^(\d{5})(\d)/, "$1-$2");
+        e.target.value = value;
+    });
+}
+
+// Inicializa a aplicação
+init();

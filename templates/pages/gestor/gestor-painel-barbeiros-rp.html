@@ -82,7 +82,7 @@
 
                             <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
 
-                                <button type="button" id="editar-barbeiro" value="{{barbeiro.id_usuario}}#{{barbeiro.nome_completo}}#{{barbeiro.cpf}}#{{barbeiro.email}}#{{barbeiro.telefone}}#{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario) }}#{{barbeiro.foto_nome_usuario}}#{{barbeiro.status_barbeiro}}#{{barbeiro.bio}}#{{barbeiro.especialidade}}#{{barbeiro.data_inicio_carreira}}"
+                                <button type="button" id="editar-barbeiro" value="{{barbeiro.id_usuario}}#{{barbeiro.nome_completo}}#{{barbeiro.cpf}}#{{barbeiro.email}}#({{ barbeiro.telefone[:2] }}) {{ barbeiro.telefone[2:7] }}-{{ barbeiro.telefone[7:] }}#{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario) }}#{{barbeiro.foto_nome_usuario}}#{{barbeiro.status_barbeiro}}#{{barbeiro.bio}}#{{barbeiro.especialidade}}#{{barbeiro.data_inicio_carreira}}"
                                         class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
                                     Editar barbeiro
                                 </button>
