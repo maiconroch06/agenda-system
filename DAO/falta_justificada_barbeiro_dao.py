@@ -7,34 +7,34 @@ from DAO.barbeiro_dao import BarbeiroDAO
 
 class FaltaJustificadaBarbeiroDAO:
 
-    def cadastrar(self, falta: FaltaJustificadaBarbeiro):
+    def cadastrar(self, id_barbeiro, falta_justificada: FaltaJustificadaBarbeiro):
         sql = text("""
-            INSERT INTO faltas_justificadas_barbeiro (
+            INSERT INTO falta_justificada_barbeiro (
                 data_falta,
                 horario_inicio_falta,
                 horario_final_falta,
                 motivo_falta,
-                fk_falta_justificada_barbeiro
+                fk_barbeiro_falta_justificada
             ) VALUES (
                 :data_falta,
                 :horario_inicio_falta,
                 :horario_final_falta,
                 :motivo_falta,
-                :fk_falta_justificada_barbeiro
+                :fk_barbeiro_falta_justificada
             )
         """)
 
         resultado = db.session.execute(sql, {
-            "data_falta": falta.data_falta,
-            "horario_inicio_falta": falta.horario_inicio_falta,
-            "horario_final_falta": falta.horario_final_falta,
-            "motivo_falta": falta.motivo_falta,
-            "fk_falta_justificada_barbeiro": falta.barbeiro.id
+            "data_falta": falta_justificada.data_falta,
+            "horario_inicio_falta": falta_justificada.horario_inicio_falta,
+            "horario_final_falta": falta_justificada.horario_final_falta,
+            "motivo_falta": falta_justificada.motivo_falta,
+            "fk_barbeiro_falta_justificada": id_barbeiro
         })
 
         db.session.commit()
 
-        return resultado.lastrowid
+        return resultado.lastrowid > 0
 
     def buscar_por_id(self, id_falta_justificada: int):
         sql = text("""
@@ -44,8 +44,8 @@ class FaltaJustificadaBarbeiroDAO:
                 horario_inicio_falta,
                 horario_final_falta,
                 motivo_falta,
-                fk_falta_justificada_barbeiro
-            FROM faltas_justificadas_barbeiro
+                fk_barbeiro_falta_justificada
+            FROM falta_justificada_barbeiro
             WHERE id_falta_justificada = :id_falta_justificada
         """)
 
@@ -67,9 +67,9 @@ class FaltaJustificadaBarbeiroDAO:
                 horario_inicio_falta,
                 horario_final_falta,
                 motivo_falta,
-                fk_falta_justificada_barbeiro
-            FROM faltas_justificadas_barbeiro
-            WHERE fk_falta_justificada_barbeiro = :id_barbeiro
+                fk_barbeiro_falta_justificada
+            FROM falta_justificada_barbeiro
+            WHERE fk_barbeiro_falta_justificada = :id_barbeiro
             ORDER BY data_falta DESC, horario_inicio_falta
         """)
 
@@ -85,14 +85,13 @@ class FaltaJustificadaBarbeiroDAO:
 
     def atualizar(self, falta: FaltaJustificadaBarbeiro):
         sql = text("""
-            UPDATE faltas_justificadas_barbeiro
+            UPDATE falta_justificada_barbeiro
             SET
                 data_falta = :data_falta,
                 horario_inicio_falta = :horario_inicio_falta,
                 horario_final_falta = :horario_final_falta,
                 motivo_falta = :motivo_falta
             WHERE id_falta_justificada = :id_falta_justificada
-              AND fk_falta_justificada_barbeiro = :fk_falta_justificada_barbeiro
         """)
 
         resultado = db.session.execute(sql, {
@@ -101,7 +100,6 @@ class FaltaJustificadaBarbeiroDAO:
             "horario_inicio_falta": falta.horario_inicio_falta,
             "horario_final_falta": falta.horario_final_falta,
             "motivo_falta": falta.motivo_falta,
-            "fk_falta_justificada_barbeiro": falta.barbeiro.id
         })
 
         db.session.commit()
@@ -110,7 +108,7 @@ class FaltaJustificadaBarbeiroDAO:
 
     def excluir(self, id_falta_justificada: int):
         sql = text("""
-            DELETE FROM faltas_justificadas_barbeiro
+            DELETE FROM falta_justificada_barbeiro
             WHERE id_falta_justificada = :id_falta_justificada
         """)
 
@@ -125,7 +123,7 @@ class FaltaJustificadaBarbeiroDAO:
 
     def _mapear_falta(self, registro):
         barbeiro = BarbeiroDAO().buscar_por_id(
-            registro["fk_falta_justificada_barbeiro"]
+            registro["fk_barbeiro_falta_justificada"]
         )
 
         return FaltaJustificadaBarbeiro(

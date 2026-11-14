@@ -10,7 +10,6 @@ class FaltaJustificadaBarbeiro:
         horario_inicio_falta= None, 
         horario_final_falta= None, 
         motivo_falta= None, 
-        barbeiro = None, 
         ):
 
         self.__id_falta_justificada = id_falta_justificada
@@ -18,7 +17,6 @@ class FaltaJustificadaBarbeiro:
         self.__horario_inicio_falta = horario_inicio_falta
         self.__horario_final_falta = horario_final_falta
         self.__motivo_falta = motivo_falta
-        self.__barbeiro = barbeiro
         
 
     @property
@@ -61,11 +59,4 @@ class FaltaJustificadaBarbeiro:
     def motivo_falta(self, value):
         self.__motivo_falta = value
 
-    @property
-    def barbeiro(self):
-        return self.__barbeiro
-
-    @barbeiro.setter
-    def barbeiro(self, value):
-        self.__barbeiro = value
     

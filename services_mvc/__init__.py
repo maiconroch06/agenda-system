@@ -10,3 +10,4 @@ from .agenda_mensal_service import AgendaMensalService
 from .barbearia_service import BarbeariaService
 from .recesso_service   import RecessoService
 from .servicos_service import ServicoService
+from .faltas_justificadas_barbeiro_service import FaltasJustificadaBarbeiroService

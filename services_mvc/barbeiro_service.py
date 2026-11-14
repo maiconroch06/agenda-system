@@ -51,6 +51,10 @@ class BarbeiroService(UsuarioService):
             print("\n ERRO NO SERVICE:", repr(error)) # <-- Vai mostrar o erro exato no terminal
             flash(f"\n # ERRO AO BUSCAR AGENDAMENTOS MARCADOS AO BARBEIRO '{barbeiro.get('nome_completo', 0)}' #\n {error}\n")
             return []
+        
+    def consultar_faltas_por_barbeiro_ativo(self):
+        return self.__barbeiroRepositorio.consultar_faltas_por_barbeiro_ativo()
+        
             
     # Mexer mais tarde para salvar os dados do barbeiro
     def salvar_dados_especificos(self, usuario, fotoTemp):

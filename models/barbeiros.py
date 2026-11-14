@@ -10,9 +10,10 @@ class Barbeiro(Usuario):
         nome_completo,
         telefone,
         cpf,
-        email,
         data_atualizacao,
-        data_liberacao=datetime.now(timezone.utc),
+        email=None,
+        data_liberacao=None,
+        faltas_justificadas = None,
         status_usuario = None,
         data_cadastro = None,
         data_inicio_carreira=None,
@@ -44,6 +45,7 @@ class Barbeiro(Usuario):
         self.__status_barbeiro = status_barbeiro
         self.__bio = bio
         self.__especialidade = especialidade
+        self.__faltas_justificadas = faltas_justificadas
 
     @property
     def data_liberacao(self):
@@ -84,3 +86,11 @@ class Barbeiro(Usuario):
     @especialidade.setter
     def especialidade(self, value):
         self.__especialidade = value
+
+    @property
+    def faltas_justificadas(self):
+        return self.__faltas_justificadas
+
+    @faltas_justificadas.setter
+    def faltas_justificadas(self, value):
+        self.__faltas_justificadas = value

@@ -1,6 +1,6 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
 from controladores import ControladorGestor, ControladorBarbeiro
-from models import Cliente, Servico, Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal, Recesso
+from models import Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal, Recesso, FaltaJustificadaBarbeiro
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
 from datetime import datetime, timezone
@@ -205,6 +205,58 @@ def gestorServicoEditar():
     id = request.form.get('srv-id')
   
     return ControladorGestor.editarServico(id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo)
+
+##################################################################################
+# FALTAS JUSTIFICADAS DOS BARBEIROS - Aba de visualização dos Barbeiros cadastrados
+
+@gestor.route('/painel/barbeiros/faltas-justificadas', methods=['GET'])
+def gestor_fatas_justificadas_barbeiro():
+    return render_template('pages/gestor/gestor-painel-barbeiros-faltas-justificadas-rp .html', barbeiros_faltas_justificadas = ControladorBarbeiro.consultar_faltas_do_barbeiro_ativos(), mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/barbeiros/faltas-justificadas/cadastrar', methods=['POST'])
+def gestor_cadastrar_faltas_justificadas_barbeiro():
+    
+        
+    id_barbeiro = request.form.get("id_barbeiro_falta", type=int)
+    nome_barbeiro = request.form.get("nome_barbeiro_falta")
+    
+    print("o nome é ", nome_barbeiro)
+    
+    falta_justificada = FaltaJustificadaBarbeiro(
+        data_falta=datetime.strptime(request.form.get("data_falta"),  "%Y-%m-%d").date(),
+        horario_inicio_falta=request.form.get("hora_inicio_falta"),
+        horario_final_falta=request.form.get("hora_fim_falta"),
+        motivo_falta=request.form.get("motivo_falta_justificada")
+    )
+    
+    return ControladorBarbeiro.cadastrar_faltas_do_barbeiro_ativos(id_barbeiro,falta_justificada,nome_barbeiro)
+
+@gestor.route('/painel/barbeiros/faltas-justificadas/excluir', methods=['POST'])
+def gestor_excluir_faltas_justificadas_barbeiro():
+      
+    falta_justificada = FaltaJustificadaBarbeiro(
+        data_falta=request.form.get("falta-data"),
+        motivo_falta=request.form.get("falta-motivo"),
+        id_falta_justificada=request.form.get("falta-id", type=int)
+    )
+    
+   
+    return ControladorBarbeiro.excluir_faltas_do_barbeiro_ativos(falta_justificada)
+
+@gestor.route('/painel/barbeiros/faltas-justificadas/atualizar', methods=['POST'])
+def gestor_atualizar_faltas_justificadas_barbeiro():
+      
+    falta_justificada = FaltaJustificadaBarbeiro(
+    
+        data_falta=datetime.strptime(request.form.get("data_falta"),  "%Y-%m-%d").date(),
+        horario_inicio_falta=request.form.get("hora_inicio_falta"),
+        horario_final_falta=request.form.get("hora_fim_falta"),
+        motivo_falta=request.form.get("motivo_falta_justificada"),
+        id_falta_justificada=request.form.get("id_barbeiro_falta", type=int)
+        )
+    
+   
+    return ControladorBarbeiro.atualizar_faltas_do_barbeiro_ativos(falta_justificada)
 
 
 ##################################################################################

@@ -1,8 +1,22 @@
-from models import FaltaJustificadaBarbeiro
+
 from repositorio import FaltaJustificadaBarbeiroRepositorio
 
 class FaltasJustificadaBarbeiroService:
 
     def __init__(self):
         self.__falta_justificadas_barbeiro_repositorio = FaltaJustificadaBarbeiroRepositorio()
-        self.__falta_justificadas_barbeiro = FaltaJustificadaBarbeiro()
+    
+    def cadastrar_falta_justificada(self, id_barbeiro, falta_justificada):
+        return self.__falta_justificadas_barbeiro_repositorio.cadastrar_falta_justificada(id_barbeiro, falta_justificada)
+    
+    def buscar_por_id(self, id_falta: int):
+        return self.__falta_justificadas_barbeiro_repositorio.buscar_por_id(id_falta)
+
+    def listar_por_barbeiro(self, id_barbeiro: int):
+        return self.__falta_justificadas_barbeiro_repositorio.consultar_todos_por_barbeiro(id_barbeiro)
+
+    def atualizar(self, falta):
+        return self.__falta_justificadas_barbeiro_repositorio.atualizar(falta)
+
+    def excluir(self, id_falta: int):
+        return self.__falta_justificadas_barbeiro_repositorio.excluir(id_falta)

@@ -1,19 +1,12 @@
 from DAO.falta_justificada_barbeiro_dao import FaltaJustificadaBarbeiroDAO
 
-
 class FaltaJustificadaBarbeiroRepositorio:
 
     def __init__(self):
         self.__faltaDao = FaltaJustificadaBarbeiroDAO()
 
-    def salvar(self, falta):
-        return self.__faltaDao.cadastrar(falta)
-
-    def buscar_por_id(self, id_falta: int):
-        return self.__faltaDao.buscar_por_id(id_falta)
-
-    def listar_por_barbeiro(self, id_barbeiro: int):
-        return self.__faltaDao.consultar_todos_por_barbeiro(id_barbeiro)
+    def cadastrar_falta_justificada(self, id_barbeiro, falta_justificada):
+        return self.__faltaDao.cadastrar(id_barbeiro, falta_justificada)
 
     def atualizar(self, falta):
         return self.__faltaDao.atualizar(falta)

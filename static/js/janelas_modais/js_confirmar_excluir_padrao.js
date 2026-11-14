@@ -20,9 +20,10 @@ form_remover_servico.forEach(
 
         formSelecionado = formulario;
         event.preventDefault();
-        titulo_janela_modal.textContent = " Confirmar exclusão de "+ descricao_classe.textContent;
+        titulo_janela_modal.textContent = " Excluir "+ descricao_classe.textContent;
 
-        conteiner_div_mensagem_modal.innerHTML= "<p> Excluir o "+descricao_classe.textContent +": <strong> "+  descricao_servico.textContent  + " </strong>? </p> Todos os agendamentos com este serviço serão excluidos." ;
+        conteiner_div_mensagem_modal.innerHTML= "<p> Excluir "+descricao_classe.textContent +": <strong> "+  descricao_servico.textContent  + 
+        " </strong>? </p> O(s) registro(s) selecionado(s) será(ão) excluido(s)." ;
         modal.showModal();
     });
 });

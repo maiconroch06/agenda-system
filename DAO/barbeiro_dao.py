@@ -1,8 +1,9 @@
 
 from sqlalchemy import text
 from database import db
-from models import Barbeiro, Endereco, Cliente, Servico, Agendamento
+from models import Barbeiro, Endereco, FaltaJustificadaBarbeiro
 from utilitarios import FormatarHoras, FormatarTelefone
+from datetime import datetime, timezone
 
 class BarbeiroDAO:
 
@@ -62,7 +63,7 @@ class BarbeiroDAO:
 
         db.session.execute(sql, {
             "id_barbeiro": barbeiro.id_usuario,
-            "data_liberacao": barbeiro.data_liberacao,
+            "data_liberacao": datetime.now(timezone.utc),
             "bio": barbeiro.bio,
             "especialidade": barbeiro.especialidade,
             "status_barbeiro": barbeiro.status_barbeiro,
@@ -363,6 +364,58 @@ class BarbeiroDAO:
         db.session.commit()
 
         return resultado.rowcount > 0 #oq isso faz?
+
+    def consultar_faltas_dos_barbeiros_ativo(self):
+        sql = text("""
+                SELECT u.nome_completo, 
+                u.id_usuario,u.telefone,
+                u.foto_nome_usuario, 
+                u.cpf, u.data_atualizacao,
+                f.* 
+                FROM falta_justificada_barbeiro f 
+                    right join barbeiro b 
+                on f.fk_barbeiro_falta_justificada = b.id_barbeiro 
+                    inner join usuario u 
+                on u.id_usuario = b.id_barbeiro 
+                    and b.status_barbeiro = :status;
+                   """)
+        
+        resultado = db.session.execute(sql,{
+            "status": True
+        }).mappings().all()
+         
+        # uso dic pois a complexidade na busca é o(1)
+        barbeiro_map: dict[int,Barbeiro]={}
+            
+        for linha in resultado:
+            
+            id_usuario_barbeiro = linha["id_usuario"]
+            
+            if id_usuario_barbeiro not in barbeiro_map:
+                barbeiro_map[id_usuario_barbeiro] = Barbeiro(
+                id_usuario=id_usuario_barbeiro,    
+                nome_completo=linha["nome_completo"],
+                telefone=linha["telefone"],
+                cpf=linha["cpf"],
+                data_atualizacao=linha["data_atualizacao"],
+                foto_nome_usuario=linha["foto_nome_usuario"], 
+                faltas_justificadas=[]     
+            )
+            
+            if linha["id_falta_justificada"] is not None:
+                barbeiro_map[id_usuario_barbeiro].faltas_justificadas.append(
+                    FaltaJustificadaBarbeiro(
+                        id_falta_justificada=linha["id_falta_justificada"],
+                        data_falta=linha["data_falta"],
+                        horario_inicio_falta=(datetime.min + linha["horario_inicio_falta"]).time(),
+                        horario_final_falta=(datetime.min + linha["horario_final_falta"]).time(),
+                        motivo_falta=linha["motivo_falta"] 
+                    )
+                )
+            
+        return list(barbeiro_map.values())
+                   
+        
 
     @staticmethod
     def _mapear_barbeiro(registro):
