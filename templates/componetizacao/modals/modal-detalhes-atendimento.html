@@ -13,9 +13,9 @@
                 {% if a.status == 1 %}
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]">Agendado</span>
                 {% elif a.status == 2 %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#085041] text-[#9fe1cb] border-[#0f6e56]">Concluído</span>
-                {% elif a.status == 3 %}
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#0c2d48] text-[#7cc4fa] border-[#1d5b8c]">Em andamento</span>    
+                {% elif a.status == 3 %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#085041] text-[#9fe1cb] border-[#0f6e56]">Concluído</span>
                 {% else %}
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3a1510] text-[#f0997b] border-[#993c1d]">Cancelado</span>
                 {% endif %}
@@ -86,14 +86,14 @@
         <div class="flex flex-col gap-2 mt-4">
             <form method="POST" action="{{ url_for('barbeiro.atualizar_status', id_agendamento=a.id) }}" class="flex flex-col gap-2 w-full">
                 {% if a.status == 1 %}
-                    <button type="submit" name="status" value=3 class="w-full h-10 px-4 rounded-lg border border-[#1d5b8c] bg-transparent text-[#7cc4fa] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity">Iniciar serviço</button>
+                    <button type="submit" name="status" value=2 class="w-full h-10 px-4 rounded-lg border border-[#1d5b8c] bg-[#0c2d48] text-[#7cc4fa] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity">Iniciar serviço</button>
                     <button type="submit" name="status" value=0 class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors">Cancelar</button>
                 {% elif a.status == 2 %}
-                    <button type="submit" name="status" value=3 class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all">Voltar status</button>
-                {% elif a.status == 3 %}
-                    <button type="submit" name="status" value=2 class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity">Concluir agendamento</button>
+                    <button type="submit" name="status" value=3 class="w-full h-10 px-4 rounded-lg border border-[#0f6e56] bg-[#04342c] text-[#9fe1cb] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-85 transition-opacity">Concluir agendamento</button>
                     <button type="submit" name="status" value=0 class="w-full h-10 px-4 rounded-lg border border-[#993c1d] bg-transparent text-[#f0997b] text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3a1510] transition-colors">Cancelar</button>
                     <button type="submit" name="status" value=1 class="w-full h-10 px-4 rounded-lg border border-[#4a473f] bg-[#2a2825] text-[#f1efe8] font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-[#38362f] transition-colors">Voltar para agendado</button>
+                {% elif a.status == 3 %}
+                    <button type="submit" name="status" value=2 class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all">Voltar status</button>
                 {% else %}
                     <button type="submit" name="status" value=1 class="w-full h-11 px-5 rounded-lg bg-[#f1efe8] text-[#161513] font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 active:scale-98 transition-all">Voltar status</button>
                 {% endif %}
