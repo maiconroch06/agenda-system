@@ -137,17 +137,20 @@ class AgendamentoDAO:
             ORDER BY a.data_agendamento ASC, a.hora_inicio ASC
         """)
 
-        resultados = db.session.execute(
-            sql,
-            {
-                "fk_id_cliente": id_cliente
-            }
-        ).mappings().all()
+        try:
+            resultados = db.session.execute(
+                sql,
+                {
+                    "fk_id_cliente": id_cliente
+                }
+            ).mappings().all()
 
-        return [
-            AgendamentoDAO._mapear_agendamento(registro)
-            for registro in resultados
-        ]
+            return [
+                AgendamentoDAO._mapear_agendamento_todos_dados(registro)
+                for registro in resultados
+            ]
+        except Exception as erros:
+            print(f"{erros}")
 
     @staticmethod
     def listar_por_cliente(id_cliente: int):
@@ -317,7 +320,7 @@ class AgendamentoDAO:
         return resultado.rowcount > 0
 
     @staticmethod
-    def _mapear_agendamento(registro):
+    def _mapear_agendamento_todos_dados(registro):
 
         barbeiro = Barbeiro(
             id_usuario=registro["id_barbeiro"],
@@ -349,3 +352,17 @@ class AgendamentoDAO:
         )
 
         return agendamento
+
+    @staticmethod
+    def _mapear_agendamento(registro):
+        return Agendamento(
+            id_agendamento=registro["id_agendamento"],
+            data_agendamento=registro["data_agendamento"],
+            hora_inicio=(datetime.min + registro["hora_inicio"]).time(),
+            hora_fim=(datetime.min + registro["hora_fim"]).time(),
+            motivo_cancelamento=registro["motivo_cancelamento"],
+            status_agendamento=registro["status_agendamento"],
+            data_atualizacao=registro["data_atualizacao"],
+            barbeiro=None,
+            cliente=None
+        )

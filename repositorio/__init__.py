@@ -10,3 +10,4 @@ from .falta_justificada_barbeiro_repositorio import FaltaJustificadaBarbeiroRepo
 from .recesso_repositorio import RecessoRepositorio
 from .endereco_repositorio import EnderecoRepositorio
 from .agenda_mensal_repositorio import AgendaMensalRepositorio
+from .agendamento_servicos_repositorio import AgendamentoServicosRepositorio

@@ -10,3 +10,4 @@ from .agendamento_dao import AgendamentoDAO
 from .servicos_dao import ServicoDAO
 from .falta_justificada_barbeiro_dao import FaltaJustificadaBarbeiroDAO
 from .barbeiro_dao import BarbeiroDAO
+from .agendamento_servicos_dao import AgendamentoServicosDAO

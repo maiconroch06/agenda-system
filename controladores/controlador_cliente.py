@@ -2,7 +2,7 @@ from models import Cliente
 from flask import  session, redirect, url_for, flash, render_template
 from models import Cliente, Agendamento
 from database import db
-from services_mvc import ClienteService, ServicoService, AgendaMensalService, BarbeariaService, BarbeiroService, AgendamentoService
+from services_mvc import ClienteService, ServicoService, AgendaMensalService, BarbeariaService, BarbeiroService, AgendamentoService, AgendamentoServicosService
 from enums import EnumStatusMensagens
 from flask import jsonify
 
@@ -15,6 +15,7 @@ class ControladorCliente():
         self.__barbeariaService = BarbeariaService()
         self.__barbeiroService = BarbeiroService()
         self.__agendamentoService = AgendamentoService()
+        self.__agendamentoServicosService = AgendamentoServicosService()
     
     def login(self, email:str, senha:str):
         try:
@@ -50,26 +51,51 @@ class ControladorCliente():
             return render_template('pages/cliente/cliente-agendamento-rp.html', servicos=servicos, barbeiros=barbeiros, agenda_mensal=agenda_mensal)
         except Exception as erros:
             flash(f"{erros}", EnumStatusMensagens.ERRO.value)
-            return redirect(url_for('cliente.clientLoginPage'))
+            return redirect(url_for('cliente.clientAgendamentoServicos'))
 
-    def cadastrarAgendamento(self, agendamento: Agendamento, id_servico, id_barbeiro):
+    def cadastrarAgendamento(self, agendamento: Agendamento, id_servicos, id_barbeiro):
         try:
-            agendamento.servico= self.__servicosServices.buscar_servico_id(id_servico)
             agendamento.barbeiro= self.__barbeiroService.buscar_barbeiro_id(id_barbeiro)
-            self.__agendamentoService.cadastrar_agendamento(agendamento)
+            id_agendamento = self.__agendamentoService.cadastrar_agendamento(agendamento)
+            self.__agendamentoServicosService.salvar_agendamento_servicos(id_agendamento, id_servicos)
 
+            print(f"Ids servicos: {id_servicos} id_agendamento: {id_agendamento}")
+            flash(f"Agendamento feito com sucesso", EnumStatusMensagens.SUCESSO.value)
             return redirect(url_for('cliente.clientMeusAgendamentos'))
 
         except Exception as erros:
-            flash(f"erros: {erros}")
+            flash(f"erros: {erros}", EnumStatusMensagens.ERRO.value)
+            return redirect(url_for('cliente.clientLoginPage'))
 
     def meusAgendamentos(self, id_cliente):
         try:
-            return render_template('pages/cliente/cliente-meus-agendamentos.html', agendamentos = self.__agendamentoService.consultar_agendamento_agendados(id_cliente))
+            agendamentos = (
+                self.__agendamentoServicosService
+                .consultar_agendamentos_por_cliente(id_cliente)
+            )
+
+            print(agendamentos)
+
+            total_proximos = sum(
+                1 for item in agendamentos
+                if item.agendamento.status_agendamento in (1, 2)
+            )
+
+            total_concluidos = sum(
+                1 for item in agendamentos
+                if item.agendamento.status_agendamento == 3
+            )
+
+            return render_template(
+                'pages/cliente/cliente-meus-agendamentos.html',
+                agendamentos=agendamentos,
+                total_proximos=total_proximos,
+                total_concluidos=total_concluidos
+            )
             
         except Exception as erros:
-                    flash(f"{erros}", EnumStatusMensagens.ERRO.value)
-                    return  redirect(url_for('cliente.clientLoginPage'))
+            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
+            return redirect(url_for('cliente.clientLoginPage'))
 
    
     def consultar_todos_clientes(self):

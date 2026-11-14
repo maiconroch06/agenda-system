@@ -93,12 +93,11 @@ def clientAgendamentoServicosCadastro():
         status_agendamento=True,
         data_atualizacao=datetime.now(),
         motivo_cancelamento=None,
-        servico=None,
         barbeiro=None,
         cliente=cliente
     )
     controladorCliente = ControladorCliente() 
-    return controladorCliente.cadastrarAgendamento(agendamento, id_servico = dados.get('id_servico'), id_barbeiro = dados.get('id_barbeiro'))
+    return controladorCliente.cadastrarAgendamento(agendamento, id_servicos = dados.get('id_servicos'), id_barbeiro = dados.get('id_barbeiro'))
 
 @cliente.route('/agendamento/meus-agendamentos', methods=['GET'])
 def clientMeusAgendamentos():

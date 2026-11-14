@@ -38,7 +38,7 @@ const historicoCortes = [];
 
 const estado = {
     etapaAtual: 1,
-    servicoSelecionado: null,
+    servicosSelecionados: [],
     profissionalSelecionado: null,
     diaSelecionado: null,
     horarioSelecionado: null,
@@ -381,7 +381,7 @@ function verificarEtapaAtual() {
     switch (estado.etapaAtual) {
 
         case 1:
-            return estado.servicoSelecionado !== null;
+            return estado.servicosSelecionados.length > 0;
 
         case 2:
             return estado.profissionalSelecionado !== null;
@@ -474,11 +474,14 @@ function carregarServicos() {
 
     inputs.forEach(input => {
 
-        input.checked = estado.servicoSelecionado === input.value;
+        input.checked = estado.servicosSelecionados.includes(
+            Number(input.value)
+        );
 
         input.addEventListener("change", () => {
 
-            estado.servicoSelecionado = input.value;
+            estado.servicosSelecionados = obterServicoSelecionados()
+                .map(servico => servico.id);
 
             atualizarBotoes();
         });
@@ -675,20 +678,18 @@ function renderizarHorarios() {
     });
 }
 
-function obterServicoSelecionado() {
-    const input = document.querySelector(
+function obterServicoSelecionados() {
+    const inputs = document.querySelectorAll(
         "input[name='inputCorte']:checked"
     );
 
-    if (!input) return null;
-
-    return {
+    return Array.from(inputs).map(input => ({
         id: Number(input.value),
         nome: input.dataset.nome,
         valor: Number(input.dataset.valor),
         duracao: Number(input.dataset.duracao),
         foto: input.dataset.foto
-    };
+    }));
 }
 
 function obterBarbeiroSelecionado() {
@@ -705,10 +706,12 @@ function obterBarbeiroSelecionado() {
     };
 }
 
+
 function renderizarResumo() {
+
     if (!els.resumo) return;
 
-    const servico = obterServicoSelecionado();
+    const servicos = obterServicoSelecionados();
     const profissional = obterBarbeiroSelecionado();
 
     const formatarMoeda = valor =>
@@ -718,6 +721,7 @@ function renderizarResumo() {
         });
 
     const formatarDataCompleta = () => {
+
         if (!estado.diaSelecionado) return "-";
 
         const [ano, mes, dia] = estado.diaSelecionado
@@ -734,11 +738,69 @@ function renderizarResumo() {
         );
     };
 
+    // Calcula o valor e a duração de todos os serviços.
+    const valorTotal = servicos.reduce(
+        (total, servico) => total + servico.valor,
+        0
+    );
+
+    const duracaoTotal = servicos.reduce(
+        (total, servico) => total + servico.duracao,
+        0
+    );
+
+    // Gera o HTML de cada serviço selecionado.
+    const htmlServicos = servicos.map(servico => `
+        <div class="bg-[#25241f] rounded-xl p-4
+                    border border-[#38362f]">
+
+            <div class="flex justify-between items-center gap-3">
+
+                <div class="flex items-center gap-3 min-w-0">
+
+                    <div class="w-14 h-14 shrink-0 rounded-lg
+                                overflow-hidden bg-[#1c1c1c]
+                                border border-[#38362f]">
+
+                        <img
+                            src="${servico.foto}"
+                            alt="${servico.nome}"
+                            class="w-full h-full object-cover"
+                            onerror="this.style.display='none'"
+                        >
+
+                    </div>
+
+                    <div class="min-w-0">
+
+                        <span class="block text-[10px] uppercase
+                                     tracking-wider text-[#C9A34A]
+                                     font-semibold">
+                            Serviço
+                        </span>
+
+                        <h3 class="font-semibold text-white">
+                            ${servico.nome}
+                        </h3>
+
+                        <span class="text-xs text-[#888780]">
+                            ${servico.duracao} minutos
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <strong class="text-[#C9A34A] whitespace-nowrap">
+                    ${formatarMoeda(servico.valor)}
+                </strong>
+
+            </div>
+
+        </div>
+    `).join("");
+
     const dados = {
-        servico: servico?.nome || "-",
-        duracao: servico?.duracao || 0,
-        valor: servico?.valor || 0,
-        fotoServico: servico?.foto || "",
         profissional: profissional?.nome || "-",
         fotoProfissional: profissional?.foto || "",
         data: formatarDataCompleta(),
@@ -746,15 +808,18 @@ function renderizarResumo() {
     };
 
     els.resumo.innerHTML = `
+
         <div class="bg-[#1c1c1c] border border-[#38362f]
                     rounded-2xl p-4 sm:p-5 space-y-5">
 
             <!-- CABEÇALHO -->
             <div class="flex items-center justify-between gap-3">
+
                 <div>
                     <h2 class="text-base font-semibold text-white">
                         Resumo do agendamento
                     </h2>
+
                     <p class="text-xs text-[#888780] mt-1">
                         Confira os dados do atendimento
                     </p>
@@ -765,52 +830,30 @@ function renderizarResumo() {
                     <i class="fa-solid fa-calendar-check
                               text-[#C9A34A] text-lg"></i>
                 </div>
+
             </div>
 
-            <!-- SERVIÇO -->
-            <div class="bg-[#25241f] rounded-xl p-4
-                        border border-[#38362f]">
+            <!-- SERVIÇOS SELECIONADOS -->
+            <div class="space-y-3">
 
-                <div class="flex justify-between items-center gap-3">
+                <div class="flex justify-between items-center">
 
-                    <div class="flex items-center gap-3 min-w-0">
+                    <h3 class="text-sm font-semibold text-white">
+                        Serviços selecionados
+                    </h3>
 
-                        <div class="w-14 h-14 shrink-0 rounded-lg
-                                    overflow-hidden bg-[#1c1c1c]
-                                    border border-[#38362f]">
-
-                            <img
-                                src="${dados.fotoServico}"
-                                alt="${dados.servico}"
-                                class="w-full h-full object-cover"
-                                onerror="this.style.display='none'"
-                            >
-
-                        </div>
-
-                        <div class="min-w-0">
-                            <span class="block text-[10px] uppercase
-                                         tracking-wider text-[#C9A34A]
-                                         font-semibold">
-                                Serviço
-                            </span>
-
-                            <h3 class="font-semibold text-white truncate">
-                                ${dados.servico}
-                            </h3>
-
-                            <span class="text-xs text-[#888780]">
-                                ${dados.duracao} minutos
-                            </span>
-                        </div>
-
-                    </div>
-
-                    <strong class="text-[#C9A34A] whitespace-nowrap">
-                        ${formatarMoeda(dados.valor)}
-                    </strong>
+                    <span class="text-xs text-[#888780]">
+                        ${servicos.length} serviço(s)
+                    </span>
 
                 </div>
+
+                ${htmlServicos || `
+                    <p class="text-sm text-[#888780]">
+                        Nenhum serviço selecionado.
+                    </p>
+                `}
+
             </div>
 
             <!-- PROFISSIONAL -->
@@ -830,6 +873,7 @@ function renderizarResumo() {
                 </div>
 
                 <div class="min-w-0">
+
                     <span class="block text-[10px] uppercase
                                  tracking-wider text-[#888780]">
                         Profissional
@@ -838,6 +882,7 @@ function renderizarResumo() {
                     <strong class="text-sm text-white">
                         ${dados.profissional}
                     </strong>
+
                 </div>
 
             </div>
@@ -885,9 +930,22 @@ function renderizarResumo() {
 
             </div>
 
-            <!-- TOTAL -->
-            <div class="border-t border-[#38362f] pt-4
-                        flex items-center justify-between gap-3">
+            <!-- DURAÇÃO TOTAL -->
+            <div class="flex justify-between items-center
+                        border-t border-[#38362f] pt-4">
+
+                <span class="text-sm text-[#888780]">
+                    Duração total
+                </span>
+
+                <strong class="text-white">
+                    ${duracaoTotal} minutos
+                </strong>
+
+            </div>
+
+            <!-- VALOR TOTAL -->
+            <div class="flex items-center justify-between gap-3">
 
                 <div>
                     <span class="block text-sm font-semibold text-white">
@@ -895,13 +953,13 @@ function renderizarResumo() {
                     </span>
 
                     <span class="text-xs text-[#888780]">
-                        Valor do serviço selecionado
+                        Soma de todos os serviços
                     </span>
                 </div>
 
                 <strong class="text-xl sm:text-2xl
                                text-[#C9A34A] whitespace-nowrap">
-                    ${formatarMoeda(dados.valor)}
+                    ${formatarMoeda(valorTotal)}
                 </strong>
 
             </div>
@@ -924,6 +982,7 @@ function renderizarResumo() {
         </div>
     `;
 }
+
 
 
 /* ============================================================
@@ -975,11 +1034,11 @@ function validarFormulario() {
 
 async function confirmarAgendamento() {
 
-    const servico = obterServicoSelecionado();
+    const servicos = obterServicoSelecionados();
     const barbeiro = obterBarbeiroSelecionado();
 
     if (
-        !servico ||
+        servicos.length === 0 ||
         !barbeiro ||
         !estado.diaSelecionado ||
         !estado.horarioSelecionado
@@ -999,7 +1058,7 @@ async function confirmarAgendamento() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                id_servico: servico.id,
+                id_servicos: servicos.map(servico => servico.id),
                 id_barbeiro: barbeiro.id,
                 data: estado.diaSelecionado,
                 horario: estado.horarioSelecionado
