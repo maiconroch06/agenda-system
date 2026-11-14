@@ -47,21 +47,21 @@ def barbeiroPainel():
 
     agendamentos_flask = ControladorBarbeiro.consultar_agendamentos_barbeiro(barbeiro)
     
-    #print("\n 1. BARBEIRO NA SESSÃO: ", barbeiro)
-    #print("\n 2. AGENDAMENTOS RETORNADOS: ", agendamentos_flask)
+    print("\n 1. BARBEIRO NA SESSÃO: ", barbeiro)
+    print("\n 2. AGENDAMENTOS RETORNADOS: ", agendamentos_flask)
     
     # Função auxiliar para definir a prioridade
     def peso_status(status):
-        if status == 3:
+        if status == 2:
             return 1
         elif status == 1:
             return 2
-        elif status == 2:
+        elif status == 3:
             return 3
         else:
             return 4  # Cancelado
 
-    # Ordena a lista: 1º pelo peso do status, 2º pela hora (ordem alfabética/crescente)
+    # Ordena a lista: 1º pelo peso do status, 2º pela hora (ordem crescente)
     agendamentos_flask = sorted(
         agendamentos_flask, key=lambda a: (peso_status(a.get('status')), a.get('hora', '00:00'))
     )

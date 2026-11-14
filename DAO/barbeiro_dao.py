@@ -234,81 +234,48 @@ class BarbeiroDAO:
     
     def consultar_agendamentos_barbeiro(self, id_barbeiro: int):
         sql = text("""
-            # Consulta serviços ativos
-            WITH servicos_ativos AS (
-                SELECT 
-                    id_servico,
-                    descricao_servico AS nome_servico,
-                    valor,
-                    status_servico
-                FROM servico
-                
-                WHERE status_servico = 1
-            ),
-
-            # Consulta barbeiros ativos
-            barbeiros_ativos AS (
-                SELECT
-                    u.id_usuario,
-                    b.id_barbeiro,
-                    u.nome_completo AS nome_barbeiro,
-                    u.status_usuario,
-                    b.status_barbeiro
-                FROM usuario u
-                
-                JOIN barbeiro b
-                    ON u.id_usuario = b.id_barbeiro
-                    
-                WHERE b.status_barbeiro = 1
-                    AND id_barbeiro = :id_barbeiro
-            ),
-
-            # Consulta clientes ativos
-            clientes_ativos AS (
-                SELECT
-                    u.id_usuario,
-                    c.id_cliente,
-                    u.nome_completo AS nome_cliente,
-                    u.telefone AS telefone_cliente,
-                    u.status_usuario
-                    
-                FROM usuario u
-                
-                JOIN cliente c
-                    ON u.id_usuario = c.id_cliente
-            )
-
-            # Consulta todos os agendamentos validos de um barbeiro - Exibição para o BARBEIRO
             SELECT
-                # Chave primaria e estranjeiras
                 a.id_agendamento,
-                a.fk_id_servico,
                 a.fk_id_barbeiro,
                 a.fk_id_cliente,
                 a.status_agendamento,
-                # Informações serviço
-                s.nome_servico,
-                s.valor,
-                # Informações data-hora agendamento
+                a.motivo_cancelamento,
+                a.valor_total_servicos AS valor,
+                
+                # Junta os nomes dos serviços em uma única linha (Ex: "Corte, Barba")
+                GROUP_CONCAT(s.descricao_servico SEPARATOR ', ') AS nome_servico,
+                
                 a.data_agendamento,
                 a.hora_inicio,
                 a.hora_fim,
-                # Informação barberio
-                b.nome_barbeiro,
-                # Informações cliete
-                c.nome_cliente,
-                c.telefone_cliente
+                
+                ub.nome_completo AS nome_barbeiro,
+                uc.nome_completo AS nome_cliente,
+                uc.telefone AS telefone_cliente
                 
             FROM agendamento a
 
-            JOIN servicos_ativos s
-                ON a.fk_id_servico = s.id_servico
-
-            JOIN barbeiros_ativos b
+            JOIN barbeiro b
                 ON a.fk_id_barbeiro = b.id_barbeiro
-                
-            JOIN clientes_ativos c
+            JOIN usuario ub
+                ON b.id_barbeiro = ub.id_usuario
+
+            JOIN cliente c
                 ON a.fk_id_cliente = c.id_cliente
+            JOIN usuario uc
+                ON c.id_cliente = uc.id_usuario
+
+            LEFT JOIN agendamento_servicos ags
+                ON a.id_agendamento = ags.agendamento_id
+            LEFT JOIN servico s
+                ON ags.servico_id = s.id_servico
+
+            WHERE a.fk_id_barbeiro = :id_barbeiro
+                AND b.status_barbeiro = 1
+
+            -- 5. Agrupa pelo ID do agendamento para não duplicar a linha
+            GROUP BY a.id_agendamento
+
         """)
         
         registros = db.session.execute(
