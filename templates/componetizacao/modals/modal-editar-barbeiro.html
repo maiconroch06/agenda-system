@@ -3,11 +3,7 @@
     class="fixed inset-2 sm:inset-4 md:inset-8 w-auto h-auto lg:mx-40 lg:my-10 max-h-[calc(100dvh-1rem)] overflow-y-auto overflow-x-hidden rounded-xl border-0 bg-transparent p-0 shadow-xl backdrop:bg-black/50
     [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 
-     <!-- Mensagens -->
-        <div id='exibir-menssagem-erros-endereco'
-                class="bg-red-500/10 border border-red-500/30 mb-8 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide hidden ">
-                <p id="menssagem-erros-endereco"></p>
-        </div>
+       
 
         <!-- Container externo -->
         <div class="w-full max-w-2xl m-auto bg-[#232220] border border-[#38362f] rounded-[14px] p-5 sm:p-6 shadow-xl">
@@ -16,6 +12,12 @@
             <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
                 {% set logo_class="h-20 sm:h-20 md:h-24" %}
                 {% include "componetizacao/logo/logo-top-horizontal.html" %}
+            </div>
+            
+            <!-- Mensagens -->
+            <div id='div-validation-message'
+                    class="bg-red-500/10 border border-red-500/30 mb-8 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide hidden ">
+                    <p id="validation-menssage"></p>
             </div>
 
             <h1 id="form-title" class="text-center text-xl font-medium mb-1 text-white">Cadastrar Barbeiro</h1>

@@ -70,7 +70,6 @@ class BarbeiroService(UsuarioService):
         
     def alterar_barbeiro_barbearia(self, usuario):
         status = self.__barbeiroRepositorio.atualizar(usuario)
-        print(f"=========STATUS=======", status)
         return status            
                 
 

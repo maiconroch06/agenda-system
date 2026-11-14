@@ -14,7 +14,6 @@ class Agendamento:
         data_atualizacao: datetime,
         status_agendamento: None,
         motivo_cancelamento: None,
-        servico: Servico= None,
         barbeiro: Barbeiro= None,
         cliente: Cliente= None,
         id_agendamento = None,
@@ -26,7 +25,6 @@ class Agendamento:
         self.__motivo_cancelamento = motivo_cancelamento
         self.__status_agendamento = status_agendamento
         self.__data_atualizacao = data_atualizacao
-        self.__servico = servico
         self.__barbeiro = barbeiro
         self.__cliente = cliente
 
@@ -85,14 +83,6 @@ class Agendamento:
     @data_atualizacao.setter
     def data_atualizacao(self, value):
         self.__data_atualizacao = value
-
-    @property
-    def servico(self):
-        return self.__servico
-
-    @servico.setter
-    def servico(self, value):
-        self.__servico = value
 
     @property
     def barbeiro(self):
