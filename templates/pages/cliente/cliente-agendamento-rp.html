@@ -66,6 +66,10 @@
                 </span>
             </li>
         </ol>
+        
+        <!-- Mensagem de Erro -->
+        {% set mensagens =  mensagens_status %}
+        {% include "componetizacao/mensagens/mensagens.html" %}
 
         <!-- PAINEL 1: SERVIÇO -->
         <section id="painel-1">
@@ -493,41 +497,3 @@
 </body>
 
 </html>
-
-
-<!-- 
-    <!-- PAINEL SUCESSO - Com Loanding--
-    <section id="painel-5" hidden>
-
-        <div class="text-center py-12 flex flex-col items-center gap-3">
-
-            <div
-                class="w-[64px] h-[64px] rounded-full bg-brand-gold border border-brand-gold text-[#000000] text-[30px] flex items-center justify-center">
-                &check;
-            </div>
-
-            <h1 class="text-[1.3rem] font-medium text-[#f1efe8] mb-1">
-                Agendamento confirmado!
-            </h1>
-
-            <p class="text-[14px] text-[#888780] mb-2" id="sucesso-texto">
-            </p>
-
-
-            <!-- LOADING --
-            <div class="flex flex-col items-center gap-2 mt-4">
-
-                <div class="w-8 h-8 border-4 border-[#38362f] border-t-brand-gold rounded-full animate-spin"></div>
-
-                <span class="text-xs text-[#888780]">
-                    Reiniciando em instantes...
-                </span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
--->

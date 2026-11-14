@@ -10,7 +10,7 @@ from .horario_funcionamento import HorarioFuncionamento
 from .falta_justificada_barbeiro import FaltaJustificadaBarbeiro
 from .agenda_mensal import AgendaMensal
 from .recesso import Recesso
-
+from .agendamento_servicos import AgendamentoServicos
 
 
 

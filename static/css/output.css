@@ -1070,6 +1070,11 @@
     margin-block-start: calc(calc(var(--spacing) * 2.5) * var(--tw-space-y-reverse));
     margin-block-end: calc(calc(var(--spacing) * 2.5) * calc(1 - var(--tw-space-y-reverse)));
   }
+  :where(.space-y-3 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)));
+  }
   :where(.space-y-4 > :not(:last-child)) {
     --tw-space-y-reverse: 0;
     margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));
@@ -1272,6 +1277,15 @@
   .border-blue-400 {
     border-color: var(--color-blue-400);
   }
+  .border-blue-700 {
+    border-color: var(--color-blue-700);
+  }
+  .border-blue-700\/30 {
+    border-color: color-mix(in srgb, oklch(48.8% 0.243 264.376) 30%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-blue-700) 30%, transparent);
+    }
+  }
   .border-brand-border {
     border-color: var(--color-brand-border);
   }
@@ -1469,6 +1483,9 @@
   }
   .bg-\[\#232220\]\/50 {
     background-color: color-mix(in oklab, #232220 50%, transparent);
+  }
+  .bg-\[\#232220\]\/60 {
+    background-color: color-mix(in oklab, #232220 60%, transparent);
   }
   .bg-\[\#C9A34A\]\/5 {
     background-color: color-mix(in oklab, #C9A34A 5%, transparent);
