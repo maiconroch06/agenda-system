@@ -73,6 +73,7 @@ def clientAgendamentoServicos():
 @cliente.route('/agendamento/servicos/cadastro', methods=['POST'])
 def clientAgendamentoServicosCadastro():
     dados = request.get_json(silent=True)
+    print(f"{dados}")
     dados_session = session.get('dados_cliente')
 
     cliente = Cliente(
