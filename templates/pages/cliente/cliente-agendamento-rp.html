@@ -489,6 +489,10 @@
         } | tojson if agenda_mensal else 'null' }};
         const URL_CADASTRAR_AGENDAMENTO = {{ url_for('cliente.clientAgendamentoServicosCadastro') | tojson }};
         const URL_MEUS_AGENDAMENTOS = {{ url_for('cliente.clientMeusAgendamentos') | tojson }};
+
+        document.getElementById("btn_novo_agendamento").addEventListener("click",()=>{
+        window.location.href = "/cliente/agendamento/servicos";
+        });
     </script>
 
     <!-- JAVASCRIPT -->

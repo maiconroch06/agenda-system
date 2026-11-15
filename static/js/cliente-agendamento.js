@@ -186,6 +186,7 @@ function alternarHistorico() {
     window.location.href = URL_MEUS_AGENDAMENTOS;
 }
 
+
 function carregarHistorico() {
 
     const historico = historicoCortes;
