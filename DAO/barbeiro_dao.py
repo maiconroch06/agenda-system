@@ -313,24 +313,26 @@ class BarbeiroDAO:
 
         return resultado.rowcount > 0
     
-    def atualizar_status_agendamento(self, id_agendamento:int, status_agendamento:int):
+    def atualizar_status_agendamento(self, id_agendamento:int, status_agendamento:int, data_hoje:str):
         sql = text("""
-                UPDATE agendamento
-                SET
-                    status_agendamento = :status_agendamento,
-                    data_ultimo_acesso = NOW()
-                    
-                WHERE id_agendamento = :id_agendamento
+            UPDATE agendamento
+            SET
+                status_agendamento = :status_agendamento,
+                data_atualizacao = NOW()
+                
+            WHERE id_agendamento = :id_agendamento
+                AND data_agendamento = :data_hoje
         """)
         
         resultado = db.session.execute(sql, {
             "id_agendamento": id_agendamento,
-            "status_agendamento": status_agendamento
+            "status_agendamento": status_agendamento,
+            "data_hoje": data_hoje
         })
         
         db.session.commit()
 
-        return resultado.rowcount > 0 #oq isso faz?
+        return resultado.rowcount > 0
 
     def consultar_faltas_dos_barbeiros_ativo(self):
         sql = text("""

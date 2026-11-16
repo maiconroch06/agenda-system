@@ -8,6 +8,7 @@ from enums import EnumNomesPastaImagem
 from database import db
 from utilitarios import ValidadorDeImagens
 from utilitarios import Senha
+from datetime import datetime
 
 class BarbeiroService(UsuarioService):
 
@@ -82,7 +83,10 @@ class BarbeiroService(UsuarioService):
     
     def alterar_status_agendamento(self, id_agendamento:int, status_agendamento:int):
         try:
-            return self.__barbeiroRepositorio.atualizar_status_agendamento(id_agendamento, status_agendamento)
+            data_hoje = datetime.today()
+            data_hoje = data_hoje.strftime("%Y/%m/%d")
+            
+            return self.__barbeiroRepositorio.atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje)
         except Exception as erros: 
             print(f"\n ERRO NO SERVICE: {repr(erros)}\n\n") # <-- Vai mostrar o erro exato no terminal
             flash(f"\n\n # ERRO AO #\n {erros}\n\n")

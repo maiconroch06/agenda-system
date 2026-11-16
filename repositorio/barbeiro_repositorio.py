@@ -33,5 +33,5 @@ class BarbeiroRepositorio:
     def consultar_faltas_por_barbeiro_ativo(self):
         return self.__barbeiroDao.consultar_faltas_dos_barbeiros_ativo()
     
-    def atualizar_status_agendamento(self, id_agendamento, status_agendamento):
-        return self.__barbeiroDao.atualizar_status_agendamento(id_agendamento, status_agendamento)
+    def atualizar_status_agendamento(self, id_agendamento, status_agendamento, data_hoje):
+        return self.__barbeiroDao.atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje)
