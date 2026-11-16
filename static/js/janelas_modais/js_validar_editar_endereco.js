@@ -1,6 +1,6 @@
 const modal_editar_barbeiro_endereco = document.getElementById("janela_modal_cadastrar_editar_endereco");
 const titulo = document.getElementById("form-title-endereco");
-const nome_barbeiro_titulo = document.getElementById("campo-padrao");
+const nome_barbeiro_titulo = document.getElementById("nome_barbeiro");
 
 const botao_editar_barbeiro_endereco = document.querySelectorAll("#editar-endereco");
 

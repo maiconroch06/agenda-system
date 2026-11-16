@@ -234,8 +234,8 @@ class ControladorGestor():
             if  cls.__controlador_cliente.atualziar_cliente(cliente):
                 db.session.commit()
                 flash(f"Cliente [ {cliente.nome_completo} ] atualizado com sucesso", EnumStatusMensagens.SUCESSO.value) 
-        except Exception as erros:
-            flash(f"Erro ao tentar atualizar o cliente [ {cliente.nome_completo} ] da barbearia {erros}", EnumStatusMensagens.ERRO.value)  
+        except Exception:
+            flash(f"Erro ao tentar atualizar o cliente [ {cliente.nome_completo} ] da barbearia", EnumStatusMensagens.ERRO.value)  
                
         return redirect(url_for("gestor.gestorExibirClientes")) 
     

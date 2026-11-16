@@ -7,7 +7,7 @@ const botao_voltar = document.getElementById("btn-cancelar");
 
 //campos
 const cpf = document.getElementById("bar-cpf");
-const nome_barbeiro_titulo = document.getElementById("campo-padrao");
+const nome_barbeiro_titulo = document.getElementById("nome_barbeiro");
 const nome_barbeiro_editar = document.getElementById("bar-nome");
 const email = document.getElementById("bar-email");
 const senha = document.getElementById("bar-senha");
