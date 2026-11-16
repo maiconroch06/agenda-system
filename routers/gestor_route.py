@@ -384,6 +384,11 @@ def gestor_excluir_barbeiro():
 def gestorExibirClientes():
     return ControladorGestor.consultar_clientes()
 
+#  CLIENTES
+@gestor.route('/painel/clientes/excluir')
+def gestor_excluir_clientes():
+    return ControladorGestor.consultar_clientes()
+
 ##################################################################################
 # FINANCEIRO
 @gestor.route('/painel/financeiro')

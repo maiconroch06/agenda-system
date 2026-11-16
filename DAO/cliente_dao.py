@@ -98,6 +98,7 @@ class ClienteDAO:
                 u.id_usuario,
                 u.nome_completo,
                 u.telefone,
+                u.email,
                 c.data_ultimo_servico
             FROM usuario u
             INNER JOIN cliente c

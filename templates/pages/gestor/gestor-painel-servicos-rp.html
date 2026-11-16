@@ -59,7 +59,7 @@
                                     <img id="imagem-servico" class="w-20 h-20 rounded-full object-cover mb-3 shadow-sm" 
                                     src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/servicos-imagens/' ~ servico.foto_nome_servico) }}" >
                     
-                                    <h3 id="campo-padrao" class="font-bold text-base mb-1 text-center">{{servico.descricao_servico}}</h3>
+                                    <h3  class="font-bold text-base mb-1 text-center">{{servico.descricao_servico}}</h3>
                                     <p class="text-xs text-center mb-3 line-clamp-2">Valor R$ {{servico.valor}} | duracao {{servico.duracao}} minutos</p>
                                 
                                 </div>
@@ -67,11 +67,13 @@
                      
                                     <button type="button" id="editar-servico" value="{{servico.id_servico}}&{{servico.descricao_servico}}&{{servico.valor}}&{{servico.duracao}}&{{servico.foto_nome_servico}}&{{servico.status_servico}}&1&{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/servicos-imagens/' ~ servico.foto_nome_servico) }}"
                                      class="py-1.5 rounded-lg border border-[#38362f] bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8] text-xs font-medium transition-colors cursor-pointer text-center"> Editar </button> 
-                                    <form action="/gestor/painel/servicos/excluir" id="form-confirmar-exclusao" method="POST" class="py-1.5 bg-red-800 rounded-lg border border-[#38362f]  text-white hover:bg-red-700  text-xs font-medium transition-colors cursor-pointer text-center">
-                                        <input class="hidden" type="number" name="srv-id-deletar" value="{{servico.id_servico}}">
-                                        <input class="hidden" type="text" name="srv-foto_nome" value="{{servico.foto_nome_servico}}">
-                                        <input class="hidden" type="text" name="srv-nome" value="{{servico.descricao_servico}}">
-                                        <button  type="submit"> Excluir </button> 
+                                    <form action="/gestor/painel/servicos/excluir" id="form-confirmar-exclusao" method="POST" class="ml-10 flex-1 min-w-0">
+                                        <input  type="hidden" name="srv-id-deletar" value="{{servico.id_servico}}">
+                                        <input  type="hidden" name="srv-foto_nome" value="{{servico.foto_nome_servico}}">
+                                        <input  class="nome-exclusao"  type="hidden" name="srv-nome" value="{{servico.descricao_servico}}">
+                                        <button type="submit" class="w-full h-full py-2 px-2 rounded-lg bg-red-600 border border-[#38362f] text-white hover:bg-red-800 text-xs font-bold transition-colors">
+                                             Excluir 
+                                        </button> 
                                     </form>
                                 
                                 </div>

@@ -70,7 +70,7 @@
                                                     alt="Foto de {{ barbeiro.nome_completo }}">
                                                     
                                                     <div class="flex flex-col min-w-0 text-left">
-                                                        <h3 id="campo-padrao" class="font-bold text-white text-base">
+                                                        <h3  class="font-bold text-white text-base">
                                                             {{ barbeiro.nome_completo }}
                                                         </h3>
                                                         
@@ -108,23 +108,24 @@
                                                                     <td class="p-3.5 px-4 font-medium text-[#f1efe8]">{{ falta.motivo_falta }}</td>
                                                                     <td class="p-3.5 px-4 font-medium text-[#f1efe8]"> 
                                                                         <div class="flex  justify-between">
-                                                                        <button type="button" id="editar-agenda-mensal" value="{{barbeiro.id_usuario}}#{{barbeiro.nome_completo}}#{{ falta.id_falta_justificada }}#{{falta.data_falta}}#{{ falta.horario_inicio_falta}}#{{ falta.horario_final_falta}}#{{ falta.motivo_falta }}"
-                                                                            class="flex-1 min-w-0 py-2 px-2 h-full rounded-lg bg-[#0b0b0c] border border-[#38362f] text-gray-300 hover:bg-[#0c0c0b] hover:border-amber-400  text-xs font-medium transition-colors">
-                                                                            Atualizar
-                                                                        </button>
-                                                                        <form action="/gestor/painel/barbeiros/faltas-justificadas/excluir" id="form-confirmar-exclusao" method="POST" class="ml-10 flex-1 min-w-0">
-                                                                            
-                                                                            <input type="hidden" name="falta-id-excluir" value="{{ falta.id_falta_justificada }}">
-                                                                            <input type="hidden" name="falta-data-excluir" value="{{ falta.data_falta}}">
-                                                                            <input type="hidden" name="falta-hora-inicial-excluir" value="{{ falta.horario_inicio_falta }}">
-                                                                            <input type="hidden" name="falta-hora-final-excluir" value="{{ falta.horario_final_falta}}">
-                                                                            <input type="hidden" name="falta-id-barbeiro-excluir" value="{{ barbeiro.id_usuario}}">
-                                
-                                                                            <button type="submit" class="w-full h-full py-2 px-2 rounded-lg bg-red-600 border border-[#38362f] text-white hover:bg-red-800 text-xs font-bold transition-colors">
-                                                                                Excluir
+                                                                            <button type="button" id="editar-agenda-mensal" value="{{barbeiro.id_usuario}}#{{barbeiro.nome_completo}}#{{ falta.id_falta_justificada }}#{{falta.data_falta}}#{{ falta.horario_inicio_falta}}#{{ falta.horario_final_falta}}#{{ falta.motivo_falta }}"
+                                                                                class="flex-1 min-w-0 py-2 px-2 h-full rounded-lg bg-[#0b0b0c] border border-[#38362f] text-gray-300 hover:bg-[#0c0c0b] hover:border-amber-400  text-xs font-medium transition-colors">
+                                                                                Atualizar
                                                                             </button>
-                                                                        </form>
-                                                                    </div>
+                                                                            <form action="/gestor/painel/barbeiros/faltas-justificadas/excluir" id="form-confirmar-exclusao" method="POST" class="ml-10 flex-1 min-w-0">
+                                                                                
+                                                                                <input type="hidden" name="falta-id-excluir" value="{{ falta.id_falta_justificada }}">
+                                                                                <input type="hidden" name="falta-data-excluir" value="{{ falta.data_falta}}">
+                                                                                <input type="hidden" name="falta-hora-inicial-excluir" value="{{ falta.horario_inicio_falta }}">
+                                                                                <input type="hidden" name="falta-hora-final-excluir" value="{{ falta.horario_final_falta}}">
+                                                                                <input type="hidden" name="falta-id-barbeiro-excluir" value="{{ barbeiro.id_usuario}}">
+                                                                                <input type="hidden" class="nome-exclusao"  name="" value="{{ barbeiro.nome_completo }}">
+                                    
+                                                                                <button type="submit" class="w-full h-full py-2 px-2 rounded-lg bg-red-600 border border-[#38362f] text-white hover:bg-red-800 text-xs font-bold transition-colors">
+                                                                                    Excluir
+                                                                                </button>
+                                                                            </form>
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             {% endfor %}
@@ -165,10 +166,7 @@
 
     </div>
 
-    <!-- TOAST AVISO -->
-    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
-        id="aviso"></div>
-
+  
     <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
 
     <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>

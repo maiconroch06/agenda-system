@@ -99,9 +99,9 @@
                                             <form action="/gestor/painel/recessos/excluir" id="form-confirmar-exclusao" method="POST" class="flex-1 min-w-0">
                                                 
                                                 <input type="hidden" name="recesso-id" value="{{recesso.id_recesso}}">
-                                                <input type="hidden" name="recesso-descricao" value="{{recesso.descricao_recesso}}">
+                                                <input type="hidden" class="nome-exclusao" name="recesso-descricao" value="{{recesso.descricao_recesso}}">
 
-                                                <button type="submit" class="w-full py-2 px-2 rounded-lg bg-amber-500 border border-black text-black hover:bg-amber-600 text-xs font-bold transition-colors">
+                                                <button type="submit" class="w-full py-2 px-2 rounded-lg bg-red-800  border border-black text-white hover:bg-red-700  text-xs font-bold transition-colors">
                                                    {{ 'Excluir'}} 
                                                 </button>
                                             </form>

@@ -47,25 +47,25 @@
                             <!-- Abertura -->
                             <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#161513] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-amber-400">
                                 <span class="text-[#f1efe8] select-none">Abertura:</span>
-                                <input name="horario_abertura" value="{{horario_funcionamento.horario_abertura.strftime('%H:%M')}}" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;" required>
+                                <input name="horario_abertura" value="{{horario_funcionamento.horario_abertura.strftime('%H:%M')}}" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer text-2xl" type="time" style="color-scheme: dark;" required>
                             </label>
 
                             <!-- Fechamento -->
                             <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#161513] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-amber-400">
                                 <span class="text-[#f1efe8] select-none">Fechamento:</span>
-                                <input name="horario_fechamento" value="{{horario_funcionamento.horario_fechamento.strftime('%H:%M')}}" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;" required>
+                                <input name="horario_fechamento" value="{{horario_funcionamento.horario_fechamento.strftime('%H:%M')}}" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer text-2xl" type="time" style="color-scheme: dark;" required>
                             </label>
 
                             <!-- Início Almoço -->
                             <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#161513] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-amber-400">
                                 <span class="text-[#f1efe8] select-none">Início Almoço:</span>
-                                <input name="inicio_almoco" value="{{horario_funcionamento.horario_inicio_intrajornada.strftime('%H:%M')}}" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;">
+                                <input name="inicio_almoco" value="{{horario_funcionamento.horario_inicio_intrajornada.strftime('%H:%M')}}" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer text-2xl" type="time" style="color-scheme: dark;">
                             </label>
 
                             <!-- Fim Almoço -->
                             <label class="px-3.5 py-2 rounded-full border border-[#38362f] bg-[#161513] text-xs font-medium cursor-pointer transition-all flex items-center justify-between hover:border-amber-400">
                                 <span class="text-[#f1efe8] select-none">Fim Almoço:</span>
-                                <input name="fim_almoco" value="{{horario_funcionamento.horario_fim_intrajornada.strftime('%H:%M')}}" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer [color-scheme:dark]" type="time" style="color-scheme: dark;">
+                                <input name="fim_almoco" value="{{horario_funcionamento.horario_fim_intrajornada.strftime('%H:%M')}}" class="text-[#888780] bg-transparent focus:outline-none cursor-pointer text-2xl" type="time" style="color-scheme: dark;">
                             </label>
                         </div>
 
@@ -140,36 +140,34 @@
                         
                                         </p>
 
-                                        <div class="w-full {{ 'text-[#C99E6B] bg-[#1B1814] border-[#3B2E20]' if agenda_mensal_concluida == true else 'bg-[#232220] border-[#38362f] text-[#888780]' }}  border  rounded-2xl p-4 mb-4">
-                                            <div class="flex items-center justify-between gap-4">
-                                                
-                                                <!-- Data Início (Esquerda) -->
-                                                <div class="flex-1 min-w-0">
-                                                    <span class="block text-[11px] font-semibold uppercase tracking-wider  mb-0.5">
-                                                        Dia Início
-                                                    </span>
-                                                    <p class="text-xs sm:text-sm font-medium  truncate">
-                                                        {{ agenda.data_inicial_mes.strftime('%d/%m/%Y') }}
-                                                    </p>
-                                                </div>
-
-                                                <!-- Divisória Central -->
-                                                <div class="flex items-center justify-center shrink-0 px-1">
-                                                    <span class="h-6 md:h-10 w-[1px] bg-[#38362f]"></span>
-                                                </div>
-
-                                                <!-- Data Fim (Direita) -->
-                                                <div class="flex-1 min-w-0 text-right">
-                                                    <span class="block text-[11px] font-semibold uppercase tracking-wider  mb-0.5">
-                                                        Dia Fim
-                                                    </span>
-                                                    <p class="text-xs sm:text-sm font-medium  truncate">
-                                                        {{ agenda.data_final_mes.strftime('%d/%m/%Y') }}
-                                                    </p>
-                                                </div>
-
+                                        <div class="w-full {{ 'text-[#C99E6B] bg-[#1B1814] border-[#3B2E20]' if agenda_mensal_concluida == true else 'bg-[#232220] border-[#38362f] text-[#888780]' }} border rounded-2xl p-4 mb-4">
+                                        <div class="flex flex-col gap-3">
+                                            
+                                            <!-- Data Início -->
+                                            <div class="w-full min-w-0">
+                                                <span class="block text-[11px] font-semibold uppercase tracking-wider mb-0.5">
+                                                    Dia Início
+                                                </span>
+                                                <p class="text-2xl text-[#cfcec9] font-medium truncate">
+                                                    {{ agenda.data_inicial_mes.strftime('%d/%m/%Y') }}
+                                                </p>
                                             </div>
+
+                                            <!-- Linha Divisória -->
+                                            <div class="w-full h-px {{ 'bg-[#3B2E20]' if agenda_mensal_concluida == true else 'bg-[#38362f]' }}"></div>
+
+                                            <!-- Data Fim -->
+                                            <div class="w-full min-w-0">
+                                                <span class="block text-[11px] font-semibold uppercase tracking-wider mb-0.5">
+                                                    Dia Fim
+                                                </span>
+                                                <p class="text-2xl text-[#cfcec9] font-medium truncate">
+                                                    {{ agenda.data_final_mes.strftime('%d/%m/%Y') }}
+                                                </p>
+                                            </div>
+
                                         </div>
+                                    </div>
 
                                         {% if not agenda_mensal_concluida %}   
                                             <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
@@ -222,7 +220,7 @@
     </div>
 
     <!-- TOAST AVISO -->
-    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-500 whitespace-nowrap"
         id="aviso"></div>
         
   

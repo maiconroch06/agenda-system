@@ -12,6 +12,7 @@
 </head>
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans min-h-screen">
+    <p id="titulo-modal" class="hidden">Cliente</p>
 
     {# ───────── DADOS MOCK VS FLASK ───────── #}
     {% include "componetizacao/preCadastro/dados.html" %}
@@ -73,7 +74,7 @@
                                         {% if lista_clientes %}
                                             {% for usuario in lista_clientes %}
                                                 <tr class="cliente-row border-b border-[#38362f] hover:bg-[#2a2825]/50 transition-colors">
-                                                    <td class="cliente-nome p-3.5 px-4 font-medium text-[#f1efe8]">{{ usuario.nome_completo }}</td>
+                                                    <td id="campo-padrao" class="cliente-nome p-3.5 px-4 font-medium text-[#f1efe8]">{{ usuario.nome_completo }}</td>
                                                     <td class="cliente-tel p-3.5 px-4 text-[#888780]">
                                                         {% if usuario.telefone %}
                                                             ({{ usuario.telefone[:2] }}) {{ usuario.telefone[2:7] }}-{{ usuario.telefone[7:] }}
@@ -84,6 +85,21 @@
                                                     <td class="p-3.5 px-4 text-[#888780]">{{ usuario.data_ultimo_servico | default('-', true) }}</td>
                                                     <td class="p-3.5 px-4 font-medium text-[#f1efe8]">0 visita(s)</td>
                                                     <td class="p-3.5 px-4 font-semibold text-[#9fe1cb]">R$ 0,00</td>
+                                                    <td class="p-3.5 px-4 font-semibold text-[#9fe1cb]">
+                                                        <div class="flex  justify-between">
+                                                            <button type="button" id="atualizar-cliente-barbearia" value=""
+                                                                class="flex-1 min-w-0 py-2 px-2 h-full rounded-lg bg-[#0b0b0c] border border-[#38362f] text-gray-300 hover:bg-[#0c0c0b] hover:border-amber-400  text-xs font-medium transition-colors">
+                                                                Atualizar
+                                                            </button>
+                                                            <form action="/gestor/painel/clientes/excluir" id="form-confirmar-exclusao" method="POST" class="ml-10 flex-1 min-w-0">
+                                                                <input type="hidden" name="id_cliente_barbearia" value="{{usuario.id_usuario}}">
+                                                                <input type="hidden" class="nome-exclusao" id="nome_cliente_barbearia" name="nome_cliente_barbearia" value="{{usuario.nome_completo}}">
+                                                                <button type="submit" class="w-full h-full py-2 px-2 rounded-lg bg-red-600 border border-[#38362f] text-white hover:bg-red-800 text-xs font-bold transition-colors">
+                                                                    Excluir
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             {% endfor %}
                                         {% else %}
@@ -101,6 +117,9 @@
                 </section>
             </main>
         </div>
+        
+        {% include "componetizacao/modals/modal-confimacao-excluir-padrao.html" %}
+
 
         <!-- NAVEGAÇÃO INFERIOR MOBILE -->
         {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
@@ -112,6 +131,7 @@
         id="aviso"></div>
 
     <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
     <script src="{{ url_for('static', filename='js/gestor-painel-clientes.js') }}"></script>
 </body>
 

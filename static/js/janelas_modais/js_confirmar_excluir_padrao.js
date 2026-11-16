@@ -3,7 +3,6 @@ const form_remover_servico = document.querySelectorAll('#form-confirmar-exclusao
 const botao_fechar = document.querySelector("#botao-fechar");
 const botao_cancelar = document.querySelector("#botao-cancelar");
 const botao_aceitar= document.querySelector("#botao-aceitar");
-const descricao_servico = document.getElementById("campo-padrao");
 const conteiner_div_mensagem_modal = document.getElementById("mensagem_modal_servico_excluir");
 const descricao_classe = document.getElementById("titulo-modal");
 const titulo_janela_modal = document.getElementById("titulo-janela-modal");
@@ -15,17 +14,24 @@ const titulo_janela_modal = document.getElementById("titulo-janela-modal");
 let formSelecionado = null;
 
 form_remover_servico.forEach(
+   
     (formulario) => {
+        
     formulario.addEventListener('submit', (event) => {
 
         formSelecionado = formulario;
         event.preventDefault();
         titulo_janela_modal.textContent = " Excluir "+ descricao_classe.textContent;
 
-        conteiner_div_mensagem_modal.innerHTML= "<p> Excluir "+descricao_classe.textContent +": <strong> "+  descricao_servico.textContent  + 
+        const descricao_servico = formSelecionado.querySelector(".nome-exclusao").value;
+
+        conteiner_div_mensagem_modal.innerHTML= "<p> Excluir "+ descricao_classe.textContent +": <strong> "+  descricao_servico  + 
         " </strong>? </p> O(s) registro(s) selecionado(s) será(ão) excluido(s)." ;
+       
         modal.showModal();
     });
+
+    
 });
 
 
