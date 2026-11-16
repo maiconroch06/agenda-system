@@ -55,9 +55,7 @@ client_form_register.addEventListener('submit',
             //atribui as variaaveis todos os campos do formulario
             const name = document.querySelector('#client-name');
             const email = document.querySelector('#client-email');
-            
-            
-            
+             
             // Pega a div onde vai ficar a mensagem;
             const div = document.querySelector('#div-validation-message');
 
@@ -94,8 +92,7 @@ function validarFieldNull(name, phone,email,password,password_confirm){
     const error = [];
     
     if (name.value === '' || phone.value=== '' || email.value==='' || password.value === '' || password_confirm.value===''){
-        error.push('ATENÇÃO, verifique se todos os campos estão preenchidos');
-    
+      error.push('ATENÇÃO, verifique se todos os campos estão preenchidos');
     }
 
     return error;

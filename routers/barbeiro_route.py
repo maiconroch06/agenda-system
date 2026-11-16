@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, session, request
+from controladores import ControladorBarbeiro
+from enums import EnumStatusMensagens
 
 barbeiro = Blueprint('barbeiro', __name__, template_folder='templates')
 
@@ -6,10 +8,71 @@ barbeiro = Blueprint('barbeiro', __name__, template_folder='templates')
 def barberSource():
     return redirect('/')
 
+##################################################################################
+# Logout Barbeiro - Encerramento da sessão do Barbeiro
+
+@barbeiro.route('/logout', methods=['POST','GET'])
+def barbeiroLogout():
+    session.clear()
+    return redirect('/')
+
+##################################################################################
+# Acesso do Barbeiro - Criação da sessão
+
+@barbeiro.route('/login', methods=["POST"])
+def barbeiroLogin():
+    email_digitado = request.form.get('barbeiro-email-2')
+    senha_digitada = request.form.get('barbeiro-password')
+    
+    return ControladorBarbeiro.login_barbeiro(email_digitado,senha_digitada)
+
+##################################################################################
+# O que isso esta fazendo? A mesma função existe no gestor
+
 @barbeiro.route('/login')
-def barberLogin():
-    return render_template('pages/barbeiro/barbeiro-login.html')
+def barbeiroLoginPagina():
+    if session.get('dados_barbeiro') is None:
+        return render_template('pages/barbeiro/barbeiro-login.html', mensagens_status=EnumStatusMensagens)
+        
+    return redirect(url_for('barbeiro.barbeiroPainel'))
+
+##################################################################################
+# Painel de Visualização de Agendamentos
 
 @barbeiro.route('/painel')
-def barberPanel():
-    return render_template('pages/barbeiro/barbeiro-panel-rp.html')
+def barbeiroPainel():
+    barbeiro = session.get('dados_barbeiro')
+    if not barbeiro:
+        return redirect(url_for('barbeiro.barbeiroLoginPagina'))
+
+    agendamentos_flask = ControladorBarbeiro.consultar_agendamentos_barbeiro(barbeiro)
+    
+    print("\n 1. BARBEIRO NA SESSÃO: ", barbeiro)
+    print("\n 2. AGENDAMENTOS RETORNADOS: ", agendamentos_flask)
+    
+    # Função auxiliar para definir a prioridade
+    def peso_status(status):
+        if status == 2:
+            return 1
+        elif status == 1:
+            return 2
+        elif status == 3:
+            return 3
+        else:
+            return 4  # Cancelado
+
+    # Ordena a lista: 1º pelo peso do status, 2º pela hora (ordem crescente)
+    agendamentos_flask = sorted(
+        agendamentos_flask, key=lambda a: (peso_status(a.get('status')), a.get('hora', '00:00'))
+    )
+
+    return render_template('pages/barbeiro/barbeiro-painel-inicio-rp.html', barbeiro=barbeiro, agendamentos_flask=agendamentos_flask)
+
+@barbeiro.route('/atualizar_status/<id_agendamento>', methods=['POST'])
+def atualizar_status(id_agendamento):
+    status_agendamento = request.form.get('status')
+    
+    ControladorBarbeiro.atualizar_status_agendamento(id_agendamento, status_agendamento)
+    
+    # Recarrega o painel após a alteração de status
+    return redirect(url_for('barbeiro.barbeiroPainel'))

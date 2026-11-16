@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMS Barbearia - Painel Administrativo</title>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
+</head>
+
+<body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
+    
+    {# ───────── DADOS MOCK VS FLASK ───────── #}
+    {% include "componetizacao/preCadastro/dados.html" %}
+    {# ─────────────────────────────────────── #}
+    
+    <!-- HEADER (Exibe apenas para o mobile)-->
+    {% include "componetizacao/Header/header-painel.html" %}
+
+    <div class="flex flex-col min-h-screen">
+
+        <div class="flex flex-1">
+
+            <!-- SIDEBAR DESKTOP -->
+            {% include "componetizacao/SiderBar/sider-bar-gestor.html" %}
+
+            <!-- CONTEÚDO PRINCIPAL -->
+            <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+
+                <!-- ABA FINANCEIRO -->
+                <section class="aba-func" id="aba-financeiro">
+                    <div class="flex items-center justify-between mb-5 gap-3">
+                        <div>
+                            <h1 class="text-lg lg:text-xl font-semibold">Dashboard Financeiro</h1>
+                            <p class="text-xs text-[#888780]" id="data-atual-str"></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-6">
+                        <div
+                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                                Receita do Mês
+                            </div>
+                            <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-receita-mes">
+                                R$ 0,00
+                            </div>
+                        </div>
+                        <div
+                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                                Total Atendimentos
+                            </div>
+                            <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-total-cortes">0</div>
+                        </div>
+                        <div
+                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                                Valor Médio ao Mês
+                            </div>
+                            <div class="text-2xl font-semibold text-[#f1efe8]" id="fin-ticket-medio">
+                                R$ 0,00
+                            </div>
+                        </div>
+                        <div
+                            class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex flex-col justify-between">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1 truncate">
+                                Serviço Mais Realizado
+                            </div>
+                            <div class="text-lg font-semibold text-[#f1efe8] truncate" id="fin-mais-realizado">—</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+
+                        <div class="flex justify-between items-center mb-3">
+                            <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">
+                                Histórico de Agendamento
+                            </h2>
+                        </div>
+
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
+                                            <th class="p-3.5 px-4">Data</th>
+                                            <th class="p-3.5 px-4">Cliente</th>
+                                            <th class="p-3.5 px-4">Serviço(s)</th>
+                                            <th class="p-3.5 px-4">Barbeiro</th>
+                                            <th class="p-3.5 px-4">Valor</th>
+                                            <th class="p-3.5 px-4">Status</th>
+                                        </tr>
+                                        {% for agendamento in lista_agendamentos %} 
+                                            <tr class="border-b border-[#38362f] text-[13px] tracking-wider text-[#888780]">
+                                                <td class="p-3.5 px-4 text-white">{{agendamento.dataHoraAgendamento}}</td>
+                                                <td class="p-3.5 px-4 text-white">{{agendamento.nomeCliente}}</td>
+                                                <td class="p-3.5 px-4">{{agendamento.nomeServico}}</td>
+                                                <td class="p-3.5 px-4">{{agendamento.nomeBarbeiro}}</td>
+                                                <td class="p-3.5 px-4 text-white">{{agendamento.valorServico}}</td>
+                                                <td class="p-3 px-4">{{badgeStatusHTML(agendamento.status)}}</td>
+                                                status agendamento
+                                            </tr>
+                                        {% endfor %} 
+                                    </thead>
+                                    <tbody id="fin-tabela-corpo" class="text-xs text-[#f1efe8]">
+                                        <tr>
+                                            <td colspan="6" class="p-6 text-center text-[#888780]">
+                                                Nenhum agendamento registrado ainda.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- NAVEGAÇÃO INFERIOR MOBILE -->
+        {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
+
+    </div>
+
+    <!-- TOAST AVISO -->
+    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+        id="aviso"></div>
+
+    <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gestor-painel-inicio.js') }}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMS Barbearia - Painel Administrativo</title>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
+</head>
+
+<body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
+
+    {# ───────── DADOS MOCK VS FLASK ───────── #}
+    {% include "componetizacao/preCadastro/dados.html" %}
+    {# ─────────────────────────────────────── #}
+
+    <!-- HEADER (Exibe apenas para o mobile)-->
+    {% include "componetizacao/Header/header-painel.html" %}
+
+    <div class="flex flex-col min-h-screen">
+
+        <div class="flex flex-1 pb-20 md:pb-0">
+
+            <!-- SIDEBAR DESKTOP -->
+            {% include "componetizacao/SiderBar/sider-bar-gestor.html" %}
+
+            <!-- CONTEÚDO PRINCIPAL -->
+            <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+
+                <!-- ABA INICIO -->
+                <section class="aba-func block" id="aba-inicio">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
+                        <div>
+                            <h1 class="text-xl font-semibold">Resumo de Hoje</h1>
+                            <p class="text-xs text-[#888780]" id="data-atual-str"></p>
+                        </div>
+                    </div>
+
+                    <!-- KPIS OPERACIONAIS -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faturamento Hoje</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faturamento-hoje">R$ 0,00</div>
+                        </div>
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Ticket Médio Mensal</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ticket-mdio-mensal">R$ 0,00</div>
+                        </div>
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Taxa de Ocupação</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ocupacao-hoje">0%</div>
+                        </div>
+                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faltas / Cancelados</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faltas-hoje">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Progresso de Conclusão dos Agendamentos -->
+                    {% include "componetizacao/Cards/card-progresso-agendamentos.html" %}
+
+                    <!-- Listagem dos agendamentos de hoje -->
+                    <div class="mb-6">
+
+                        <div class="flex justify-between items-center mb-3">
+
+                            <h2 class="text-sm font-semibold uppercase tracking-wider text-[#888780]">
+                                Agenda de Hoje — Todos os Barbeiros
+                            </h2>
+
+                        </div>
+
+                        <!-- Listagem dos agendamentos de hoje -->
+                        <div class="flex flex-col gap-2" id="lista-hoje-cards"></div>
+
+                    </div>
+
+                </section>
+
+            </main>
+        </div>
+
+        <!-- NAVEGAÇÃO INFERIOR MOBILE -->
+        {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
+
+    </div>
+    
+    <!-- MODAL: DETALHES DO ATENDIMENTO -->
+   {% include "componetizacao/modals/modal-detalhes-atendimento.html" %}
+
+    <!-- TOAST AVISO -->
+    <div
+        class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+        id="aviso">
+    </div>
+
+    <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gestor-painel-inicio.js') }}"></script>
+</body>
+</html>

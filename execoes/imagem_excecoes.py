@@ -1,0 +1,2 @@
+class ImagemErrorExcecao(Exception):
+    pass

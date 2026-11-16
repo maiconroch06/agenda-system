@@ -1,446 +1,453 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" class="scroll-smooth scroll-pt-20 motion-reduce:scroll-auto">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="description" content="TMS Barbearia: cortes, barboterapia e planos mensais com barbeiros especialistas. Agende seu horário online.">
     <title>TMS Barbearia - Estilo e Tradição</title>
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/logos/favicon.png') }}">
-
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
 </head>
 
-<body class="bg-brand-bg-primary text-gray-100 font-sans antialiased selection:bg-brand-gold selection:text-black">
+<body class="bg-brand-bg-primary font-sans text-gray-100 antialiased selection:bg-brand-gold selection:text-black">
 
-    <!-- Header / Navbar -->
+    {# ───────── DADOS (edite o conteúdo aqui) ───────── #}
+    {% set faqs = [
+        ('Preciso agendar ou posso ir sem marcar horário?', 'Recomendamos o agendamento prévio para garantir seu atendimento no horário desejado, sem filas. Porém, também atendemos por ordem de chegada, conforme a disponibilidade dos barbeiros.'),
+        ('Quais formas de pagamento são aceitas?', 'Aceitamos Pix, cartões de crédito e débito (todas as bandeiras), além de dinheiro em espécie.'),
+        ('Atendem crianças e mulheres?', 'Atendemos público infantil masculino a partir de 2 anos, com paciência e estrutura adequada. Nosso foco é exclusivamente em cortes e barbearia masculina.'),
+        ('Os preços da tabela incluem todos os serviços?', 'Cada serviço individual tem seu valor fixo. Combos como Cabelo + Barba possuem valores promocionais dedicados e descritos em nossa tabela.'),
+        ('Qual o horário de funcionamento?', 'Atendemos de segunda a sábado, das 09h às 20h. Não abrimos aos domingos e feriados nacionais.')
+    ] %}
+
+    {# Cabeçalho padrão de seção #}
+    {% macro section_head(eyebrow, title, sub) %}
+    <div class="mx-auto mb-12 max-w-2xl text-center sm:mb-16">
+        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-brand-gold">{{ eyebrow }}</span>
+        <h2 class="font-title mt-3 text-3xl font-bold uppercase tracking-tight text-white sm:text-4xl lg:text-5xl">{{ title | safe }}</h2>
+        <p class="mt-4 text-sm text-brand-muted sm:text-base">{{ sub }}</p>
+    </div>
+    {% endmacro %}
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-brand-gold focus:px-4 focus:py-2 focus:text-black">Ir para o conteúdo</a>
+
     {% include "componetizacao/Header/header.html" %}
 
-    <!-- Hero Section -->
-    <section id="home"
-        class="relative min-h-screen flex items-center justify-center text-center pt-24 pb-16 px-5 bg-cover bg-center"
-        style="background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('hero-bg.jpg');">
-        <div class="max-w-3xl mx-auto space-y-6">
-            <h1
-                class="font-title text-4xl sm:text-5xl md:text-6xl font-bold uppercase tracking-wide text-white leading-tight">
-                O seu estilo em alto nível. A sua melhor versão todos os dias
-            </h1>
-            <p class="text-base sm:text-lg text-brand-muted max-w-2xl mx-auto">
-                Um ambiente moderno e acolhedor com profissionais especializados para valorizar a sua imagem.
-            </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                <a href="/cliente/login"
-                    class="w-full sm:w-auto px-8 py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-semibold text-sm uppercase tracking-wider rounded transition-all duration-300 shadow-lg hover:scale-105">
-                    Agendar Agora
-                </a>
-                <a href="#servicos"
-                    class="w-full sm:w-auto px-8 py-3.5 border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black font-semibold text-sm uppercase tracking-wider rounded transition-all duration-300 hover:scale-105">
-                    Ver Serviços
-                </a>
-            </div>
-        </div>
-    </section>
+    <main id="main">
 
-    <!-- Seção Nossa Equipe -->
-    <section id="equipe" class="py-20 bg-brand-bg-secondary border-t border-brand-border/50">
-        <div class="max-w-5xl mx-auto px-5">
-            <div class="text-center mb-12">
-                <h2 class="font-title text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">Nossa
-                    Equipe</h2>
-                <p class="text-brand-muted text-sm sm:text-base mt-2">Profissionais highly qualificados para
-                    entregar o
-                    seu melhor estilo</p>
-            </div>
-
-            <div class="flex flex-col gap-8">
-                <!-- Cards dos Barbeiros -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-
-                    <!-- Barbeiro 1 (Ativo por Padrão) -->
-                    <div class="barber-card border-2 border-brand-gold bg-brand-gold/5 bg-brand-bg-card rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1"
-                        onclick="selectBarber(1, this)">
-                        <div
-                            class="photo-wrapper w-28 h-28 rounded-full overflow-hidden bg-[#22252a] border-2 border-brand-gold mb-4 transition-colors">
-                            <img src="static/assets/img/barbeiros/barbeiro-master-thiago-silva.png"
-                                alt="Foto do Barbeiro Lucas Mendes" class="w-full h-full object-cover">
-                        </div>
-                        <div class="space-y-1">
-                            <h3 class="font-bold text-lg text-white">Thiago Silva</h3>
-                            <span class="text-xs text-brand-muted block">Master Barber</span>
-                        </div>
-                    </div>
-
-                    <!-- Barbeiro 2 -->
-                    <div class="barber-card border border-brand-border bg-brand-bg-card rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/40"
-                        onclick="selectBarber(2, this)">
-                        <div
-                            class="photo-wrapper w-28 h-28 rounded-full overflow-hidden bg-[#22252a] border-2 border-brand-border mb-4 transition-colors">
-                            <img src="static/assets/img/barbeiros/barbeiro_dois_maik.png"
-                                alt="Foto do Barbeiro Lucas Mendes" class="w-full h-full object-cover">
-                        </div>
-                        <div class="space-y-1">
-                            <h3 class="font-bold text-lg text-white">Maik Mendes</h3>
-                            <span class="text-xs text-brand-muted block">Especialista em Visagismo</span>
-                        </div>
-                    </div>
-
-                    <!-- Barbeiro 3 -->
-                    <div class="barber-card border border-brand-border bg-brand-bg-card rounded-xl p-6 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/40"
-                        onclick="selectBarber(3, this)">
-                        <div
-                            class="photo-wrapper w-28 h-28 rounded-full overflow-hidden bg-[#22252a] border-2 border-brand-border mb-4 transition-colors">
-                            <img src="static/assets/img/barbeiros/barbeiro-tres-samuca.png"
-                                alt="Foto do Barbeiro Rafael Costa" class="w-full h-full object-cover">
-                        </div>
-                        <div class="space-y-1">
-                            <h3 class="font-bold text-lg text-white">Samuca Costa</h3>
-                            <span class="text-xs text-brand-muted block">Especialista em Barboterapia</span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Painel de Detalhes -->
-                <div class="bg-brand-bg-card border border-brand-border rounded-xl p-6 sm:p-9 min-h-[220px] shadow-lg">
-
-                    <!-- Detalhes Barbeiro 1 -->
-                    <div id="details-1" class="details-content block animate-fade-in space-y-4">
-                        <span class="text-xs font-bold uppercase tracking-wider text-brand-gold block">Fundador &
-                            Master
-                            Barber</span>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Thiago Silva</h2>
-                        <span class="text-xs text-brand-muted block">10+ anos de experiência</span>
-                        <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
-                            Especializado nas principais academias internacionais, Barbeiro Master domina técnicas
-                            avançadas de corte a tesoura, estruturação de cabelo masculino e atendimento
-                            personalizado
-                            de alto padrão.
-                        </p>
-                        <div class="flex flex-wrap gap-2 pt-2">
-                            <span
-                                class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Visagismo</span>
-                            <span
-                                class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Cortes
-                                Clássicos</span>
-                            <span
-                                class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Modelagem
-                                de Barba</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalhes Barbeiro 2 -->
-                    <div id="details-2" class="details-content hidden animate-fade-in space-y-4">
-                        <span class="text-xs font-bold uppercase tracking-wider text-brand-gold block">Especialista
-                            em
-                            Estilo</span>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Maik Mendes</h2>
-                        <span class="text-xs text-brand-muted block">6 anos de experiência</span>
-                        <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
-                            Com foco em tendências modernas, Maik é especialista em degradações perfeitas (Fade),
-                            alinhamento de contornos e penteados urbanos contemporâneos.
-                        </p>
-                        <div class="flex flex-wrap gap-2 pt-2">
-                            <span
-                                class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Fade
-                                / Degradê</span>
-                            <span
-                                class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Hair
-                                Design</span>
-                            <span
-                                class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Colorimetria</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalhes Barbeiro 3 -->
-                    <div id="details-3" class="details-content hidden animate-fade-in space-y-4">
-                        <span class="text-xs font-bold uppercase tracking-wider text-brand-gold block">Especialista
-                            em
-                            Barboterapia</span>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Samuca Costa</h2>
-                        <span class="text-xs text-brand-muted block">8 anos de experiência</span>
-                        <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
-                            Mestre no tradicional ritual da barba com toalha quente e lâmina afiada. Samuca garante
-                            um
-                            momento relaxante combinado a cuidados profundos com a pele.
-                        </p>
-                        <div class="flex flex-wrap gap-2 pt-2">
-                            <span
-                                class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Barboterapia</span>
-                            <span
-                                class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Tratamento
-                                Facial</span>
-                            <span
-                                class="bg-white/5 border border-brand-border px-3.5 py-1 rounded-full text-xs text-brand-muted">Navalha
-                                Clássica</span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Seção de Serviços -->
-    <section id="servicos" class="py-20 bg-brand-bg-primary border-t border-brand-border/30">
-        <div class="max-w-6xl mx-auto px-5">
-            <div class="text-center mb-12">
-                <h2 class="font-title text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-brand-gold">
-                    Nossos Serviços</h2>
-                <p class="text-brand-muted text-sm sm:text-base mt-2">Desde cortes clássicos a tratamentos completos
+        <!-- Hero -->
+        <section id="home"
+            class="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden bg-cover bg-center px-5 pb-20 pt-28 text-center"
+            style="background-image: linear-gradient(rgba(0,0,0,.78), rgba(0,0,0,.9)), url('{{ url_for('static', filename='assets/img/hero-bg.jpg') }}');">
+            <div aria-hidden="true" class="absolute left-1/2 top-0 -z-10 h-72 w-[44rem] max-w-full -translate-x-1/2 rounded-full bg-brand-gold/10 blur-3xl"></div>
+            <div class="mx-auto max-w-4xl">
+                <span class="inline-flex items-center gap-2 rounded-full border border-brand-border bg-white/5 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-gold sm:text-xs">
+                    <span class="h-1.5 w-1.5 rounded-full bg-brand-gold"></span>Estilo e Tradição
+                </span>
+                <h1 class="font-title mt-6 text-4xl font-bold uppercase leading-[1.05] tracking-wide text-white sm:text-6xl lg:text-7xl">
+                    O seu estilo em <span class="text-brand-gold">alto nível</span>. A sua melhor versão todos os dias
+                </h1>
+                <p class="mx-auto mt-6 max-w-2xl text-base text-brand-muted sm:text-lg">
+                    Um ambiente moderno e acolhedor com profissionais especializados para valorizar a sua imagem.
                 </p>
+                <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                    <a href="/cliente/login"
+                        class="w-full rounded bg-brand-gold px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-black shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-gold-hover hover:shadow-brand-gold/20 sm:w-auto">Agendar Agora</a>
+                    <a href="#servicos"
+                        class="w-full rounded border border-brand-gold px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-brand-gold transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-gold hover:text-black sm:w-auto">Ver Serviços</a>
+                </div>
+                <dl class="mx-auto mt-14 grid max-w-xl grid-cols-3 divide-x divide-brand-border border-t border-brand-border pt-8">
+                    {% for n, l in [('10+', 'Anos de experiência'), ('3', 'Barbeiros especialistas'), ('Seg–Sáb', '09h às 20h')] %}
+                        <div class="px-2">
+                            <dt class="font-title text-2xl text-white sm:text-3xl">{{ n }}</dt>
+                            <dd class="mt-1 text-[11px] text-brand-muted sm:text-xs">{{ l }}</dd>
+                        </div>
+                    {% endfor %}
+                </dl>
             </div>
+        </section>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div
-                    class="bg-brand-bg-card p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-                    <div>
-                        <h3 class="font-title text-xl text-white mb-2">Cabelo</h3>
-                        <p class="text-brand-muted text-sm mb-6">Cortes personalizados para valorizar o seu estilo e
-                            formato de rosto.</p>
+        <!-- Equipe -->
+        <section id="equipe" class="border-t border-brand-border/50 bg-brand-bg-secondary py-20 sm:py-28 overflow-hidden">
+            <div class="mx-auto max-w-5xl px-5 relative">
+                {{ section_head('Quem somos', 'Nossa <span class="text-brand-gold">Equipe</span>', 'Profissionais altamente qualificados para entregar o seu melhor estilo') }}
+
+                <!-- Container do Carrossel de Barbeiros (Tabs) -->
+                <div class="relative mx-auto mt-10 h-[220px] w-full max-w-4xl sm:h-[240px]">
+                    
+                    <!-- Setas de Navegação -->
+                    <button id="btn-prev-barber" class="absolute left-0 top-1/2 z-30 -translate-y-1/2 rounded-full bg-brand-bg-primary border border-brand-border p-3 text-brand-gold shadow-lg transition-all hover:scale-110 hover:bg-brand-gold hover:text-black hidden sm:block">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+
+                    <button id="btn-next-barber" class="absolute right-0 top-1/2 z-30 -translate-y-1/2 rounded-full bg-brand-bg-primary border border-brand-border p-3 text-brand-gold shadow-lg transition-all hover:scale-110 hover:bg-brand-gold hover:text-black hidden sm:block">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+
+                    <!-- Lista de Tabs (Cards do Carrossel) PRIMEIRO CARROSSEL -->
+                    <div id="barber-carousel-track" class="relative flex h-full w-full items-center justify-center">
+                        {% if barbeiros %}
+                            {% for b in barbeiros %}
+                                <button type="button" role="tab" id="tab-{{ loop.index }}" aria-controls="panel-{{ loop.index }}"
+                                    aria-selected="{{ 'true' if loop.first else 'false' }}" tabindex="{{ 0 if loop.first else -1 }}"
+                                    class="barber-tab absolute w-full max-w-[200px] flex flex-col items-center justify-center gap-2 rounded-xl border border-brand-border bg-brand-bg-card p-4 text-center transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold/80 aria-selected:border-brand-gold aria-selected:bg-brand-gold/5">
+                                    
+                                    <span class="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-brand-border bg-[#22252a] transition-colors group-aria-selected:border-brand-gold sm:h-28 sm:w-28">
+                                        <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_nome_usuario) }}"
+                                        alt="Foto do barbeiro {{ b.nome_completo }}" width="112" height="112" loading="lazy" class="h-full w-full aspect-[3/4] object-cover">
+                                    </span>
+                                    <span>
+                                        <span class="block text-base font-bold text-white sm:text-lg">{{ b.nome_completo }}</span>
+                                        <!-- <span class="mt-1 block text-xs text-brand-muted">{{ b.role }}</span> -->
+                                    </span>
+                                </button>
+                                                   
+                            {% endfor %}
+                        {% endif %}
                     </div>
-                    <span class="text-xl font-bold text-brand-gold">R$ 50,00</span>
                 </div>
 
-                <div
-                    class="bg-brand-bg-card p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-                    <div>
-                        <h3 class="font-title text-xl text-white mb-2">Barboterapia</h3>
-                        <p class="text-brand-muted text-sm mb-6">Barba alinhada com toalha quente, massagem e
-                            produtos
-                            de alta qualidade.</p>
-                    </div>
-                    <span class="text-xl font-bold text-brand-gold">R$ 45,00</span>
+                <!-- Controles Mobile (Setas em baixo) -->
+                <div class="mt-2 mb-6 flex justify-center gap-4 sm:hidden">
+                    <button id="btn-prev-barber-mobile" class="rounded-full bg-brand-bg-primary border border-brand-border p-3 text-brand-gold shadow-lg transition-all active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                    </button>
+                    <button id="btn-next-barber-mobile" class="rounded-full bg-brand-bg-primary border border-brand-border p-3 text-brand-gold shadow-lg transition-all active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                    </button>
                 </div>
 
-                <div
-                    class="bg-brand-bg-card p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-                    <div>
-                        <h3 class="font-title text-xl text-white mb-2">Combo TMS</h3>
-                        <p class="text-brand-muted text-sm mb-6">Corte de cabelo e barboterapia completa para um
-                            visual
-                            impecável.</p>
-                    </div>
-                    <span class="text-xl font-bold text-brand-gold">R$ 85,00</span>
-                </div>
+                <!-- Painéis com informações (Abaixo do Carrossel) -->
+                <div class="mt-8 rounded-xl border border-brand-border bg-brand-bg-card overflow-hidden shadow-lg">
+                    {% if barbeiros %}    
+                        {% for b in barbeiros %}
+                            <div id="panel-{{ loop.index }}" role="tabpanel" aria-labelledby="tab-{{ loop.index }}" tabindex="0"
+                                class="barber-panel {{ '' if loop.first else 'hidden' }} animate-fade-in flex flex-col md:flex-row items-center w-full">
 
-                <div
-                    class="bg-brand-bg-card p-7 rounded-xl border border-brand-border hover:border-brand-gold hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-                    <div>
-                        <h3 class="font-title text-xl text-white mb-2">Sobrancelha & Acabamento</h3>
-                        <p class="text-brand-muted text-sm mb-6">Alinhamento e simetria para realçar o olhar de
-                            forma
-                            natural.</p>
-                    </div>
-                    <span class="text-xl font-bold text-brand-gold">R$ 25,00</span>
-                </div>
-            </div>
-        </div>
-    </section>
+                                <!-- Informações (Texto) -->
+                                <div class="space-y-4 flex-1 w-full text-center md:text-left p-6 sm:p-10 flex flex-col justify-center">
+                                    <div>
+                                        <span class="block text-xs font-bold uppercase tracking-[0.2em] text-brand-gold">{{ b.especialidade }}</span>
+                                        <h3 class="font-title text-2xl font-bold text-white sm:text-4xl mt-1">{{ b.nome_completo }}</h3>
+                                        <span class="block text-xs text-brand-muted">{{ b.data_inicio_carreira }} anos de esperiencias</span>
+                                    </div>
+                                    <p class="max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base mx-auto md:mx-0">{{ b.bio }}</p>
+                        
+                                    <div class="pt-2">
+                                        <a href="/cliente/login" class="inline-block text-sm font-semibold text-brand-gold transition-colors hover:text-white">Agendar com {{ b.nome_completo.split()[0] }} →</a>
+                                    </div>
+                                </div>
 
-    <!-- Seção de Planos -->
-    <section id="planos" class="py-20 bg-brand-bg-secondary border-t border-brand-border/50">
-        <div class="max-w-6xl mx-auto px-5">
-            <div class="text-center mb-12">
-                <h2 class="font-title text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">
-                    Planos
-                    Mensais</h2>
-                <p class="text-brand-muted text-sm sm:text-base mt-2">Mantenha o visual sempre em dia com descontos
-                    exclusivos</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-                <!-- Plano 1 -->
-                <div
-                    class="bg-brand-bg-card p-8 rounded-xl border border-brand-border text-center flex flex-col justify-between h-full">
-                    <div>
-                        <h3 class="font-title text-2xl text-white mb-3">Plano Corte</h3>
-                        <div class="text-4xl font-bold text-white mb-6">R$ 135<span
-                                class="text-sm font-normal text-brand-muted">/mês</span></div>
-                        <ul class="text-sm text-brand-muted divide-y divide-brand-border/60 mb-8">
-                            <li class="py-2.5">4 Cortes de Cabelo por mês</li>
-                            <li class="py-2.5">10% OFF em produtos</li>
-                            <li class="py-2.5">Atendimento VIP</li>
-                        </ul>
-                    </div>
-                    <a href="#"
-                        class="block w-full py-3 border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black font-semibold text-xs uppercase tracking-wider rounded transition-all">Assinar
-                        Plano</a>
-                </div>
-
-                <!-- Plano 2 (Destaque) -->
-                <div
-                    class="bg-brand-bg-card p-8 rounded-xl border-2 border-brand-gold text-center relative md:-translate-y-2 shadow-xl shadow-brand-gold/10 flex flex-col justify-between h-full">
-                    <span
-                        class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-gold text-black px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">Mais
-                        Pedido</span>
-                    <div>
-                        <h3 class="font-title text-2xl text-white mb-3">Plano Combo</h3>
-                        <div class="text-4xl font-bold text-white mb-6">R$ 240<span
-                                class="text-sm font-normal text-brand-muted">/mês</span></div>
-                        <ul class="text-sm text-brand-muted divide-y divide-brand-border/60 mb-8">
-                            <li class="py-2.5">4 Cortes + 4 Barbas por mês</li>
-                            <li class="py-2.5">15% OFF em produtos</li>
-                            <li class="py-2.5">Desconto em serviços extras</li>
-                        </ul>
-                    </div>
-                    <a href="#"
-                        class="block w-full py-3.5 bg-brand-gold hover:bg-brand-gold-hover text-black font-semibold text-xs uppercase tracking-wider rounded transition-all shadow-md">Garantir
-                        Estilo</a>
-                </div>
-
-                <!-- Plano 3 -->
-                <div
-                    class="bg-brand-bg-card p-8 rounded-xl border border-brand-border text-center flex flex-col justify-between h-full">
-                    <div>
-                        <h3 class="font-title text-2xl text-white mb-3">Plano Barba</h3>
-                        <div class="text-4xl font-bold text-white mb-6">R$ 120<span
-                                class="text-sm font-normal text-brand-muted">/mês</span></div>
-                        <ul class="text-sm text-brand-muted divide-y divide-brand-border/60 mb-8">
-                            <li class="py-2.5">4 Barboterapias por mês</li>
-                            <li class="py-2.5">10% OFF em produtos</li>
-                            <li class="py-2.5">Atendimento VIP</li>
-                        </ul>
-                    </div>
-                    <a href="#"
-                        class="block w-full py-3 border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black font-semibold text-xs uppercase tracking-wider rounded transition-all">Assinar
-                        Plano</a>
+                                <div class="relative w-full md:w-[300px] shrink-0 overflow-hidden md:border-l border-brand-border/30 aspect-square md:aspect-[3/4] bg-brand-bg-card">
+                                    <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_nome_usuario) }}" 
+                                        alt="Foto do barbeiro {{ b.nome_completo }}" 
+                                        loading="lazy" 
+                                        class="h-full w-full aspect-[3/4] object-cover [mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]
+                                                    [-webkit-mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]">
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Seção Perguntas & Respostas (FAQ) -->
-    <section id="faq" class="py-20 bg-black text-white border-t border-brand-border/30">
-        <div class="max-w-4xl mx-auto px-5">
-            <div class="text-center mb-12">
-                <span class="text-xs font-bold uppercase tracking-widest text-brand-gold block mb-2">Dúvidas
-                    Frequentes</span>
-                <h2 class="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-2">
-                    Perguntas <span class="italic font-normal text-brand-gold">& respostas</span>
-                </h2>
-                <p class="text-brand-muted text-sm sm:text-base">Tudo o que você precisa saber antes de vir</p>
-            </div>
+        <!-- Serviços -->
+        <section id="servicos" class="border-t border-brand-border/30 bg-brand-bg-primary py-20 sm:py-28 overflow-hidden">
+            
+            <div class="mx-auto max-w-6xl px-5 relative">
+                {% if servicos %}
+                    {{ section_head('Cuidado completo', 'Nossos <span class="text-brand-gold">Serviços</span>', 'Desde cortes clássicos a tratamentos completos') }}
+                
+                    <!-- Container do Carrossel -->
+                    <div class="relative mx-auto mt-10 h-[450px] w-full max-w-5xl md:h-[420px]">
+                        
+                        <!-- Setas de Navegação -->
+                        <button id="btn-prev-service" class="absolute left-0 top-1/2 z-30 -translate-y-1/2 rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all hover:scale-110 hover:bg-brand-gold hover:text-black hidden sm:block">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                            </svg>
+                        </button>
 
-            <!-- Acordeão FAQ -->
-            <div class="divide-y divide-white/10 border-y border-white/10">
+                        <button id="btn-next-service" class="absolute right-0 top-1/2 z-30 -translate-y-1/2 rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all hover:scale-110 hover:bg-brand-gold hover:text-black hidden sm:block">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                            </svg>
+                        </button>
 
-                <details class="group py-2 transition-colors">
-                    <summary
-                        class="flex justify-between items-center py-4 text-base sm:text-lg font-medium text-white cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
-                        <span>Preciso agendar ou posso ir sem marcar horário?</span>
-                        <span
-                            class="w-7 h-7 rounded-full border border-white/20 text-brand-gold flex items-center justify-center text-lg transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold shrink-0 ml-4">+</span>
-                    </summary>
-                    <div class="pb-4 text-brand-muted text-sm sm:text-base leading-relaxed animate-fade-in">
-                        Recomendamos o agendamento prévio para garantir seu atendimento no horário desejado sem
-                        filas.
-                        Porém, também atendemos por ordem de chegada conforme a disponibilidade dos barbeiros.
-                    </div>
-                </details>
-
-                <details class="group py-2 transition-colors">
-                    <summary
-                        class="flex justify-between items-center py-4 text-base sm:text-lg font-medium text-white cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
-                        <span>Quais formas de pagamento são aceitas?</span>
-                        <span
-                            class="w-7 h-7 rounded-full border border-white/20 text-brand-gold flex items-center justify-center text-lg transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold shrink-0 ml-4">+</span>
-                    </summary>
-                    <div class="pb-4 text-brand-muted text-sm sm:text-base leading-relaxed animate-fade-in">
-                        Aceitamos Pix, cartões de crédito e débito (todas as bandeiras), além de dinheiro em
-                        espécie.
-                    </div>
-                </details>
-
-                <details class="group py-2 transition-colors">
-                    <summary
-                        class="flex justify-between items-center py-4 text-base sm:text-lg font-medium text-white cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
-                        <span>Atendem crianças e mulheres?</span>
-                        <span
-                            class="w-7 h-7 rounded-full border border-white/20 text-brand-gold flex items-center justify-center text-lg transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold shrink-0 ml-4">+</span>
-                    </summary>
-                    <div class="pb-4 text-brand-muted text-sm sm:text-base leading-relaxed animate-fade-in">
-                        Atendemos público infantil masculino a partir de 2 anos com paciência e estrutura adequada.
-                        Nosso foco é exclusivamente em cortes e barbearia masculina.
-                    </div>
-                </details>
-
-                <details class="group py-2 transition-colors">
-                    <summary
-                        class="flex justify-between items-center py-4 text-base sm:text-lg font-medium text-white cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
-                        <span>Os preços da tabela incluem todos os serviços?</span>
-                        <span
-                            class="w-7 h-7 rounded-full border border-white/20 text-brand-gold flex items-center justify-center text-lg transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold shrink-0 ml-4">+</span>
-                    </summary>
-                    <div class="pb-4 text-brand-muted text-sm sm:text-base leading-relaxed animate-fade-in">
-                        Cada serviço individual tem seu valor fixo. Combos como Cabelo + Barba possuem valores
-                        promocionais dedicados e descritos em nossa tabela.
-                    </div>
-                </details>
-
-                <details class="group py-2 transition-colors">
-                    <summary
-                        class="flex justify-between items-center py-4 text-base sm:text-lg font-medium text-white cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
-                        <span>Qual o horário de funcionamento?</span>
-                        <span
-                            class="w-7 h-7 rounded-full border border-white/20 text-brand-gold flex items-center justify-center text-lg transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold shrink-0 ml-4">+</span>
-                    </summary>
-                    <div class="pb-4 text-brand-muted text-sm sm:text-base leading-relaxed animate-fade-in">
-                        Atendemos de Segunda a Sábado, das 09h às 20h. Não abrimos aos domingos e feriados
-                        nacionais.
-                    </div>
-                </details>
+                        <!-- Lista de Cards -->
+                        <div id="carousel-track" class="relative flex h-full w-full items-center justify-center">
+                        
+                                {% for servico in servicos %}
+                                    <article class="service-card absolute w-full max-w-[280px] sm:max-w-[300px] flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold">
+                                        <div>           
+                                            <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/servicos-imagens/' ~ servico.foto_nome_servico) }}" alt="{{ servico.descricao }}" class="w-full object-cover rounded-lg mb-3">
+                                            
+                                            <h3 class="font-title mb-1 text-xl text-white">{{ servico.descricao_servico }}</h3>
+                                            <p class="text-sm leading-relaxed text-brand-muted">Duração: {{ servico.duracao }} min</p>
+                                        </div>
+                                        <div class="mt-8 flex items-center justify-between border-t border-brand-border pt-5">
+                                            <span class="text-xl font-bold text-brand-gold">R$ {{ "%.2f"|format(servico.valor|float) }}</span>
+                                            <a href="/cliente/login" class="text-xs font-semibold uppercase tracking-wider text-brand-muted transition-colors group-hover:text-brand-gold">Agendar →</a>
+                                        </div>
+                                    </article>
+                                {% endfor %}
+                                
+                        </div>
+                    {% else %}
+                        
+                        {{ section_head('Nenhum', '<span class="text-brand-gold">Serviço</span>', 'Cadastrado') }}
+                    
+                    {% endif %}
+                </div>
+               
+                
+                <!-- Controles Mobile (Setas em baixo) -->
+                <div class="mt-6 flex justify-center gap-4 sm:hidden">
+                    <button id="btn-prev-mobile" class="rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                    </button>
+                    <button id="btn-next-mobile" class="rounded-full bg-brand-bg-secondary border border-brand-border p-3 text-brand-gold shadow-lg transition-all active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                    </button>
+                </div>
 
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    {%include "componetizacao/Footer/footer.html"%}
 
-    <!-- Script Interatividade Barbeiros -->
+        <!-- FAQ -->
+        <section id="faq" class="border-t border-brand-border/30 bg-black py-20 text-white sm:py-28">
+            <div class="mx-auto max-w-3xl px-5">
+                {{ section_head('Dúvidas Frequentes', 'Perguntas <span class="italic font-normal text-brand-gold">& respostas</span>', 'Tudo o que você precisa saber antes de vir') }}
+
+                <div class="divide-y divide-white/10 border-y border-white/10">
+                    {% for q, a in faqs %}
+                    <details class="group">
+                        <summary class="flex cursor-pointer select-none list-none items-center justify-between gap-4 py-5 text-base font-medium text-white transition-colors hover:text-brand-gold sm:text-lg [&::-webkit-details-marker]:hidden">
+                            <span>{{ q }}</span>
+                            <span aria-hidden="true" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/20 text-lg text-brand-gold transition-transform duration-300 group-open:rotate-45 group-open:border-brand-gold">+</span>
+                        </summary>
+                        <p class="animate-fade-in pb-5 text-sm leading-relaxed text-brand-muted sm:text-base">{{ a }}</p>
+                    </details>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA final -->
+        <section class="border-t border-brand-border/30 bg-brand-bg-primary py-20 sm:py-24">
+            <div class="mx-auto max-w-4xl px-5">
+                <div class="rounded-2xl border border-brand-gold/40 bg-brand-bg-card px-6 py-12 text-center sm:px-12">
+                    <h2 class="font-title text-2xl font-bold uppercase text-white sm:text-4xl">Pronto para renovar o visual?</h2>
+                    <p class="mt-4 text-sm text-brand-muted sm:text-base">Escolha o barbeiro, o serviço e o horário em poucos cliques.</p>
+                    <a href="/cliente/login" class="mt-8 inline-block rounded bg-brand-gold px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-black shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-gold-hover">Agendar Horário</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include "componetizacao/Footer/footer.html" %}
+
+    <!-- Script do Carrossel de Equipe -->
     <script>
-        function selectBarber(id, cardElement) {
-            // Remove o estado ativo de todos os cards
-            document.querySelectorAll('.barber-card').forEach(card => {
-                card.classList.remove('border-2', 'border-brand-gold', 'bg-brand-gold/5');
-                card.classList.add('border', 'border-brand-border');
+        (() => {
+            const barberTabs = Array.from(document.querySelectorAll('.barber-tab'));
+            const barberPanels = Array.from(document.querySelectorAll('.barber-panel'));
+            const totalBarbers = barberTabs.length;
+            
+            if (totalBarbers === 0) return;
 
-                const photo = card.querySelector('.photo-wrapper');
-                if (photo) {
-                    photo.classList.remove('border-brand-gold');
-                    photo.classList.add('border-brand-border');
-                }
-            });
-
-            // Esconde todas as descrições
-            document.querySelectorAll('.details-content').forEach(detail => {
-                detail.classList.add('hidden');
-                detail.classList.remove('block');
-            });
-
-            // Aplica o estado ativo ao card clicado
-            cardElement.classList.remove('border', 'border-brand-border');
-            cardElement.classList.add('border-2', 'border-brand-gold', 'bg-brand-gold/5');
-
-            const photoWrapper = cardElement.querySelector('.photo-wrapper');
-            if (photoWrapper) {
-                photoWrapper.classList.remove('border-brand-border');
-                photoWrapper.classList.add('border-brand-gold');
+            // Se houver 3 ou menos barbeiros, alinhar horizontalmente sem quebrar
+            if (totalBarbers <= 2) {
+                const track = document.getElementById('barber-carousel-track');
+                track.classList.remove('relative');
+                track.classList.add('flex', 'gap-4', 'flex-wrap');
+                
+                document.querySelectorAll('#btn-prev-barber, #btn-next-barber, #btn-prev-barber-mobile, #btn-next-barber-mobile')
+                    .forEach(btn => btn.style.display = 'none');
+                
+                barberTabs.forEach((tab, index) => {
+                    tab.classList.remove('absolute', 'opacity-0', 'scale-50');
+                    tab.classList.add('opacity-100', 'scale-100');
+                    
+                    // Funcionalidade de clique básica para quando há poucos cards
+                    tab.addEventListener('click', () => {
+                        barberTabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+                        tab.setAttribute('aria-selected', 'true');
+                        
+                        barberPanels.forEach(p => p.classList.add('hidden'));
+                        barberPanels[index].classList.remove('hidden');
+                    });
+                });
+                return;
             }
 
-            // Exibe a descrição do barbeiro selecionado
-            const targetDetail = document.getElementById(`details-${id}`);
-            if (targetDetail) {
-                targetDetail.classList.remove('hidden');
-                targetDetail.classList.add('block');
+            let currentIndex = 0;
+            let autoplayBarberTimer;
+
+            // Classes de estado do carrossel 3D
+            const classHiddenLeft = ['opacity-0', 'scale-50', '-translate-x-[150%]', 'z-0'];
+            const classLeft = ['opacity-60', 'scale-90', '-translate-x-[85%]', 'sm:-translate-x-[110%]', 'z-10'];
+            const classCenter = ['opacity-100', 'scale-100', 'sm:scale-105', 'translate-x-0', 'z-20', 'shadow-2xl', 'shadow-brand-gold/10'];
+            const classRight = ['opacity-60', 'scale-90', 'translate-x-[85%]', 'sm:translate-x-[110%]', 'z-10'];
+            const classHiddenRight = ['opacity-0', 'scale-50', 'translate-x-[150%]', 'z-0'];
+
+            const updateBarberCarousel = () => {
+                const length = totalBarbers;
+                const prevIndex = (currentIndex - 1 + length) % length;
+                const nextIndex = (currentIndex + 1) % length;
+
+                barberTabs.forEach((tab, i) => {
+                    tab.classList.remove(...classHiddenLeft, ...classLeft, ...classCenter, ...classRight, ...classHiddenRight);
+
+                    if (i === currentIndex) {
+                        tab.classList.add(...classCenter);
+                        tab.setAttribute('aria-selected', 'true');
+                        tab.tabIndex = 0;
+                    } else {
+                        tab.setAttribute('aria-selected', 'false');
+                        tab.tabIndex = -1;
+                        
+                        if (i === prevIndex) {
+                            tab.classList.add(...classLeft);
+                        } else if (i === nextIndex) {
+                            tab.classList.add(...classRight);
+                        } else {
+                            const dist = (i - currentIndex + length) % length;
+                            if (dist < length / 2) {
+                                tab.classList.add(...classHiddenRight);
+                            } else {
+                                tab.classList.add(...classHiddenLeft);
+                            }
+                        }
+                    }
+                });
+
+                // Atualiza a exibição do painel associado
+                barberPanels.forEach((panel, i) => {
+                    if (i === currentIndex) {
+                        panel.classList.remove('hidden');
+                    } else {
+                        panel.classList.add('hidden');
+                    }
+                });
+            };
+
+            const next = () => { currentIndex = (currentIndex + 1) % totalBarbers; updateBarberCarousel(); };
+            const prev = () => { currentIndex = (currentIndex - 1 + totalBarbers) % totalBarbers; updateBarberCarousel(); };
+
+            document.getElementById('btn-next-barber')?.addEventListener('click', () => { next(); resetTimer(); });
+            document.getElementById('btn-prev-barber')?.addEventListener('click', () => { prev(); resetTimer(); });
+            document.getElementById('btn-next-barber-mobile')?.addEventListener('click', () => { next(); resetTimer(); });
+            document.getElementById('btn-prev-barber-mobile')?.addEventListener('click', () => { prev(); resetTimer(); });
+
+            // Permitir que o clique num card lateral o traga para o centro
+            barberTabs.forEach((tab, i) => {
+                tab.addEventListener('click', () => {
+                    currentIndex = i;
+                    updateBarberCarousel();
+                    resetTimer();
+                });
+            });
+
+            const resetTimer = () => {
+                clearInterval(autoplayBarberTimer);
+                autoplayBarberTimer = setInterval(next, 5000); // Rotação a cada 5s
+            };
+
+            updateBarberCarousel();
+            resetTimer();
+        })();
+    </script>
+
+    <!-- Script do Carrossel de Serviços 3D -->
+    <script>
+        (() => {
+            const cards = Array.from(document.querySelectorAll('.service-card'));
+            const totalCards = cards.length;
+            
+            if (totalCards === 0) return;
+    
+            // Proteção: Se houver 3 ou menos cards, desativa o 3D e alinha no centro (sem quebrar o layout)
+            if (totalCards <= 3) {
+                const track = document.getElementById('carousel-track');
+                track.classList.remove('relative');
+                track.classList.add('flex', 'gap-4', 'flex-wrap');
+                
+                document.querySelectorAll('#btn-prev-service, #btn-next-service, #btn-prev-mobile, #btn-next-mobile')
+                    .forEach(btn => btn.style.display = 'none');
+                
+                cards.forEach(card => {
+                    card.classList.remove('absolute', 'opacity-0', 'scale-50');
+                    card.classList.add('opacity-100', 'scale-100');
+                });
+                return;
             }
-        }
+    
+            let currentIndex = 0;
+            let autoplayTimer;
+    
+            // Classes de estado (Tailwind) para as animações de surgir/sumir e destacar o meio
+            const classHiddenLeft = ['opacity-0', 'scale-50', '-translate-x-[150%]', 'z-0'];
+            const classLeft = ['opacity-60', 'scale-90', '-translate-x-[85%]', 'sm:-translate-x-[110%]', 'z-10'];
+            const classCenter = ['opacity-100', 'scale-100', 'sm:scale-105', 'translate-x-0', 'z-20', 'border-brand-gold', 'shadow-2xl', 'shadow-brand-gold/10'];
+            const classRight = ['opacity-60', 'scale-90', 'translate-x-[85%]', 'sm:translate-x-[110%]', 'z-10'];
+            const classHiddenRight = ['opacity-0', 'scale-50', 'translate-x-[150%]', 'z-0'];
+    
+            const updateCarousel = () => {
+                const length = totalCards;
+                const prevIndex = (currentIndex - 1 + length) % length;
+                const nextIndex = (currentIndex + 1) % length;
+    
+                cards.forEach((card, i) => {
+                    card.classList.remove(
+                        ...classHiddenLeft, ...classLeft, ...classCenter, ...classRight, ...classHiddenRight
+                    );
+    
+                    if (i === currentIndex) {
+                        card.classList.add(...classCenter);
+                    } else if (i === prevIndex) {
+                        card.classList.add(...classLeft);
+                    } else if (i === nextIndex) {
+                        card.classList.add(...classRight);
+                    } else {
+                        const dist = (i - currentIndex + length) % length;
+                        if (dist < length / 2) {
+                            card.classList.add(...classHiddenRight);
+                        } else {
+                            card.classList.add(...classHiddenLeft);
+                        }
+                    }
+                });
+            };
+    
+            const next = () => { currentIndex = (currentIndex + 1) % totalCards; updateCarousel(); };
+            const prev = () => { currentIndex = (currentIndex - 1 + totalCards) % totalCards; updateCarousel(); };
+    
+            document.getElementById('btn-next-service')?.addEventListener('click', () => { next(); resetTimer(); });
+            document.getElementById('btn-prev-service')?.addEventListener('click', () => { prev(); resetTimer(); });
+            document.getElementById('btn-next-mobile')?.addEventListener('click', () => { next(); resetTimer(); });
+            document.getElementById('btn-prev-mobile')?.addEventListener('click', () => { prev(); resetTimer(); });
+    
+            const resetTimer = () => {
+                clearInterval(autoplayTimer);
+                autoplayTimer = setInterval(next, 4000); // 4 segundos
+            };
+    
+            updateCarousel();
+            resetTimer();
+        })();
     </script>
 </body>
 

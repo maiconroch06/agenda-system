@@ -1,0 +1,101 @@
+<!-- SIDEBAR DESKTOP -->
+<aside id="sidebar" class="hidden md:flex md:flex-col md:w-64 md:h-screen md:sticky md:top-0 shrink-0 bg-[#232220] border-r border-[#38362f]">
+
+    <!-- Logo -->
+    <div class="block items-center px-5 py-5 border-b border-[#38362f]">
+        {% set logo_class="h-16 md:h-20 lg:h-24" %}
+        {% include "componetizacao/logo/logo-top-horizontal.html" %}
+        <h1 class="mt-4 text-2xl font-bold">Painel Administrativo</h1>
+    </div>
+
+    <!-- Navegação Desktop -->
+    <nav class="flex flex-col p-3 gap-1 overflow-y-auto">
+        
+        <!-- Início -->
+        <a href="/gestor/painel">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-inicio.html" %}</span> Início
+            </button>
+        </a>
+
+        <!-- Agendamento -->
+        <a href="/gestor/painel/agendamento">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/agendamento' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-agendamento.html" %}</span> Agendamentos
+            </button>
+        </a>
+
+        <!-- Agenda -->
+        <a href="/gestor/painel/horario_funcionamento">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/agenda' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-agenda-mensal.html" %}</span> Agendas e horarios
+            </button>
+        </a>
+        <!-- Recessos -->
+        <a href="/gestor/painel/recessos">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/agenda' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-recesso.html" %}</span> Recessos
+            </button>
+        </a>
+
+        <!-- Serviços -->
+        <a href="/gestor/painel/servicos">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/servicos' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-servico.html" %}</span> Serviços
+            </button>
+        </a>
+
+        <!-- Barbeiros -->
+        <a href="/gestor/painel/barbeiros">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/barbeiros' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-barbeiro.html" %}</span> Barbeiros
+            </button>
+        </a>
+       
+        <!-- Faltas dos Barbeiros -->
+        <a href="/gestor/painel/barbeiros/faltas-justificadas">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/barbeiros/faltas_justificadas' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-barbeiro-faltas-justificadas.html" %}</span> Faltas dos barbeiros
+            </button>
+        </a>
+
+        <!-- Clientes -->
+        <a href="/gestor/painel/clientes">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/clientes' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-clientes.html" %}</span> Clientes
+            </button>
+        </a>
+        
+        <!-- Financeiro -->
+        <a href="/gestor/painel/financeiro">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/financeiro' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-financeiro.html" %}</span> Financeiro
+            </button>
+        </a>
+    </nav>
+
+    <!-- foto do gestor, nome e logout-->
+    <div class="mt-auto mx-3 mb-5 px-4 py-3 rounded-lg border border-[#38362f] bg-transparent">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 shrink-0 rounded-full bg-[#38362f] flex items-center justify-center overflow-hidden">
+                {% if session.get('dados_gestor')['foto_path'] %}
+                <img src="{{ url_for('static', filename=session.get('dados_gestor')['foto_path']) }}" alt="Avatar" class="w-full h-full object-cover">
+                {% else %}
+                <span class="text-sm font-bold text-[#f1efe8]">
+                    {{ session.get('dados_gestor')['nome_completo'][0]|upper }}
+                </span>
+                {% endif %}
+            </div>
+            <div class="min-w-0 flex items-center gap-13">
+                <div class="w-full">
+                    <p class="text-sm font-medium text-[#f1efe8]">
+                        {{ session.get('dados_gestor')['nome_completo'].split(' ')[0] }}
+                    </p>
+                </div>
+                <a href="/gestor/logout" class="text-xs text-[#888780] hover:text-[#f34747] transition-colors flex items-center">
+                    SAIR {% include "componetizacao/icones/icone-logout.html" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</aside>

@@ -1,0 +1,19 @@
+{% with mensagens_erros = get_flashed_messages(with_categories=true) %}
+            {% if mensagens_erros %}
+                {% for category, messagem in mensagens_erros %}
+                 {% if category == mensagens.SUCESSO.value %}
+                        <div class="mb-4 p-3.5 rounded-[8px] text-[13px] font-medium border bg-emerald-950 text-emerald-300 border-emerald-800">
+                            {{ messagem }}
+                        </div>
+                    {% elif category == mensagens.AVISO.value %}
+                        <div class="mb-4 p-3.5 rounded-[8px] text-[13px] font-medium border bg-amber-950 text-amber-300 border-amber-800">
+                            {{ messagem }}
+                        </div>
+                    {% else %}
+                        <div class="mb-4 p-3.5 rounded-[8px] text-[13px] font-medium border bg-red-950 text-red-300 border-red-800">
+                            {{ messagem }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+{% endwith %}

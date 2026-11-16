@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMS Barbearia | BarberDash</title>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
+</head>
+
+<body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
+
+    {# ───────── DADOS MOCK VS FLASK ───────── #}
+    {% include "componetizacao/preCadastro/dados.html" %}
+    {# ─────────────────────────────────────── #}
+
+    <!-- HEADER (Exibe apenas para o mobile)-->
+    {% include "componetizacao/Header/header-barbeiro-painel.html" %}
+
+    <div class="flex flex-col min-h-screen">
+
+        <div class="flex flex-1 pb-20 md:pb-0">
+
+            <!-- CONTEÚDO PRINCIPAL -->
+            <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+
+                <!-- ABA INÍCIO -->
+                <section class="block" id="aba-inicio">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+                        <div>
+                            <h1 class="text-xl font-semibold">Resumo de Hoje</h1>
+                            <p class="text-xs text-[#888780]" id="data-atual-str"></p>
+                        </div>
+                    </div>
+
+                    <!-- Card de Progresso de Conclusão dos Agendamentos -->
+                    {% include "componetizacao/Cards/card-progresso-agendamentos.html" %}
+
+                    <div class="text-xs font-medium text-[#888780] uppercase tracking-wider mb-3">Atendimentos de hoje</div>
+
+                    <!-- Listagem dos agendamentos de hoje via Jinja -->
+                    <div class="flex flex-col gap-2" id="lista-inicio-hoje">
+                        {% for item in agendamentos_flask %}
+                            <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f] {% if item.status in [0, 3] %}opacity-65{% endif %}" onclick="abrirModalDetalhe('{{ item.id }}')">
+                                
+                                <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">{{ item.hora }}</div>
+
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium">{{ item.cliente }}</div>
+                                    <div class="text-xs text-[#888780] mt-0.5">{{ item.servico }}</div>
+                                </div>
+
+                                <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                                    {% if item.status == 0 %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3a1510] text-[#f0997b] border-[#993c1d]">Cancelado</span>
+                                    {% elif item.status == 1 %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]">Agendado</span>
+                                    {% elif item.status == 2 %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#0c2d48] text-[#7cc4fa] border-[#1d5b8c]">Em andamento</span>    
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#085041] text-[#9fe1cb] border-[#0f6e56]">Concluído</span>
+                                    {% endif %}
+                                    <div class="text-xs font-medium">Total: R$ {{ "%.2f"|format(item.valor)|replace('.', ',') }}</div>
+                                </div>
+                                
+                            </div>
+                        {% else %}
+                            <p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento para hoje.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="flex justify-center items-center mt-6 mb-2">
+                        <!-- Botão de Voltar Dia -->
+                        <button onclick="mudarDia(-1)" 
+                            class="w-8 h-8 flex items-center justify-center rounded-full bg-[#232220] border border-[#38362f] text-[#f1efe8] hover:bg-[#38362f] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f0c05a] active:scale-95" 
+                            aria-label="Dia Anterior">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button> 
+
+                        <!-- Exibição da Data Atual na Navegação -->
+                        <div class="flex flex-col items-center justify-center min-w-[140px]">
+                            <span id="nav-data-display" class="text-sm font-semibold text-[#f1efe8]">Hoje</span>
+                            <!-- Botão para voltar ao dia de hoje (oculto por padrão) -->
+                            <button id="btn-hoje" onclick="irParaHoje()" class="text-[10px] text-[#f0c05a] hover:underline mt-0.5 hidden">
+                                Voltar para Hoje
+                            </button>
+                        </div>
+
+                        <!-- Botão de Avançar Dia -->
+                        <button onclick="mudarDia(1)" 
+                            class="w-8 h-8 flex items-center justify-center rounded-full bg-[#232220] border border-[#38362f] text-[#f1efe8] hover:bg-[#38362f] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f0c05a] active:scale-95" 
+                            aria-label="Próximo Dia">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button> 
+                    </div>
+
+                </section>
+
+            </main>
+        </div>
+
+    </div>
+
+    {% include "componetizacao/modals/modal-detalhes-atendimento.html" %}
+
+    <input type="file" id="inp-nova-foto" accept="image/*" class="hidden">
+
+    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+        id="aviso">
+    </div>
+
+    <script src="{{ url_for('static', filename='js/barbeiro-painel-utilitarios.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/barbeiro-painel-inicio.js') }}"></script>
+
+</body>
+
+</html>

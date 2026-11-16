@@ -1,5 +1,5 @@
 // pega um elemento usando um seletor CSS.
-const user_form_login = document.querySelector('#manager-form-login');
+const user_form_login = document.querySelector('#gestor-form-login');
 
 //document.querySelector('#user-email');  // id
 //document.querySelector('.campo__erro'); // classe
@@ -19,8 +19,8 @@ function validateUserLogin(email, senha){
 //Validação para o USUARIO E LOGIN
 user_form_login.addEventListener('submit', function(event){
     
-        const email = document.querySelector("#manager-email").value; //sem o # oiu o . significa elemento
-        const senha = document.querySelector("#manager-senha").value;
+        const email = document.querySelector("#gestor-email").value; //sem o # oiu o . significa elemento
+        const senha = document.querySelector("#gestor-senha").value;
         const message = document.querySelector("#validation-menssage");//significa o elemento p
         const div = document.querySelector('#div-validation-message');
         message.textContent = '';

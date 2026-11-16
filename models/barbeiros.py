@@ -1,48 +1,98 @@
-from database import db
-from sqlalchemy.dialects.mysql import TINYINT
 
-class Barbeiro(db.Model):
-    __tablename__ = 'barbeiros'
+from datetime import datetime, timezone
+from .usuarios import Usuario
 
-    id = db.Column(
-        db.Integer, 
-        db.ForeignKey('usuarios.id', onupdate='CASCADE', ondelete='CASCADE'), 
-        primary_key=True, 
-        nullable=False
-    )
-    data_liberacao = db.Column(db.DateTime, nullable = True )
-    ativo = db.Column(TINYINT(1), nullable=False) 
-    
-    descricao = db.Column(
-        db.String(500), 
-        nullable=False
-    )
 
-    # CREATE - Salva o usuário e retorna o ID auto-incremental gerado pelo MySQL
-    def salvar(self):
-        db.session.execute(
-            db.text(
-                """
-                insert into barbeiros (id, data_liberacao,ativo,descricao) values (:id,:data_liberacao,:ativo,:descricao)
-                """
-            ),{
-                "id": self.id,
-                "data_liberacao":self.data_liberacao,
-                "ativo": self.ativo,
-                "descricao": self.descricao
-            }
+class Barbeiro(Usuario):
+
+    def __init__(
+        self,
+        nome_completo,
+        telefone,
+        cpf,
+        data_ultimo_acesso,
+        email=None,
+         motivo_bloqueio=None,
+        data_liberacao=None,
+        faltas_justificadas = None,
+        status_usuario = None,
+        data_cadastro = None,
+        data_inicio_carreira=None,
+        status_barbeiro=True,
+        foto_nome_usuario=None,
+        senha=None,
+        id_usuario=None,
+        endereco=None,
+        bio=None,
+        especialidade=None
+    ):
+
+        super().__init__(
+            nome_completo=nome_completo,
+            telefone=telefone,
+            cpf=cpf,
+            email=email,
+            status_usuario=status_usuario,
+            motivo_bloqueio=motivo_bloqueio,
+            data_cadastro=data_cadastro,
+            data_ultimo_acesso=data_ultimo_acesso,
+            foto_nome_usuario=foto_nome_usuario,
+            senha=senha,
+            id_usuario=id_usuario,
+            endereco=endereco
         )
 
-   
-    @classmethod
-    def buscarCLientePorEmail(cls, email):
-        return db.session.execute(
-                db.text(
-                """
-                    select *
-                    from clientes c join usuarios u 
-                    on c.id = u.id where u.email = :email
-                """
-                    ),
-                    {"email":email}
-            ).first()
+        self.__data_liberacao = data_liberacao
+        self.__data_inicio_carreira = data_inicio_carreira
+        self.__status_barbeiro = status_barbeiro
+        self.__bio = bio
+        self.__especialidade = especialidade
+        self.__faltas_justificadas = faltas_justificadas
+
+    @property
+    def data_liberacao(self):
+        return self.__data_liberacao
+
+    @data_liberacao.setter
+    def data_liberacao(self, value):
+        self.__data_liberacao = value
+
+    @property
+    def data_inicio_carreira(self):
+        return self.__data_inicio_carreira
+
+    @data_inicio_carreira.setter
+    def data_inicio_carreira(self, value):
+        self.__data_inicio_carreira = value
+
+    @property
+    def status_barbeiro(self):
+        return self.__status_barbeiro
+
+    @status_barbeiro.setter
+    def status_barbeiro(self, value):
+        self.__status_barbeiro = value
+
+    @property
+    def bio(self):
+        return self.__bio
+
+    @bio.setter
+    def bio(self, value):
+        self.__bio = value
+
+    @property
+    def especialidade(self):
+        return self.__especialidade
+
+    @especialidade.setter
+    def especialidade(self, value):
+        self.__especialidade = value
+
+    @property
+    def faltas_justificadas(self):
+        return self.__faltas_justificadas
+
+    @faltas_justificadas.setter
+    def faltas_justificadas(self, value):
+        self.__faltas_justificadas = value
