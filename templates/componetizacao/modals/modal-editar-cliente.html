@@ -1,0 +1,142 @@
+<dialog
+    id="janela_modal_editar_cliente"
+    class="fixed inset-2 sm:inset-4 md:inset-8 w-auto h-auto lg:mx-40 lg:my-10 max-h-[calc(100dvh-1rem)] overflow-y-auto overflow-x-hidden rounded-xl border-0 bg-transparent p-0 shadow-xl backdrop:bg-black/50
+    [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
+       
+
+        <!-- Container externo -->
+        <div class="w-full max-w-2xl m-auto bg-[#232220] border border-[#38362f] rounded-[14px] p-5 sm:p-6 shadow-xl">
+
+        
+            <div class="w-full flex items-center justify-center mb-4 md:mb-6 shrink-0">
+                {% set logo_class="h-20 sm:h-20 md:h-24" %}
+                {% include "componetizacao/logo/logo-top-horizontal.html" %}
+            </div>
+            
+            <!-- Mensagens -->
+            <div id='div-validation-message'
+                    class="bg-red-500/10 border border-red-500/30 mb-8 text-red-500  sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide hidden ">
+                    <p id="validation-menssage"></p>
+            </div>
+
+            <h1 id="form-title" class="text-center text-xl font-medium mb-1 text-white">Cadastrar Barbeiro</h1>
+            <p id="form-subtitle" class="text-center text-[13px] text-[#888780] mb-4">Preencha os dados do profissional</p>
+                    
+                <form id="form_cliente_atualizar" action="/gestor/painel/clientes/atualizar" method="post" enctype="multipart/form-data"
+                    novalidate class="flex flex-col gap-3.5 shrink-0">
+                    <input type="hidden" id="cliente_id" name="cliente_id" value="">
+                    <input type="hidden" id="cliente_cpf" name="cliente_cpf" value="">
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
+
+                        <!-- Nome Completo -->
+                        <div class="flex flex-col">
+                            <label for="prop-nome"
+                               class="text-[12px] font-medium text-[#888780]">
+                                Nome completo:
+                            </label>
+                            <input type="text"
+                                value=""
+                                id="cliente_nome" name="cliente_nome" placeholder="Ex: nome do proprietário" autocomplete="off"
+                               class="w-full h-10 px-3 border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+                            <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-nome"></span>
+                        </div>
+
+                        <!-- Telefone -->
+                        <div class="flex flex-col">
+                            <label for="prop-telefone"
+                               class="text-[12px] font-medium text-[#888780]">
+                                Telefone
+                            </label>
+                            <input type="tel"
+                                value=""
+                                id="cliente_telefone" name="cliente_telefone" placeholder="(84) 00000-0000" maxlength="15"
+                                autocomplete="off"
+                                class="w-full h-10 px-3 border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+                            <span class="campo__erro text-[10px] text-red-500 mt-0.5 block"
+                                id="erro-prop-telefone"></span>
+                        </div>
+
+                        <!-- E-mail (Ocupa as 2 colunas no desktop) -->
+                        <div class="flex flex-col sm:col-span-2">
+                            <label for="prop-email"
+                               class="text-[12px] font-medium text-[#888780]">
+                                E-mail
+                            </label>
+                            <input type="email"
+                                value=""
+                                id="cliente_email" name="cliente_email" placeholder="emaildoproprietario@gmail.com"
+                                maxlength="70" autocomplete="off"
+                               class="w-full h-10 px-3 border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+                            <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-email"></span>
+                        </div>
+
+                        <!-- Senha -->
+                        <div class="flex flex-col">
+                            <label for="client-senha"
+                                class="text-[12px] font-medium text-[#888780]">
+                                Senha
+                            </label>
+                            <input type="password"
+                                value=""
+                                id="cliente_senha" name="cliente_senha" placeholder="Digite sua senha" autocomplete="off"
+                                class="w-full h-10 px-3 border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+                            <span class="campo__erro text-[10px] text-red-500 mt-0.5 block" id="erro-prop-senha"></span>
+                             <small class="text-xs text-[#888780]">
+                                Deixe em branco para manter a senha anterior
+                            </small>
+                        </div>
+
+                        <!-- Confirmar Senha -->
+                        <div class="flex flex-col">
+                            <label for="prop-conf-senha"
+                               class="text-[12px] font-medium text-[#888780]">
+                                Confirmar a Senha
+                            </label>
+                            <input type="password"
+                                value=""
+                                id="cliente_confirmar_senha" name="cliente_confirmar_senha" placeholder="Digite sua senha"
+                                autocomplete="off"
+                                class="w-full h-10 px-3 border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-[14px] focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+                            <span class="campo__erro text-[10px] text-red-500 mt-0.5 block"
+                                id="erro-prop-conf-senha"></span>
+                        </div>
+                        
+                    </div>  
+                    <div id="div-seletor-status" class="flex flex-col gap-1 text-[#888780] mt-5">
+                        <label for="bab_status_barbeiro" class="text-[12px] font-medium text-[#888780]">
+                            Status do cliente:
+                        </label>
+
+                            <select id="status_cliente" name="status_cliente" class="text-[12px] text-amber bg-[#161513] border border-[#4a473f] rounded-lg p-2">
+                                <option id="ativado_cliente" value="1">
+                                    Ativado
+                                </option>
+
+                                <option id="desativado_cliente" value="0">
+                                    Desativado
+                                </option>
+                            </select>
+                    </div>  
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-medium text-[#888780]" for="bloq-motivo">Motivo *</label>
+                        <textarea rows="6" id="cliente_motivo_bloqueio"  name="motivo_falta_justificada" placeholder="Ex: muitas agendamentos cancelados, validação de dados na barbearia, pendência(s) de pagamento"
+                        class="h-15 px-3 rounded-lg border border-[#4a473f] bg-[#161513] text-white text-sm focus:outline-none"></textarea>
+                        <small class="mt-2 text-[12px]  font-normal text-yellow-300" for="bloq-motivo">Esse motivo vai aparecer aos clientes com justificativa para o cancelamento de sua restrição no sistema. </small>
+                    </div>                     
+                        <button type="submit"
+                        class="w-full py-2.5 sm:py-3 bg-brand-gold hover:bg-brand-gold-hover text-black   sm:text-sm tracking-wider rounded-lg transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer mt-2">
+                            Atualizar cliente
+                        </button>
+                        <button type="button" id="btn_cancelar_modal_cliente" class="h-10 px-4 bg-red-800  border  border-red-500 rounded-lg  text-white text-[14px] hover:text-[#f1efe8] hover:bg-red-600 transition-colors">Cancelar</button>
+
+                </form>
+
+        </div>
+</dialog>
+
+
+
+
+

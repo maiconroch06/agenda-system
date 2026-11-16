@@ -33,6 +33,12 @@
                 
                 <!-- ABA 5: CLIENTES -->
                 <section id="aba-clientes">
+                    <!-- ============================================================
+                    COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
+                    ============================================================ -->
+                    {% set mensagens = mensagens_status %}
+                    {% include "componetizacao/mensagens/mensagens.html" %}
+
                     <div class="flex items-center justify-between mb-5 gap-3">
                         <div>
                             <h1 class="text-lg lg:text-xl font-semibold">Gestão de Clientes</h1>
@@ -66,6 +72,7 @@
                                             <th class="p-3.5 px-4">Cliente</th>
                                             <th class="p-3.5 px-4">Telefone</th>
                                             <th class="p-3.5 px-4">Última Visita</th>
+                                            <th class="p-3.5 px-4">Último Serviço</th>
                                             <th class="p-3.5 px-4">Total Servicos</th>
                                             <th class="p-3.5 px-4">Total Gasto</th>
                                         </tr>
@@ -82,23 +89,27 @@
                                                             Não informado
                                                         {% endif %}
                                                     </td>
-                                                    <td class="p-3.5 px-4 text-[#888780]">{{ usuario.data_ultimo_servico | default('-', true) }}</td>
-                                                    <td class="p-3.5 px-4 font-medium text-[#f1efe8]">0 visita(s)</td>
-                                                    <td class="p-3.5 px-4 font-semibold text-[#9fe1cb]">R$ 0,00</td>
+                                                    <td class="p-3.5 px-4 text-[#888780]">{{ usuario.data_ultimo_acesso.strftime('%d-%m-%Y %H:%M') | default('-', true) }}</td>
+                                                    <td class="p-3.5 px-4 text-[#888780]">{{ usuario.data_ultimo_servico.strftime('%d-%m-%Y %H:%M') if usuario.data_ultimo_servico else 'Nenhum serviço' }}</td>
+                                                    <td class="p-3.5 px-4 font-medium text-[#f1efe8]">{{usuario.total_servicos}} serviços(s)</td>
+                                                    <td class="p-3.5 px-4 font-semibold text-[#9fe1cb]">R$ {{ "{:,.2f}".format(usuario.valor_total) if usuario.valor_total else '0,00' }}</td>
                                                     <td class="p-3.5 px-4 font-semibold text-[#9fe1cb]">
+                                                        {%if usuario.id_usuario!=1%}
                                                         <div class="flex  justify-between">
-                                                            <button type="button" id="atualizar-cliente-barbearia" value=""
-                                                                class="flex-1 min-w-0 py-2 px-2 h-full rounded-lg bg-[#0b0b0c] border border-[#38362f] text-gray-300 hover:bg-[#0c0c0b] hover:border-amber-400  text-xs font-medium transition-colors">
+                                                            <button type="button" id="atualizar-cliente-barbearia" value="{{usuario.id_usuario}}#{{usuario.nome_completo}}#{{usuario.telefone}}#{{usuario.email}}#{{usuario.status_usuario}}#{{usuario.motivo_bloqueio if usuario.motivo_bloqueio else '' }}#{{ usuario.cpf if usuario.cpf  else '' }}"
+                                                                class="flex-1 min-w-0 py-2 px-2 h-full rounded-lg bg-[#0b0b0c] border border-[#38362f] text-gray-300 hover:bg-[#0c0c0b] hover:border-amber-400  text-xs font-medium transition-colors cursor-pointer">
                                                                 Atualizar
                                                             </button>
                                                             <form action="/gestor/painel/clientes/excluir" id="form-confirmar-exclusao" method="POST" class="ml-10 flex-1 min-w-0">
                                                                 <input type="hidden" name="id_cliente_barbearia" value="{{usuario.id_usuario}}">
+                                                                <input type="hidden" name="foto_nome_cliente_barbearia" value="{{usuario.foto_nome_usuario}}">
                                                                 <input type="hidden" class="nome-exclusao" id="nome_cliente_barbearia" name="nome_cliente_barbearia" value="{{usuario.nome_completo}}">
-                                                                <button type="submit" class="w-full h-full py-2 px-2 rounded-lg bg-red-600 border border-[#38362f] text-white hover:bg-red-800 text-xs font-bold transition-colors">
+                                                                <button type="submit" class="w-full h-full py-2 px-2 rounded-lg bg-red-600 border border-[#38362f] text-white hover:bg-red-800 text-xs font-bold transition-colors cursor-pointer">
                                                                     Excluir
                                                                 </button>
                                                             </form>
                                                         </div>
+                                                        {% endif%}
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -119,6 +130,7 @@
         </div>
         
         {% include "componetizacao/modals/modal-confimacao-excluir-padrao.html" %}
+        {% include "componetizacao/modals/modal-editar-cliente.html" %}
 
 
         <!-- NAVEGAÇÃO INFERIOR MOBILE -->
@@ -127,12 +139,12 @@
     </div>
     
     <!-- TOAST AVISO -->
-    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-500 whitespace-nowrap"
         id="aviso"></div>
 
     <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
     <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/gestor-painel-clientes.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/janelas_modais/js_validar_editar_cliente.js') }}"></script>
 </body>
 
 </html>

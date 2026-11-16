@@ -55,10 +55,11 @@ def clientRegister():
             email=request.form.get('email'),
             senha= request.form.get('senha'),
             foto_nome_usuario= None,
+            motivo_bloqueio=None,
             endereco = None,
             status_usuario=1,
             data_cadastro=datetime.now(timezone.utc),
-            data_atualizacao=datetime.now(timezone.utc)
+            data_ultimo_acesso=datetime.now(timezone.utc)
     )
     
     controladorCliente = ControladorCliente() 
@@ -83,7 +84,7 @@ def clientAgendamentoServicosCadastro():
         email=dados_session.get('email'), 
         status_usuario=dados_session.get('status_usuario'), 
         data_cadastro=dados_session.get('data_cadastro'), 
-        data_atualizacao=dados_session.get('data_atualizacao')
+        data_ultimo_acesso=dados_session.get('data_ultimo_acesso')
     )
 
     agendamento = Agendamento(
@@ -91,7 +92,7 @@ def clientAgendamentoServicosCadastro():
         hora_inicio=dados.get('horario'),
         hora_fim=dados.get('horario'),
         status_agendamento=True,
-        data_atualizacao=datetime.now(),
+        data_ultimo_acesso=datetime.now(),
         motivo_cancelamento=None,
         barbeiro=None,
         cliente=cliente

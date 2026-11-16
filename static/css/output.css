@@ -16,6 +16,7 @@
     --color-red-800: oklch(44.4% 0.177 26.899);
     --color-red-900: oklch(39.6% 0.141 25.723);
     --color-red-950: oklch(25.8% 0.092 26.042);
+    --color-orange-300: oklch(83.7% 0.128 66.29);
     --color-amber-50: oklch(98.7% 0.022 95.277);
     --color-amber-100: oklch(96.2% 0.059 95.617);
     --color-amber-200: oklch(92.4% 0.12 95.746);
@@ -26,7 +27,9 @@
     --color-amber-800: oklch(47.3% 0.137 46.201);
     --color-amber-900: oklch(41.4% 0.112 45.904);
     --color-amber-950: oklch(27.9% 0.077 45.635);
+    --color-yellow-300: oklch(90.5% 0.182 98.111);
     --color-green-50: oklch(98.2% 0.018 155.826);
+    --color-green-200: oklch(92.5% 0.084 155.995);
     --color-green-300: oklch(87.1% 0.15 154.449);
     --color-green-400: oklch(79.2% 0.209 151.711);
     --color-green-500: oklch(72.3% 0.219 149.579);
@@ -648,14 +651,23 @@
   .h-14 {
     height: calc(var(--spacing) * 14);
   }
+  .h-15 {
+    height: calc(var(--spacing) * 15);
+  }
   .h-16 {
     height: calc(var(--spacing) * 16);
   }
   .h-20 {
     height: calc(var(--spacing) * 20);
   }
+  .h-30 {
+    height: calc(var(--spacing) * 30);
+  }
   .h-32 {
     height: calc(var(--spacing) * 32);
+  }
+  .h-70 {
+    height: calc(var(--spacing) * 70);
   }
   .h-72 {
     height: calc(var(--spacing) * 72);
@@ -2149,8 +2161,14 @@
   .text-gray-800 {
     color: var(--color-gray-800);
   }
+  .text-green-200 {
+    color: var(--color-green-200);
+  }
   .text-green-400 {
     color: var(--color-green-400);
+  }
+  .text-orange-300 {
+    color: var(--color-orange-300);
   }
   .text-red-300 {
     color: var(--color-red-300);
@@ -2166,6 +2184,9 @@
   }
   .text-white {
     color: var(--color-white);
+  }
+  .text-yellow-300 {
+    color: var(--color-yellow-300);
   }
   .text-zinc-300 {
     color: var(--color-zinc-300);

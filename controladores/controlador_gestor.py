@@ -218,7 +218,26 @@ class ControladorGestor():
         
         return redirect(url_for("gestor.gestor_recesso_consultar"))
     
+    @classmethod
+    def excluir_cliente_barbearia(cls,  id_usuario, foto_nome, nome_cliente):
+        try: 
+            if  cls.__controlador_cliente.excluir_cliente(id_usuario,foto_nome,EnumNomesPastaImagem.IMAGENS_CLIENTE):
+                flash(f"Cliente [ {nome_cliente} ] excluido com sucesso", EnumStatusMensagens.SUCESSO.value) 
+        except Exception:
+            flash(f"Erro ao tentar excluir o cliente [ {nome_cliente} ] da barbearia", EnumStatusMensagens.ERRO.value)  
+               
+        return redirect(url_for("gestor.gestorExibirClientes")) 
     
+    @classmethod
+    def atualizar_cliente_barbearia(cls, cliente):
+        try: 
+            if  cls.__controlador_cliente.atualziar_cliente(cliente):
+                db.session.commit()
+                flash(f"Cliente [ {cliente.nome_completo} ] atualizado com sucesso", EnumStatusMensagens.SUCESSO.value) 
+        except Exception as erros:
+            flash(f"Erro ao tentar atualizar o cliente [ {cliente.nome_completo} ] da barbearia {erros}", EnumStatusMensagens.ERRO.value)  
+               
+        return redirect(url_for("gestor.gestorExibirClientes")) 
     
     
     

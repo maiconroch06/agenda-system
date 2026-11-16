@@ -1,6 +1,6 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
 from controladores import ControladorGestor, ControladorBarbeiro
-from models import Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal, Recesso, FaltaJustificadaBarbeiro
+from models import Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal, Recesso, FaltaJustificadaBarbeiro, Cliente
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
 from datetime import datetime, timezone
@@ -309,7 +309,7 @@ def gestor_barbeiro_cadastrar():
         foto_nome_usuario=None,
         status_usuario=True,
         data_cadastro=datetime.now(timezone.utc),
-        data_atualizacao=datetime.now(timezone.utc),
+        data_ultimo_acesso=datetime.now(timezone.utc),
         data_liberacao=datetime.now(timezone.utc),
         bio=request.form.get('bio'),
         status_barbeiro=True,
@@ -340,7 +340,7 @@ def gestorBarbeiroPageUpdate():
         telefone=telefone_temp,
         email=request.form.get('email'),
         senha=request.form.get('senha', None),
-        data_atualizacao=datetime.now(timezone.utc),
+        data_ultimo_acesso=datetime.now(timezone.utc),
         status_barbeiro=request.form.get('status_barbeiro', type=int),
         bio=request.form.get('bio'),
         especialidade=request.form.get('especialidade'),
@@ -384,10 +384,34 @@ def gestor_excluir_barbeiro():
 def gestorExibirClientes():
     return ControladorGestor.consultar_clientes()
 
-#  CLIENTES
-@gestor.route('/painel/clientes/excluir')
-def gestor_excluir_clientes():
-    return ControladorGestor.consultar_clientes()
+@gestor.route('/painel/clientes/excluir', methods=['POST'])
+def gestor_excluir_cliente():
+    id_cliente = request.form.get("id_cliente_barbearia")
+    foto_nome_cliente = request.form.get("foto_nome_usuario")
+    nome_cliente = request.form.get("nome_cliente_barbearia")
+    
+    return ControladorGestor.excluir_cliente_barbearia(id_cliente,foto_nome_cliente,nome_cliente)
+
+@gestor.route('/painel/clientes/atualizar', methods=['POST'])
+def gestor_atualizar_cliente():
+    
+    telefone_temp = ''.join(filter(str.isdigit,request.form.get('cliente_telefone')))
+     
+    cliente = Cliente(
+        id_usuario=request.form.get("cliente_id"),
+        foto_nome_usuario=EnumNomesPastaImagem.IMAGEM_PADRAO.value,
+        nome_completo=request.form.get("cliente_nome"),
+        telefone=telefone_temp,
+        email=request.form.get("cliente_email"),
+        senha=request.form.get("cliente_senha"),
+        motivo_bloqueio=request.form.get("motivo_falta_justificada") if request.form.get("motivo_falta_justificada").strip() else None,
+        status_usuario=request.form.get("status_cliente"),
+        cpf= request.form.get("cliente_cpf") if request.form.get("cliente_cpf").strip() else None
+    )
+    
+    print(cliente.cpf)
+        
+    return ControladorGestor.atualizar_cliente_barbearia(cliente)
 
 ##################################################################################
 # FINANCEIRO

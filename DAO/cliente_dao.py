@@ -40,7 +40,7 @@ class ClienteDAO:
                 u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
-                u.data_atualizacao,
+                u.data_ultimo_acesso,
                 u.fk_id_endereco,
                 c.id_cliente,
                 c.data_ultimo_servico
@@ -72,7 +72,7 @@ class ClienteDAO:
                 u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
-                u.data_atualizacao,
+                u.data_ultimo_acesso,
                 u.fk_id_endereco,
                 c.id_cliente,
                 c.data_ultimo_servico
@@ -92,13 +92,19 @@ class ClienteDAO:
 
         return dict(registro)
 
-    def consultar_clientes_services(self):
+    def consultar_clientes_resumido(self):
         sql = text("""
-            SELECT
-                u.id_usuario,
+            SELECT u.id_usuario,
                 u.nome_completo,
                 u.telefone,
                 u.email,
+                u.cpf,
+                u.status_usuario,
+                u.foto_nome_usuario,
+                u.motivo_bloqueio,
+                u.data_ultimo_acesso,
+                (select count(id_agendamento) from agendamento where fk_id_cliente=c.id_cliente) as total_servicos,
+                (select sum(valor_total_servicos) from agendamento where fk_id_cliente=c.id_cliente) as valor_total,
                 c.data_ultimo_servico
             FROM usuario u
             INNER JOIN cliente c
@@ -121,7 +127,7 @@ class ClienteDAO:
                 senha = :senha,
                 foto_nome_usuario = :foto_nome_usuario,
                 status_usuario = :status_usuario,
-                data_atualizacao = :data_atualizacao,
+                data_ultimo_acesso = :data_ultimo_acesso,
                 fk_id_endereco = :fk_id_endereco
             WHERE id_usuario = :id_usuario
         """)
@@ -143,7 +149,7 @@ class ClienteDAO:
             "senha": cliente.senha,
             "foto_nome_usuario": cliente.foto_nome_usuario,
             "status_usuario": cliente.status_usuario,
-            "data_atualizacao": cliente.data_atualizacao,
+            "data_ultimo_acesso": cliente.data_ultimo_acesso,
             "fk_id_endereco": cliente.fk_id_endereco,
             "data_ultimo_servico": cliente.data_ultimo_servico
         }
@@ -195,6 +201,6 @@ class ClienteDAO:
             foto_nome_usuario=registro["foto_nome_usuario"],
             status_usuario=bool(registro["status_usuario"]),
             data_cadastro=registro["data_cadastro"],
-            data_atualizacao=registro["data_atualizacao"],
+            data_ultimo_acesso=registro["data_ultimo_acesso"],
             data_ultimo_servico=registro["data_ultimo_servico"]
         )

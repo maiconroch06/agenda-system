@@ -101,3 +101,9 @@ class ControladorCliente():
     def consultar_todos_clientes(self):
         return self.__clienteService.consultar_clientes_services()
    
+    def excluir_cliente(self, id_usuario, foto_nome, nome_pasta):
+        return self.__clienteService.excluir_usuario_barbearia(id_usuario, foto_nome, nome_pasta)
+    
+    def atualziar_cliente(self, cliente):
+            return self.__clienteService.alterar_usuario_barbearia(None, None,cliente.foto_nome_usuario,  cliente)
+   

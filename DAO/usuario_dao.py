@@ -11,22 +11,24 @@ class UsuarioDAO:
                 telefone,
                 cpf,
                 email,
+                motivo_bloqueio,
                 senha,
                 foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
-                data_atualizacao,
+                data_ultimo_acesso,
                 fk_id_endereco
             ) VALUES (
                 :nome_completo,
                 :telefone,
                 :cpf,
                 :email,
+                :motivo_bloqueio,
                 :senha,
                 :foto_nome_usuario,
                 :status_usuario,
                 :data_cadastro,
-                :data_atualizacao,
+                :data_ultimo_acesso,
                 :fk_id_endereco
             )
         """)
@@ -36,11 +38,12 @@ class UsuarioDAO:
             "telefone": usuario.telefone,
             "cpf": usuario.cpf,
             "email": usuario.email,
+            "motivo_bloqueio": usuario.motivo_bloqueio,
             "senha": usuario.senha,
             "foto_nome_usuario": usuario.foto_nome_usuario,
             "status_usuario": usuario.status_usuario,
             "data_cadastro": usuario.data_cadastro,
-            "data_atualizacao": usuario.data_atualizacao,
+            "data_ultimo_acesso": usuario.data_ultimo_acesso,
             "fk_id_endereco": (
                 usuario.endereco.id_endereco
                 if usuario.endereco is not None
@@ -61,10 +64,11 @@ class UsuarioDAO:
                 cpf,
                 email,
                 senha,
+                motivo_bloqueio,
                 foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
-                data_atualizacao,
+                data_ultimo_acesso,
                 fk_id_endereco
             FROM usuario
             WHERE id_usuario = :id_usuario
@@ -88,11 +92,12 @@ class UsuarioDAO:
                 telefone,
                 cpf,
                 email,
+                motivo_bloqueio,
                 senha,
                 foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
-                data_atualizacao,
+                data_ultimo_acesso,
                 fk_id_endereco
             FROM usuario
             WHERE email = :email
@@ -116,11 +121,12 @@ class UsuarioDAO:
                 telefone,
                 cpf,
                 email,
+                motivo_bloqueio,
                 senha,
                 foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
-                data_atualizacao,
+                data_ultimo_acesso,
                 fk_id_endereco
             FROM usuario
             WHERE cpf = :cpf
@@ -144,11 +150,12 @@ class UsuarioDAO:
                 telefone,
                 cpf,
                 email,
+                motivo_bloqueio,
                 senha,
                 foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
-                data_atualizacao,
+                data_ultimo_acesso,
                 fk_id_endereco
             FROM usuario
             ORDER BY nome_completo
@@ -169,11 +176,12 @@ class UsuarioDAO:
                 telefone,
                 cpf,
                 email,
+                motivo_bloqueio,
                 senha,
                 foto_nome_usuario,
                 status_usuario,
                 data_cadastro,
-                data_atualizacao,
+                data_ultimo_acesso,
                 fk_id_endereco
             FROM usuario
             WHERE status_usuario = :status
@@ -198,9 +206,10 @@ class UsuarioDAO:
                 nome_completo = :nome_completo,
                 telefone = :telefone,
                 cpf = :cpf,
+                motivo_bloqueio = :motivo_bloqueio,
                 email = :email,
                 foto_nome_usuario = :foto_nome_usuario,
-                data_atualizacao = :data_atualizacao
+                status_usuario = :status_usuario
             WHERE id_usuario = :id_usuario
         """)
 
@@ -210,8 +219,10 @@ class UsuarioDAO:
             "telefone": usuario.telefone,
             "cpf": usuario.cpf,
             "email": usuario.email,
+            "motivo_bloqueio": usuario.motivo_bloqueio,
+            "status_usuario": usuario.status_usuario,
             "foto_nome_usuario": usuario.foto_nome_usuario,
-            "data_atualizacao": usuario.data_atualizacao
+            
         })
 
         db.session.flush()
@@ -228,9 +239,10 @@ class UsuarioDAO:
                 cpf = :cpf,
                 email = :email,
                 senha = :senha,
+                motivo_bloqueio = :motivo_bloqueio,
                 foto_nome_usuario = :foto_nome_usuario,
-                status_usuario = :status_usuario,
-                data_atualizacao = :data_atualizacao
+                status_usuario = :status_usuario
+                
             WHERE id_usuario = :id_usuario
         """)
 
@@ -240,10 +252,11 @@ class UsuarioDAO:
             "telefone": usuario.telefone,
             "cpf": usuario.cpf,
             "email": usuario.email,
-            "senha": usuario.senha,
             "foto_nome_usuario": usuario.foto_nome_usuario,
-            "status_usuario": usuario.status_usuario,
-            "data_atualizacao": usuario.data_atualizacao,
+            "motivo_bloqueio": usuario.motivo_bloqueio,
+            "senha": usuario.senha,
+            "status_usuario": usuario.status_usuario
+        
         })
 
         db.session.flush()
@@ -339,6 +352,7 @@ class UsuarioDAO:
             foto_nome_usuario=registro["foto_nome_usuario"],
             status_usuario=bool(registro["status_usuario"]),
             data_cadastro=registro["data_cadastro"],
-            data_atualizacao=registro["data_atualizacao"],
-            fk_id_endereco=registro["fk_id_endereco"]
+            data_ultimo_acesso=registro["data_ultimo_acesso"],
+            fk_id_endereco=registro["fk_id_endereco"],
+            motivo_bloqueio=registro[" motivo_bloqueio"]
         )

@@ -9,7 +9,8 @@ class Usuario:
         nome_completo: str,
         telefone: str,
         cpf: str,
-        data_atualizacao: datetime,
+        data_ultimo_acesso= None,
+        motivo_bloqueio = None,
         email=None,
         status_usuario=None,
         data_cadastro=None,
@@ -26,8 +27,9 @@ class Usuario:
         self.__senha = senha
         self.__foto_nome_usuario = foto_nome_usuario
         self.__status_usuario = status_usuario
+        self.__motivo_bloqueio= motivo_bloqueio
         self.__data_cadastro = data_cadastro
-        self.__data_atualizacao = data_atualizacao
+        self.__data_ultimo_acesso = data_ultimo_acesso
         self.__endereco = endereco
 
     @property
@@ -93,6 +95,14 @@ class Usuario:
     @status_usuario.setter
     def status_usuario(self, value):
         self.__status_usuario = value
+        
+    @property
+    def motivo_bloqueio(self):
+        return self.__motivo_bloqueio
+
+    @motivo_bloqueio.setter
+    def motivo_bloqueio(self, value):
+        self.__motivo_bloqueio = value
 
     @property
     def data_cadastro(self):
@@ -103,12 +113,12 @@ class Usuario:
         self.__data_cadastro = value
 
     @property
-    def data_atualizacao(self):
-        return self.__data_atualizacao
+    def data_ultimo_acesso(self):
+        return self.__data_ultimo_acesso
 
-    @data_atualizacao.setter
-    def data_atualizacao(self, value):
-        self.__data_atualizacao = value
+    @data_ultimo_acesso.setter
+    def data_ultimo_acesso(self, value):
+        self.__data_ultimo_acesso = value
 
     @property
     def endereco(self):

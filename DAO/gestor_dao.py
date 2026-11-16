@@ -19,7 +19,7 @@ class GestorDAO:
                 u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
-                u.data_atualizacao,
+                u.data_ultimo_acesso,
                 g.fk_cnpj_barbearia
             FROM usuario u
             INNER JOIN gestor g

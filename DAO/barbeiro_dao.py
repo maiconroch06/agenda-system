@@ -19,7 +19,7 @@ class BarbeiroDAO:
                 u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
-                u.data_atualizacao,
+                u.data_ultimo_acesso,
                 b.id_barbeiro,
                 b.data_liberacao,
                 b.bio,
@@ -86,7 +86,7 @@ class BarbeiroDAO:
                 u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
-                u.data_atualizacao,
+                u.data_ultimo_acesso,
 
                 b.id_barbeiro,
                 b.data_liberacao,
@@ -138,7 +138,7 @@ class BarbeiroDAO:
                 u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
-                u.data_atualizacao,
+                u.data_ultimo_acesso,
 
                 b.id_barbeiro,
                 b.data_liberacao,
@@ -187,7 +187,7 @@ class BarbeiroDAO:
                 u.foto_nome_usuario,
                 u.status_usuario,
                 u.data_cadastro,
-                u.data_atualizacao,
+                u.data_ultimo_acesso,
 
                 b.id_barbeiro,
                 b.data_liberacao,
@@ -318,7 +318,7 @@ class BarbeiroDAO:
                 UPDATE agendamento
                 SET
                     status_agendamento = :status_agendamento,
-                    data_atualizacao = NOW()
+                    data_ultimo_acesso = NOW()
                     
                 WHERE id_agendamento = :id_agendamento
         """)
@@ -337,7 +337,7 @@ class BarbeiroDAO:
                 SELECT u.nome_completo, 
                 u.id_usuario,u.telefone,
                 u.foto_nome_usuario, 
-                u.cpf, u.data_atualizacao,
+                u.cpf, u.data_ultimo_acesso,
                 f.* 
                 FROM falta_justificada_barbeiro f 
                     right join barbeiro b 
@@ -365,7 +365,7 @@ class BarbeiroDAO:
                 nome_completo=linha["nome_completo"],
                 telefone=linha["telefone"],
                 cpf=linha["cpf"],
-                data_atualizacao=linha["data_atualizacao"],
+                data_ultimo_acesso=linha["data_ultimo_acesso"],
                 foto_nome_usuario=linha["foto_nome_usuario"], 
                 faltas_justificadas=[]     
             )
@@ -413,7 +413,7 @@ class BarbeiroDAO:
             foto_nome_usuario=registro["foto_nome_usuario"],
             status_usuario=bool(registro["status_usuario"]),
             data_cadastro=registro["data_cadastro"],
-            data_atualizacao=registro["data_atualizacao"],
+            data_ultimo_acesso=registro["data_ultimo_acesso"],
 
             data_liberacao=registro["data_liberacao"],
             bio=registro["bio"],
