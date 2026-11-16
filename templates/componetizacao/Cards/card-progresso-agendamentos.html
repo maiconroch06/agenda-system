@@ -39,3 +39,47 @@
     </div>
 
 </div>
+
+<h1>TESTE v</h1>
+
+<div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 mb-6">
+    <div class="flex justify-between items-end mb-2">
+        <h2 class="text-sm font-semibold text-[#f1efe8]">Progresso do Dia</h2>
+        <span class="text-xs text-[#888780] font-medium" id="progresso-texto">
+            {{ concluidos }} de {{ total_validos }} concluídos
+        </span>
+    </div>
+
+    <!-- Barra de progresso -->
+    <div class="flex w-full h-2 bg-[#161513] rounded-full overflow-hidden">
+        
+        <!-- Barra Verde (Concluídos) -->
+        <div style="width: {{ pct_concluidos }}%;" 
+            class="bg-[#085041] transition-all duration-500" 
+            id="progresso-fill"
+            title="Concluídos">
+        </div>
+        
+        <!-- Barra Amarela (Pendentes/Agendados) -->
+        <div style="width: {{ pct_pendentes }}%;" 
+            class="bg-[#f0c05a] transition-all duration-500" 
+            id="progresso-pendente"
+            title="Pendentes"></div>
+        
+        <!-- Barra Vermelha (Cancelados) -->
+        <div style="width: {{ pct_cancelados }}%;" 
+            class="bg-[#881c1c] transition-all duration-500" 
+            id="progresso-cancelados"
+            title="Cancelados">
+        </div>
+            
+    </div>
+    
+    <!-- Mini legenda indicativa abaixo da barra -->
+    <div class="flex gap-4 mt-3 text-[10px] text-[#888780] font-medium">
+        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#085041]"></span> Concluído</div>
+        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f0c05a]"></span> Pendente</div>
+        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#881c1c]"></span> Cancelado</div>
+    </div>
+
+</div>
