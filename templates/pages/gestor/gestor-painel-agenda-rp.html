@@ -186,7 +186,7 @@
                                             <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
 
                                                 <button type="button" id="editar-agenda-mensal" value="{{agenda.id_agenda_mensal}}#{{agenda.titulo_agenda}}#{{agenda.data_inicial_mes}}#{{agenda.data_final_mes}}"
-                                                        class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
+                                                        class="px-4 py-2.5 rounded-xl bg-amber-400 text-[#161513] text-xs font-bold hover:bg-amber-300  cursor-pointer">
                                                     Editar agenda
                                                 </button>
 
@@ -197,7 +197,7 @@
                                                     <input type="hidden" name="data_inicio" value="{{agenda.data_inicial_mes}}">
                                                     <input type="hidden" name="data_fim" value="{{agenda.data_final_mes}}">
 
-                                                    <button type="submit" class="w-full py-2 px-2 rounded-lg bg-amber-500 border border-black text-black hover:bg-amber-600 text-xs font-bold transition-colors">
+                                                    <button type="submit" class="w-full py-2 px-2 rounded-lg bg-transparent border border-amber-400 text-amber-400 hover:border-amber-300 hover:text-amber-300 text-xs font-bold transition-colors">
                                                     {{ 'Desativar' if agenda.status_agenda_mensal == 1 else 'Ativar' }} 
                                                     </button>
                                                 </form>

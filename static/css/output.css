@@ -388,6 +388,9 @@
   .z-50 {
     z-index: 50;
   }
+  .z-301 {
+    z-index: 301;
+  }
   .z-500 {
     z-index: 500;
   }
@@ -2560,6 +2563,9 @@
     .hover\:border-\[\#cecece\]:hover {
       border-color: #cecece;
     }
+    .hover\:border-amber-300:hover {
+      border-color: var(--color-amber-300);
+    }
     .hover\:border-amber-400:hover {
       border-color: var(--color-amber-400);
     }
@@ -2693,6 +2699,9 @@
     }
     .hover\:text-amber-200:hover {
       color: var(--color-amber-200);
+    }
+    .hover\:text-amber-300:hover {
+      color: var(--color-amber-300);
     }
     .hover\:text-black:hover {
       color: var(--color-black);

@@ -99,7 +99,15 @@ def gestor_recesso_cadastrar():
 
 @gestor.route('/painel/recessos', methods=['GET'])
 def gestor_recesso_consultar():   
-    return render_template('pages/gestor/gestor-painel-recesso-rp.html', recessos = ControladorGestor.consultar_recessos_barbearia_por_mes(), mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=0, botao_filtro=0 ,recessos = ControladorGestor.consultar_recessos_barbearia(), mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/recessos/consultar/mes_atual', methods=['GET'])
+def gestor_recesso_consultar_mes_atual():   
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=1 ,recessos = ControladorGestor.consultar_recessos_barbearia_mes_atual(), mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/recessos/consultar/ano_atual', methods=['GET'])
+def gestor_recesso_consultar_ano_atual():   
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=2 ,recessos = ControladorGestor.consultar_recessos_barbearia_ano_atual(), mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/recessos/excluir', methods=['POST'])
 def gestor_recesso_excluir():  

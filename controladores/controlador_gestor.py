@@ -205,11 +205,25 @@ class ControladorGestor():
         return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))        
 
     @classmethod
-    def consultar_recessos_barbearia_por_mes(cls):        
+    def consultar_recessos_barbearia(cls):        
         try:
-            return cls.__recesso_service.consultar_recessos_por_mes_services()  
+            return cls.__recesso_service.consultar_todos_recessos_services()  
         except Exception as erros:
             flash(f"Erro consultar os recessos da barbearia {erros}", EnumStatusMensagens.ERRO.value)  
+   
+    @classmethod
+    def consultar_recessos_barbearia_mes_atual(cls):        
+        try:
+            return cls.__recesso_service.consultar_recessos_mes_atual_services()  
+        except Exception:
+            flash(f"Erro consultar os recessos da barbearia ", EnumStatusMensagens.ERRO.value)  
+    
+    @classmethod
+    def consultar_recessos_barbearia_ano_atual(cls):        
+        try:
+            return cls.__recesso_service.consultar_recessos_ano_atual_services()  
+        except Exception :
+            flash(f"Erro consultar os recessos da barbearia", EnumStatusMensagens.ERRO.value)  
               
     @classmethod
     def cadastrar_recessos_barbearia_por_mes(cls, recesso):        

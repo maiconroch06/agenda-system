@@ -5,7 +5,6 @@ const botao_cadastrar_editar = document.querySelector("#botao-cadastrar-editar")
 const botao_cadastrar_servico = document.getElementById("cadastrar-servico");
 const botao_limpar_consulta_servicos_global = document.getElementById("limpar-consulta-servico");
 
-
 // campos do formulario
 const formulario = document.querySelector("#form-servico");
 const formulario_servico_consultar_nome = document.getElementById("form-consultar-servico-nome");

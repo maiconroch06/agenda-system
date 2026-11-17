@@ -18,6 +18,9 @@ class RecessoRepositorio:
 
     def consultar_todos(self):
         return self.__recessoDao.listar_todos()
+   
+    def consultar_recessos_intervalo_datas(self, data_inicio, data_final):
+        return self.__recessoDao.consultar_recessos_por_intervalo_datas(data_inicio, data_final)
     
     def atualizar(self, recesso):
         return self.__recessoDao.atualizar(recesso)
