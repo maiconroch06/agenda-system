@@ -20,6 +20,9 @@ class BarbeiroRepositorio:
     
     def listar_todos(self):
         return self.__barbeiroDao.consultar_todos()
+    
+    def consultar_barbeiro_nome(self, nome_barbeiro):
+        return self.__barbeiroDao.consultar_barbeiro_nome(nome_barbeiro)
 
     def listar_todos_ativos(self):
         return self.__barbeiroDao.consultar_todos_ativos()

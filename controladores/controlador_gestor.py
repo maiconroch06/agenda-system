@@ -120,7 +120,7 @@ class ControladorGestor():
    
     @classmethod
     def consultar_cliente_nome(cls,nome_cliente):
-        return render_template('pages/gestor/gestor-painel-clientes-rp.html', lista_clientes= cls.__controlador_cliente.consultar_cliente_nome(nome_cliente), modo=1, mensagens_status=EnumStatusMensagens)
+        return render_template('pages/gestor/gestor-painel-clientes-rp.html',nome_cliente=nome_cliente, lista_clientes= cls.__controlador_cliente.consultar_cliente_nome(nome_cliente), modo=1, mensagens_status=EnumStatusMensagens)
 
     @classmethod
     def consultar_agendamentos(cls, status_agendamento):

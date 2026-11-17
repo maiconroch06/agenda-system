@@ -264,10 +264,15 @@ def gestor_atualizar_faltas_justificadas_barbeiro():
 
 ##################################################################################
 # BARBEIROS - Aba de visualização dos Barbeiros cadastrados
+
 @gestor.route('/painel/barbeiros', methods=['GET'])
 def gestorAbaBarbeiros():
-    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = ControladorBarbeiro.consultar_todos_barbeiros(), mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html',modo=0,  barbeiros = ControladorBarbeiro.consultar_todos_barbeiros(), mensagens_status=EnumStatusMensagens)
 
+@gestor.route('/painel/barbeiro/consultar/nome', methods=['POST'])
+def gestor_barbeiro_consultar_nome():
+    nome_barbeiro = request.form.get("consultar-barbeiro")
+    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', modo=1,  nome_barbeiro=nome_barbeiro, barbeiros = ControladorBarbeiro.consultar_barbeiros_nome(nome_barbeiro), mensagens_status=EnumStatusMensagens)
 
 # Gerenciar Barbeiro  - Validando dados informados no cadastro do Barbeiro
 @gestor.route('painel/barbeiro/cadastrar', methods=['GET'])
@@ -384,9 +389,9 @@ def gestor_excluir_barbeiro():
 def gestorExibirClientes():
     return ControladorGestor.consultar_clientes()
 
-@gestor.route('/painel/cliente/consultar',methods=['POST'])
+@gestor.route('/painel/cliente/consultar/nome',methods=['POST'])
 def gestor_consultar_cliente():
-    nome_cliente = request.form.get("buscar-cliente");
+    nome_cliente = request.form.get("consultar-cliente");
     return ControladorGestor.consultar_cliente_nome(nome_cliente)
 
 @gestor.route('/painel/clientes/excluir', methods=['POST'])

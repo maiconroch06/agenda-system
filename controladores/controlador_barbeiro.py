@@ -33,7 +33,13 @@ class ControladorBarbeiro:
     @classmethod
     def consultar_todos_barbeiros(cls):
         return cls.__barbeiroService.consultar_barbeiros()
-        #return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = cls.__barbeiroService.consultar_barbeiros(), mensagens_status=EnumStatusMensagens)
+   
+    @classmethod
+    def consultar_barbeiros_nome(cls, nome_barbeiro):
+        barbeiros = cls.__barbeiroService.consultar_barbeiro_nome(nome_barbeiro)
+       
+        return barbeiros
+     
 
     @classmethod
     def consultar_agendamentos_barbeiro(cls, barbeiro:dict):

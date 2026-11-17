@@ -4,7 +4,7 @@ const botao_editar_barbeiro = document.querySelectorAll("#editar-barbeiro");
 const titulo = document.getElementById("form-title");
 const formulario = document.getElementById("form-barbeiro");
 const botao_voltar = document.getElementById("btn-cancelar");
-
+const botao_limpar_consulta_do_barbeiro_global = document.getElementById("limpar-consulta-barbeiro");
 //campos
 const cpf = document.getElementById("bar-cpf");
 const nome_barbeiro_titulo = document.getElementById("nome_barbeiro");
@@ -27,6 +27,10 @@ const imagem_preview = document.querySelector('#img_srv-preview');
 function init() {
  aplicarMascaras();
 }
+
+botao_limpar_consulta_do_barbeiro_global.addEventListener("click",()=>{
+    window.location.href ="/gestor/painel/barbeiros";
+});
 
 botao_editar_barbeiro.forEach(
     (editar)=>{

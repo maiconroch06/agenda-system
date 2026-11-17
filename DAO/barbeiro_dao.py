@@ -174,6 +174,57 @@ class BarbeiroDAO:
             self._mapear_barbeiro(registro)
             for registro in registros
         ]
+        
+    def consultar_barbeiro_nome(self, nome_barbeiro):
+            sql = text("""
+                SELECT
+                    u.id_usuario,
+                    u.nome_completo,
+                    u.telefone,
+                    u.cpf,
+                    u.email,
+                    u.senha,
+                    u.foto_nome_usuario,
+                    u.status_usuario,
+                    u.data_cadastro,
+                    u.data_ultimo_acesso,
+    
+                    b.id_barbeiro,
+                    b.data_liberacao,
+                    b.bio,
+                    b.especialidade,
+                    b.status_barbeiro,
+                    TIMESTAMPDIFF(YEAR, b.data_inicio_carreira, CURDATE()) data_inicio_carreira,
+    
+                    e.id_endereco,
+                    e.cep,
+                    e.cidade,
+                    e.uf,
+                    e.logradouro,
+                    e.numero,
+                    e.bairro,
+                    e.sequencia,
+                    e.complemento
+    
+                FROM usuario u
+    
+                INNER JOIN barbeiro b
+                    ON b.id_barbeiro = u.id_usuario
+    
+                LEFT JOIN endereco e
+                    ON e.id_endereco = u.fk_id_endereco
+                WHERE u.nome_completo LIKE :nome_completo 
+                ORDER BY u.nome_completo
+            """)
+    
+            registros = db.session.execute(sql,{"nome_completo":f"%{nome_barbeiro}%"}).mappings().all()
+    
+            print("TOTAL de barbeiros", len(registros))
+            
+            return [
+                self._mapear_barbeiro(registro)
+                for registro in registros
+            ]
 
     def consultar_todos_ativos(self):
         sql = text("""
@@ -385,8 +436,6 @@ class BarbeiroDAO:
             
         return list(barbeiro_map.values())
                    
-        
-
     @staticmethod
     def _mapear_barbeiro(registro):
 
@@ -404,7 +453,7 @@ class BarbeiroDAO:
                 sequencia=registro["sequencia"],
                 complemento=registro["complemento"]
             )
-
+            
         return Barbeiro(
             id_usuario=registro["id_usuario"],
             nome_completo=registro["nome_completo"],
