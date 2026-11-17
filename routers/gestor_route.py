@@ -55,7 +55,18 @@ def gestorAbaAgendamento():
 @gestor.route('/painel/horario_funcionamento')
 def gestor_horario_funcionamento_barbearia():
     data_atual = datetime.now(timezone.utc).date()
-    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual, horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_mensal_barbearia() ,mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=0, botao_filtro=0,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_barbearia() ,mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/horario_funcionamento/consultar/mes_atual')
+def gestor_horario_funcionamento_barbearia_consultar_mes():
+    data_atual = datetime.now(timezone.utc).date()
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=1, botao_filtro=1,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_barbearia_por_mes() ,mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/horario_funcionamento/consultar/ano_atual')
+def gestor_horario_funcionamento_barbearia_consultar_ano():
+    data_atual = datetime.now(timezone.utc).date()
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=1, botao_filtro=2,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_barbearia_anual() ,mensagens_status=EnumStatusMensagens)
+
 
 
 @gestor.route('/painel/horario_funcionamento/atualizar', methods=['POST'])
@@ -216,8 +227,16 @@ def gestorServicoEditar():
 # FALTAS JUSTIFICADAS DOS BARBEIROS - Aba de visualização dos Barbeiros cadastrados
 
 @gestor.route('/painel/barbeiros/faltas-justificadas', methods=['GET'])
-def gestor_fatas_justificadas_barbeiro():
-    return render_template('pages/gestor/gestor-painel-barbeiros-faltas-justificadas-rp .html', barbeiros_faltas_justificadas = ControladorBarbeiro.consultar_faltas_do_barbeiro_ativos(), mensagens_status=EnumStatusMensagens)
+def gestor_faltas_justificadas_barbeiro():
+    return render_template('pages/gestor/gestor-painel-barbeiros-faltas-justificadas-rp .html',modo=0, barbeiros_faltas_justificadas = ControladorBarbeiro.consultar_faltas_do_barbeiro_ativos(), botao_mes=0,  mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/barbeiros/faltas-justificadas/consultar/mensal', methods=['GET'])
+def gestor_faltas_justificadas_consultar_mensal_barbeiro():
+    return render_template('pages/gestor/gestor-painel-barbeiros-faltas-justificadas-rp .html', modo=  1, barbeiros_faltas_justificadas = ControladorBarbeiro.consultar_faltas_mensais_barbeiros_ativos(), botao_mes=1, mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/barbeiros/faltas-justificadas/consultar/anual', methods=['GET'])
+def gestor_faltas_justificadas_consultar_anual_barbeiro():
+    return render_template('pages/gestor/gestor-painel-barbeiros-faltas-justificadas-rp .html', modo=  1, barbeiros_faltas_justificadas = ControladorBarbeiro.consultar_faltas_anual_barbeiros_ativos(), botao_mes=2, mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/barbeiros/faltas-justificadas/cadastrar', methods=['POST'])
 def gestor_cadastrar_faltas_justificadas_barbeiro():

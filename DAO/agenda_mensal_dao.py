@@ -102,10 +102,34 @@ class AgendaMensalDAO:
 
         resultados = db.session.execute(sql).mappings().all()
 
+        
         return [
             self.__mapear_agenda_mensal(registro)
             for registro in resultados
         ]
+    
+    def consultar_agenda_intervalo(self, data_inicio_mes, data_fim_mes):
+            sql = text("""
+                SELECT
+                    id_agenda_mensal,
+                    data_inicial_mes,
+                    data_final_mes,
+                    titulo_agenda,
+                    status_agenda_mensal
+                FROM agenda_mensal
+                WHERE data_inicial_mes >= :data_inicial_mes AND  data_final_mes <= :data_final_mes
+                ORDER BY data_inicial_mes DESC
+            """)
+    
+            resultados = db.session.execute(sql,{
+                "data_inicial_mes":data_inicio_mes,
+                "data_final_mes":data_fim_mes
+                }).mappings().all()
+    
+            return [
+                self.__mapear_agenda_mensal(registro)
+                for registro in resultados
+            ]
         
     def atualizar_status_agenda_mensal(self, agenda_mensal):
         sql = text("""

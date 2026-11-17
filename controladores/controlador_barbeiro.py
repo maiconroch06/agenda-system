@@ -80,8 +80,21 @@ class ControladorBarbeiro:
         try: 
             return cls.__barbeiroService.consultar_faltas_por_barbeiro_ativo()
         except Exception as erros:
-           
             flash(f"Não foi possivel consultar as faltas dos barbeiros, contate o suporte {erros}", EnumStatusMensagens.AVISO.value)
+   
+    @classmethod
+    def consultar_faltas_mensais_barbeiros_ativos(cls):
+        try: 
+            return cls.__barbeiroService.consultar_faltas_mensais_barbeiros_ativo()
+        except Exception :
+            flash(f"Não foi possivel consultar as faltas dos barbeiros, contate o suporte", EnumStatusMensagens.AVISO.value)
+  
+    @classmethod
+    def consultar_faltas_anual_barbeiros_ativos(cls):
+        try: 
+            return cls.__barbeiroService.consultar_faltas_anuais_barbeiros_ativo()
+        except Exception :
+            flash(f"Não foi possivel consultar as faltas dos barbeiros, contate o suporte", EnumStatusMensagens.AVISO.value)
             
     @classmethod
     def cadastrar_faltas_do_barbeiro_ativos(cls, id_barbeiro, falta_justificada, nome_barbeiro):

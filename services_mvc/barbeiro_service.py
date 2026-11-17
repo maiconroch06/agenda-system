@@ -8,7 +8,8 @@ from enums import EnumNomesPastaImagem
 from database import db
 from utilitarios import ValidadorDeImagens
 from utilitarios import Senha
-from datetime import datetime
+from datetime import datetime, date
+import calendar
 
 class BarbeiroService(UsuarioService):
 
@@ -47,8 +48,22 @@ class BarbeiroService(UsuarioService):
             try:
                 barbeiros = self.__barbeiroRepositorio.listar_todos_ativos()
                 return barbeiros
-            except Exception as error:
-                flash(f"Erro ao buscar os barbeiros cadastrados no banco {error}")
+            except Exception :
+                flash(f"Erro ao buscar os barbeiros cadastrados no banco")
+    
+    def consultar_faltas_mensais_barbeiros_ativo(self):
+            try:
+                barbeiros = self.__barbeiroRepositorio.consultar_faltas_mensais_barbeiros_ativo(date.today().replace(day=1),date.today().replace(day=calendar.monthrange(date.today().year, date.today().month)[1]))
+                return barbeiros
+            except Exception:
+                flash(f"Erro ao buscar os barbeiros cadastrados no banco, contate o suporte")
+   
+    def consultar_faltas_anuais_barbeiros_ativo(self):
+            try:
+                barbeiros = self.__barbeiroRepositorio.consultar_faltas_mensais_barbeiros_ativo(date.today().replace(day=1, month=1),date.today().replace(day=31, month=12))
+                return barbeiros
+            except Exception:
+                flash(f"Erro ao buscar os barbeiros cadastrados no banco, contate o suporte")
 
     def consultar_agendamentos_barbeiro(self, barbeiro:dict):
         try:
@@ -57,7 +72,7 @@ class BarbeiroService(UsuarioService):
 
         except Exception as error:
             print("\n ERRO NO SERVICE:", repr(error)) # <-- Vai mostrar o erro exato no terminal
-            flash(f"\n # ERRO AO BUSCAR AGENDAMENTOS MARCADOS AO BARBEIRO '{barbeiro.get('nome_completo', 0)}' #\n {error}\n")
+            flash(f"\n # ERRO AO BUSCAR AGENDAMENTOS MARCADOS AO BARBEIRO '{barbeiro.get('nome_completo', 0)}")
             return []
         
     def consultar_faltas_por_barbeiro_ativo(self):

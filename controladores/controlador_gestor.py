@@ -134,6 +134,7 @@ class ControladorGestor():
     @classmethod
     def consultar_horario_funcionamento(cls, id_barbearia):
         return ControladorHorarioFuncionamento.consultar_horario_funcionamento(id_barbearia)
+   
     
     @classmethod
     def atualizar_horario_funcionamento_barbearia(cls, horario_funcionamento_barbearia):
@@ -168,9 +169,23 @@ class ControladorGestor():
         return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))       
         
     @classmethod
-    def consultar_agenda_mensal_barbearia(cls):        
+    def consultar_agenda_barbearia_por_mes(cls):        
         try:
-            return ControladorAgendaMensal.consultar_todas_agenda_mensal_service()
+            return ControladorAgendaMensal.consultar_agendas_mensais_por_mes_service()
+        except Exception as erros:
+            flash(f"Erro na consulta da agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)
+            
+    @classmethod
+    def consultar_agenda_barbearia_anual(cls):        
+        try:
+            return ControladorAgendaMensal.consultar_agendas_mensais_anual_service()
+        except Exception as erros:
+            flash(f"Erro na consulta da agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)      
+    
+    @classmethod
+    def consultar_agenda_barbearia(cls):        
+        try:
+            return ControladorAgendaMensal.consultar_todas_agendas_mensais_service()
         except Exception as erros:
             flash(f"Erro na consulta da agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)     
     

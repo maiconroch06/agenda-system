@@ -11,8 +11,8 @@ class RecessoService:
     def consultar_recessos_por_mes_services(self):
         return self.__recesso_repositorio.consultar_todos()
     
-    def consultar_recessos_services(self):
-        return self.__recesso_repositorio.consultar_todos()
+    def consultar_recessos_intervalo_services(self):
+        return self.__recesso_repositorio.consultar_por_mes()
   
     def cadastrar_recessos_services(self, recesso):
         if self.__recesso_repositorio.verificar_recesso_existente_cadastro(recesso)>0:

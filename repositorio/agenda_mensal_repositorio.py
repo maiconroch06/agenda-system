@@ -27,6 +27,9 @@ class AgendaMensalRepositorio:
 
     def listar_todos(self):
         return self.__agenda_mensal_DAO.listar_todos()
+  
+    def consultar_agenda_intervalo(self,data_inicio_mes, data_fim_mes):
+        return self.__agenda_mensal_DAO.consultar_agenda_intervalo(data_inicio_mes, data_fim_mes)
     
     def atualizar_status_agenda_mensal(self, agenda_mensal):
         return self.__agenda_mensal_DAO.atualizar_status_agenda_mensal(agenda_mensal)

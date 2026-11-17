@@ -9,6 +9,25 @@ const ipt_data_inicio = document.getElementById("agenda-data-inicio");
 const ipt_data_fim = document.getElementById("agenda-data-fim");
 const id_agenda = document.getElementById("id_agenda");
 
+const botao_faltas_justificadas_mensais_global = document.getElementById("consulta_agenda_barbearia_mensal");
+const botao_faltas_justificadas_anual_global = document.getElementById("consulta_agenda_barbearia__anual");
+const botao_limpar_faltas_justificadas_mensais_global = document.getElementById("limpar_consulta_agenda_barbearia");
+
+botao_faltas_justificadas_mensais_global.addEventListener("click", () => {
+    console.log("passou aqui");
+    window.location.href = "/gestor/painel/horario_funcionamento/consultar/mes_atual";
+});
+
+botao_limpar_faltas_justificadas_mensais_global.addEventListener("click", () => {
+    console.log("passou aqui");
+    window.location.href = "/gestor/painel/horario_funcionamento";
+});
+
+botao_faltas_justificadas_anual_global.addEventListener("click", () => {
+    console.log("passou aqui");
+    window.location.href = "/gestor/painel/horario_funcionamento/consultar/ano_atual";
+});
+
 
 btn_cadastrar_agenda_mensal.addEventListener("click", (event)=>{
     const dataAtual = new Date();

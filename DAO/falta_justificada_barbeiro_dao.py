@@ -36,7 +36,6 @@ class FaltaJustificadaBarbeiroDAO:
 
         return resultado.lastrowid > 0
 
-    
 
     def consultar_todos_por_barbeiro(self, id_barbeiro: int):
         sql = text("""
@@ -144,7 +143,7 @@ class FaltaJustificadaBarbeiroDAO:
     
             return resultado.scalar() > 0
     
-    
+
 
     def _mapear_falta(self, registro):
         barbeiro = BarbeiroDAO().buscar_por_id(
