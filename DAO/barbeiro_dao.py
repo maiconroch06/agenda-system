@@ -2,7 +2,7 @@
 from sqlalchemy import text
 from database import db
 from models import Barbeiro, Endereco, FaltaJustificadaBarbeiro
-from utilitarios import FormatarHoras, FormatarTelefone
+from utilitarios import FormatarHoras, FormatarTelefone, FormatarData
 from datetime import datetime, timezone
 
 class BarbeiroDAO:
@@ -384,6 +384,29 @@ class BarbeiroDAO:
         db.session.commit()
 
         return resultado.rowcount > 0
+    
+    def atualizar_status_agendamento(self, id_agendamento:int, status_agendamento:int, data_hoje:str, motivo_cancelamento:str):
+        sql = text("""
+            UPDATE agendamento
+            SET
+                status_agendamento = :status_agendamento,
+                motivo_cancelamento = :motivo_cancelamento,
+                data_atualizacao = NOW()
+                
+            WHERE id_agendamento = :id_agendamento
+                AND data_agendamento = :data_hoje
+        """)
+        
+        resultado = db.session.execute(sql, {
+            "id_agendamento": id_agendamento,
+            "status_agendamento": status_agendamento,
+            "motivo_cancelamento": motivo_cancelamento,
+            "data_hoje": data_hoje
+        })
+        
+        db.session.commit()
+
+        return resultado.rowcount > 0
 
     def consultar_faltas_dos_barbeiros_ativo(self):
         sql = text("""
@@ -536,7 +559,7 @@ class BarbeiroDAO:
         return {
             "id": str(registro["id_agendamento"]),
             "barbeiro": registro["nome_barbeiro"],
-            "data": str(registro["data_agendamento"]),
+            "data": FormatarData._formatar_data(registro["data_agendamento"]),
             "hora": FormatarHoras._formatar_hora(registro["hora_inicio"]),
             "cliente": registro["nome_cliente"],
             "telefone": FormatarTelefone._formatar_telefone(registro["telefone_cliente"]),
