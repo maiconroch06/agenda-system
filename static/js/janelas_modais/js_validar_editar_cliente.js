@@ -17,27 +17,31 @@ const cliente_cpf = document.getElementById("cliente_cpf");
 const botao_fechar_modal = document.getElementById("btn_cancelar_modal_cliente");
 
 const formulario = document.getElementById("form_cliente_atualizar");
-const formulario_consultar_cliente = document.getElementById("form-consultar-cliente-nome");
+const formulario_consultar_cliente_nome = document.getElementById("form-consultar-cliente-nome");
 
 /*
 const nome_cliente_titulo = document.getElementById("campo-padrao");
 
 */
 
-formulario_consultar_cliente.addEventListener("submit",(event)=>{
+formulario_consultar_cliente_nome.addEventListener("submit",(event)=>{
     event.preventDefault();
-    
-    formulario_consultar_cliente.classList.remove(("border-red-400"));
+
+    const message = document.querySelector("#validation-menssage");
+    const div_messagem = document.querySelector("#div-validation-message");
+   
+    message.textContent = '';
 
     const input_consultar_cliente = document.getElementById("input-nome-cliente-consulta");
 
     if (input_consultar_cliente.value.trim() === ''){
         input_consultar_cliente.classList.remove(("border-[#38362f]"));
         input_consultar_cliente.classList.add(("border-red-400"));
-        
+        message.innerHTML = 'Campo de pesquisa nome não pode ser vazio.';
+        div_messagem.classList.remove('hidden');
         return;
     }
-    formulario_consultar_cliente.submit();
+    formulario_consultar_cliente_nome.submit();
     
 
 });

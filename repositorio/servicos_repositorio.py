@@ -13,6 +13,9 @@ class ServicoRepositorio:
 
     def consultar_todos_servicos(self):
         return self.servico_dao.consultar_todos_os_servicos()
+   
+    def consultar_servico_nome(self,nome_servico):
+        return self.servico_dao.consultar_servico_nome(nome_servico)
     
     def consultar_todos_os_servicos_resumo(self):
         return self.servico_dao.consultar_todos_os_servicos_resumo()

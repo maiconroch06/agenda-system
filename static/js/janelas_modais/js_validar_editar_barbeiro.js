@@ -3,6 +3,7 @@ const modal_cadastrar_editar_barbeiro = document.querySelector("#janela_modal_ca
 const botao_editar_barbeiro = document.querySelectorAll("#editar-barbeiro");
 const titulo = document.getElementById("form-title");
 const formulario = document.getElementById("form-barbeiro");
+const formulario_consultar_barbeiro_nome = document.getElementById("form-consultar-barbeiro-nome");
 const botao_voltar = document.getElementById("btn-cancelar");
 const botao_limpar_consulta_do_barbeiro_global = document.getElementById("limpar-consulta-barbeiro");
 //campos
@@ -28,6 +29,25 @@ function init() {
  aplicarMascaras();
 }
 
+formulario_consultar_barbeiro_nome.addEventListener("submit",()=>{
+    event.preventDefault();
+    const message = document.querySelector("#validation-menssage");
+    const div_messagem = document.querySelector("#div-validation-message");
+  
+    message.textContent = '';
+
+
+    const input_consultar_cliente = document.getElementById("input-nome-barbeiro-consulta");
+
+    if (input_consultar_cliente.value.trim() === '') {
+        input_consultar_cliente.classList.remove(("border-[#38362f]"));
+        input_consultar_cliente.classList.add(("border-red-400"));
+        message.innerHTML = 'Campo de pesquisa nome não pode ser vazio.';
+        div_messagem.classList.remove('hidden');
+        return;
+    }
+    formulario_consultar_barbeiro_nome.submit();
+});
 botao_limpar_consulta_do_barbeiro_global.addEventListener("click",()=>{
     window.location.href ="/gestor/painel/barbeiros";
 });

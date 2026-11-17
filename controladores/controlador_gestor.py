@@ -112,7 +112,11 @@ class ControladorGestor():
             
     @classmethod
     def consultar_servicos(cls):
-            return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = ControladorServico.consultar_todos_os_servicos(), mensagens_status=EnumStatusMensagens)
+            return render_template('pages/gestor/gestor-painel-servicos-rp.html',modo=0, listaServicos = ControladorServico.consultar_todos_os_servicos(), mensagens_status=EnumStatusMensagens)
+   
+    @classmethod
+    def consultar_servico_nome(cls, nome_servico):
+            return render_template('pages/gestor/gestor-painel-servicos-rp.html', nome_servico=nome_servico, modo=1, listaServicos = ControladorServico.consultar_servico_nome(nome_servico), mensagens_status=EnumStatusMensagens)
    
     @classmethod
     def consultar_clientes(cls):

@@ -33,6 +33,11 @@
                 
                 <!-- ABA 5: CLIENTES -->
                 <section id="aba-clientes">
+                    <!-- Mensagem form consultar por nome vazio -->
+                    <div id='div-validation-message'
+                        class="bg-red-500/10 border border-red-500/30 mb-8 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide hidden ">
+                        <p id="validation-menssage"></p>
+                    </div>
                     <!-- ============================================================
                     COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
                     ============================================================ -->
@@ -40,6 +45,9 @@
                     {% include "componetizacao/mensagens/mensagens.html" %}
 
                     <div class="flex items-center justify-between mb-5 gap-3">
+                        
+                       
+
                         <div>
                             <h1 class="text-lg lg:text-xl font-semibold">Gestão de Clientes</h1>
                             <p class="text-xs text-[#888780]" id="data-atual-str"></p>

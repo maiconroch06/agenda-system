@@ -90,7 +90,27 @@ class ServicoDAO:
         registros = db.session.execute(sql).mappings().all()
 
         return [dict(registro) for registro in registros]
-
+    
+    def consultar_servico_nome (self, nome_servico):
+            sql = text("""
+                SELECT
+                    id_servico,
+                    descricao_servico,
+                    valor,
+                    duracao,
+                    foto_nome_servico,
+                    status_servico,
+                    data_cadastro,
+                    data_atualizacao
+                FROM servico
+                WHERE descricao_servico like :nome_servico
+                ORDER BY descricao_servico
+            """)
+    
+            registros = db.session.execute(sql,{"nome_servico":f"%{nome_servico}%"}).mappings().all()
+    
+            return [dict(registro) for registro in registros]
+        
     def consultar_todos_os_servicos_resumo(self):
         sql = text("""
             SELECT

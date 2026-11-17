@@ -3,10 +3,12 @@ const botao_editar = document.querySelectorAll("#editar-servico");
 const botao_cancelar_modal_servico = document.querySelector("#fechar-modal-editar");
 const botao_cadastrar_editar = document.querySelector("#botao-cadastrar-editar");
 const botao_cadastrar_servico = document.getElementById("cadastrar-servico");
+const botao_limpar_consulta_servicos_global = document.getElementById("limpar-consulta-servico");
 
 
 // campos do formulario
 const formulario = document.querySelector("#form-servico");
+const formulario_servico_consultar_nome = document.getElementById("form-consultar-servico-nome");
 
 // campos do html
 const descricao_servico = document.querySelector("#srv-descricao-servico");
@@ -19,6 +21,32 @@ const imagem_preview = document.querySelector('#img_srv-preview');
 
 
 let tipo_dados = -1;
+
+formulario_servico_consultar_nome.addEventListener("submit",(event)=>{
+    event.preventDefault();
+
+    const message = document.querySelector("#validation-menssage");
+    const div_messagem = document.querySelector("#div-validation-message");
+
+    message.textContent = '';
+    
+
+    const input_consultar_cliente = document.getElementById("input-nome-servico-consulta");
+
+    if (input_consultar_cliente.value.trim() === '') {
+        input_consultar_cliente.classList.remove(("border-[#38362f]"));
+        input_consultar_cliente.classList.add(("border-red-400"));
+        message.innerHTML = 'Campo de pesquisa nome não pode ser vazio.';
+        div_messagem.classList.remove('hidden');
+
+        return;
+    }
+    formulario_servico_consultar_nome.submit();
+});
+
+botao_limpar_consulta_servicos_global.addEventListener("click",()=>{
+    window.location.href ="/gestor/painel/servicos"
+});
 
 botao_cadastrar_servico.addEventListener("click", ()=>{
     document.getElementById("div-seletor-status").classList.add("hidden");

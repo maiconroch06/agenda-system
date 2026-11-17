@@ -8,6 +8,7 @@
     monospace;
     --color-red-50: oklch(97.1% 0.013 17.38);
     --color-red-100: oklch(93.6% 0.032 17.717);
+    --color-red-200: oklch(88.5% 0.062 18.334);
     --color-red-300: oklch(80.8% 0.114 19.571);
     --color-red-400: oklch(70.4% 0.191 22.216);
     --color-red-500: oklch(63.7% 0.237 25.331);
@@ -42,6 +43,7 @@
     --color-gray-600: oklch(44.6% 0.03 256.802);
     --color-gray-700: oklch(37.3% 0.034 259.733);
     --color-gray-800: oklch(27.8% 0.033 256.848);
+    --color-gray-950: oklch(13% 0.028 261.692);
     --color-zinc-50: oklch(98.5% 0 none);
     --color-zinc-100: oklch(96.7% 0.001 286.375);
     --color-zinc-200: oklch(92% 0.004 286.32);
@@ -1366,6 +1368,9 @@
       border-color: color-mix(in oklab, var(--color-red-500) 30%, transparent);
     }
   }
+  .border-red-700 {
+    border-color: var(--color-red-700);
+  }
   .border-red-800 {
     border-color: var(--color-red-800);
   }
@@ -1545,6 +1550,9 @@
   }
   .bg-amber-500 {
     background-color: var(--color-amber-500);
+  }
+  .bg-amber-600 {
+    background-color: var(--color-amber-600);
   }
   .bg-amber-900 {
     background-color: var(--color-amber-900);
@@ -2124,6 +2132,9 @@
   .text-gray-800 {
     color: var(--color-gray-800);
   }
+  .text-gray-950 {
+    color: var(--color-gray-950);
+  }
   .text-green-400 {
     color: var(--color-green-400);
   }
@@ -2138,6 +2149,9 @@
   }
   .text-red-600 {
     color: var(--color-red-600);
+  }
+  .text-red-700 {
+    color: var(--color-red-700);
   }
   .text-white {
     color: var(--color-white);
@@ -2516,6 +2530,10 @@
       border-style: var(--tw-border-style);
       border-width: 0px;
     }
+    .hover\:border-2:hover {
+      border-style: var(--tw-border-style);
+      border-width: 2px;
+    }
     .hover\:border-\[\#4a473f\]:hover {
       border-color: #4a473f;
     }
@@ -2566,6 +2584,15 @@
       .hover\:border-brand-gold\/80:hover {
         border-color: color-mix(in oklab, var(--color-brand-gold) 80%, transparent);
       }
+    }
+    .hover\:border-red-200:hover {
+      border-color: var(--color-red-200);
+    }
+    .hover\:border-red-300:hover {
+      border-color: var(--color-red-300);
+    }
+    .hover\:border-red-600:hover {
+      border-color: var(--color-red-600);
     }
     .hover\:border-white:hover {
       border-color: var(--color-white);
@@ -2667,6 +2694,9 @@
     }
     .hover\:text-gray-800:hover {
       color: var(--color-gray-800);
+    }
+    .hover\:text-red-300:hover {
+      color: var(--color-red-300);
     }
     .hover\:text-white:hover {
       color: var(--color-white);

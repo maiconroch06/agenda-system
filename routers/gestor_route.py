@@ -157,9 +157,15 @@ def gestor_agenda_mensal_alterar_status():
 
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados
+
 @gestor.route('/painel/servicos')
 def gestorAbaServicos():     
     return ControladorGestor.consultar_servicos()
+
+@gestor.route('/painel/servicos/consulta/nome', methods=["POST"])
+def gestor_consultar_servico_nome(): 
+    nome_servico = request.form.get("consultar-servico")    
+    return ControladorGestor.consultar_servico_nome(nome_servico)
 
 # SERVIÇOS - pagina para cadastrar o Serviço
 @gestor.route('/painel/servicos/cadastrar', methods=['GET'])
