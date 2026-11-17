@@ -130,7 +130,10 @@ class ControladorGestor():
     def consultar_agendamentos(cls, status_agendamento):
         return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos = cls.__controlador_agendamento.consultar_agendamento(status_agendamento)) 
     
-    
+    @classmethod
+    def consultar_agendamentos_data_hoje(cls, data_hoje):
+        return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos_flask = cls.__controlador_agendamento.consultar_agendamento_dia(data_hoje)) 
+        
     @classmethod
     def consultar_horario_funcionamento(cls, id_barbearia):
         return ControladorHorarioFuncionamento.consultar_horario_funcionamento(id_barbearia)

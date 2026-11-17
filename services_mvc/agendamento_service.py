@@ -9,6 +9,9 @@ class AgendamentoService:
         
     def consultar_agendamento_agendados(self, id_cliente): 
         return self.__agendamento_repositorio.consultar_agendamento_status_agendados(id_cliente)
+    
+    def consultar_agendamento_data_hoje(self, data_hoje): 
+        return self.__agendamento_repositorio.consultar_agendamento_por_dia(data_hoje)
 
     def cadastrar_agendamento(self, agendamento):
         return self.__agendamento_repositorio.salvar(agendamento)

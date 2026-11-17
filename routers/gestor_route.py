@@ -3,7 +3,7 @@ from controladores import ControladorGestor, ControladorBarbeiro
 from models import Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal, Recesso, FaltaJustificadaBarbeiro, Cliente
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
@@ -42,7 +42,7 @@ def gestorLogout():
 # Painel Gestor - Aba inicial
 @gestor.route('/painel', methods=['POST','GET'])
 def gestorPainel():
-    return ControladorGestor.consultar_agendamentos(1)
+    return ControladorGestor.consultar_agendamentos_data_hoje(date.today())
 
 # Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros
 @gestor.route('/painel/agendamento')

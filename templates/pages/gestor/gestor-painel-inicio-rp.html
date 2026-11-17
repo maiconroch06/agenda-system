@@ -13,10 +13,6 @@
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
-    {# ───────── DADOS MOCK VS FLASK ───────── #}
-    {% include "componetizacao/preCadastro/dados.html" %}
-    {# ─────────────────────────────────────── #}
-
     <!-- HEADER (Exibe apenas para o mobile)-->
     {% include "componetizacao/Header/header-painel.html" %}
 
@@ -43,10 +39,12 @@
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
                             <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faturamento Hoje</div>
-                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faturamento-hoje">R$ 0,00</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faturamento-hoje">{% set total_dia = agendamentos_flask | sum(attribute='valor_total_servicos') %}
+                            R$ {{ "%.2f"|format(total_dia)|replace('.', ',') }}</div>
                         </div>
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
-                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Ticket Médio Mensal</div>
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Ticket Médio Mensal
+                            </div>
                             <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ticket-mdio-mensal">R$ 0,00</div>
                         </div>
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
@@ -54,7 +52,8 @@
                             <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ocupacao-hoje">0%</div>
                         </div>
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
-                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faltas / Cancelados</div>
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faltas / Cancelados
+                            </div>
                             <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faltas-hoje">0</div>
                         </div>
                     </div>
@@ -74,7 +73,71 @@
                         </div>
 
                         <!-- Listagem dos agendamentos de hoje -->
-                        <div class="flex flex-col gap-2" id="lista-hoje-cards"></div>
+                        <div class="flex flex-col gap-2" id="lista-inicio-hoje">
+                            {% for item in agendamentos_flask %}
+                            <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer transition-all hover:border-[#524f46] hover:bg-[#272623] {% if item.status_agendamento in [0, 3] %}opacity-65{% endif %}"
+                                onclick="abrirModalDetalhe('{{ item.id }}')">
+                            
+                                <div class="flex items-start sm:items-center gap-3.5 flex-1 min-w-0">
+                                    <!-- Bloco de Horário -->
+                                    <div
+                                        class="flex flex-col items-center justify-center bg-[#191816] border border-[#32302a] rounded-xl px-3 py-2 min-w-[64px] flex-shrink-0">
+                                        <span class="text-sm font-bold text-[#f1efe8] leading-none">{{ item.hora_inicio }}</span>
+                                        <span class="text-[11px] text-[#888780] mt-1 leading-none">{{ item.hora_fim }}</span>
+                                    </div>
+                            
+                                    <!-- Cliente, Barbeiro e Serviços -->
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+                                            <div class="min-w-0">
+                                                <span class="block text-[10px] uppercase tracking-wider text-[#888780] font-semibold">Cliente</span>
+                                                <p class="text-sm font-semibold text-[#f1efe8] truncate">{{ item.nome_cliente }}</p>
+                                            </div>
+                            
+                                            <div class="hidden sm:block h-7 w-[1px] bg-[#32302a]"></div>
+                            
+                                            <div class="min-w-0">
+                                                <span
+                                                    class="block text-[10px] uppercase tracking-wider text-[#888780] font-semibold">Barbeiro</span>
+                                                <p class="text-sm font-semibold text-[#e6c67c] truncate">{{ item.nome_completo }}</p>
+                                            </div>
+                                        </div>
+                            
+                                        <div class="text-xs text-[#9e9c95] mt-2 pt-1.5 border-t border-[#302e28] truncate">
+                                            servicos
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <!-- Status e Valor Total -->
+                                <div
+                                    class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#302e28]">
+                                    {% if item.status_agendamento == 0 %}
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3a1510] text-[#f0997b] border-[#993c1d]">Cancelado</span>
+                                    {% elif item.status_agendamento == 1 %}
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]">Agendado</span>
+                                    {% elif item.status_agendamento == 2 %}
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#0c2d48] text-[#7cc4fa] border-[#1d5b8c]">Em
+                                        andamento</span>
+                                    {% else %}
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#085041] text-[#9fe1cb] border-[#0f6e56]">Concluído</span>
+                                    {% endif %}
+                            
+                                    <div class="text-xs text-[#888780]">
+                                        Total: <span class="text-sm font-semibold text-[#f1efe8]">R$ {{
+                                            "%.2f"|format(item.valor_total_servicos)|replace('.', ',') }}</span>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            {% else %}
+                            <p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento para hoje.</p>
+                            {% endfor %}
+                        </div>
 
                     </div>
 
@@ -87,17 +150,16 @@
         {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
 
     </div>
-    
-    <!-- MODAL: DETALHES DO ATENDIMENTO -->
-   {% include "componetizacao/modals/modal-detalhes-atendimento.html" %}
 
+    <!-- MODAL: DETALHES DO ATENDIMENTO 
+   
+        -->
     <!-- TOAST AVISO -->
-    <div
-        class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
+    <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso">
     </div>
 
-    <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/gestor-painel-inicio.js') }}"></script>
+
 </body>
+
 </html>
