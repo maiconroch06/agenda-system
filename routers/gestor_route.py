@@ -384,6 +384,11 @@ def gestor_excluir_barbeiro():
 def gestorExibirClientes():
     return ControladorGestor.consultar_clientes()
 
+@gestor.route('/painel/cliente/consultar',methods=['POST'])
+def gestor_consultar_cliente():
+    nome_cliente = request.form.get("buscar-cliente");
+    return ControladorGestor.consultar_cliente_nome(nome_cliente)
+
 @gestor.route('/painel/clientes/excluir', methods=['POST'])
 def gestor_excluir_cliente():
     id_cliente = request.form.get("id_cliente_barbearia")
@@ -408,9 +413,7 @@ def gestor_atualizar_cliente():
         status_usuario=request.form.get("status_cliente"),
         cpf= request.form.get("cliente_cpf") if request.form.get("cliente_cpf").strip() else None
     )
-    
-    print(cliente.cpf)
-        
+            
     return ControladorGestor.atualizar_cliente_barbearia(cliente)
 
 ##################################################################################

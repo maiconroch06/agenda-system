@@ -1,6 +1,7 @@
 const modal_editar_cliente = document.querySelector("#janela_modal_editar_cliente");
 
 const botao_editar_cliente_global = document.querySelectorAll("#atualizar-cliente-barbearia");
+const botao_limpar_consulta_cliente_global = document.getElementById("limpar-consulta-cliente");
 const titulo = document.getElementById("nome_cliente");
 
 const nome_cliente_editar = document.getElementById("cliente_nome");
@@ -16,15 +17,37 @@ const cliente_cpf = document.getElementById("cliente_cpf");
 const botao_fechar_modal = document.getElementById("btn_cancelar_modal_cliente");
 
 const formulario = document.getElementById("form_cliente_atualizar");
+const formulario_consultar_cliente = document.getElementById("form-consultar-cliente-nome");
 
 /*
 const nome_cliente_titulo = document.getElementById("campo-padrao");
 
 */
 
+formulario_consultar_cliente.addEventListener("submit",(event)=>{
+    event.preventDefault();
+    
+    formulario_consultar_cliente.classList.remove(("border-red-400"));
 
+    const input_consultar_cliente = document.getElementById("input-nome-cliente-consulta");
+
+    if (input_consultar_cliente.value.trim() === ''){
+        input_consultar_cliente.classList.remove(("border-[#38362f]"));
+        input_consultar_cliente.classList.add(("border-red-400"));
+        
+        return;
+    }
+    formulario_consultar_cliente.submit();
+    
+
+});
 
 let descricao_anterior = '';
+
+botao_limpar_consulta_cliente_global.addEventListener("click", ()=>{
+    botao_limpar_consulta_cliente_global.classList.add("hidden");
+    window.location.href ="/gestor/painel/clientes";
+});
 
 botao_editar_cliente_global.forEach(
     (editar)=>{

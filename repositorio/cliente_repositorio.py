@@ -21,6 +21,9 @@ class ClienteRepositorio:
        
     def consultar_clientes_services(self):
         return self.clienteDao.consultar_clientes_resumido()
+    
+    def consultar_cliente_nome(self, nome_cliente):
+        return self.clienteDao.consultar_clientes_nome_resumido(nome_cliente)
 
     def buscar_cliente_id(self, id_cliente):
         return self.clienteDao.consultarClienteId(id_cliente)
