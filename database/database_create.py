@@ -5,7 +5,7 @@ db = SQLAlchemy()
 
 class Database_create:
     USUARIO = 'dev_barbearia'
-    SENHA = ''
+    SENHA = 'hospedagem'
     SERVIDOR = 'localhost'
     PORTA = 3306
     BANCO = 'databasetmsbarbearia'
