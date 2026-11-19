@@ -9,8 +9,9 @@ app = Flask(__name__)
 
 # 1. Verifica se o banco existe e configura o SQLAlchemy
 try:
-    create_database(app)
-    print("Banco de dados verificado com sucesso.")
+    #create_database(app)
+    #print("Banco de dados verificado com sucesso.")
+    print("Banco de dados esta desativado por enquanto.")
 
 except RuntimeError as erro:
     print(f"ERRO AO INICIALIZAR O BANCO: {erro}")
