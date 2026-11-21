@@ -112,20 +112,32 @@ class ControladorGestor():
             
     @classmethod
     def consultar_servicos(cls):
-            return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = ControladorServico.consultar_todos_os_servicos(), mensagens_status=EnumStatusMensagens)
+            return render_template('pages/gestor/gestor-painel-servicos-rp.html',modo=0, listaServicos = ControladorServico.consultar_todos_os_servicos(), mensagens_status=EnumStatusMensagens)
+   
+    @classmethod
+    def consultar_servico_nome(cls, nome_servico):
+            return render_template('pages/gestor/gestor-painel-servicos-rp.html', nome_servico=nome_servico, modo=1, listaServicos = ControladorServico.consultar_servico_nome(nome_servico), mensagens_status=EnumStatusMensagens)
    
     @classmethod
     def consultar_clientes(cls):
-        return render_template('pages/gestor/gestor-painel-clientes-rp.html', lista_clientes= cls.__controlador_cliente.consultar_todos_clientes(),  mensagens_status=EnumStatusMensagens)
+        return render_template('pages/gestor/gestor-painel-clientes-rp.html', lista_clientes= cls.__controlador_cliente.consultar_todos_clientes(), modo=0, mensagens_status=EnumStatusMensagens)
+   
+    @classmethod
+    def consultar_cliente_nome(cls,nome_cliente):
+        return render_template('pages/gestor/gestor-painel-clientes-rp.html',nome_cliente=nome_cliente, lista_clientes= cls.__controlador_cliente.consultar_cliente_nome(nome_cliente), modo=1, mensagens_status=EnumStatusMensagens)
 
     @classmethod
     def consultar_agendamentos(cls, status_agendamento):
         return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos = cls.__controlador_agendamento.consultar_agendamento(status_agendamento)) 
     
-    
+    @classmethod
+    def consultar_agendamentos_data_hoje(cls, data_hoje):
+        return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos_flask = cls.__controlador_agendamento.consultar_agendamento_dia(data_hoje)) 
+        
     @classmethod
     def consultar_horario_funcionamento(cls, id_barbearia):
         return ControladorHorarioFuncionamento.consultar_horario_funcionamento(id_barbearia)
+   
     
     @classmethod
     def atualizar_horario_funcionamento_barbearia(cls, horario_funcionamento_barbearia):
@@ -160,9 +172,23 @@ class ControladorGestor():
         return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))       
         
     @classmethod
-    def consultar_agenda_mensal_barbearia(cls):        
+    def consultar_agenda_barbearia_por_mes(cls):        
         try:
-            return ControladorAgendaMensal.consultar_todas_agenda_mensal_service()
+            return ControladorAgendaMensal.consultar_agendas_mensais_por_mes_service()
+        except Exception as erros:
+            flash(f"Erro na consulta da agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)
+            
+    @classmethod
+    def consultar_agenda_barbearia_anual(cls):        
+        try:
+            return ControladorAgendaMensal.consultar_agendas_mensais_anual_service()
+        except Exception as erros:
+            flash(f"Erro na consulta da agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)      
+    
+    @classmethod
+    def consultar_agenda_barbearia(cls):        
+        try:
+            return ControladorAgendaMensal.consultar_todas_agendas_mensais_service()
         except Exception as erros:
             flash(f"Erro na consulta da agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)     
     
@@ -182,11 +208,25 @@ class ControladorGestor():
         return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))        
 
     @classmethod
-    def consultar_recessos_barbearia_por_mes(cls):        
+    def consultar_recessos_barbearia(cls):        
         try:
-            return cls.__recesso_service.consultar_recessos_por_mes_services()  
+            return cls.__recesso_service.consultar_todos_recessos_services()  
         except Exception as erros:
             flash(f"Erro consultar os recessos da barbearia {erros}", EnumStatusMensagens.ERRO.value)  
+   
+    @classmethod
+    def consultar_recessos_barbearia_mes_atual(cls):        
+        try:
+            return cls.__recesso_service.consultar_recessos_mes_atual_services()  
+        except Exception:
+            flash(f"Erro consultar os recessos da barbearia ", EnumStatusMensagens.ERRO.value)  
+    
+    @classmethod
+    def consultar_recessos_barbearia_ano_atual(cls):        
+        try:
+            return cls.__recesso_service.consultar_recessos_ano_atual_services()  
+        except Exception :
+            flash(f"Erro consultar os recessos da barbearia", EnumStatusMensagens.ERRO.value)  
               
     @classmethod
     def cadastrar_recessos_barbearia_por_mes(cls, recesso):        

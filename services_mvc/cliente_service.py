@@ -52,6 +52,9 @@ class ClienteService(UsuarioService):
 
     def consultar_clientes_services(self):
            return self.__clienteRepositorio.consultar_clientes_services()  
+   
+    def consultar_cliente_nome_services(self, nome_cliente):
+        return self.__clienteRepositorio.consultar_cliente_nome(nome_cliente)  
 
       
 

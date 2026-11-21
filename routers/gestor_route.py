@@ -3,7 +3,7 @@ from controladores import ControladorGestor, ControladorBarbeiro
 from models import Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal, Recesso, FaltaJustificadaBarbeiro, Cliente
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from decimal import Decimal
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 
 
 gestor = Blueprint('gestor', __name__, template_folder='templates')
@@ -42,7 +42,7 @@ def gestorLogout():
 # Painel Gestor - Aba inicial
 @gestor.route('/painel', methods=['POST','GET'])
 def gestorPainel():
-    return ControladorGestor.consultar_agendamentos(1)
+    return ControladorGestor.consultar_agendamentos_data_hoje(date.today())
 
 # Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros
 @gestor.route('/painel/agendamento')
@@ -55,7 +55,18 @@ def gestorAbaAgendamento():
 @gestor.route('/painel/horario_funcionamento')
 def gestor_horario_funcionamento_barbearia():
     data_atual = datetime.now(timezone.utc).date()
-    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual, horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_mensal_barbearia() ,mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=0, botao_filtro=0,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_barbearia() ,mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/horario_funcionamento/consultar/mes_atual')
+def gestor_horario_funcionamento_barbearia_consultar_mes():
+    data_atual = datetime.now(timezone.utc).date()
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=1, botao_filtro=1,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_barbearia_por_mes() ,mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/horario_funcionamento/consultar/ano_atual')
+def gestor_horario_funcionamento_barbearia_consultar_ano():
+    data_atual = datetime.now(timezone.utc).date()
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=1, botao_filtro=2,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_barbearia_anual() ,mensagens_status=EnumStatusMensagens)
+
 
 
 @gestor.route('/painel/horario_funcionamento/atualizar', methods=['POST'])
@@ -88,7 +99,15 @@ def gestor_recesso_cadastrar():
 
 @gestor.route('/painel/recessos', methods=['GET'])
 def gestor_recesso_consultar():   
-    return render_template('pages/gestor/gestor-painel-recesso-rp.html', recessos = ControladorGestor.consultar_recessos_barbearia_por_mes(), mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=0, botao_filtro=0 ,recessos = ControladorGestor.consultar_recessos_barbearia(), mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/recessos/consultar/mes_atual', methods=['GET'])
+def gestor_recesso_consultar_mes_atual():   
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=1 ,recessos = ControladorGestor.consultar_recessos_barbearia_mes_atual(), mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/recessos/consultar/ano_atual', methods=['GET'])
+def gestor_recesso_consultar_ano_atual():   
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=2 ,recessos = ControladorGestor.consultar_recessos_barbearia_ano_atual(), mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/recessos/excluir', methods=['POST'])
 def gestor_recesso_excluir():  
@@ -157,9 +176,15 @@ def gestor_agenda_mensal_alterar_status():
 
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados
+
 @gestor.route('/painel/servicos')
 def gestorAbaServicos():     
     return ControladorGestor.consultar_servicos()
+
+@gestor.route('/painel/servicos/consulta/nome', methods=["POST"])
+def gestor_consultar_servico_nome(): 
+    nome_servico = request.form.get("consultar-servico")    
+    return ControladorGestor.consultar_servico_nome(nome_servico)
 
 # SERVIÇOS - pagina para cadastrar o Serviço
 @gestor.route('/painel/servicos/cadastrar', methods=['GET'])
@@ -210,8 +235,16 @@ def gestorServicoEditar():
 # FALTAS JUSTIFICADAS DOS BARBEIROS - Aba de visualização dos Barbeiros cadastrados
 
 @gestor.route('/painel/barbeiros/faltas-justificadas', methods=['GET'])
-def gestor_fatas_justificadas_barbeiro():
-    return render_template('pages/gestor/gestor-painel-barbeiros-faltas-justificadas-rp .html', barbeiros_faltas_justificadas = ControladorBarbeiro.consultar_faltas_do_barbeiro_ativos(), mensagens_status=EnumStatusMensagens)
+def gestor_faltas_justificadas_barbeiro():
+    return render_template('pages/gestor/gestor-painel-barbeiros-faltas-justificadas-rp .html',modo=0, barbeiros_faltas_justificadas = ControladorBarbeiro.consultar_faltas_do_barbeiro_ativos(), botao_mes=0,  mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/barbeiros/faltas-justificadas/consultar/mensal', methods=['GET'])
+def gestor_faltas_justificadas_consultar_mensal_barbeiro():
+    return render_template('pages/gestor/gestor-painel-barbeiros-faltas-justificadas-rp .html', modo=  1, barbeiros_faltas_justificadas = ControladorBarbeiro.consultar_faltas_mensais_barbeiros_ativos(), botao_mes=1, mensagens_status=EnumStatusMensagens)
+
+@gestor.route('/painel/barbeiros/faltas-justificadas/consultar/anual', methods=['GET'])
+def gestor_faltas_justificadas_consultar_anual_barbeiro():
+    return render_template('pages/gestor/gestor-painel-barbeiros-faltas-justificadas-rp .html', modo=  1, barbeiros_faltas_justificadas = ControladorBarbeiro.consultar_faltas_anual_barbeiros_ativos(), botao_mes=2, mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/barbeiros/faltas-justificadas/cadastrar', methods=['POST'])
 def gestor_cadastrar_faltas_justificadas_barbeiro():
@@ -264,10 +297,15 @@ def gestor_atualizar_faltas_justificadas_barbeiro():
 
 ##################################################################################
 # BARBEIROS - Aba de visualização dos Barbeiros cadastrados
+
 @gestor.route('/painel/barbeiros', methods=['GET'])
 def gestorAbaBarbeiros():
-    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = ControladorBarbeiro.consultar_todos_barbeiros(), mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html',modo=0,  barbeiros = ControladorBarbeiro.consultar_todos_barbeiros(), mensagens_status=EnumStatusMensagens)
 
+@gestor.route('/painel/barbeiro/consultar/nome', methods=['POST'])
+def gestor_barbeiro_consultar_nome():
+    nome_barbeiro = request.form.get("consultar-barbeiro")
+    return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', modo=1,  nome_barbeiro=nome_barbeiro, barbeiros = ControladorBarbeiro.consultar_barbeiros_nome(nome_barbeiro), mensagens_status=EnumStatusMensagens)
 
 # Gerenciar Barbeiro  - Validando dados informados no cadastro do Barbeiro
 @gestor.route('painel/barbeiro/cadastrar', methods=['GET'])
@@ -384,6 +422,11 @@ def gestor_excluir_barbeiro():
 def gestorExibirClientes():
     return ControladorGestor.consultar_clientes()
 
+@gestor.route('/painel/cliente/consultar/nome',methods=['POST'])
+def gestor_consultar_cliente():
+    nome_cliente = request.form.get("consultar-cliente");
+    return ControladorGestor.consultar_cliente_nome(nome_cliente)
+
 @gestor.route('/painel/clientes/excluir', methods=['POST'])
 def gestor_excluir_cliente():
     id_cliente = request.form.get("id_cliente_barbearia")
@@ -408,9 +451,7 @@ def gestor_atualizar_cliente():
         status_usuario=request.form.get("status_cliente"),
         cpf= request.form.get("cliente_cpf") if request.form.get("cliente_cpf").strip() else None
     )
-    
-    print(cliente.cpf)
-        
+            
     return ControladorGestor.atualizar_cliente_barbearia(cliente)
 
 ##################################################################################

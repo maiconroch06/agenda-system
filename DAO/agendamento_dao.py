@@ -122,7 +122,7 @@ class AgendamentoDAO:
                 u.email,
                 u.telefone,
                 u.cpf,
-                u.data_atualizacao,
+                u.data_ultimo_acesso,
                 b.bio
             FROM agendamento a
 
@@ -151,6 +151,70 @@ class AgendamentoDAO:
             ]
         except Exception as erros:
             print(f"{erros}")
+            
+    @staticmethod
+    def consultar_todos_os_agendamento_do_dia(data_hoje):
+            sql = text("""
+                
+                SELECT
+                    -- Dados do agendamento
+                    a.id_agendamento,
+                    a.data_agendamento,
+                    a.hora_inicio,
+                    a.hora_fim,
+                    a.status_agendamento,
+                    a.data_atualizacao,
+                    a.fk_id_barbeiro,
+                    a.fk_id_cliente,
+                    a.motivo_cancelamento,
+                    a.valor_total_servicos,
+                                   
+
+                    -- Dados do barbeiro
+                    b.id_barbeiro,
+                    ub.nome_completo,
+                    ub.email,
+                    ub.telefone,
+                    ub.cpf,
+                    ub.data_ultimo_acesso,
+                    b.bio,
+
+                    -- Dados do cliente
+                    c.id_cliente,
+                    uc.nome_completo AS nome_cliente,
+                    uc.telefone AS telefone_cliente
+
+                FROM agendamento a
+
+                INNER JOIN barbeiro b
+                    ON a.fk_id_barbeiro = b.id_barbeiro
+
+                INNER JOIN cliente c
+                    ON a.fk_id_cliente = c.id_cliente
+
+                INNER JOIN usuario uc
+                    ON c.id_cliente = uc.id_usuario
+
+                INNER JOIN usuario ub
+                    ON b.id_barbeiro = ub.id_usuario
+
+                WHERE a.data_agendamento = :data_hoje
+
+                ORDER BY a.data_agendamento ASC, a.hora_inicio ASC;
+                            """)
+    
+            
+            resultados = db.session.execute(
+                    sql,
+                    {
+                        "data_hoje": data_hoje
+                    }
+                ).mappings().all()
+            
+            print("Total: ", data_hoje)
+            
+            return  [dict(registro) for registro in resultados]
+         
 
     @staticmethod
     def listar_por_cliente(id_cliente: int):

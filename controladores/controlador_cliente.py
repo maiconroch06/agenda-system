@@ -175,6 +175,9 @@ class ControladorCliente():
    
     def consultar_todos_clientes(self):
         return self.__clienteService.consultar_clientes_services()
+    
+    def consultar_cliente_nome(self, nome_completo):
+        return self.__clienteService.consultar_cliente_nome_services(nome_completo)
    
     def excluir_cliente(self, id_usuario, foto_nome, nome_pasta):
         return self.__clienteService.excluir_usuario_barbearia(id_usuario, foto_nome, nome_pasta)

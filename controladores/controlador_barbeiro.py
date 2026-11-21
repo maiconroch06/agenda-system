@@ -33,7 +33,13 @@ class ControladorBarbeiro:
     @classmethod
     def consultar_todos_barbeiros(cls):
         return cls.__barbeiroService.consultar_barbeiros()
-        #return render_template('pages/gestor/gestor-painel-barbeiros-rp.html', barbeiros = cls.__barbeiroService.consultar_barbeiros(), mensagens_status=EnumStatusMensagens)
+   
+    @classmethod
+    def consultar_barbeiros_nome(cls, nome_barbeiro):
+        barbeiros = cls.__barbeiroService.consultar_barbeiro_nome(nome_barbeiro)
+       
+        return barbeiros
+     
 
     @classmethod
     def consultar_agendamentos_barbeiro(cls, barbeiro:dict):
@@ -59,6 +65,15 @@ class ControladorBarbeiro:
             flash(f"{erros}")
     
     @classmethod
+    def atualizar_status_agendamento(cls, id_agendamento:int, status_agendamento:int, motivo_cancelamento:str):
+        try:
+            cls.__barbeiroService.alterar_status_agendamento(id_agendamento, status_agendamento, motivo_cancelamento)
+            flash("Agendamento alterado com sucesso", EnumStatusMensagens.SUCESSO.value)
+        except Exception as erros:
+            flash(f"Não foi possivel alterar o status do agendamento, contate o suporte", EnumStatusMensagens.AVISO.value)
+            flash(f"{erros}")
+    
+    @classmethod
     def atualizar_informacoes_barbeiro(cls, imagem_form, img_padrao, imagem_anterior, usuario):
         try:
            
@@ -74,8 +89,21 @@ class ControladorBarbeiro:
         try: 
             return cls.__barbeiroService.consultar_faltas_por_barbeiro_ativo()
         except Exception as erros:
-           
             flash(f"Não foi possivel consultar as faltas dos barbeiros, contate o suporte {erros}", EnumStatusMensagens.AVISO.value)
+   
+    @classmethod
+    def consultar_faltas_mensais_barbeiros_ativos(cls):
+        try: 
+            return cls.__barbeiroService.consultar_faltas_mensais_barbeiros_ativo()
+        except Exception :
+            flash(f"Não foi possivel consultar as faltas dos barbeiros, contate o suporte", EnumStatusMensagens.AVISO.value)
+  
+    @classmethod
+    def consultar_faltas_anual_barbeiros_ativos(cls):
+        try: 
+            return cls.__barbeiroService.consultar_faltas_anuais_barbeiros_ativo()
+        except Exception :
+            flash(f"Não foi possivel consultar as faltas dos barbeiros, contate o suporte", EnumStatusMensagens.AVISO.value)
             
     @classmethod
     def cadastrar_faltas_do_barbeiro_ativos(cls, id_barbeiro, falta_justificada, nome_barbeiro):

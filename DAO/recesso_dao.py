@@ -125,6 +125,28 @@ class RecessoDAO:
                     self.__mapear_recesso(registro)
                     for registro in resultados
                 ]
+        
+    def consultar_recessos_por_intervalo_datas(self, data_inicio, data_final):
+            sql = text("""
+                SELECT
+                    id_recesso,
+                    descricao_recesso,
+                    data_inicio_recesso,
+                    data_fim_recesso
+                FROM recesso
+                    WHERE data_inicio_recesso >= :data_inicio AND data_fim_recesso <= :data_final
+                ORDER BY data_fim_recesso DESC
+            """)
+    
+            resultados = db.session.execute(sql, {
+                "data_inicio": data_inicio,
+                "data_final":data_final
+                }).mappings().all()
+    
+            return  [
+                        self.__mapear_recesso(registro)
+                        for registro in resultados
+                    ]
             
 
     def atualizar(self, recesso: Recesso):

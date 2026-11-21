@@ -115,6 +115,32 @@ class ClienteDAO:
         registros = db.session.execute(sql).mappings().all()
 
         return [dict(registro) for registro in registros]
+    
+    def consultar_clientes_nome_resumido(self, nome_completo):
+            sql = text("""
+                SELECT u.id_usuario,
+                    u.nome_completo,
+                    u.telefone,
+                    u.email,
+                    u.cpf,
+                    u.status_usuario,
+                    u.foto_nome_usuario,
+                    u.motivo_bloqueio,
+                    u.data_ultimo_acesso,
+                    (select count(id_agendamento) from agendamento where fk_id_cliente=c.id_cliente) as total_servicos,
+                    (select sum(valor_total_servicos) from agendamento where fk_id_cliente=c.id_cliente) as valor_total,
+                    c.data_ultimo_servico
+                FROM usuario u
+                INNER JOIN cliente c
+                    ON c.id_cliente = u.id_usuario
+                WHERE
+                    u.nome_completo LIKE :nome_completo
+                ORDER BY u.nome_completo
+            """)
+    
+            registros = db.session.execute(sql, {"nome_completo": f"%{nome_completo}%"}).mappings().all()
+    
+            return [dict(registro) for registro in registros]
 
     def atualizar(self, cliente: Cliente):
         sql_usuario = text("""

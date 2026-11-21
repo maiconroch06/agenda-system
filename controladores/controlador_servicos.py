@@ -12,3 +12,7 @@ class ControladorServico:
     def consultar_todos_os_servicos(cls):
             return cls.__servicos_barbearia_service_mvc.consultar_todos_servicos()
             
+    @classmethod
+    def consultar_servico_nome(cls, nome_servico):
+            return cls.__servicos_barbearia_service_mvc.consultar_servico_nome(nome_servico)
+            

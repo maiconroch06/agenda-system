@@ -114,14 +114,27 @@
                     </form>                 
 
                     <div class="flex items-center justify-between mb-5 gap-3">
-                        <div>
+                        <div class="flex flex-row gap-4">
                             <h1 class="text-lg lg:text-xl font-semibold">Agenda Geral</h1>
-                    
+                            <button type="button" id="btn-abrir-modal-agenda" class="px-4 py-2.5 rounded-xl bg-amber-400 text-[#161513] text-xs font-bold hover:bg-amber-300  cursor-pointer">
+                                + Cadastrar Agenda
+                            </button>
                         </div>
-
-                        <button type="button" id="btn-abrir-modal-agenda" class="px-4 py-2.5 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold cursor-pointer">
-                            + Cadastrar Agenda
-                        </button>
+                        <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                            <small>Filtro intervalo: </small>
+                            <button id="consulta_agenda_barbearia_mensal" type="button"
+                                class="h-9 md:h-10 px-4 rounded-xl {{'bg-green-700 text-white' if botao_filtro and botao_filtro==1 else 'rounded-full border border-[#4a473f] bg-transparent' }} text-xs font-bold hover:bg-amber-300 hover:text-black transition-colors cursor-pointer ">
+                                mês atual
+                            </button>
+                            <button id="consulta_agenda_barbearia__anual" type="button"
+                                class="h-9 md:h-10 px-4 rounded-xl {{'bg-green-700 text-white' if botao_filtro and botao_filtro==2 else 'rounded-full border border-[#4a473f] bg-transparent' }} text-xs font-bold hover:bg-amber-300 hover:text-black transition-colors cursor-pointer ">
+                                ano atual
+                            </button>
+                            <button id="limpar_consulta_agenda_barbearia" type="button"
+                                class="h-9 md:h-10 px-4 rounded-xl bg-red-700 text-white text-xs font-semibold hover:bg-red-500 transition-colors cursor-pointer {{'hidden' if modo==0 else ''}}">
+                                Limpar filtro
+                            </button>
+                        </div>
                     </div>
 
                     <span class="text-xs font-semibold uppercase tracking-wider text-[#888780] block mb-3">
@@ -173,7 +186,7 @@
                                             <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
 
                                                 <button type="button" id="editar-agenda-mensal" value="{{agenda.id_agenda_mensal}}#{{agenda.titulo_agenda}}#{{agenda.data_inicial_mes}}#{{agenda.data_final_mes}}"
-                                                        class="flex-1 min-w-0 py-2 px-2 rounded-lg border border-[#38362f] text-gray-300 hover:bg-[#2a2825] text-xs font-medium transition-colors">
+                                                        class="px-4 py-2.5 rounded-xl bg-amber-400 text-[#161513] text-xs font-bold hover:bg-amber-300  cursor-pointer">
                                                     Editar agenda
                                                 </button>
 
@@ -184,7 +197,7 @@
                                                     <input type="hidden" name="data_inicio" value="{{agenda.data_inicial_mes}}">
                                                     <input type="hidden" name="data_fim" value="{{agenda.data_final_mes}}">
 
-                                                    <button type="submit" class="w-full py-2 px-2 rounded-lg bg-amber-500 border border-black text-black hover:bg-amber-600 text-xs font-bold transition-colors">
+                                                    <button type="submit" class="w-full py-2 px-2 rounded-lg bg-transparent border border-amber-400 text-amber-400 hover:border-amber-300 hover:text-amber-300 text-xs font-bold transition-colors">
                                                     {{ 'Desativar' if agenda.status_agenda_mensal == 1 else 'Ativar' }} 
                                                     </button>
                                                 </form>
