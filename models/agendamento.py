@@ -1,5 +1,5 @@
 from datetime import date, time, datetime, timedelta
-from .barbeiros import Barbeiro
+from .barbeiro import Barbeiro
 from .cliente import Cliente
 from .servicos import Servico
 
@@ -16,7 +16,7 @@ class Agendamento:
         motivo_cancelamento: None,
         barbeiro: Barbeiro= None,
         cliente: Cliente= None,
-        id_agendamento = None,
+        id_agendamento = None
     ):
         self.__id_agendamento = id_agendamento
         self.__data_agendamento = data_agendamento

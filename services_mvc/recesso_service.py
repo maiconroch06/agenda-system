@@ -9,7 +9,7 @@ class RecessoService:
         self.__recesso_repositorio = RecessoRepositorio()
         
     def consultar_recessos_por_mes_services(self):
-        return self.__recesso_repositorio.consultar_todos()
+        return self.__recesso_repositorio.consultar_por_mes()
     
     def consultar_recessos_services(self):
         return self.__recesso_repositorio.consultar_todos()

@@ -19,3 +19,6 @@ class FaltaJustificadaBarbeiroRepositorio:
 
     def verificar_atualizacao_falta_justificativa_existente_barbeiro(self, id_barbeiro, falta_justificada):
         return self.__faltaDao.verificar_atualizacao_falta_justificativa_existente_barbeiro_dao(id_barbeiro, falta_justificada)
+
+    def consultar_faltas_por_periodo(self, data_inicio, data_fim):
+        return self.__faltaDao.consultar_faltas_por_periodo(data_inicio, data_fim);

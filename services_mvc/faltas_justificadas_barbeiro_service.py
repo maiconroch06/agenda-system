@@ -32,6 +32,9 @@ class FaltasJustificadaBarbeiroService:
             motivo_cancelamento = "Motivo do cancelamento: " + falta_justificada.motivo_falta
             return self.__agendamento_service.atualizar_status_cancelamento_faltas_justificadas_service(motivo_cancelamento, EnumStatusAgendamento.CANCELADO.value, falta_justificada, id_barbeiro)
 
+    def consultar_faltas_por_periodo(self, data_inicio, data_fim):
+        return self.__falta_justificadas_barbeiro_repositorio.consultar_faltas_por_periodo(data_inicio, data_fim)
+
     def excluir(self, id_barbeiro,falta_justificada):
         if self.__falta_justificadas_barbeiro_repositorio.excluir(falta_justificada.id_falta_justificada):
             return self.__agendamento_service.atualizar_status_cancelamento_faltas_justificadas_service(None, EnumStatusAgendamento.SERVICO_AGENDADO.value, falta_justificada, id_barbeiro)

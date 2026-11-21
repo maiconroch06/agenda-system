@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 
 from models.usuarios import Usuario
 from models.endereco import Endereco
-from models.barbeiros import Barbeiro
+from models.barbeiro import Barbeiro
 from enums import EnumStatusMensagens
 from services_mvc import BarbeiroService
 from .controlador_faltas_justificadas import FaltasJustificadaBarbeiro

@@ -46,6 +46,9 @@ const estado = {
     nome: "Maicon Rocha"
 };
 
+const limparAoCarregar =
+    sessionStorage.getItem("limparAgendamento") === "true";
+
 /* ============================================================
    ELEMENTOS
    ============================================================ */
@@ -405,22 +408,19 @@ function verificarEtapaAtual() {
 
 function avancarEtapa() {
 
-    if (!AGENDA_DISPONIVEL) {
-        return;
-    }
+    ocultarMensagemFlash();
 
     if (estado.etapaAtual === 4) {
-
         if (!validarFormulario()) {
             mostrarAviso("Verifique os campos destacados");
             return;
         }
+
         confirmarAgendamento();
         return;
     }
 
     if (!verificarEtapaAtual()) {
-
         const mensagens = {
             1: "Selecione um serviço para continuar",
             2: "Selecione um profissional para continuar",
@@ -428,7 +428,12 @@ function avancarEtapa() {
         };
 
         mostrarAviso(mensagens[estado.etapaAtual]);
+        return;
+    }
 
+    // Impede entrar na etapa de horários sem agenda mensal.
+    if (estado.etapaAtual === 2 && !AGENDA_DISPONIVEL) {
+        mostrarAviso("Não existe uma agenda disponível para agendamentos.");
         return;
     }
 
@@ -480,9 +485,10 @@ function carregarServicos() {
         );
 
         input.addEventListener("change", () => {
-
             estado.servicosSelecionados = obterServicoSelecionados()
                 .map(servico => servico.id);
+
+            ocultarMensagemFlash();
 
             atualizarBotoes();
         });
@@ -557,7 +563,13 @@ function obterDiasDaAgenda() {
     return dias;
 }
 
+
 function renderizarDias() {
+
+    if (!els.abasDias) {
+        console.error("Elemento abas-dias não encontrado no HTML.");
+        return;
+    }
 
     const dias = obterDiasDaAgenda();
 
@@ -578,20 +590,39 @@ function renderizarDias() {
             String(data.getDate()).padStart(2, "0")
         ].join("-");
 
+        const diaSemana = data.getDay();
+
+        const diaDisponivel =
+            DIAS_FUNCIONAMENTO.includes(diaSemana);
+
+        const diaEmRecesso =
+            dataEstaEmRecesso(dataISO);
+
+        const diaIndisponivel =
+            !diaDisponivel || diaEmRecesso;
+
         const ativo = estado.diaSelecionado === dataISO;
 
         return `
             <button
                 type="button"
                 data-dia="${dataISO}"
-                class="flex flex-col items-center justify-center
-                       min-w-[60px] py-2 px-3 rounded-xl
-                       ${ativo
-                           ? "bg-[#f1efe8] text-[#161513]"
-                           : "bg-[#1c1c1c] border-2 border-[#38362f] text-white"}"
+                ${diaIndisponivel ? "disabled" : ""}
+                class="
+                    flex flex-col items-center justify-center
+                    min-w-[60px] py-2 px-3 rounded-xl transition-all
+
+                    ${diaIndisponivel
+                        ? "bg-[#111215] border border-[#252525] text-[#555] cursor-not-allowed opacity-50"
+                        : ativo
+                            ? "bg-[#f1efe8] text-[#161513]"
+                            : "bg-[#1c1c1c] border-2 border-[#38362f] text-white hover:border-brand-gold"
+                    }
+                "
+                title="${diaEmRecesso ? "Barbearia em recesso" : ""}"
             >
                 <span class="text-xs">
-                    ${NOMES_DIAS[data.getDay()]}
+                    ${NOMES_DIAS[diaSemana]}
                 </span>
 
                 <strong class="text-base">
@@ -602,26 +633,29 @@ function renderizarDias() {
 
     }).join("");
 
-    els.abasDias.querySelectorAll("[data-dia]").forEach(botao => {
+    els.abasDias.querySelectorAll("[data-dia]:not(:disabled)")
+        .forEach(botao => {
 
-        botao.addEventListener("click", () => {
+            botao.addEventListener("click", () => {
 
-            estado.diaSelecionado = botao.dataset.dia;
+                estado.diaSelecionado = botao.dataset.dia;
+                estado.horarioSelecionado = null;
 
-            estado.horarioSelecionado = null;
-
-            renderizarDias();
-            renderizarHorarios();
-
-            atualizarBotoes();
+                renderizarDias();
+                renderizarHorarios();
+                atualizarBotoes();
+            });
         });
-    });
 }
 
 
 function renderizarHorarios() {
 
     if (!els.gradeHorarios) return;
+
+    const horario = obterHorarioBarbeiroSelecionado();
+
+    renderizarInformacoesHorario(horario);
 
     if (!estado.diaSelecionado) {
         els.gradeHorarios.innerHTML = `
@@ -632,40 +666,146 @@ function renderizarHorarios() {
         return;
     }
 
-    // Temporário: utiliza os horários fictícios existentes no arquivo.
-    const dia = new Date(
+    if (dataEstaEmRecesso(estado.diaSelecionado)) {
+
+        els.gradeHorarios.innerHTML = `
+            <p class="col-span-full text-center text-brand-muted text-sm">
+                A barbearia estará em recesso nesta data.
+            </p>
+        `;
+
+        estado.horarioSelecionado = null;
+
+        atualizarBotoes();
+
+        return;
+    }
+
+    if (!horario) {
+        els.gradeHorarios.innerHTML = `
+            <p class="col-span-full text-center text-brand-muted text-sm">
+                Não foi possível consultar o expediente do profissional.
+            </p>
+        `;
+        return;
+    }
+
+    const diaSemana = new Date(
         estado.diaSelecionado + "T12:00:00"
     ).getDay();
 
-    const ocupados = HORARIOS_OCUPADOS[dia] || [];
+    if (!DIAS_FUNCIONAMENTO.includes(diaSemana)) {
+        els.gradeHorarios.innerHTML = `
+            <p class="col-span-full text-center text-brand-muted text-sm">
+                A barbearia não funciona neste dia.
+            </p>
+        `;
+        return;
+    }
 
-    els.gradeHorarios.innerHTML = TODOS_HORARIOS.map(horario => {
+    const abertura = horarioParaMinutos(horario.horario_abertura);
+    const fechamento = horarioParaMinutos(horario.horario_fechamento);
 
-        const indisponivel = ocupados.includes(horario);
-        const selecionado = estado.horarioSelecionado === horario;
+    const inicioIntervalo = horarioParaMinutos(
+        horario.horario_inicio_intrajornada
+    );
+
+    const fimIntervalo = horarioParaMinutos(
+        horario.horario_fim_intrajornada
+    );
+
+    const servicos = obterServicoSelecionados();
+    const barbeiro = obterBarbeiroSelecionado();
+
+    const duracaoTotal = servicos.reduce(
+        (total, servico) => total + servico.duracao,
+        0
+    );
+
+    const intervalo = 30;
+
+    const horarios = [];
+
+    for (
+        let inicio = abertura;
+        inicio + duracaoTotal <= fechamento;
+        inicio += intervalo
+    ) {
+
+        const fim = inicio + duracaoTotal;
+
+        const horarioInicio = minutosParaHorario(inicio);
+
+        // Verifica se o horário já passou.
+        if (horarioJaPassou(estado.diaSelecionado, horarioInicio)) {
+            continue;
+        }
+
+        // Verifica se o atendimento invade o intervalo.
+        const invadeIntervalo =
+            inicio < fimIntervalo &&
+            fim > inicioIntervalo;
+
+        if (invadeIntervalo) continue;
+
+        if (
+            barbeiro &&
+            horarioEmFaltaJustificada(
+                barbeiro.id,
+                estado.diaSelecionado,
+                inicio,
+                fim
+            )
+        ) {
+            continue;
+        }
+
+        horarios.push({
+            horario: horarioInicio,
+            ocupado: horarioEstaOcupado(
+                barbeiro.id,
+                estado.diaSelecionado,
+                inicio,
+                fim
+            )
+        });
+    }
+
+    // Horários ocupados devem vir da consulta de agendamentos.
+    const ocupados = HORARIOS_OCUPADOS[estado.diaSelecionado] || [];
+
+    els.gradeHorarios.innerHTML = horarios.map(item => {
+
+    const indisponivel = item.ocupado;
+
+    const selecionado =
+        estado.horarioSelecionado === item.horario;
 
         return `
             <button
                 type="button"
-                data-horario="${horario}"
+                data-horario="${item.horario}"
                 ${indisponivel ? "disabled" : ""}
                 class="
                     rounded-lg p-3 text-sm font-semibold transition-all
                     ${indisponivel
-                        ? "bg-[#111215] text-[#555] cursor-not-allowed line-through"
+                        ? "bg-[#111215] text-[#777] border border-[#38362f] cursor-not-allowed opacity-60"
                         : selecionado
                             ? "bg-brand-gold text-black border border-brand-gold"
                             : "bg-[#1c1c1c] border border-[#38362f] text-white hover:border-brand-gold"
                     }
                 "
+                title="${indisponivel ? "Horário já reservado" : "Selecionar horário"}"
             >
-                ${horario}
+                ${item.horario}
+                
             </button>
         `;
-
     }).join("");
 
-    els.gradeHorarios.querySelectorAll("[data-horario]").forEach(botao => {
+els.gradeHorarios
+    .querySelectorAll("[data-horario]:not(:disabled)")
+    .forEach(botao => {
 
         botao.addEventListener("click", () => {
 
@@ -675,8 +815,22 @@ function renderizarHorarios() {
 
             atualizarBotoes();
         });
-
     });
+
+    els.gradeHorarios
+        .querySelectorAll("[data-horario]:not(:disabled)")
+        .forEach(botao => {
+
+            botao.addEventListener("click", () => {
+
+                estado.horarioSelecionado =
+                    botao.dataset.horario;
+
+                renderizarHorarios();
+
+                atualizarBotoes();
+            });
+        });
 }
 
 function obterServicoSelecionados() {
@@ -694,19 +848,185 @@ function obterServicoSelecionados() {
 }
 
 function obterBarbeiroSelecionado() {
+
     const input = document.querySelector(
         "input[name='inputBarbeiro']:checked"
     );
 
     if (!input) return null;
 
+    const semPreferencia = input.value === "any";
+
     return {
-        id: Number(input.value),
+        id: semPreferencia ? null : Number(input.value),
+        semPreferencia: semPreferencia,
         nome: input.dataset.nome,
         foto: input.dataset.foto
     };
 }
 
+function obterHorarioBarbeiroSelecionado() {
+    const barbeiro = obterBarbeiroSelecionado();
+
+    if (!barbeiro) return null;
+
+    return HORARIOS_BARBEARIA;
+}
+
+function renderizarInformacoesHorario(horario) {
+
+    const elemento = document.getElementById(
+        "informacoes-horario"
+    );
+
+    if (!elemento) return;
+
+    if (!horario) {
+        elemento.innerHTML = `
+            <p>Selecione um profissional para consultar os horários.</p>
+        `;
+        return;
+    }
+
+    elemento.innerHTML = `
+        <div class="flex flex-wrap gap-x-5 gap-y-2
+                    bg-[#1c1c1c] border border-[#38362f]
+                    rounded-xl p-3">
+
+            <span>
+                <strong class="text-white">Abertura:</strong>
+                ${horario.horario_abertura}
+            </span>
+
+            <span>
+                <strong class="text-white">Fechamento:</strong>
+                ${horario.horario_fechamento}
+            </span>
+
+            <span>
+                <strong class="text-white">Intervalo:</strong>
+                ${horario.horario_inicio_intrajornada}
+                às
+                ${horario.horario_fim_intrajornada}
+            </span>
+
+        </div>
+    `;
+}
+
+function horarioParaMinutos(horario) {
+    const [hora, minuto] = horario.split(":").map(Number);
+
+    return hora * 60 + minuto;
+}
+
+function minutosParaHorario(minutos) {
+
+    const hora = Math.floor(minutos / 60);
+    const minuto = minutos % 60;
+
+    return (
+        String(hora).padStart(2, "0") +
+        ":" +
+        String(minuto).padStart(2, "0")
+    );
+}
+
+function horarioJaPassou(data, horario) {
+
+    const agora = new Date();
+
+    const [ano, mes, dia] = data.split("-").map(Number);
+    const [hora, minuto] = horario.split(":").map(Number);
+
+    const dataHorario = new Date(
+        ano,
+        mes - 1,
+        dia,
+        hora,
+        minuto
+    );
+
+    return dataHorario <= agora;
+}
+
+function dataEstaEmRecesso(dataISO) {
+
+    return RECESSOS.some(recesso => {
+
+        return (
+            dataISO >= recesso.data_inicio_recesso &&
+            dataISO <= recesso.data_fim_recesso
+        );
+
+    });
+
+}
+
+function horarioEmFaltaJustificada(idBarbeiro, data, inicio, fim) {
+
+    return FALTAS_BARBEIROS.some(falta => {
+
+        // Verifica se a falta pertence ao barbeiro selecionado.
+        if (Number(falta.id_barbeiro) !== Number(idBarbeiro)) {
+            return false;
+        }
+
+        // Verifica se a falta pertence à data selecionada.
+        if (falta.data !== data) {
+            return false;
+        }
+
+        const inicioFalta = horarioParaMinutos(
+            falta.horario_inicio
+        );
+
+        const fimFalta = horarioParaMinutos(
+            falta.horario_fim
+        );
+
+        // Verifica se existe sobreposição entre os horários.
+        return inicio < fimFalta && fim > inicioFalta;
+    });
+}
+
+function horarioEstaOcupado(idBarbeiro, data, inicio, fim) {
+
+    return AGENDAMENTOS.some(agendamento => {
+
+        // Verifica se pertence ao barbeiro selecionado.
+        if (
+            Number(agendamento.id_barbeiro) !== Number(idBarbeiro)
+        ) {
+            return false;
+        }
+
+        // Verifica se pertence à data selecionada.
+        if (agendamento.data !== data) {
+            return false;
+        }
+
+        const inicioAgendamento = horarioParaMinutos(
+            agendamento.horario_inicio
+        );
+
+        const fimAgendamento = horarioParaMinutos(
+            agendamento.horario_fim
+        );
+
+        // Verifica a sobreposição dos horários.
+        return inicio < fimAgendamento && fim > inicioAgendamento;
+    });
+}
+
+function calcularHorarioFinal(horarioInicial, duracaoTotal) {
+
+    const inicio = horarioParaMinutos(horarioInicial);
+
+    const fim = inicio + duracaoTotal;
+
+    return minutosParaHorario(fim);
+}
 
 function renderizarResumo() {
 
@@ -1048,6 +1368,16 @@ async function confirmarAgendamento() {
         return;
     }
 
+    const duracaoTotal = servicos.reduce(
+        (total, servico) => total + servico.duracao,
+        0
+    );
+
+    const horarioFinal = calcularHorarioFinal(
+        estado.horarioSelecionado,
+        duracaoTotal
+    );
+
     els.btnContinuar.disabled = true;
     els.btnContinuar.textContent = "Agendando...";
 
@@ -1062,16 +1392,26 @@ async function confirmarAgendamento() {
                 id_servicos: servicos.map(servico => servico.id),
                 id_barbeiro: barbeiro.id,
                 data: estado.diaSelecionado,
-                horario: estado.horarioSelecionado
+                horario_inicio: estado.horarioSelecionado,
+                horario_fim: horarioFinal
             })
         });
 
-        if (!resposta.ok) {
-            throw new Error("Não foi possível realizar o agendamento.");
+        const dados = await resposta.json();
+
+        if (!resposta.ok && resposta.status !== 409) {
+            throw new Error(
+                dados.erro || "Não foi possível realizar o agendamento."
+            );
         }
 
-        // Navega para a página para a qual o Flask redirecionou.
-        window.location.href = resposta.url;
+        // Marca que as seleções devem ser limpas ao carregar a página.
+        if (dados.limpar_selecao) {
+            sessionStorage.setItem("limparAgendamento", "true");
+        }
+
+        // Navega somente agora para a página desejada.
+        window.location.href = dados.redirect_url;
 
     } catch (erro) {
 
@@ -1082,6 +1422,48 @@ async function confirmarAgendamento() {
     }
 }
 
+function ocultarMensagemFlash() {
+    const mensagens = document.getElementById("mensagens-flash");
+
+    if (mensagens) {
+        mensagens.style.transition = "opacity 0.3s ease";
+        mensagens.style.opacity = "0";
+
+        setTimeout(() => {
+            mensagens.remove();
+        }, 300);
+    }
+}
+
+function limparSelecaoAgendamento() {
+
+    // Limpa o estado do wizard.
+    estado.etapaAtual = 1;
+    estado.servicosSelecionados = [];
+    estado.profissionalSelecionado = null;
+    estado.diaSelecionado = null;
+    estado.horarioSelecionado = null;
+    estado.agendamentoConcluido = false;
+
+    // Desmarca os serviços.
+    document.querySelectorAll(
+        "input[name='inputCorte']"
+    ).forEach(input => {
+        input.checked = false;
+    });
+
+    // Desmarca os barbeiros.
+    document.querySelectorAll(
+        "input[name='inputBarbeiro']"
+    ).forEach(input => {
+        input.checked = false;
+    });
+
+    // Volta para a primeira etapa.
+    mostrarPainel(1);
+    atualizarBotoes();
+}
+
 /* ============================================================
    REINICIAR E INICIALIZAÇÃO
    ============================================================ */
@@ -1089,32 +1471,27 @@ async function confirmarAgendamento() {
 function reiniciar() {
 
     estado.etapaAtual = 1;
-
-    estado.servicoSelecionado = null;
-
+    estado.servicosSelecionados = [];
     estado.profissionalSelecionado = null;
-
     estado.diaSelecionado = null;
-
     estado.horarioSelecionado = null;
-
     estado.agendamentoConcluido = false;
 
+    limparSelecaoAgendamento();
+
     if (els.navEtapa) els.navEtapa.hidden = false;
-
     if (els.etapa) els.etapa.hidden = false;
-
     if (els.sucesso) els.sucesso.hidden = true;
-
-    carregarServicos();
-
-    carregarProfissionais();
 
     mostrarPainel(1);
 }
 
 function iniciar() {
 
+    if (limparAoCarregar) {
+        sessionStorage.removeItem("limparAgendamento");
+        limparSelecaoAgendamento();
+    }
     carregarServicos();
 
     carregarProfissionais();
