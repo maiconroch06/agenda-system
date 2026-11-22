@@ -142,6 +142,43 @@ class FaltaJustificadaBarbeiroDAO:
             )
     
             return resultado.scalar() > 0
+
+    @staticmethod
+    def consultar_faltas_por_periodo(data_inicio, data_fim):
+
+        sql = text("""
+            SELECT
+                f.id_falta_justificada,
+                f.data_falta,
+                f.horario_inicio_falta,
+                f.horario_final_falta,
+                f.motivo_falta,
+                f.fk_barbeiro_falta_justificada AS id_barbeiro
+
+            FROM falta_justificada_barbeiro f
+
+            INNER JOIN barbeiro b
+                ON b.id_barbeiro = f.fk_barbeiro_falta_justificada
+
+            INNER JOIN usuario u
+                ON u.id_usuario = b.id_barbeiro
+
+            WHERE f.data_falta BETWEEN :data_inicio AND :data_fim
+
+            ORDER BY
+                f.data_falta,
+                f.horario_inicio_falta
+        """)
+
+        resultado = db.session.execute(
+            sql,
+            {
+                "data_inicio": data_inicio,
+                "data_fim": data_fim
+            }
+        ).mappings().all()
+
+        return resultado
     
 
 

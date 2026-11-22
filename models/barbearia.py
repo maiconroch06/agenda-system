@@ -14,8 +14,8 @@ class Barbearia:
         email_empresa: str,
         logo_barbearia_nome: str,
         data_cadastro: datetime,
-        endereco: Endereco,
-        agenda: HorarioFuncionamento
+        endereco: Endereco = None,
+        agenda: HorarioFuncionamento = None
     ):
         self.__cnpj = cnpj
         self.__nome_barbearia = nome_barbearia

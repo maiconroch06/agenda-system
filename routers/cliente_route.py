@@ -89,10 +89,10 @@ def clientAgendamentoServicosCadastro():
 
     agendamento = Agendamento(
         data_agendamento=dados.get('data'),
-        hora_inicio=dados.get('horario'),
-        hora_fim=dados.get('horario'),
+        hora_inicio=dados.get('horario_inicio'),
+        hora_fim=dados.get('horario_fim'),
         status_agendamento=True,
-        data_ultimo_acesso=datetime.now(),
+        data_atualizacao=datetime.now(),
         motivo_cancelamento=None,
         barbeiro=None,
         cliente=cliente

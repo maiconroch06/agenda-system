@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 
 from models.usuarios import Usuario
 from models.endereco import Endereco
-from models.barbeiros import Barbeiro
+from models.barbeiro import Barbeiro
 from enums import EnumStatusMensagens
 from services_mvc import BarbeiroService
 from .controlador_faltas_justificadas import FaltasJustificadaBarbeiro
@@ -59,6 +59,15 @@ class ControladorBarbeiro:
     def atualizar_status_agendamento(cls, id_agendamento:int, status_agendamento:int):
         try:
             cls.__barbeiroService.alterar_status_agendamento(id_agendamento, status_agendamento)
+            flash("Agendamento alterado com sucesso", EnumStatusMensagens.SUCESSO.value)
+        except Exception as erros:
+            flash(f"Não foi possivel alterar o status do agendamento, contate o suporte", EnumStatusMensagens.AVISO.value)
+            flash(f"{erros}")
+    
+    @classmethod
+    def atualizar_status_agendamento(cls, id_agendamento:int, status_agendamento:int, motivo_cancelamento:str):
+        try:
+            cls.__barbeiroService.alterar_status_agendamento(id_agendamento, status_agendamento, motivo_cancelamento)
             flash("Agendamento alterado com sucesso", EnumStatusMensagens.SUCESSO.value)
         except Exception as erros:
             flash(f"Não foi possivel alterar o status do agendamento, contate o suporte", EnumStatusMensagens.AVISO.value)

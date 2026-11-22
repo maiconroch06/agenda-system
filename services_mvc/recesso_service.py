@@ -10,8 +10,8 @@ class RecessoService:
     def __init__(self):
         self.__recesso_repositorio = RecessoRepositorio()
         
-    def consultar_todos_recessos_services(self):
-        return self.__recesso_repositorio.consultar_todos()
+    def consultar_recessos_por_mes_services(self):
+        return self.__recesso_repositorio.consultar_por_mes()
     
     def consultar_recessos_mes_atual_services(self):
             return self.__recesso_repositorio.consultar_recessos_intervalo_datas(date.today().replace(day=1),date.today().replace(day=calendar.monthrange(date.today().year, date.today().month)[1]))

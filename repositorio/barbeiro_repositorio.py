@@ -41,3 +41,6 @@ class BarbeiroRepositorio:
         
     def atualizar_status_agendamento(self, id_agendamento, status_agendamento, data_hoje):
         return self.__barbeiroDao.atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje)
+    
+    def atualizar_status_agendamento(self, id_agendamento, status_agendamento, data_hoje, motivo_cancelamento):
+        return self.__barbeiroDao.atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje, motivo_cancelamento)

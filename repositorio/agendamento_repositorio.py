@@ -43,5 +43,13 @@ class AgendamentoRepositorio:
         return AgendamentoDAO.atualizar_status_e_motivo_do_cancelamento_faltas_justificadas_dao(motivo_cancelamento, status_agendamento,falta_justificada,id_barbeiro)
 
     @staticmethod
+    def consultar_agendamentos_por_periodo(data_inicio, data_fim):
+        return AgendamentoDAO.consultar_agendamentos_por_periodo(data_inicio, data_fim)
+
+    @staticmethod
+    def cliente_tem_conflito_horario(id_cliente, data_agendamento, hora_inicio, hora_fim):
+        return AgendamentoDAO.cliente_tem_conflito_horario(id_cliente, data_agendamento, hora_inicio, hora_fim)
+
+    @staticmethod
     def excluir(id_agendamento):
         return AgendamentoDAO.excluir(id_agendamento)

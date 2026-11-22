@@ -384,6 +384,84 @@ class AgendamentoDAO:
         return resultado.rowcount > 0
 
     @staticmethod
+    def consultar_agendamentos_por_periodo(data_inicio, data_fim):
+
+        sql = text("""
+            SELECT
+                a.id_agendamento,
+                a.data_agendamento,
+                a.hora_inicio,
+                a.hora_fim,
+                a.motivo_cancelamento,
+                a.status_agendamento,
+                a.data_atualizacao,
+                a.fk_id_barbeiro AS id_barbeiro,
+
+                b.id_barbeiro,
+                u.nome_completo,
+                u.cpf,
+                u.email,
+                u.telefone,
+                b.bio,
+                u.data_ultimo_acesso
+
+            FROM agendamento a
+
+            INNER JOIN barbeiro b
+                ON a.fk_id_barbeiro = b.id_barbeiro
+            
+            INNER JOIN usuario u
+                ON b.id_barbeiro = u.id_usuario
+
+            WHERE a.data_agendamento BETWEEN :data_inicio AND :data_fim
+              AND a.status_agendamento = 1
+            ORDER BY
+                a.data_agendamento,
+                a.hora_inicio
+        """)
+
+        resultado = db.session.execute(
+            sql,
+            {
+                "data_inicio": data_inicio,
+                "data_fim": data_fim
+            }
+        ).mappings().all()
+
+        return [
+            AgendamentoDAO._mapear_agendamento_todos_dados(registro)
+            for registro in resultado
+        ]
+
+    @staticmethod
+    def cliente_tem_conflito_horario(
+        id_cliente,
+        data_agendamento,
+        hora_inicio,
+        hora_fim
+    ):
+        sql = text("""
+            SELECT EXISTS (
+                SELECT 1
+                FROM agendamento a
+                WHERE a.fk_id_cliente = :id_cliente
+                  AND a.data_agendamento = :data_agendamento
+                  AND a.hora_inicio < :hora_fim
+                  AND a.hora_fim > :hora_inicio
+                  AND a.status_agendamento = 1
+            )
+        """)
+
+        resultado = db.session.execute(sql, {
+            "id_cliente": id_cliente,
+            "data_agendamento": data_agendamento,
+            "hora_inicio": hora_inicio,
+            "hora_fim": hora_fim
+        }).scalar()
+
+        return bool(resultado)
+
+    @staticmethod
     def _mapear_agendamento_todos_dados(registro):
 
         barbeiro = Barbeiro(
@@ -393,7 +471,7 @@ class AgendamentoDAO:
             telefone=registro["telefone"],
             bio=registro["bio"],
             cpf=registro["cpf"],
-            data_atualizacao=registro["data_atualizacao"]
+            data_ultimo_acesso=registro["data_ultimo_acesso"]
         )
 
         #servico = Servico(
