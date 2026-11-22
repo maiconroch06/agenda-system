@@ -316,7 +316,7 @@ def gestor_barbeiro_cadastrar():
     cep_temp = ''.join(filter(str.isdigit,request.form.get('cep')))
     cpf_temp = ''.join(filter(str.isdigit,request.form.get('cpf')))
     fotoTemp = request.files.get('srv-imagem' , None) 
-    agora_utc = datetime.now(timezone.utc)
+    agora_utc = datetime.now()
     
     endereco = Endereco(
         cep=cep_temp,
@@ -339,9 +339,9 @@ def gestor_barbeiro_cadastrar():
         senha=request.form.get('senha'),
         foto_usuario=None,
         status_usuario=True,
-        data_cadastro=datetime.now(timezone.utc),
-        data_ultimo_acesso=datetime.now(timezone.utc),
-        data_liberacao=datetime.now(timezone.utc),
+        data_cadastro=datetime.now(),
+        data_ultimo_acesso=datetime.now(),
+        data_liberacao=datetime.now(),
         bio=request.form.get('bio'),
         status_barbeiro=True,
         especialidade=request.form.get('especialidade'),

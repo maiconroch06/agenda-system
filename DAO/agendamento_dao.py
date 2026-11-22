@@ -2,7 +2,7 @@
 from sqlalchemy import text
 from database import db
 from models import Agendamento, Barbeiro, Servico
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 from enums import EnumStatusAgendamento
 
 class AgendamentoDAO:
@@ -294,7 +294,7 @@ class AgendamentoDAO:
         resultado = db.session.execute(sql, {
             "motivo_cancelamento": motivo_cancelamento,
             "status_agendamento": status_agendamento,
-            "data_atualizacao": datetime.now(timezone.utc),
+            "data_atualizacao": datetime.now(),
             "data_inicial_agenda": agenda_mensal.data_inicial_mes,
             "data_final_agenda": agenda_mensal.data_final_mes,       
             "status_agendamento_concluido": EnumStatusAgendamento.CONCLUIDO.value       
@@ -323,7 +323,7 @@ class AgendamentoDAO:
         resultado = db.session.execute(sql, {
             "motivo_cancelamento": motivo_cancelamento,
             "status_agendamento": status_agendamento,
-            "data_atualizacao": datetime.now(timezone.utc),
+            "data_atualizacao": datetime.now(),
             "data_falta": falta_justifica.data_falta,
             "id_barbeiro": falta_justifica.d_barbeiro,       
             "horario_inicio_falta": falta_justifica.horario_inicio_falta,       

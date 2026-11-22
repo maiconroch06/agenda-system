@@ -1,3 +1,6 @@
+from datetime import datetime, timezone
+
+
 from sqlalchemy import text
 from database import db
 from models.usuarios import Usuario
@@ -229,6 +232,24 @@ class UsuarioDAO:
         
                
         return resultado.rowcount > 0
+    
+    def atualizar_ultimo_acesso(self, id_usuario):
+                      
+            sql = text("""
+                UPDATE usuario
+                SET
+                data_ultimo_acesso = :data_ultimo_acesso
+                WHERE id_usuario = :id_usuario
+            """)
+    
+            resultado = db.session.execute(sql, {
+                "id_usuario": id_usuario,
+               "data_ultimo_acesso": datetime.now()     
+            })
+    
+            db.session.commit()   
+                   
+            return resultado.rowcount > 0
 
     def atualizar_usuario_com_senha(self, usuario: Usuario):
         sql = text("""
@@ -353,6 +374,5 @@ class UsuarioDAO:
             status_usuario=bool(registro["status_usuario"]),
             data_cadastro=registro["data_cadastro"],
             data_ultimo_acesso=registro["data_ultimo_acesso"],
-            fk_id_endereco=registro["fk_id_endereco"],
             motivo_bloqueio=registro[" motivo_bloqueio"]
         )

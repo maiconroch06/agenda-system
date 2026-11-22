@@ -150,7 +150,7 @@ class Usuario:
             raise ValueError("O nome do usuário é obrigatório.")
 
     def _str__(self):
-        return f"Usuario(id={self.__id}, nome={self.__nome_completo})"
+        return f"Usuario(id={self.__id_usuario}, nome={self.__nome_completo})"
     
     def getTipo(self):
         return type(self).__name__

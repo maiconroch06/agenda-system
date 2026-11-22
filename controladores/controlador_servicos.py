@@ -21,7 +21,7 @@ class ControladorServico:
             return redirect(url_for(cls.__GESTOR_ABAS_SERVICOS))
 
         except Exception as erros:
-            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
+            flash(f"{erros} deu erros a2qui", EnumStatusMensagens.ERRO.value)
             return redirect(url_for(cls.__GESTOR_ABAS_SERVICOS))
 
 

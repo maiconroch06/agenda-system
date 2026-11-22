@@ -25,7 +25,8 @@ class ControladorCliente():
     def login(self, email:str, senha:str):
         try:
             self.__clienteService.realizarLoginService(email,senha)
-            return redirect(url_for('cliente.clientAgendamentoServicos'))
+            if self.__clienteService.atualizarUltimoAcesso(session.get('dados_cliente',{}).get("id_usuario")): 
+                return redirect(url_for('cliente.clientAgendamentoServicos'))
        
         except Exception as erros:
            flash(f"{erros}", EnumStatusMensagens.ERRO.value) 

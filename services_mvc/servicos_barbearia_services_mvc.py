@@ -26,16 +26,15 @@ class ServicoBarbearia:
     def cadastrar_servico_barbearia(self, foto_servico, novo_descricao, novo_valor, novo_duracao):
         
         try:
-            
-            
+                    
             servico = Servico(
                 foto_servico=EnumNomesPastaImagem.IMAGEM_PADRAO.value,
                 descricao_servico=novo_descricao,
                 valor= Decimal(novo_valor or -1),
                 duracao= int(novo_duracao or -1),
                 status_servico=True,
-                data_cadastro=datetime.now(timezone.utc),
-                data_atualizacao= datetime.now(timezone.utc)  
+                data_cadastro=datetime.now(),
+                data_atualizacao= datetime.now()  
             )
             #validar campos com o especialista
             servico.validarValoresVazios()

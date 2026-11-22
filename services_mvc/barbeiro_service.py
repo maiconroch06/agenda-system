@@ -71,7 +71,7 @@ class BarbeiroService(UsuarioService):
                                   
             salvou_barbeiro = self.__barbeiroRepositorio.salvar(usuario)
             
-            ValidadorDeImagens.salvarImagem(fotoTemp, self.definir_pasta_imagem_usuario(), usuario.foto_nome_usuario)
+            ValidadorDeImagens.salvarImagem(fotoTemp, self.definir_pasta_imagem_usuario(), usuario.foto_usuario)
             db.session.commit()
             
             return salvou_barbeiro

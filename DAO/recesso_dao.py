@@ -1,8 +1,6 @@
 
 from sqlalchemy import text
 from database import db
-from datetime import date, timezone
-import calendar
 
 from models import Recesso
 from DAO.agenda_mensal_dao import AgendaMensalDAO

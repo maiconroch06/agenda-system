@@ -39,7 +39,7 @@ class ServicoDAO:
 
         db.session.commit()
 
-        return resultado.rowconunt > 0
+        return resultado.rowcount > 0
 
     def consultar_servico_id(self, id_servico: int):
         sql = text("""

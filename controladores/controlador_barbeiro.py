@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, session
 from werkzeug.utils import secure_filename
 from database import db
 from enums import EnumStatusMensagens
@@ -14,8 +14,9 @@ class ControladorBarbeiro:
     @classmethod
     def login_barbeiro(cls, email:str, senha:str):
         try:
-            cls.__barbeiroService.barbeiro_realizar_login_service(email,senha)   
-            return redirect(url_for('barbeiro.barbeiroPainel'))
+            cls.__barbeiroService.barbeiro_realizar_login_service(email,senha)  
+            if cls.__barbeiroService.atualizarUltimoAcesso(session.get('dados_barbeiro',{}).get("id_usuario")): 
+                return redirect(url_for('barbeiro.barbeiroPainel'))
             
         except Exception as error:
             flash(f"{error}")

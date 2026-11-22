@@ -1,3 +1,5 @@
+from calendar import c
+
 from flask import session, redirect, url_for, flash, render_template
 from werkzeug.security import check_password_hash
 from database import db
@@ -23,8 +25,9 @@ class ControladorGestor():
     @classmethod
     def login_gestor(cls, email:str, senha:str):
         try:
-            cls.__gestor_service_mvc.gestor_realizar_login_service(email,senha)   
-            return redirect(url_for('gestor.gestorPainel'))
+            cls.__gestor_service_mvc.gestor_realizar_login_service(email,senha)
+            if cls.__gestor_service_mvc.atualizarUltimoAcesso(session.get('dados_gestor',{}).get("id_usuario")):
+                return redirect(url_for('gestor.gestorPainel'))
         
         except Exception as error:
             flash(f"{error}")

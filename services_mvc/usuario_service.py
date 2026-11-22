@@ -54,9 +54,9 @@ class UsuarioService:
                 return True
             else:
                 raise Exception()
-           
-           
-        
+                  
+    def atualizarUltimoAcesso(self, id_usuario):
+        return self.__usuarioRepositorio.alterar_ultimo_acesso(id_usuario)    
    
     def salvar_dados_especificos(self, usuario: Usuario): 
         raise NotImplementedError

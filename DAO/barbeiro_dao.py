@@ -3,7 +3,7 @@ from sqlalchemy import text
 from database import db
 from models import Barbeiro, Endereco, FaltaJustificadaBarbeiro
 from utilitarios import FormatarHoras, FormatarTelefone, FormatarData
-from datetime import datetime, timezone
+from datetime import datetime
 
 class BarbeiroDAO:
 
@@ -63,7 +63,7 @@ class BarbeiroDAO:
 
         db.session.execute(sql, {
             "id_barbeiro": barbeiro.id_usuario,
-            "data_liberacao": datetime.now(timezone.utc),
+            "data_liberacao": datetime.now(),
             "bio": barbeiro.bio,
             "especialidade": barbeiro.especialidade,
             "status_barbeiro": barbeiro.status_barbeiro,

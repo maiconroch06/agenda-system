@@ -58,8 +58,8 @@ def clientRegister():
             motivo_bloqueio=None,
             endereco = None,
             status_usuario=1,
-            data_cadastro=datetime.now(timezone.utc),
-            data_ultimo_acesso=datetime.now(timezone.utc)
+            data_cadastro=datetime.now(),
+            data_ultimo_acesso=datetime.now()
     )
     
     controladorCliente = ControladorCliente() 

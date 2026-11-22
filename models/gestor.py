@@ -16,7 +16,7 @@ class Gestor(Usuario):
         data_cadastro, 
         data_ultimo_acesso, 
         motivo_bloqueio = None,
-        foto_nome_usuario=None, 
+        foto_usuario=None, 
         senha=None, 
         id_usuario=None, 
         endereco = None
@@ -31,7 +31,7 @@ class Gestor(Usuario):
             motivo_bloqueio=motivo_bloqueio,
             data_cadastro=data_cadastro,
             data_ultimo_acesso=data_ultimo_acesso, 
-            foto_nome_usuario=foto_nome_usuario, 
+            foto_usuario=foto_usuario, 
             senha =senha, 
             id_usuario=id_usuario,
             endereco=endereco

@@ -1,24 +1,4 @@
 
-/* ============================================================
-   DADOS
-   ============================================================ */
-
-const SERVICOS = [
-    { id: "infantil", name: "Corte Infantil", duration: 30, price: 20, icon: "../../static/assets/img/cortes/corte-infantil.jpeg", alt: "corte-infantil" },
-    { id: "social", name: "Corte Social", duration: 30, price: 18, icon: "../../static/assets/img/cortes/corte-social.jpeg", alt: "corte-social" },
-    { id: "social-barba", name: "Social & Barba", duration: 50, price: 30, icon: "../../static/assets/img/cortes/corte-social&barba.jpeg", alt: "corte-social-barba" },
-    { id: "degrade", name: "Degradê", duration: 40, price: 22, icon: "../../static/assets/img/cortes/corte-degrade.jpeg", alt: "corte-degrade" },
-    { id: "degrade-barba", name: "Degradê & Barba", duration: 60, price: 30, icon: "../../static/assets/img/cortes/corte-degrade-barba.jpeg", alt: "corte-degrade-barba" },
-    { id: "militar", name: "Corte Militar", duration: 20, price: 15, icon: "../../static/assets/img/cortes/corte-militar.jpeg", alt: "corte-militar" },
-    { id: "barba", name: "Barba", duration: 25, price: 15, icon: "../../static/assets/img/cortes/corte-barba.jpeg", alt: "corte-barba" },
-];
-
-const PROFISSIONAIS = [
-    { id: "thiago", name: "Thiago Tomaz", description: "Barbeiro sênior", icon: "../../static/assets/img/barbeiros/barbeiro-master-thiago-silva.png", alt: "thiago" },
-    { id: "samuel", name: "Samuel", description: "Barbeiro sênior", icon: "../../static/assets/img/barbeiros/barbeiro-tres-samuca.png", alt: "samuel" },
-    { id: "maik", name: "Maik", description: "Barbeiro novato", icon: "../../static/assets/img/barbeiros/barbeiro_dois_maik.png", alt: "maik" },
-    { id: "any", name: "Sem preferência", description: "Qualquer profissional disponível", icon: "", alt: "⇄" },
-];
 
 const NOMES_DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
@@ -530,6 +510,10 @@ function obterDiasDaAgenda() {
     if (!AGENDA_MENSAL) {
         return [];
     }
+    
+    console.log("AGENDA MENSAL:", AGENDA_MENSAL);
+    console.log("DATA INICIAL:", AGENDA_MENSAL?.dataInicial);
+    console.log("DATA FINAL:", AGENDA_MENSAL?.dataFinal);
 
     const [anoInicial, mesInicial, diaInicial] =
         AGENDA_MENSAL.dataInicial.split("-").map(Number);
