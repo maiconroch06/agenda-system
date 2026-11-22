@@ -20,6 +20,9 @@ class ServicoBarbearia:
     def consultar_servico_nome(self, nome_servico):
         return self.__servico_repositorio.consultar_servico_nome(nome_servico)
     
+    def consultar_descricoes_servico(self):
+        return self.__servico_repositorio.consultar_descricoes_servico()
+    
     def consultar_todos_servicos_resumo(self):
         return self.__servico_repositorio.consultar_todos_os_servicos_resumo()
     

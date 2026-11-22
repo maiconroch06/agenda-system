@@ -9,7 +9,6 @@ from .controlador_faltas_justificadas import FaltasJustificadaBarbeiro
 class ControladorBarbeiro:
 
     __barbeiroService = BarbeiroService()
-
     
     @classmethod
     def login_barbeiro(cls, email:str, senha:str):
@@ -30,8 +29,12 @@ class ControladorBarbeiro:
     def consultar_barbeiros_nome(cls, nome_barbeiro):
         barbeiros = cls.__barbeiroService.consultar_barbeiro_nome(nome_barbeiro)
         return barbeiros
+    
+    @classmethod
+    def consultar_nomes_barbeiros(cls):
+            barbeiros = cls.__barbeiroService.consultar_nomes_barbeiro()
+            return barbeiros
      
-
     @classmethod
     def consultar_agendamentos_barbeiro(cls, barbeiro:dict):
         return cls.__barbeiroService.consultar_agendamentos_barbeiro(barbeiro)

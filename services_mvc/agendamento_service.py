@@ -1,3 +1,6 @@
+import calendar
+from datetime import date
+
 from repositorio import AgendamentoRepositorio
 from models import Agendamento
 
@@ -12,6 +15,12 @@ class AgendamentoService:
     
     def consultar_agendamento_data_hoje(self, data_hoje): 
         return self.__agendamento_repositorio.consultar_agendamento_por_dia(data_hoje)
+    
+    def consultar_total_agendamento_cancelado_data_hoje(self, data_hoje): 
+        return self.__agendamento_repositorio.consultar_total_agendamento_cancelado_por_dia(data_hoje)
+    
+    def consultar_media_mensal_agendamento(self): 
+        return self.__agendamento_repositorio.consultar_media_mensal_agendamento(date.today().replace(day=1),date.today().replace(day=calendar.monthrange(date.today().year, date.today().month)[1]))
     
     def consultar_total_agendamento(self, data_inicio, data_final): 
         return self.__agendamento_repositorio.consultar_total_agendamentos_por_periodo(data_inicio, data_final)

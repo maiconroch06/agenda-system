@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
+from requests import PreparedRequest
 from controladores import ControladorCliente
 from models import Cliente, Agendamento
 from datetime import datetime, timezone
@@ -75,6 +76,7 @@ def clientAgendamentoServicos():
 def clientAgendamentoServicosCadastro():
     dados = request.get_json(silent=True)
     dados_session = session.get('dados_cliente')
+     
 
     cliente = Cliente(
         id_usuario=dados_session.get('id_cliente'),
@@ -94,6 +96,7 @@ def clientAgendamentoServicosCadastro():
         status_agendamento=True,
         data_atualizacao=datetime.now(),
         motivo_cancelamento=None,
+        valor_total_servicos=dados.get("valor_total_servicos_agendamento"),
         barbeiro=None,
         cliente=cliente
     )

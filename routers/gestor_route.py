@@ -1,5 +1,5 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
-from controladores import ControladorGestor, ControladorBarbeiro, ControladorServico, ControladorRecesso, ControladorAgendaMensal
+from controladores import ControladorGestor, ControladorBarbeiro, ControladorServico, ControladorRecesso, ControladorAgendaMensal, ControladorAgendamento
 from models import Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal, Recesso, FaltaJustificadaBarbeiro, Cliente
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from datetime import datetime, timezone, date
@@ -46,7 +46,8 @@ def gestorPainel():
 # Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros
 @gestor.route('/painel/agendamento')
 def gestorAbaAgendamento():
-    return render_template('pages/gestor/gestor-painel-agendamento-rp.html')
+    return render_template('pages/gestor/gestor-painel-agendamento-rp.html', lista_barbeiros=ControladorBarbeiro.consultar_nomes_barbeiros(),
+                           servicos_descricao=ControladorServico.consultar_descricoes_servico())
 
 ##################################################################################
 #  HORARIO_FUNCIONAMENTO

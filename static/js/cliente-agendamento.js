@@ -12,6 +12,8 @@ const HORARIOS_OCUPADOS = {};
 
 const historicoCortes = [];
 
+let valor_total_agendamento = 0.0;
+
 /* ============================================================
    ESTADO
    ============================================================ */
@@ -169,7 +171,6 @@ function alternarHistorico() {
     window.location.href = URL_MEUS_AGENDAMENTOS;
 }
 
-
 function carregarHistorico() {
 
     const historico = historicoCortes;
@@ -197,8 +198,8 @@ function carregarHistorico() {
 
                 <span class="text-[12px] px-2 py-0.5 rounded-full font-medium
                     ${item.status === 'Concluído'
-                        ? 'bg-green-900/40 text-green-400 border border-green-800'
-                        : 'bg-amber-900/40 text-amber-400 border border-amber-800'}">
+            ? 'bg-green-900/40 text-green-400 border border-green-800'
+            : 'bg-amber-900/40 text-amber-400 border border-amber-800'}">
                     ${item.status}
                 </span>
 
@@ -372,7 +373,7 @@ function verificarEtapaAtual() {
 
         case 3:
             return estado.diaSelecionado !== null &&
-                   estado.horarioSelecionado !== null;
+                estado.horarioSelecionado !== null;
 
         case 4:
             return true;
@@ -479,27 +480,27 @@ function carregarServicos() {
    ETAPA 2 — PROFISSIONAIS
    ============================================================ */
 
-    function carregarProfissionais() {
+function carregarProfissionais() {
 
-        if (!els.listaProfissionais) return;
+    if (!els.listaProfissionais) return;
 
-        const inputs = els.listaProfissionais.querySelectorAll(
-            "input[name='inputBarbeiro']"
-        );
+    const inputs = els.listaProfissionais.querySelectorAll(
+        "input[name='inputBarbeiro']"
+    );
 
-        inputs.forEach(input => {
+    inputs.forEach(input => {
 
-            input.checked =
-                estado.profissionalSelecionado === input.value;
+        input.checked =
+            estado.profissionalSelecionado === input.value;
 
-            input.addEventListener("change", () => {
+        input.addEventListener("change", () => {
 
-                estado.profissionalSelecionado = input.value;
+            estado.profissionalSelecionado = input.value;
 
-                atualizarBotoes();
-            });
+            atualizarBotoes();
         });
-    }
+    });
+}
 
 /* ============================================================
    ETAPA 3 — DIAS E HORÁRIOS
@@ -510,7 +511,7 @@ function obterDiasDaAgenda() {
     if (!AGENDA_MENSAL) {
         return [];
     }
-    
+
     console.log("AGENDA MENSAL:", AGENDA_MENSAL);
     console.log("DATA INICIAL:", AGENDA_MENSAL?.dataInicial);
     console.log("DATA FINAL:", AGENDA_MENSAL?.dataFinal);
@@ -597,11 +598,11 @@ function renderizarDias() {
                     min-w-[60px] py-2 px-3 rounded-xl transition-all
 
                     ${diaIndisponivel
-                        ? "bg-[#111215] border border-[#252525] text-[#555] cursor-not-allowed opacity-50"
-                        : ativo
-                            ? "bg-[#f1efe8] text-[#161513]"
-                            : "bg-[#1c1c1c] border-2 border-[#38362f] text-white hover:border-brand-gold"
-                    }
+                ? "bg-[#111215] border border-[#252525] text-[#555] cursor-not-allowed opacity-50"
+                : ativo
+                    ? "bg-[#f1efe8] text-[#161513]"
+                    : "bg-[#1c1c1c] border-2 border-[#38362f] text-white hover:border-brand-gold"
+            }
                 "
                 title="${diaEmRecesso ? "Barbearia em recesso" : ""}"
             >
@@ -760,10 +761,10 @@ function renderizarHorarios() {
 
     els.gradeHorarios.innerHTML = horarios.map(item => {
 
-    const indisponivel = item.ocupado;
+        const indisponivel = item.ocupado;
 
-    const selecionado =
-        estado.horarioSelecionado === item.horario;
+        const selecionado =
+            estado.horarioSelecionado === item.horario;
 
         return `
             <button
@@ -773,11 +774,11 @@ function renderizarHorarios() {
                 class="
                     rounded-lg p-3 text-sm font-semibold transition-all
                     ${indisponivel
-                        ? "bg-[#111215] text-[#777] border border-[#38362f] cursor-not-allowed opacity-60"
-                        : selecionado
-                            ? "bg-brand-gold text-black border border-brand-gold"
-                            : "bg-[#1c1c1c] border border-[#38362f] text-white hover:border-brand-gold"
-                    }
+                ? "bg-[#111215] text-[#777] border border-[#38362f] cursor-not-allowed opacity-60"
+                : selecionado
+                    ? "bg-brand-gold text-black border border-brand-gold"
+                    : "bg-[#1c1c1c] border border-[#38362f] text-white hover:border-brand-gold"
+            }
                 "
                 title="${indisponivel ? "Horário já reservado" : "Selecionar horário"}"
             >
@@ -787,19 +788,19 @@ function renderizarHorarios() {
         `;
     }).join("");
 
-els.gradeHorarios
-    .querySelectorAll("[data-horario]:not(:disabled)")
-    .forEach(botao => {
+    els.gradeHorarios
+        .querySelectorAll("[data-horario]:not(:disabled)")
+        .forEach(botao => {
 
-        botao.addEventListener("click", () => {
+            botao.addEventListener("click", () => {
 
-            estado.horarioSelecionado = botao.dataset.horario;
+                estado.horarioSelecionado = botao.dataset.horario;
 
-            renderizarHorarios();
+                renderizarHorarios();
 
-            atualizarBotoes();
+                atualizarBotoes();
+            });
         });
-    });
 
     els.gradeHorarios
         .querySelectorAll("[data-horario]:not(:disabled)")
@@ -1053,6 +1054,8 @@ function renderizarResumo() {
         (total, servico) => total + servico.duracao,
         0
     );
+
+    valor_total_agendamento = valorTotal;
 
     // Gera o HTML de cada serviço selecionado.
     const htmlServicos = servicos.map(servico => `
@@ -1377,7 +1380,8 @@ async function confirmarAgendamento() {
                 id_barbeiro: barbeiro.id,
                 data: estado.diaSelecionado,
                 horario_inicio: estado.horarioSelecionado,
-                horario_fim: horarioFinal
+                horario_fim: horarioFinal,
+                valor_total_servicos_agendamento: valor_total_agendamento
             })
         });
 

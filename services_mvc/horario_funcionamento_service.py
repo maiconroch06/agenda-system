@@ -10,6 +10,9 @@ class HorarioFuncionamentoService:
         
     def consultar_horario_funcionamento_barbearia(self, id_barbearia):
         return self.__agenda_repositorio.buscar_por_id(id_barbearia)
+   
+    def consultar_capacidade_realizar_servicos_dia(self):
+        return self.__agenda_repositorio.consutar_capacidade_total_servicos_dia()
       
     def atualizar_horario_funcionamento_barbearia(self, novo_horario_funcionamento_barbearia):
         return self.__agenda_repositorio.atualizar_horario_funcionamento_repositorio(novo_horario_funcionamento_barbearia)

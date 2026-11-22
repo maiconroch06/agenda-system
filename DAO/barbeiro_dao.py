@@ -225,6 +225,23 @@ class BarbeiroDAO:
                 self._mapear_barbeiro(registro)
                 for registro in registros
             ]
+    def consultar_nomes_barbeiro(self):
+                sql = text("""
+                    SELECT
+                        u.id_usuario,
+                        u.nome_completo
+                   
+                    FROM usuario u
+        
+                    INNER JOIN barbeiro b
+                        ON b.id_barbeiro = u.id_usuario
+        
+                    ORDER BY u.nome_completo
+                """)
+        
+                registros = db.session.execute(sql).mappings().all()
+        
+                return [dict(registro) for registro in registros]
 
     def consultar_todos_ativos(self):
         sql = text("""

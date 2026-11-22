@@ -17,6 +17,7 @@ class AgendamentoDAO:
                 hora_fim,
                 status_agendamento,
                 data_atualizacao,
+                valor_total_servicos,
                 fk_id_barbeiro,
                 fk_id_cliente
             ) VALUES (
@@ -25,6 +26,7 @@ class AgendamentoDAO:
                 :hora_fim,
                 :status_agendamento,
                 :data_atualizacao,
+                :valor_total_servicos,
                 :fk_id_barbeiro,
                 :fk_id_cliente
             )
@@ -36,6 +38,7 @@ class AgendamentoDAO:
             "hora_fim": agendamento.hora_fim,
             "status_agendamento": agendamento.status_agendamento,
             "data_atualizacao": agendamento.data_atualizacao,
+            "valor_total_servicos": agendamento.valor_total_servicos,
             "fk_id_barbeiro": agendamento.barbeiro.id_usuario,
             "fk_id_cliente": agendamento.cliente.id_usuario
         }
@@ -84,7 +87,7 @@ class AgendamentoDAO:
                 hora_fim,
                 status_agendamento,
                 data_atualizacao,
-               
+               valor_total_servicos,
                 fk_id_barbeiro,
                 fk_id_cliente
             FROM agendamento
@@ -115,6 +118,7 @@ class AgendamentoDAO:
                 a.fk_id_barbeiro,
                 a.fk_id_cliente,
                 a.motivo_cancelamento,
+                a.valor_total_servicos,
 
                 -- Dados do barbeiro
                 b.id_barbeiro,
@@ -168,8 +172,7 @@ class AgendamentoDAO:
                     a.fk_id_cliente,
                     a.motivo_cancelamento,
                     a.valor_total_servicos,
-                                   
-
+                                           
                     -- Dados do barbeiro
                     b.id_barbeiro,
                     ub.nome_completo,
@@ -211,11 +214,43 @@ class AgendamentoDAO:
                     }
                 ).mappings().all()
             
-            print("Total: ", data_hoje)
-            
             return  [dict(registro) for registro in resultados]
          
-
+    @staticmethod
+    def consultar_total_agendamentos_cancelados(data_hoje):
+        sql = text("""
+            select count(id_agendamento) FROM databasetmsbarbearia.agendamento WHERE status_agendamento = 0 
+            """)
+        
+        resultados = db.session.execute(
+                sql,
+                {
+                    "data_hoje": data_hoje
+                }
+            )
+        
+        return resultados.scalar()
+    
+    @staticmethod
+    def consultar_media_agendamentos_mensal(data_inicio, data_final):
+            sql = text("""
+                    select AVG(valor_total_servicos) 
+                    FROM databasetmsbarbearia.agendamento where data_agendamento 
+                    BETWEEN :data_inicio AND :data_final 
+                    AND status_agendamento=3 
+                """)
+            
+            resultados = db.session.execute(
+                    sql,
+                    {
+                        "data_inicio": data_inicio,
+                        "data_final": data_final
+                    }
+                )
+            
+            
+            return resultados.scalar()
+    
     @staticmethod
     def listar_por_cliente(id_cliente: int):
         sql = text("""
@@ -394,6 +429,7 @@ class AgendamentoDAO:
                 a.hora_fim,
                 a.motivo_cancelamento,
                 a.status_agendamento,
+                a.valor_total_servicos,
                 a.data_atualizacao,
                 a.fk_id_barbeiro AS id_barbeiro,
 
@@ -526,6 +562,7 @@ class AgendamentoDAO:
             motivo_cancelamento=registro["motivo_cancelamento"],
             status_agendamento=registro["status_agendamento"],
             data_atualizacao=registro["data_atualizacao"],
+            valor_total_servicos = registro["valor_total_servicos"],
             barbeiro=None,
             cliente=None
         )

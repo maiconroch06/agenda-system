@@ -19,6 +19,14 @@ class AgendamentoRepositorio:
     @staticmethod
     def consultar_agendamento_por_dia(data_hoje):
         return AgendamentoDAO.consultar_todos_os_agendamento_do_dia(data_hoje)
+   
+    @staticmethod
+    def consultar_total_agendamento_cancelado_por_dia(data_hoje):
+        return AgendamentoDAO.consultar_total_agendamentos_cancelados(data_hoje)
+    
+    @staticmethod
+    def consultar_media_mensal_agendamento(data_inicio, data_final):
+        return AgendamentoDAO.consultar_media_agendamentos_mensal(data_inicio, data_final)
 
     @staticmethod
     def listar_por_cliente(id_cliente):

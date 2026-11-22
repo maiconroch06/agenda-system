@@ -47,7 +47,7 @@
                                     onchange="filtrarPorBarbeiro(this.value)">
                                     <option value="todos">Todos os Barbeiros</option>
                                     {% for b in lista_barbeiros %}
-                                        <option value="{{ b.nome }}">{{ b.nome }}</option>
+                                        <option value="{{ b.id_usuario }}">{{ b.nome_completo }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -58,7 +58,11 @@
                                 <select id="filtro-status-agenda"
                                     class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer"
                                     onchange="filtrarPorStatus(this.value)">
-                                    <option value="todos">Todos os Status</option>
+                                    <option value="todos">Todos os status</option>
+                                    <option value="1">Agendado</option>
+                                    <option value="2">Em andamento</option>
+                                    <option value="0">Cancelado</option>
+                                    <option value="3">Concluído</option>
                                 </select>
                             </div>
                             <!-- Não tem JS atualizado -->
@@ -67,7 +71,10 @@
                                 <select id="filtro-servico-agenda"
                                     class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer"
                                     onchange="filtrarPorServico(this.value)">
-                                    <option value="todos">Todos os Serviços</option>
+                                    <option value="-1">Todos os Serviços</option>
+                                    {% for servico in servicos_descricao %}
+                                        <option value="{{servico.id_servico}}">{{servico.descricao_servico}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
 

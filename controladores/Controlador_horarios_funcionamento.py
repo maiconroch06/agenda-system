@@ -11,6 +11,10 @@ class ControladorHorarioFuncionamento():
     @classmethod
     def consultar_horario_funcionamento(cls, id_barbearia):
         return cls.__horario_funcionamento.consultar_horario_funcionamento_barbearia(id_barbearia)
+    
+    @classmethod
+    def consultar_capacidade_realizar_servicos_dia(cls):
+        return cls.__horario_funcionamento.consultar_capacidade_realizar_servicos_dia()
         
     @classmethod
     def atualizar_horario_funcionamento(cls, horario_funcionamento_barbearia):

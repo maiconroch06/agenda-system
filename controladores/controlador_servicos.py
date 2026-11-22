@@ -37,6 +37,10 @@ class ControladorServico:
     @classmethod
     def consultar_servico_nome(cls, nome_servico):
         return cls.__servicos_barbearia_service_mvc.consultar_servico_nome(nome_servico)
+    
+    @classmethod
+    def consultar_descricoes_servico(cls):
+        return cls.__servicos_barbearia_service_mvc.consultar_descricoes_servico()
 
     @classmethod
     def editarServico(cls, id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo):

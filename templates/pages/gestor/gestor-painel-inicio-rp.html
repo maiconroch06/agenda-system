@@ -35,26 +35,42 @@
                         </div>
                     </div>
 
+                    {% set tsc = namespace(total_servicos_concluidos=0) %}
+                    
+                    {% for agenda in agendamentos_flask %}
+                    {% if agenda.status_agendamento==3 %}
+                    {% set tsc.total_servicos_concluidos = tsc.total_servicos_concluidos + 1 %}
+                    {% endif %}
+
+                    {% endfor %}
+
                     <!-- KPIS OPERACIONAIS -->
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
                             <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faturamento Hoje</div>
-                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faturamento-hoje">{% set total_dia = agendamentos_flask | sum(attribute='valor_total_servicos') %}
-                            R$ {{ "%.2f"|format(total_dia)|replace('.', ',') }}</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faturamento-hoje">{% set total_dia =
+                                agendamentos_flask | sum(attribute='valor_total_servicos') %}
+                                R$ {{ "%.2f"|format(total_dia)|replace('.', ',') }}</div>
                         </div>
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
                             <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Ticket Médio Mensal
                             </div>
-                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ticket-mdio-mensal">R$ 0,00</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ticket-mdio-mensal">R$ {{
+                                "%.2f"|format(ticket_medio_mensal)|replace('.', ',') if ticket_medio_mensal else '0,00'
+                                }}</div>
                         </div>
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
-                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Taxa de Ocupação</div>
-                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ocupacao-hoje">0%</div>
+                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Taxa de Ocupação do
+                                dia</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ocupacao-hoje">{{
+                                ((tsc.total_servicos_concluidos / (capacidade_atendimento / 30)) * 100) | round(2) }} %
+                            </div>
                         </div>
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
                             <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faltas / Cancelados
                             </div>
-                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faltas-hoje">0</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faltas-hoje">{{ total_cancelados }}
+                            </div>
                         </div>
                     </div>
 
@@ -77,38 +93,44 @@
                             {% for item in agendamentos_flask %}
                             <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer transition-all hover:border-[#524f46] hover:bg-[#272623] {% if item.status_agendamento in [0, 3] %}opacity-65{% endif %}"
                                 onclick="abrirModalDetalhe('{{ item.id }}')">
-                            
+
                                 <div class="flex items-start sm:items-center gap-3.5 flex-1 min-w-0">
                                     <!-- Bloco de Horário -->
                                     <div
                                         class="flex flex-col items-center justify-center bg-[#191816] border border-[#32302a] rounded-xl px-3 py-2 min-w-[64px] flex-shrink-0">
-                                        <span class="text-sm font-bold text-[#f1efe8] leading-none">{{ item.hora_inicio }}</span>
-                                        <span class="text-[11px] text-[#888780] mt-1 leading-none">{{ item.hora_fim }}</span>
+                                        <span class="text-sm font-bold text-[#f1efe8] leading-none">{{ item.hora_inicio
+                                            }}</span>
+                                        <span class="text-[11px] text-[#888780] mt-1 leading-none">{{ item.hora_fim
+                                            }}</span>
                                     </div>
-                            
+
                                     <!-- Cliente, Barbeiro e Serviços -->
                                     <div class="flex-1 min-w-0">
                                         <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
                                             <div class="min-w-0">
-                                                <span class="block text-[10px] uppercase tracking-wider text-[#888780] font-semibold">Cliente</span>
-                                                <p class="text-sm font-semibold text-[#f1efe8] truncate">{{ item.nome_cliente }}</p>
+                                                <span
+                                                    class="block text-[10px] uppercase tracking-wider text-[#888780] font-semibold">Cliente</span>
+                                                <p class="text-sm font-semibold text-[#f1efe8] truncate">{{
+                                                    item.nome_cliente }}</p>
                                             </div>
-                            
+
                                             <div class="hidden sm:block h-7 w-[1px] bg-[#32302a]"></div>
-                            
+
                                             <div class="min-w-0">
                                                 <span
                                                     class="block text-[10px] uppercase tracking-wider text-[#888780] font-semibold">Barbeiro</span>
-                                                <p class="text-sm font-semibold text-[#e6c67c] truncate">{{ item.nome_completo }}</p>
+                                                <p class="text-sm font-semibold text-[#e6c67c] truncate">{{
+                                                    item.nome_completo }}</p>
                                             </div>
                                         </div>
-                            
-                                        <div class="text-xs text-[#9e9c95] mt-2 pt-1.5 border-t border-[#302e28] truncate">
+
+                                        <div
+                                            class="text-xs text-[#9e9c95] mt-2 pt-1.5 border-t border-[#302e28] truncate">
                                             servicos
                                         </div>
                                     </div>
                                 </div>
-                            
+
                                 <!-- Status e Valor Total -->
                                 <div
                                     class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#302e28]">
@@ -126,13 +148,13 @@
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#085041] text-[#9fe1cb] border-[#0f6e56]">Concluído</span>
                                     {% endif %}
-                            
+
                                     <div class="text-xs text-[#888780]">
                                         Total: <span class="text-sm font-semibold text-[#f1efe8]">R$ {{
                                             "%.2f"|format(item.valor_total_servicos)|replace('.', ',') }}</span>
                                     </div>
                                 </div>
-                            
+
                             </div>
                             {% else %}
                             <p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento para hoje.</p>
