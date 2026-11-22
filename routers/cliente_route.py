@@ -21,12 +21,12 @@ def clientLoginPage():
 def clientLogin():   
     # Verificando o tipo de request POST
    if request.method == "POST":
-        email_digitado = request.form.get('email')
-        senha_digitada = request.form.get('senha')
+        email_digitado = request.form.get('email','')
+        senha_digitada = request.form.get('senha','')
         
         controladorCliente = ControladorCliente()
 
-        return controladorCliente.login(email_digitado,senha_digitada)
+        return controladorCliente.login(email_digitado, senha_digitada)
         
 
 @cliente.route('/logout', methods=["GET","POST"])
@@ -54,7 +54,7 @@ def clientRegister():
             cpf=None,
             email=request.form.get('email'),
             senha= request.form.get('senha'),
-            foto_nome_usuario= None,
+            foto_usuario= None,
             motivo_bloqueio=None,
             endereco = None,
             status_usuario=1,

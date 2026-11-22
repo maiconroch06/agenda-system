@@ -12,7 +12,7 @@ class ServicoDAO:
                 descricao_servico,
                 valor,
                 duracao,
-                foto_nome_servico,
+                foto_servico,
                 status_servico,
                 data_cadastro,
                 data_atualizacao
@@ -20,7 +20,7 @@ class ServicoDAO:
                 :descricao_servico,
                 :valor,
                 :duracao,
-                :foto_nome_servico,
+                :foto_servico,
                 :status_servico,
                 :data_cadastro,
                 :data_atualizacao
@@ -31,7 +31,7 @@ class ServicoDAO:
             "descricao_servico": servico.descricao_servico,
             "valor": servico.valor,
             "duracao": servico.duracao,
-            "foto_nome_servico": servico.foto_nome_servico,
+            "foto_servico": servico.foto_servico,
             "status_servico": servico.status_servico,
             "data_cadastro": servico.data_cadastro,
             "data_atualizacao": servico.data_atualizacao
@@ -48,7 +48,7 @@ class ServicoDAO:
                 descricao_servico,
                 valor,
                 duracao,
-                foto_nome_servico,
+                foto_servico,
                 status_servico,
                 data_cadastro,
                 data_atualizacao
@@ -66,7 +66,7 @@ class ServicoDAO:
             descricao_servico=registro["descricao_servico"],
             valor=registro["valor"],
             duracao=registro["duracao"],
-            foto_nome_servico=registro["foto_nome_servico"],
+            foto_servico=registro["foto_servico"],
             status_servico=registro["status_servico"],
             data_cadastro=registro["data_cadastro"],
             data_atualizacao=registro["data_atualizacao"]
@@ -79,7 +79,7 @@ class ServicoDAO:
                 descricao_servico,
                 valor,
                 duracao,
-                foto_nome_servico,
+                foto_servico,
                 status_servico,
                 data_cadastro,
                 data_atualizacao
@@ -98,7 +98,7 @@ class ServicoDAO:
                     descricao_servico,
                     valor,
                     duracao,
-                    foto_nome_servico,
+                    foto_servico,
                     status_servico,
                     data_cadastro,
                     data_atualizacao
@@ -118,7 +118,7 @@ class ServicoDAO:
                 descricao_servico,
                 valor,
                 duracao,
-                foto_nome_servico
+                foto_servico
             FROM servico
             WHERE status_servico = 1
             ORDER BY descricao_servico
@@ -135,7 +135,7 @@ class ServicoDAO:
                 descricao_servico,
                 valor,
                 duracao,
-                foto_nome_servico,
+                foto_servico,
                 status_servico,
                 data_cadastro,
                 data_atualizacao
@@ -161,7 +161,7 @@ class ServicoDAO:
                 descricao_servico = :descricao_servico,
                 valor = :valor,
                 duracao = :duracao,
-                foto_nome_servico = :foto_nome_servico,
+                foto_servico = :foto_servico,
                 status_servico = :status_servico,
                 data_atualizacao = :data_atualizacao
             WHERE id_servico = :id_servico
@@ -172,7 +172,7 @@ class ServicoDAO:
             "descricao_servico": servico.descricao_servico,
             "valor": servico.valor,
             "duracao": servico.duracao,
-            "foto_nome_servico": servico.foto_nome_servico,
+            "foto_servico": servico.foto_servico,
             "status_servico": servico.status_servico,
             "data_atualizacao": servico.data_atualizacao
         })
@@ -241,7 +241,7 @@ class ServicoDAO:
             descricao_servico=registro['descricao_servico'],
             valor=registro['valor'],
             duracao=registro['duracao'],
-            foto_nome_servico=registro['foto_nome_servico'],
+            foto_servico=registro['foto_servico'],
             status_servico=registro['status_servico'],
             data_cadastro=registro['data_cadastro'],
             data_atualizacao=registro['data_atualizacao']

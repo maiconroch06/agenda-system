@@ -3,6 +3,11 @@ from services_mvc import HorarioFuncionamentoService
 class ControladorHorarioFuncionamento():
     __horario_funcionamento = HorarioFuncionamentoService()
     
+    
+    @classmethod
+    def atualizar_falta_justificada_barbeiro(cls, falta_justificada):
+        return cls.__horario_funcionamento.atualizar_horario_funcionamento_barbearia(falta_justificada)
+  
     @classmethod
     def consultar_horario_funcionamento(cls, id_barbearia):
         return cls.__horario_funcionamento.consultar_horario_funcionamento_barbearia(id_barbearia)

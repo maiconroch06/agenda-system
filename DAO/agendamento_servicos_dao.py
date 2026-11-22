@@ -50,6 +50,7 @@ class AgendamentoServicosDAO:
                 u.telefone,
                 u.cpf,
                 u.email,
+                u.data_ultimo_acesso,
                 b.bio,
                 b.especialidade,
 
@@ -57,7 +58,7 @@ class AgendamentoServicosDAO:
                 s.descricao_servico,
                 s.valor,
                 s.duracao,
-                s.foto_nome_servico
+                s.foto_servico
 
             FROM agendamento a
 
@@ -123,7 +124,7 @@ class AgendamentoServicosDAO:
                 telefone=registro["telefone"],
                 bio=registro["bio"],
                 cpf=registro["cpf"],
-                data_atualizacao=registro["data_atualizacao"]
+                data_ultimo_acesso=registro["data_ultimo_acesso"]
             )
     
             servico = Servico(

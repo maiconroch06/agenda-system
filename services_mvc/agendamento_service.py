@@ -22,8 +22,8 @@ class AgendamentoService:
     def atualizar_status_e_motivo_do_cancelamento_service(self, motivo_cancelamento, status_agendamento,agenda_mensal):
         return self.__agendamento_repositorio.atualizar_status_e_motivo_do_cancelamento(motivo_cancelamento, status_agendamento,agenda_mensal)
     
-    def atualizar_status_cancelamento_faltas_justificadas_service(self, motivo_cancelamento, status_agendamento,falta_justificada,id_barbeiro):
-        return self.__agendamento_repositorio.atualizar_status_e_motivo_do_cancelamento_faltas_justificadas(motivo_cancelamento, status_agendamento,falta_justificada,id_barbeiro)
+    def atualizar_status_cancelamento_faltas_justificadas_service(self, motivo_cancelamento, status_agendamento,falta_justificada):
+        return self.__agendamento_repositorio.atualizar_status_e_motivo_do_cancelamento_faltas_justificadas(motivo_cancelamento, status_agendamento,falta_justificada)
 
     def consultar_agendamentos_por_periodo(self, data_inicio, data_fim):
         return self.__agendamento_repositorio.consultar_agendamentos_por_periodo(data_inicio, data_fim)

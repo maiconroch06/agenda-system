@@ -29,7 +29,7 @@ class ServicoBarbearia:
             
             
             servico = Servico(
-                foto_nome_servico=EnumNomesPastaImagem.IMAGEM_PADRAO.value,
+                foto_servico=EnumNomesPastaImagem.IMAGEM_PADRAO.value,
                 descricao_servico=novo_descricao,
                 valor= Decimal(novo_valor or -1),
                 duracao= int(novo_duracao or -1),
@@ -44,11 +44,11 @@ class ServicoBarbearia:
             #salvar a imagem na pasta
             #extensão | validar extensao | pegar o novo nome da imagem
             
-            servico.foto_nome_servico = ValidadorDeImagens.nomeImagem(secure_filename(foto_servico.filename), "servicos") 
+            servico.foto_servico = ValidadorDeImagens.nomeImagem(secure_filename(foto_servico.filename), "servicos") 
             
             resposta_repositorio = self.__servico_repositorio.cadastrar_servico(servico)
             
-            ValidadorDeImagens.salvarImagem(foto_servico, EnumNomesPastaImagem.IMAGEMS_SERVICOS, servico.foto_nome_servico)
+            ValidadorDeImagens.salvarImagem(foto_servico, EnumNomesPastaImagem.IMAGEMS_SERVICOS, servico.foto_servico)
             
             return resposta_repositorio
             
@@ -74,7 +74,7 @@ class ServicoBarbearia:
                 status_servico=status_ativo  
             )
             
-            servico.foto_nome_servico = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao, "servicos")
+            servico.foto_servico = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,EnumNomesPastaImagem.IMAGEMS_SERVICOS, img_padrao, "servicos")
             
             if not self.__servico_repositorio.atualizar(servico):
                 raise Exception("Error ao tentar atualizar o serviço, tente novamente!")

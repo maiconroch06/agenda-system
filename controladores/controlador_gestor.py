@@ -1,10 +1,8 @@
 from flask import session, redirect, url_for, flash, render_template
-from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 from database import db
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
-from services_mvc import GestorServiceMVC, ServicoBarbearia, BarbeiroService, RecessoService
-from execoes import ImagemErrorExcecao 
+from services_mvc import GestorServiceMVC, BarbeiroService
 from models import Barbeiro
 from werkzeug.utils import secure_filename
 from .controlador_cliente import ControladorCliente
@@ -17,8 +15,6 @@ from .controlador_agenda_mensal import ControladorAgendaMensal
 
 class ControladorGestor():
     __gestor_service_mvc = GestorServiceMVC()
-    __recesso_service = RecessoService()
-    __servicos_barbearia_service_mvc = ServicoBarbearia()
     __barbeiro_service_mvc = BarbeiroService()
     __controlador_cliente = ControladorCliente()
     __controlador_barbeiro = ControladorBarbeiro()
@@ -60,14 +56,13 @@ class ControladorGestor():
     
     @classmethod
     def atualizar_barbeiro(cls, imagem_form, img_padrao, imagem_anterior, barbeiro):
-            try:              
-                                
-                if not cls.__controlador_barbeiro.atualizar_informacoes_barbeiro(imagem_form, img_padrao, imagem_anterior, barbeiro):
-                       flash(f"Erro ao atualizar o barbeiro", EnumStatusMensagens.ERRO.value)      
-            except Exception:
-                flash(f"Nenhuma informação do babeiro foi atualizada.", EnumStatusMensagens.ERRO.value)
-                
-            return redirect(url_for('gestor.gestorAbaBarbeiros'))
+        try:                            
+            if not cls.__controlador_barbeiro.atualizar_informacoes_barbeiro(imagem_form, img_padrao, imagem_anterior, barbeiro):
+                    flash(f"Erro ao atualizar o barbeiro", EnumStatusMensagens.ERRO.value)      
+        except Exception:
+            flash(f"Nenhuma informação do babeiro foi atualizada.", EnumStatusMensagens.ERRO.value)
+            
+        return redirect(url_for('gestor.gestorAbaBarbeiros'))
 
     @classmethod
     def consultar_clientes(cls):
@@ -89,13 +84,12 @@ class ControladorGestor():
     def consultar_horario_funcionamento(cls, id_barbearia):
         return ControladorHorarioFuncionamento.consultar_horario_funcionamento(id_barbearia)
    
-    
     @classmethod
     def atualizar_horario_funcionamento_barbearia(cls, horario_funcionamento_barbearia):
             
             try:
                 ControladorHorarioFuncionamento.atualizar_horario_funcionamento(horario_funcionamento_barbearia)
-                flash("Horario de funcionmento da barbearia atualziado com sucesso", EnumStatusMensagens.SUCESSO.value)
+                flash("Horario de funcionmento da barbearia atualizado com sucesso", EnumStatusMensagens.SUCESSO.value)
             except Exception :
                 flash(f"Erro ao tentar atualizar o horario de funcionmento da barbearia", EnumStatusMensagens.ERRO.value)
             
@@ -122,11 +116,7 @@ class ControladorGestor():
 
         return redirect(url_for("gestor.gestorExibirClientes"))
     
-    
-    
-    
-    
-    
+   
     
     
            

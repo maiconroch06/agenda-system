@@ -15,11 +15,11 @@ class UsuarioService:
     def cadastrarUsuarioService(self, usuario: Usuario, fotoTemp:str):
         try:
             
-            usuario.nomeVazioUsuario()
+            usuario.validarNomeVazio()
             usuario.senha = Senha.gerar_senha(usuario.senha)
             usuario.endereco = EnderecoService.cadastrar_endereco(usuario.endereco)
            
-            usuario.foto_nome_usuario = ValidadorDeImagens.nomeImagem(fotoTemp, usuario.getTipo())   
+            usuario.foto_usuario = ValidadorDeImagens.nomeImagem(fotoTemp, usuario.getTipo())   
         
             return self.__usuarioRepositorio.salvar(usuario) 
 
@@ -39,7 +39,7 @@ class UsuarioService:
         
     def alterar_usuario_barbearia(self,  imagem_form, img_padrao, imagem_anterior, usuario):
                                                      
-        usuario.foto_nome_usuario = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,self.definir_pasta_imagem_usuario(), img_padrao, usuario.getTipo())
+        usuario.foto_usuario = ValidadorDeImagens.editarImagem(imagem_anterior,imagem_form,self.definir_pasta_imagem_usuario(), img_padrao, usuario.getTipo())
         
         if not usuario.senha.strip():
             if self.__usuarioRepositorio.atualizar_usuario_sem_senha(usuario):

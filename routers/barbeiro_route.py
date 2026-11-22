@@ -22,8 +22,8 @@ def barbeiroLogout():
 
 @barbeiro.route('/login', methods=["POST"])
 def barbeiroLogin():
-    email_digitado = request.form.get('barbeiro-email-2')
-    senha_digitada = request.form.get('barbeiro-password')
+    email_digitado = request.form.get('barbeiro-email-2','')
+    senha_digitada = request.form.get('barbeiro-password','')
     
     return ControladorBarbeiro.login_barbeiro(email_digitado,senha_digitada)
 
@@ -147,7 +147,7 @@ def atualizar_status(id_agendamento):
         except (ValueError, TypeError):
             novo_status = status_agendamento
             
-        ControladorBarbeiro.atualizar_status_agendamento(id_agendamento, novo_status)
+        ControladorBarbeiro.atualizar_status_agendamento(id_agendamento, novo_status, None)
     
     # Recarrega o painel após a alteração de status
     return redirect(url_for('barbeiro.barbeiroPainel'))

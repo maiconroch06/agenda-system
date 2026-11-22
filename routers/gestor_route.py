@@ -247,17 +247,16 @@ def gestor_cadastrar_faltas_justificadas_barbeiro():
 
     id_barbeiro = request.form.get("id_barbeiro_falta", type=int)
     nome_barbeiro = request.form.get("nome_barbeiro_falta")
-    
-    print("o nome é ", nome_barbeiro)
-    
+   
     falta_justificada = FaltaJustificadaBarbeiro(
         data_falta=datetime.strptime(request.form.get("data_falta",''),  "%Y-%m-%d").date(),
         horario_inicio_falta=request.form.get("hora_inicio_falta",''),
         horario_final_falta=request.form.get("hora_fim_falta",''),
-        motivo_falta=request.form.get("motivo_falta_justificada",'')
+        motivo_falta=request.form.get("motivo_falta_justificada",''),
+        id_barbeiro=id_barbeiro
     )
     
-    return ControladorBarbeiro.cadastrar_faltas_do_barbeiro_ativos(id_barbeiro,falta_justificada,nome_barbeiro)
+    return ControladorBarbeiro.cadastrar_faltas_do_barbeiro_ativos(falta_justificada, nome_barbeiro)
 
 @gestor.route('/painel/barbeiros/faltas-justificadas/excluir', methods=['POST'])
 def gestor_excluir_faltas_justificadas_barbeiro():
@@ -267,11 +266,12 @@ def gestor_excluir_faltas_justificadas_barbeiro():
         id_falta_justificada=request.form.get("falta-id-excluir", type=int),
         data_falta=datetime.strptime(request.form.get("falta-data-excluir",''),  "%Y-%m-%d").date(),
         horario_inicio_falta=request.form.get("falta-hora-inicial-excluir"),
-        horario_final_falta=request.form.get("falta-hora-final-excluir")
+        horario_final_falta=request.form.get("falta-hora-final-excluir"),
+        motivo_falta= request.form.get("falta-motivo-excluir"),
+        id_barbeiro=id_barbeiro
         )
     
-   
-    return ControladorBarbeiro.excluir_faltas_do_barbeiro_ativos(id_barbeiro, falta_justificada)
+    return ControladorBarbeiro.excluir_faltas_do_barbeiro_ativos(falta_justificada)
 
 @gestor.route('/painel/barbeiros/faltas-justificadas/atualizar', methods=['POST'])
 def gestor_atualizar_faltas_justificadas_barbeiro():
@@ -285,9 +285,7 @@ def gestor_atualizar_faltas_justificadas_barbeiro():
         motivo_falta=request.form.get("motivo_falta_justificada"),
         id_falta_justificada=request.form.get("id_falta_justificativa", type=int)
         )
-    
-   
-    return ControladorBarbeiro.atualizar_faltas_do_barbeiro_ativos(id_barbeiro, falta_justificada,nome_barbeiro)
+    return ControladorBarbeiro.atualizar_faltas_do_barbeiro_ativos(falta_justificada,nome_barbeiro)
 
 
 ##################################################################################
@@ -339,7 +337,7 @@ def gestor_barbeiro_cadastrar():
         cpf=cpf_temp,
         email=request.form.get('email'),
         senha=request.form.get('senha'),
-        foto_nome_usuario=None,
+        foto_usuario=None,
         status_usuario=True,
         data_cadastro=datetime.now(timezone.utc),
         data_ultimo_acesso=datetime.now(timezone.utc),
@@ -425,7 +423,7 @@ def gestor_consultar_cliente():
 @gestor.route('/painel/clientes/excluir', methods=['POST'])
 def gestor_excluir_cliente():
     id_cliente = request.form.get("id_cliente_barbearia")
-    foto_nome_cliente = request.form.get("foto_nome_usuario")
+    foto_nome_cliente = request.form.get("foto_usuario")
     nome_cliente = request.form.get("nome_cliente_barbearia")
     
     return ControladorGestor.excluir_cliente_barbearia(id_cliente,foto_nome_cliente,nome_cliente)
@@ -437,7 +435,7 @@ def gestor_atualizar_cliente():
      
     cliente = Cliente(
         id_usuario=request.form.get("cliente_id"),
-        foto_nome_usuario=EnumNomesPastaImagem.IMAGEM_PADRAO.value,
+        foto_usuario=EnumNomesPastaImagem.IMAGEM_PADRAO.value,
         nome_completo=request.form.get("cliente_nome"),
         telefone=telefone_temp,
         email=request.form.get("cliente_email"),

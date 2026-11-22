@@ -12,19 +12,19 @@ class Barbearia:
         nome_barbearia: str,
         telefone: str,
         email_empresa: str,
-        logo_barbearia_nome: str,
+        logo_barbearia: str,
         data_cadastro: datetime,
         endereco: Endereco = None,
-        agenda: HorarioFuncionamento = None
+        horario_funcionamento: HorarioFuncionamento = None
     ):
         self.__cnpj = cnpj
         self.__nome_barbearia = nome_barbearia
         self.__telefone = telefone
         self.__email_empresa = email_empresa
-        self.__logo_barbearia_nome = logo_barbearia_nome
+        self.__logo_barbearia = logo_barbearia
         self.__data_cadastro = data_cadastro
         self.__endereco = endereco
-        self.__agenda = agenda
+        self.__horario_funcionamento = horario_funcionamento
 
 
     @property
@@ -61,11 +61,11 @@ class Barbearia:
 
     @property
     def logo_barbearia(self):
-        return self.__logo_barbearia_nome
+        return self.__logo_barbearia
 
     @logo_barbearia.setter
     def logo_barbearia(self, value):
-        self.__logo_barbearia_nome = value
+        self.__logo_barbearia = value
 
     @property
     def data_cadastro(self):
@@ -84,9 +84,9 @@ class Barbearia:
         self.__endereco = value
 
     @property
-    def agenda(self):
-            return self.__agenda
+    def horario_funcionamento(self):
+            return self.__horario_funcionamento
     
-    @agenda.setter
-    def agenda(self, value):
-        self.__agenda = value
+    @horario_funcionamento.setter
+    def horario_funcionamento(self, value):
+        self.__horario_funcionamento = value

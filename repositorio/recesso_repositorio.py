@@ -13,8 +13,8 @@ class RecessoRepositorio:
     def verificar_recesso_existente_cadastro(self, recesso):
         return self.__recessoDao.verificar_recesso_existente_cadastro(recesso)
 
-    def consultar_por_mes(self):
-        return self.__recessoDao.listar_por_mes()
+    def consultar_recessos(self, data_inicio, data_final):
+        return self.__recessoDao.consultar_recessos(data_inicio, data_final)
 
     def consultar_todos(self):
         return self.__recessoDao.listar_todos()

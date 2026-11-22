@@ -69,6 +69,8 @@ botao_cadastrar_faltas_justificadas_global.forEach((cadastrar)=>{
         form_campo_id_barbeiro.value = dados_barbeiro[0];
         form_campo_nome_barbeiro.value = dados_barbeiro[1];
         form_campo_data_falta_justificada.value=new Date().toLocaleDateString("en-CA");
+
+        form_campo_motivo_falta.value ='';
         
         botao_cadastrar_editar_faltas_justificadas_modal.textContent = "Cadastrar falta justificada";
         titulo_modal_faltas_justificadas.textContent = botao_cadastrar_editar_faltas_justificadas_modal.textContent;

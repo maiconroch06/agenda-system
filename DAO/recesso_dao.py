@@ -39,7 +39,8 @@ class RecessoDAO:
 
         return resultado.rowcount > 0
 
-    def listar_por_mes (self):
+
+    def consultar_recessos (self, data_inicio, data_final):
         sql = text("""
             SELECT
                 id_recesso,
@@ -53,8 +54,8 @@ class RecessoDAO:
         resultado = db.session.execute(
             sql,
             {
-                "data_inicio": date.today().replace(day=1),
-                "data_final": date.today().replace(day=31, month=12),
+                "data_inicio": data_inicio,
+                "data_final": data_final,
              }
         ).mappings().all()
 
@@ -183,7 +184,7 @@ class RecessoDAO:
         return resultado.rowcount > 0
 
     def __mapear_recesso(self, registro):
-        
+                
         return Recesso(
             id_recesso=registro["id_recesso"],
             data_inicio_recesso=registro["data_inicio_recesso"],

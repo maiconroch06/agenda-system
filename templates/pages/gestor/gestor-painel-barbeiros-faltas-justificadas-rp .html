@@ -85,7 +85,7 @@
                                         <div id="card_servicos" class="">
                                             <div class="flex flex-row gap-4 my-0.5 items-center">
                                                 <img class="ml-5 w-10 h-10 rounded-full object-cover shrink-0 border-2 border-amber-500"
-                                                    src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario) }}"
+                                                    src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_usuario) }}"
                                                     alt="Foto de {{ barbeiro.nome_completo }}">
 
                                                 <div class="flex flex-col min-w-0 text-left">
@@ -147,6 +147,8 @@
 
                                                                     <input type="hidden" name="falta-id-excluir"
                                                                         value="{{ falta.id_falta_justificada }}">
+                                                                    <input type="hidden" name="falta-motivo-excluir"
+                                                                        value="{{ falta.motivo_falta }}">
                                                                     <input type="hidden" name="falta-data-excluir"
                                                                         value="{{ falta.data_falta}}">
                                                                     <input type="hidden"

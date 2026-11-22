@@ -88,7 +88,7 @@
                             class="flex flex-col items-center min-w-0 bg-[#232220] rounded-2xl p-4 border border-zinc-700/60 hover:border-amber-500/40 transition-all">
 
                             <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500"
-                                src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario) }}"
+                                src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_usuario) }}"
                                 alt="Foto de {{ barbeiro.nome_completo }}">
 
                             <h3 id="nome_barbeiro" class="font-bold text-white text-base text-center">{{
@@ -117,7 +117,7 @@
                             <div class="flex flex-col gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
 
                                 <button type="button" id="editar-barbeiro"
-                                    value="{{barbeiro.id_usuario}}#{{barbeiro.nome_completo}}#{{barbeiro.cpf}}#{{barbeiro.email}}#({{ barbeiro.telefone[:2] }}) {{ barbeiro.telefone[2:7] }}-{{ barbeiro.telefone[7:] }}#{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario) }}#{{barbeiro.foto_nome_usuario}}#{{barbeiro.status_barbeiro}}#{{barbeiro.bio}}#{{barbeiro.especialidade}}#{{barbeiro.data_inicio_carreira}}"
+                                    value="{{barbeiro.id_usuario}}#{{barbeiro.nome_completo}}#{{barbeiro.cpf}}#{{barbeiro.email}}#({{ barbeiro.telefone[:2] }}) {{ barbeiro.telefone[2:7] }}-{{ barbeiro.telefone[7:] }}#{{url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_usuario) }}#{{barbeiro.foto_usuario}}#{{barbeiro.status_barbeiro}}#{{barbeiro.bio}}#{{barbeiro.especialidade}}#{{barbeiro.data_inicio_carreira}}"
                                     class="w-full py-2 px-2 rounded-lg font-bold bg-amber-400 text-gray-950 hover:bg-amber-300 text-xs  transition-colors">
                                     Editar barbeiro
                                 </button>
@@ -132,7 +132,7 @@
                                     method="POST" class="w-full">
 
                                     <input type="hidden" name="srv-id-deletar" value="{{ barbeiro.id_usuario }}">
-                                    <input type="hidden" name="srv-foto_nome" value="{{ barbeiro.foto_nome_usuario }}">
+                                    <input type="hidden" name="srv-foto_nome" value="{{ barbeiro.foto_usuario }}">
                                     <input type="hidden" class="nome-exclusao" name=""
                                         value="{{ barbeiro.nome_completo }}">
 

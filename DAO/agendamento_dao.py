@@ -45,7 +45,7 @@ class AgendamentoDAO:
 
         db.session.commit()
 
-        return resultado.lastrowid
+        return resultado.lastrowid 
 
     # Gerenciar conflito
     @staticmethod
@@ -305,7 +305,7 @@ class AgendamentoDAO:
         return resultado.rowcount > 0
     
     @staticmethod
-    def atualizar_status_e_motivo_do_cancelamento_faltas_justificadas_dao(motivo_cancelamento, status_agendamento, falta_justifica, id_barbeiro):
+    def atualizar_status_e_motivo_do_cancelamento_faltas_justificadas_dao(motivo_cancelamento, status_agendamento, falta_justifica):
         sql = text("""
             UPDATE agendamento
             SET
@@ -325,7 +325,7 @@ class AgendamentoDAO:
             "status_agendamento": status_agendamento,
             "data_atualizacao": datetime.now(timezone.utc),
             "data_falta": falta_justifica.data_falta,
-            "id_barbeiro": id_barbeiro,       
+            "id_barbeiro": falta_justifica.d_barbeiro,       
             "horario_inicio_falta": falta_justifica.horario_inicio_falta,       
             "horario_final_falta": falta_justifica.horario_final_falta,       
             "status_agendamento_concluido": EnumStatusAgendamento.CONCLUIDO.value       

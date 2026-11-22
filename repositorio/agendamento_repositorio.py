@@ -39,8 +39,8 @@ class AgendamentoRepositorio:
         return AgendamentoDAO.atualizar_status_e_motivo_do_cancelamento_agenda_mensal(motivo_cancelamento, status_agendamento,agenda_mensal)
 
     @staticmethod
-    def atualizar_status_e_motivo_do_cancelamento_faltas_justificadas(motivo_cancelamento, status_agendamento,falta_justificada,id_barbeiro):
-        return AgendamentoDAO.atualizar_status_e_motivo_do_cancelamento_faltas_justificadas_dao(motivo_cancelamento, status_agendamento,falta_justificada,id_barbeiro)
+    def atualizar_status_e_motivo_do_cancelamento_faltas_justificadas(motivo_cancelamento, status_agendamento,falta_justificada):
+        return AgendamentoDAO.atualizar_status_e_motivo_do_cancelamento_faltas_justificadas_dao(motivo_cancelamento, status_agendamento,falta_justificada)
 
     @staticmethod
     def consultar_agendamentos_por_periodo(data_inicio, data_fim):

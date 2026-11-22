@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from models import Cliente
 from flask import  session, redirect, url_for, flash, render_template
 from models import Cliente, Agendamento
 from database import db
+from models.barbearia import Barbearia
 from services_mvc import ClienteService, ServicoBarbearia, AgendaMensalService, BarbeariaService, BarbeiroService, AgendamentoService, AgendamentoServicosService, RecessoService, FaltasJustificadaBarbeiroService
 from enums import EnumStatusMensagens
 from flask import jsonify
@@ -30,7 +33,7 @@ class ControladorCliente():
               
     def cadastrarCliente(self, cliente:Cliente):      
         try:
-            cliente.id  =  self.__clienteService.cadastrarUsuarioService(cliente, cliente.foto_nome_usuario)
+            cliente.id  =  self.__clienteService.cadastrarUsuarioService(cliente, cliente.foto_usuario)
                
             if cliente.id:     
                 if self.__clienteService.salvar_dados_especificos(cliente):                                      
@@ -38,7 +41,7 @@ class ControladorCliente():
             else:
                 flash(f"Erro ao cadastrar o cliente", EnumStatusMensagens.ERRO.value)
         except Exception as erros:
-            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
+            flash(f"{erros} ", EnumStatusMensagens.ERRO.value)
             return redirect(url_for('cliente.clientRegisterPage'))
 
     # Lembrar de buscar os dias de recesso da agenda caso seja o ultimo dia
@@ -56,11 +59,13 @@ class ControladorCliente():
             servicos = self.__servicosServices.listar_servicos_ativos()
             barbeiros = self.__barbeiroService.consultar_barbeiros_ativos()
 
+          
             barbeiro_faltas_json = []
             agendamentos_json = []
+            
             if agenda_mensal:
 
-                barbeiro_faltas = self.__faltasJustificadasBarbeiroService.consultar_faltas_por_periodo(
+                barbeiro_faltas = self.__faltasJustificadasBarbeiroService.consultar_faltas_justificadas_barbeiro_periodo(
                     agenda_mensal.data_inicial_mes,
                     agenda_mensal.data_final_mes
                 )
@@ -69,11 +74,11 @@ class ControladorCliente():
                     {
                         "id_barbeiro": falta["id_barbeiro"],
                         "data": falta["data_falta"].isoformat(),
-                        "horario_inicio": falta["horario_inicio_falta"].strftime("%H:%M"),
-                        "horario_fim": falta["horario_final_falta"].strftime("%H:%M"),
+                        "horario_inicio": (datetime.min + falta["horario_inicio_falta"]).strftime("%H:%M"),
+                        "horario_fim": (datetime.min + falta["horario_final_falta"]).strftime("%H:%M"),
                         "motivo": falta["motivo_falta"]
                     }
-                    for falta in barbeiro_faltas
+                    for falta in barbeiro_faltas 
                 ]
 
                 agendamentos_cadastrados = self.__agendamentoService.consultar_agendamentos_por_periodo(agenda_mensal.data_inicial_mes,
@@ -89,7 +94,7 @@ class ControladorCliente():
                     for agendamento in agendamentos_cadastrados
                 ]
 
-            recessos = self.__recessoService.consultar_recessos_services()
+            recessos = self.__recessoService.consultar_recessos()
 
             recessos_json = [
                 {
@@ -97,19 +102,21 @@ class ControladorCliente():
                     "data_fim_recesso": recesso.data_fim_recesso.isoformat(),
                     "descricao_recesso": recesso.descricao_recesso
                 }
-                for recesso in recessos
+                
+                for recesso in recessos or []
             ]
 
             horarios_barbearia = {
-                "horario_abertura": dados_barbearia.agenda.horario_abertura.strftime("%H:%M"),
-                "horario_fechamento": dados_barbearia.agenda.horario_fechamento.strftime("%H:%M"),
-                "horario_inicio_intrajornada": dados_barbearia.agenda.horario_inicio_intrajornada.strftime("%H:%M"),
-                "horario_fim_intrajornada": dados_barbearia.agenda.horario_fim_intrajornada.strftime("%H:%M")
+                "horario_abertura": dados_barbearia.horario_funcionamento.horario_abertura.strftime("%H:%M"),
+                "horario_fechamento": dados_barbearia.horario_funcionamento.horario_fechamento.strftime("%H:%M"),
+                "horario_inicio_intrajornada": dados_barbearia.horario_funcionamento.horario_inicio_intrajornada.strftime("%H:%M"),
+                "horario_fim_intrajornada": dados_barbearia.horario_funcionamento.horario_fim_intrajornada.strftime("%H:%M")
             }
 
             return render_template('pages/cliente/cliente-agendamento-rp.html', 
                                    servicos=servicos, barbeiros=barbeiros, agenda_mensal=agenda_mensal, dados_barbearia=dados_barbearia, recessos=recessos_json, horarios_barbearia=horarios_barbearia, barbeiro_faltas=barbeiro_faltas_json, agendamentos=agendamentos_json, mensagens_status=EnumStatusMensagens)
         except Exception as erros:
+            session.clear()
             flash(f"{erros}", EnumStatusMensagens.ERRO.value)
             return redirect(url_for('cliente.clientLoginPage'))
 
@@ -183,7 +190,7 @@ class ControladorCliente():
         return self.__clienteService.excluir_usuario_barbearia(id_usuario, foto_nome, nome_pasta)
 
     def atualziar_cliente(self, cliente):
-        return self.__clienteService.alterar_usuario_barbearia(None, None,cliente.foto_nome_usuario,  cliente)
+        return self.__clienteService.alterar_usuario_barbearia(None, None,cliente.foto_usuario,  cliente)
 
 
    

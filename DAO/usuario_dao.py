@@ -13,7 +13,7 @@ class UsuarioDAO:
                 email,
                 motivo_bloqueio,
                 senha,
-                foto_nome_usuario,
+                foto_usuario,
                 status_usuario,
                 data_cadastro,
                 data_ultimo_acesso,
@@ -25,7 +25,7 @@ class UsuarioDAO:
                 :email,
                 :motivo_bloqueio,
                 :senha,
-                :foto_nome_usuario,
+                :foto_usuario,
                 :status_usuario,
                 :data_cadastro,
                 :data_ultimo_acesso,
@@ -40,7 +40,7 @@ class UsuarioDAO:
             "email": usuario.email,
             "motivo_bloqueio": usuario.motivo_bloqueio,
             "senha": usuario.senha,
-            "foto_nome_usuario": usuario.foto_nome_usuario,
+            "foto_usuario": usuario.foto_usuario,
             "status_usuario": usuario.status_usuario,
             "data_cadastro": usuario.data_cadastro,
             "data_ultimo_acesso": usuario.data_ultimo_acesso,
@@ -65,7 +65,7 @@ class UsuarioDAO:
                 email,
                 senha,
                 motivo_bloqueio,
-                foto_nome_usuario,
+                foto_usuario,
                 status_usuario,
                 data_cadastro,
                 data_ultimo_acesso,
@@ -94,7 +94,7 @@ class UsuarioDAO:
                 email,
                 motivo_bloqueio,
                 senha,
-                foto_nome_usuario,
+                foto_usuario,
                 status_usuario,
                 data_cadastro,
                 data_ultimo_acesso,
@@ -123,7 +123,7 @@ class UsuarioDAO:
                 email,
                 motivo_bloqueio,
                 senha,
-                foto_nome_usuario,
+                foto_usuario,
                 status_usuario,
                 data_cadastro,
                 data_ultimo_acesso,
@@ -152,7 +152,7 @@ class UsuarioDAO:
                 email,
                 motivo_bloqueio,
                 senha,
-                foto_nome_usuario,
+                foto_usuario,
                 status_usuario,
                 data_cadastro,
                 data_ultimo_acesso,
@@ -178,7 +178,7 @@ class UsuarioDAO:
                 email,
                 motivo_bloqueio,
                 senha,
-                foto_nome_usuario,
+                foto_usuario,
                 status_usuario,
                 data_cadastro,
                 data_ultimo_acesso,
@@ -208,7 +208,7 @@ class UsuarioDAO:
                 cpf = :cpf,
                 motivo_bloqueio = :motivo_bloqueio,
                 email = :email,
-                foto_nome_usuario = :foto_nome_usuario,
+                foto_usuario = :foto_usuario,
                 status_usuario = :status_usuario
             WHERE id_usuario = :id_usuario
         """)
@@ -221,7 +221,7 @@ class UsuarioDAO:
             "email": usuario.email,
             "motivo_bloqueio": usuario.motivo_bloqueio,
             "status_usuario": usuario.status_usuario,
-            "foto_nome_usuario": usuario.foto_nome_usuario,
+            "foto_usuario": usuario.foto_usuario,
             
         })
 
@@ -240,7 +240,7 @@ class UsuarioDAO:
                 email = :email,
                 senha = :senha,
                 motivo_bloqueio = :motivo_bloqueio,
-                foto_nome_usuario = :foto_nome_usuario,
+                foto_usuario = :foto_usuario,
                 status_usuario = :status_usuario
                 
             WHERE id_usuario = :id_usuario
@@ -252,7 +252,7 @@ class UsuarioDAO:
             "telefone": usuario.telefone,
             "cpf": usuario.cpf,
             "email": usuario.email,
-            "foto_nome_usuario": usuario.foto_nome_usuario,
+            "foto_usuario": usuario.foto_usuario,
             "motivo_bloqueio": usuario.motivo_bloqueio,
             "senha": usuario.senha,
             "status_usuario": usuario.status_usuario
@@ -349,7 +349,7 @@ class UsuarioDAO:
             cpf=registro["cpf"],
             email=registro["email"],
             senha=registro["senha"],
-            foto_nome_usuario=registro["foto_nome_usuario"],
+            foto_usuario=registro["foto_usuario"],
             status_usuario=bool(registro["status_usuario"]),
             data_cadastro=registro["data_cadastro"],
             data_ultimo_acesso=registro["data_ultimo_acesso"],

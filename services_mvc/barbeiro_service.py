@@ -50,21 +50,7 @@ class BarbeiroService(UsuarioService):
                 return barbeiros
             except Exception :
                 flash(f"Erro ao buscar os barbeiros cadastrados no banco")
-    
-    def consultar_faltas_mensais_barbeiros_ativo(self):
-            try:
-                barbeiros = self.__barbeiroRepositorio.consultar_faltas_mensais_barbeiros_ativo(date.today().replace(day=1),date.today().replace(day=calendar.monthrange(date.today().year, date.today().month)[1]))
-                return barbeiros
-            except Exception:
-                flash(f"Erro ao buscar os barbeiros cadastrados no banco, contate o suporte")
-   
-    def consultar_faltas_anuais_barbeiros_ativo(self):
-            try:
-                barbeiros = self.__barbeiroRepositorio.consultar_faltas_mensais_barbeiros_ativo(date.today().replace(day=1, month=1),date.today().replace(day=31, month=12))
-                return barbeiros
-            except Exception:
-                flash(f"Erro ao buscar os barbeiros cadastrados no banco, contate o suporte")
-
+       
     def consultar_agendamentos_barbeiro(self, barbeiro:dict):
         try:
             id_barbeiro = barbeiro.get('id_barbeiro', 0) # exibe 0 se chave não existir

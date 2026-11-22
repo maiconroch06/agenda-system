@@ -30,7 +30,7 @@ class BarbeariaDAO:
                 b.nome_barbearia,
                 b.telefone,
                 b.email_empresa,
-                b.logo_barbearia_nome,
+                b.logo_barbearia,
                 b.data_cadastro,
                 b.fk_id_endereco,
                 b.fk_id_horario_funcionamento,
@@ -81,7 +81,7 @@ class BarbeariaDAO:
             dias_funcionamento=registro["dias_funcionamento"]
         )
 
-
+            
         endereco = Endereco(
             id_endereco=registro["id_endereco"],
             cep=registro["cep"],
@@ -99,8 +99,8 @@ class BarbeariaDAO:
             nome_barbearia=registro["nome_barbearia"],
             telefone=registro["telefone"],
             email_empresa=registro["email_empresa"],
-            logo_barbearia_nome=registro["logo_barbearia_nome"],
+            logo_barbearia=registro["logo_barbearia"],
             data_cadastro=registro["data_cadastro"],
             endereco=endereco,
-            agenda=horario_funcionamento
+            horario_funcionamento=horario_funcionamento
         )

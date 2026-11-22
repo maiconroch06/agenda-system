@@ -131,7 +131,7 @@
                             data-foto="{{ url_for(
                                 'static',
                                 filename=config['UPLOAD_FILES'].replace('static/', '') ~
-                                '/servicos-imagens/' ~ servico.foto_nome_servico
+                                '/servicos-imagens/' ~ servico.foto_servico
                             ) }}"
                         >
 
@@ -151,7 +151,7 @@
                                     src="{{ url_for(
                                         'static',
                                         filename=config['UPLOAD_FILES'].replace('static/', '') ~
-                                        '/servicos-imagens/' ~ servico.foto_nome_servico
+                                        '/servicos-imagens/' ~ servico.foto_servico
                                     ) }}"
                                     alt="{{ servico.descricao_servico }}"
                                     class="w-full h-full object-cover object-center
@@ -250,7 +250,7 @@
                             data-foto="{{ url_for(
                                 'static',
                                 filename=config['UPLOAD_FILES'].replace('static/', '') ~
-                                '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario
+                                '/barbeiro-imagens/' ~ barbeiro.foto_usuario
                             ) }}"
                         >
 
@@ -268,7 +268,7 @@
                                     src="{{ url_for(
                                         'static',
                                         filename=config['UPLOAD_FILES'].replace('static/', '') ~
-                                        '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario
+                                        '/barbeiro-imagens/' ~ barbeiro.foto_usuario
                                     ) }}"
                                     alt="{{ barbeiro.nome }}"
                                     class="w-full h-full object-cover object-center
@@ -496,7 +496,7 @@
         } | tojson if agenda_mensal else 'null' }};
 
         const HORARIOS_BARBEARIA = {{ horarios_barbearia | tojson }};
-        const DIAS_FUNCIONAMENTO = {{ dados_barbearia.agenda.dias_funcionamento | tojson }};
+        const DIAS_FUNCIONAMENTO = {{ dados_barbearia.horario_funcionamento.dias_funcionamento | tojson }};
         const RECESSOS = {{ recessos | tojson }};
         const FALTAS_BARBEIROS = {{ barbeiro_faltas | tojson }};
 
