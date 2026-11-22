@@ -231,8 +231,6 @@ class AgendaMensalDAO:
 
         return resultado.scalar()
 
-
-
     def __mapear_agenda_mensal(self, registro):
        
         return AgendaMensal(

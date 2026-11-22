@@ -89,7 +89,7 @@ class ControladorCliente():
                     for agendamento in agendamentos_cadastrados
                 ]
 
-            recessos = self.__recessoService.consultar_recessos_por_mes_services()
+            recessos = self.__recessoService.consultar_recessos_services()
 
             recessos_json = [
                 {

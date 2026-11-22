@@ -1,8 +1,7 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
-from controladores import ControladorGestor, ControladorBarbeiro
+from controladores import ControladorGestor, ControladorBarbeiro, ControladorServico, ControladorRecesso
 from models import Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal, Recesso, FaltaJustificadaBarbeiro, Cliente
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
-from decimal import Decimal
 from datetime import datetime, timezone, date
 
 
@@ -95,19 +94,19 @@ def gestor_recesso_cadastrar():
         descricao_recesso=request.form.get("descricao_recesso")
     )
      
-    return ControladorGestor.cadastrar_recessos_barbearia_por_mes(recesso)
+    return ControladorRecesso.cadastrar_recessos_barbearia_por_mes(recesso)
 
 @gestor.route('/painel/recessos', methods=['GET'])
 def gestor_recesso_consultar():   
-    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=0, botao_filtro=0 ,recessos = ControladorGestor.consultar_recessos_barbearia(), mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=0, botao_filtro=0 ,recessos = ControladorRecesso.consultar_recessos_barbearia(), mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/recessos/consultar/mes_atual', methods=['GET'])
 def gestor_recesso_consultar_mes_atual():   
-    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=1 ,recessos = ControladorGestor.consultar_recessos_barbearia_mes_atual(), mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=1 ,recessos = ControladorRecesso.consultar_recessos_barbearia_mes_atual(), mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/recessos/consultar/ano_atual', methods=['GET'])
 def gestor_recesso_consultar_ano_atual():   
-    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=2 ,recessos = ControladorGestor.consultar_recessos_barbearia_ano_atual(), mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=2 ,recessos = ControladorRecesso.consultar_recessos_barbearia_ano_atual(), mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/recessos/excluir', methods=['POST'])
 def gestor_recesso_excluir():  
@@ -115,7 +114,7 @@ def gestor_recesso_excluir():
         id_recesso=request.form.get("recesso-id", type=int),
         descricao_recesso=request.form.get("recesso-descricao")
     ) 
-    return ControladorGestor.excluir_recessos_barbearia_por_mes(recesso)
+    return ControladorRecesso.excluir_recessos_barbearia_por_mes(recesso)
 
 @gestor.route('/painel/recessos/atualizar', methods=['POST'])
 def gestor_recesso_atualizar():  
@@ -126,20 +125,19 @@ def gestor_recesso_atualizar():
         data_fim_recesso=datetime.strptime(request.form.get("data_fim_recesso"),  "%Y-%m-%d").date(),
         descricao_recesso=request.form.get("descricao_recesso")
     ) 
-    return ControladorGestor.atualizar_recessos_barbearia(recesso)
-
-     
+    return ControladorRecesso.atualizar_recessos_barbearia(recesso)
 
 ##################################################################################
 # AGENDA MENSAL 
 
 @gestor.route('/painel/agenda_mensal/cadastrar', methods=['POST'])
-def gestor_agenda_cadastrar():
+def gestorAgendaCadastrar():
     
     agenda_mensal = AgendaMensal(
         data_inicial_mes= datetime.strptime(request.form.get("data_inicio"),  "%Y-%m-%d").date(),
         data_final_mes=datetime.strptime(request.form.get("data_fim"),  "%Y-%m-%d").date(),
         titulo_agenda=request.form.get("titulo_agenda"), 
+        status_agenda_mensal=False
     )
      
     return ControladorGestor.cadastrar_agenda_mensal_barbearia(agenda_mensal)
@@ -176,15 +174,14 @@ def gestor_agenda_mensal_alterar_status():
 
 ##################################################################################
 # SERVIÇOS - Aba de visualização de todos Serviços cadastrados
-
 @gestor.route('/painel/servicos')
 def gestorAbaServicos():     
-    return ControladorGestor.consultar_servicos()
+    return ControladorServico.consultar_servicos()
 
 @gestor.route('/painel/servicos/consulta/nome', methods=["POST"])
 def gestor_consultar_servico_nome(): 
     nome_servico = request.form.get("consultar-servico")    
-    return ControladorGestor.consultar_servico_nome(nome_servico)
+    return ControladorServico.consultar_servico_nome(nome_servico)
 
 # SERVIÇOS - pagina para cadastrar o Serviço
 @gestor.route('/painel/servicos/cadastrar', methods=['GET'])
@@ -200,10 +197,8 @@ def gestorServicoCadastrar():
     descricao_servico = request.form.get('srv-descricao-servico').strip()
     valor = request.form.get('srv-valor').strip()
     duracao = request.form.get('srv-duracao').strip()
-    
-   
-             
-    return ControladorGestor.cadastrarServico(imagem, descricao_servico, valor, duracao)
+
+    return ControladorServico.cadastrarServico(imagem, descricao_servico, valor, duracao)
 
 # SERVIÇOS - REMOVER
 @gestor.route('/painel/servicos/excluir', methods=['POST'])
@@ -212,7 +207,7 @@ def gestor_excluir_servico():
     foto_nome = request.form.get('srv-foto_nome') 
     nome_servico = request.form.get('srv-nome') 
         
-    return ControladorGestor.excluir_servico(id_servico, foto_nome,nome_servico)
+    return ControladorServico.excluir_servico(id_servico, foto_nome,nome_servico)
   
 
 # SERVIÇOS - Salvar edição do serviço no banco de dados
@@ -229,7 +224,7 @@ def gestorServicoEditar():
     ativo = request.form.get('srv-status', type=int)
     id = request.form.get('srv-id')
   
-    return ControladorGestor.editarServico(id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo)
+    return ControladorServico.editarServico(id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo)
 
 ##################################################################################
 # FALTAS JUSTIFICADAS DOS BARBEIROS - Aba de visualização dos Barbeiros cadastrados
@@ -248,8 +243,7 @@ def gestor_faltas_justificadas_consultar_anual_barbeiro():
 
 @gestor.route('/painel/barbeiros/faltas-justificadas/cadastrar', methods=['POST'])
 def gestor_cadastrar_faltas_justificadas_barbeiro():
-    
-        
+
     id_barbeiro = request.form.get("id_barbeiro_falta", type=int)
     nome_barbeiro = request.form.get("nome_barbeiro_falta")
     

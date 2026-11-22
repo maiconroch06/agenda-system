@@ -54,7 +54,7 @@ class RecessoDAO:
             sql,
             {
                 "data_inicio": date.today().replace(day=1),
-                "data_final": date.today().replace(day=calendar.monthrange(date.today().year, date.today().month)[1]),
+                "data_final": date.today().replace(day=31, month=12),
              }
         ).mappings().all()
 
@@ -80,8 +80,6 @@ class RecessoDAO:
             {"data_inicio_mes": recesso.data_inicio_recesso}
         )
         
-        db.session.commit()
-
         return resultado.scalar()
     
     
@@ -103,9 +101,7 @@ class RecessoDAO:
                
                 }
         )
-        
-        db.session.commit()
-        
+
         return resultado.scalar()
 
     def listar_todos(self):
