@@ -5,7 +5,7 @@ publics = Blueprint('public', __name__)
 
 @publics.route('/')
 def homePage():
-    return render_template('index.html', barbeiros = ControladorBarbeiro.consultar_todos_barbeiros(), servicos = ControladorServico.consultar_servicos_resumido() )
+    return render_template('index.html', barbeiros = ControladorBarbeiro.consultar_todos_barbeiros(), servicos = ControladorServico.consultarServicoResumido())
 
 @publics.route('/tipo-usuario')
 def category():

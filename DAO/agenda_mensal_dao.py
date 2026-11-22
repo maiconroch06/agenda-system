@@ -3,14 +3,11 @@ from sqlalchemy import text
 from database import db
 
 from models import AgendaMensal
-from .horario_funcionamento_dao import HorarioFuncionamentoDAO
 from datetime import datetime
 
 
 class AgendaMensalDAO:
 
-    def __init__(self):
-        self.__horarioFuncionamento = HorarioFuncionamentoDAO()
 
     def cadastrar(self, nova_agenda_mensal:AgendaMensal, cnpj_barbearia):
         sql = text("""
@@ -189,6 +186,21 @@ class AgendaMensalDAO:
 
         return bool(resultado)
     
+    def verificar_agenda_mensal_ativada_existente(self):
+    
+            sql = text("""
+                SELECT COUNT(id_agenda_mensal)
+                    FROM agenda_mensal
+                WHERE status_agenda_mensal=:status_agenda_mensal
+            """)
+    
+            resultado = db.session.execute(sql, {
+                "status_agenda_mensal": True,
+               
+            }).scalar()
+    
+            return bool(resultado)
+        
     def verificar_agenda_aberta(self, agenda):
         sql = text("""
                     SELECT count(id_agenda_mensal)  
@@ -202,8 +214,6 @@ class AgendaMensalDAO:
              "status_agenda_mensal": True}
         )
         
-        db.session.commit()
-
         return resultado.scalar()
 
     def verificar_agenda_mensal_existente(self, agenda):
@@ -225,10 +235,7 @@ class AgendaMensalDAO:
              "status_agenda_mensal": True
              }
         )
-        
-        db.session.commit()
-        
-
+            
         return resultado.scalar()
 
     def __mapear_agenda_mensal(self, registro):

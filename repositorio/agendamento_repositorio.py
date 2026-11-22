@@ -49,7 +49,13 @@ class AgendamentoRepositorio:
     @staticmethod
     def cliente_tem_conflito_horario(id_cliente, data_agendamento, hora_inicio, hora_fim):
         return AgendamentoDAO.cliente_tem_conflito_horario(id_cliente, data_agendamento, hora_inicio, hora_fim)
+   
+    @staticmethod
+    def consultar_total_agendamentos_por_periodo(data_inicio, data_final):
+        return AgendamentoDAO.consultar_total_agendamentos_por_periodo(data_inicio, data_final)
 
     @staticmethod
     def excluir(id_agendamento):
         return AgendamentoDAO.excluir(id_agendamento)
+    
+    

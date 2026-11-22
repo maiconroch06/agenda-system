@@ -7,28 +7,28 @@ class ControladorRecesso:
     __RECESSO_CONSULTAR = "gestor.gestor_recesso_consultar"
 
     @classmethod
-    def consultar_recessos_barbearia(cls):
+    def consultarRecessos(cls):
         try:
             return cls.__recessoService.consultar_recessos()
         except Exception as erros:
             flash(f"Erro consultar os recessos da barbearia {erros}", EnumStatusMensagens.ERRO.value)
 
     @classmethod
-    def consultar_recessos_barbearia_mes_atual(cls):
+    def consultarRecessosMesAtual(cls):
         try:
             return cls.__recessoService.consultar_recessos_mes_atual_services()
         except Exception:
             flash(f"Erro consultar os recessos da barbearia ", EnumStatusMensagens.ERRO.value)
 
     @classmethod
-    def consultar_recessos_barbearia_ano_atual(cls):
+    def consultarRecessosAnoAtual(cls):
         try:
             return cls.__recessoService.consultar_recessos_ano_atual_services()
         except Exception:
             flash(f"Erro consultar os recessos da barbearia", EnumStatusMensagens.ERRO.value)
 
     @classmethod
-    def cadastrar_recessos_barbearia_por_mes(cls, recesso):
+    def cadastrarRecesso(cls, recesso):
         try:
             if cls.__recessoService.cadastrar_recessos_services(recesso):
                 flash(f"Recesso [ {recesso.descricao_recesso} ] cadastrado com sucesso.",
@@ -39,7 +39,7 @@ class ControladorRecesso:
         return redirect(url_for(cls.__RECESSO_CONSULTAR))
 
     @classmethod
-    def atualizar_recessos_barbearia(cls, recesso):
+    def atualizarRecesso(cls, recesso):
         try:
             if cls.__recessoService.atualizar_recessos_services(recesso):
                 flash(f"Recesso [ {recesso.descricao_recesso} ] atualizado com sucesso",
@@ -51,7 +51,7 @@ class ControladorRecesso:
         return redirect(url_for(cls.__RECESSO_CONSULTAR))
 
     @classmethod
-    def excluir_recessos_barbearia_por_mes(cls, recesso):
+    def excluirRecessos(cls, recesso):
         try:
             if cls.__recessoService.excluir_recessos_services(recesso.id_recesso):
                 flash(f"Recesso [ {recesso.descricao_recesso} ] excluido com sucesso",

@@ -37,8 +37,12 @@ class AgendaMensalRepositorio:
     def verificar_agenda_mensal_existente(self, nova_agenda_mensal):
         return self.__agenda_mensal_DAO.verificar_agenda_mensal_existente(nova_agenda_mensal)
     
+    def verificar_agenda_mensal_ativada_existente(self):
+        return self.__agenda_mensal_DAO.verificar_agenda_mensal_ativada_existente()
+    
     def atualizar(self, nova_agenda_mensal):
         return self.__agenda_mensal_DAO.atualizar(nova_agenda_mensal)
+    
+   
 
-    def excluir(self, id_mes: int):
-        return self.__agenda_mensal_DAO.excluir(id_mes)
+        

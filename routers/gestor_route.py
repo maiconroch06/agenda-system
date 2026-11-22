@@ -1,5 +1,5 @@
 from flask import current_app, Blueprint, render_template, redirect, url_for, session, request, flash
-from controladores import ControladorGestor, ControladorBarbeiro, ControladorServico, ControladorRecesso
+from controladores import ControladorGestor, ControladorBarbeiro, ControladorServico, ControladorRecesso, ControladorAgendaMensal
 from models import Endereco, Barbeiro, HorarioFuncionamento, AgendaMensal, Recesso, FaltaJustificadaBarbeiro, Cliente
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
 from datetime import datetime, timezone, date
@@ -25,10 +25,10 @@ def gestorLoginPagina():
 # Envio dos dados a partid da Tela de Login
 @gestor.route('/login', methods=["POST"])
 def gestorLogin():
-    email_digitado = request.form.get('gestor-email-2')
-    senha_digitada = request.form.get('gestor-password')
+    email_digitado = request.form.get('gestor-email-2','')
+    senha_digitada = request.form.get('gestor-password','')
     
-    return ControladorGestor.login_gestor(email_digitado,senha_digitada)
+    return ControladorGestor.login_gestor(email_digitado, senha_digitada)
 
 
 # Logout Gestor - Encerramento da sessão do Gestor
@@ -54,17 +54,17 @@ def gestorAbaAgendamento():
 @gestor.route('/painel/horario_funcionamento')
 def gestor_horario_funcionamento_barbearia():
     data_atual = datetime.now(timezone.utc).date()
-    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=0, botao_filtro=0,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_barbearia() ,mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=0, botao_filtro=0,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorAgendaMensal.consultar_todas_agendas_mensais_service() ,mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/horario_funcionamento/consultar/mes_atual')
 def gestor_horario_funcionamento_barbearia_consultar_mes():
     data_atual = datetime.now(timezone.utc).date()
-    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=1, botao_filtro=1,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_barbearia_por_mes() ,mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=1, botao_filtro=1,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorAgendaMensal.consultar_agendas_mensais_por_mes_service() ,mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/horario_funcionamento/consultar/ano_atual')
 def gestor_horario_funcionamento_barbearia_consultar_ano():
     data_atual = datetime.now(timezone.utc).date()
-    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=1, botao_filtro=2,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorGestor.consultar_agenda_barbearia_anual() ,mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=1, botao_filtro=2,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorAgendaMensal.consultar_agendas_mensais_anual_service() ,mensagens_status=EnumStatusMensagens)
 
 
 
@@ -73,7 +73,7 @@ def gestor_horario_funcionamento_barbearia_atualizar():
     
     horario_funcionamento = HorarioFuncionamento(
         id_horario=request.form.get("horario_funcionamento_id"),
-        horario_abertura= datetime.strptime(request.form.get("horario_abertura"), "%H:%M").time(),
+        horario_abertura= datetime.strptime(request.form.get("horario_abertura", ''), "%H:%M").time(),
         horario_fechamento=request.form.get("horario_fechamento"),
         horario_inicio_intrajornada=request.form.get("inicio_almoco"),
         horario_fim_intrajornada=request.form.get("fim_almoco"),
@@ -89,24 +89,24 @@ def gestor_horario_funcionamento_barbearia_atualizar():
 def gestor_recesso_cadastrar():
     
     recesso = Recesso(
-        data_inicio_recesso= datetime.strptime(request.form.get("data_inicio_recesso"),  "%Y-%m-%d").date(),
-        data_fim_recesso=datetime.strptime(request.form.get("data_fim_recesso"),  "%Y-%m-%d").date(),
+        data_inicio_recesso= datetime.strptime(request.form.get("data_inicio_recesso",''),  "%Y-%m-%d").date(),
+        data_fim_recesso=datetime.strptime(request.form.get("data_fim_recesso",''),  "%Y-%m-%d").date(),
         descricao_recesso=request.form.get("descricao_recesso")
     )
      
-    return ControladorRecesso.cadastrar_recessos_barbearia_por_mes(recesso)
+    return ControladorRecesso.cadastrarRecesso(recesso)
 
 @gestor.route('/painel/recessos', methods=['GET'])
 def gestor_recesso_consultar():   
-    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=0, botao_filtro=0 ,recessos = ControladorRecesso.consultar_recessos_barbearia(), mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=0, botao_filtro=0, recessos = ControladorRecesso.consultarRecessos(), mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/recessos/consultar/mes_atual', methods=['GET'])
 def gestor_recesso_consultar_mes_atual():   
-    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=1 ,recessos = ControladorRecesso.consultar_recessos_barbearia_mes_atual(), mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=1, recessos = ControladorRecesso.consultarRecessosMesAtual(), mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/recessos/consultar/ano_atual', methods=['GET'])
 def gestor_recesso_consultar_ano_atual():   
-    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=2 ,recessos = ControladorRecesso.consultar_recessos_barbearia_ano_atual(), mensagens_status=EnumStatusMensagens)
+    return render_template('pages/gestor/gestor-painel-recesso-rp.html', modo=1, botao_filtro=2, recessos = ControladorRecesso.consultarRecessosAnoAtual(), mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/recessos/excluir', methods=['POST'])
 def gestor_recesso_excluir():  
@@ -114,62 +114,61 @@ def gestor_recesso_excluir():
         id_recesso=request.form.get("recesso-id", type=int),
         descricao_recesso=request.form.get("recesso-descricao")
     ) 
-    return ControladorRecesso.excluir_recessos_barbearia_por_mes(recesso)
+    return ControladorRecesso.excluirRecessos(recesso)
 
 @gestor.route('/painel/recessos/atualizar', methods=['POST'])
 def gestor_recesso_atualizar():  
        
     recesso = Recesso(
         id_recesso=request.form.get("id_recesso", type=int),
-        data_inicio_recesso= datetime.strptime(request.form.get("data_inicio_recesso"),  "%Y-%m-%d").date(),
-        data_fim_recesso=datetime.strptime(request.form.get("data_fim_recesso"),  "%Y-%m-%d").date(),
+        data_inicio_recesso= datetime.strptime(request.form.get("data_inicio_recesso",''),  "%Y-%m-%d").date(),
+        data_fim_recesso=datetime.strptime(request.form.get("data_fim_recesso",''),  "%Y-%m-%d").date(),
         descricao_recesso=request.form.get("descricao_recesso")
     ) 
-    return ControladorRecesso.atualizar_recessos_barbearia(recesso)
+    return ControladorRecesso.atualizarRecesso(recesso)
 
 ##################################################################################
-# AGENDA MENSAL 
-
+# AGENDA MENSAL
 @gestor.route('/painel/agenda_mensal/cadastrar', methods=['POST'])
 def gestorAgendaCadastrar():
     
     agenda_mensal = AgendaMensal(
-        data_inicial_mes= datetime.strptime(request.form.get("data_inicio"),  "%Y-%m-%d").date(),
-        data_final_mes=datetime.strptime(request.form.get("data_fim"),  "%Y-%m-%d").date(),
+        data_inicial_mes= datetime.strptime(request.form.get("data_inicio",''),  "%Y-%m-%d").date(),
+        data_final_mes=datetime.strptime(request.form.get("data_fim",''),  "%Y-%m-%d").date(),
         titulo_agenda=request.form.get("titulo_agenda"), 
         status_agenda_mensal=False
     )
      
-    return ControladorGestor.cadastrar_agenda_mensal_barbearia(agenda_mensal)
+    return ControladorAgendaMensal.cadastrar_agenda_mensal_service(agenda_mensal)
 
 @gestor.route('/painel/agenda_mensal/atualizar', methods=['POST'])
 def gestor_agenda_mensal_atualizar():
     
+    
     agenda_mensal = AgendaMensal(
         id_agenda_mensal=request.form.get("agenda_id", type=int),
-        data_inicial_mes= datetime.strptime(request.form.get("data_inicio"),  "%Y-%m-%d").date(),
-        data_final_mes=datetime.strptime(request.form.get("data_fim"),  "%Y-%m-%d").date(),
+        data_inicial_mes= datetime.strptime(request.form.get("data_inicio",''),  "%Y-%m-%d").date(),
+        data_final_mes=datetime.strptime(request.form.get("data_fim",''),  "%Y-%m-%d").date(),
         titulo_agenda=request.form.get("titulo_agenda")
     )
      
-    return ControladorGestor.atualizar_agenda_mensal_barbearia(agenda_mensal)
+    return ControladorAgendaMensal.atualizar_agenda_mensal_service(agenda_mensal)
 
 @gestor.route('/painel/agenda_mensal/alterar_status', methods=['POST'])
 def gestor_agenda_mensal_alterar_status():
         
-   
-    status_agenda_mensal = request.form.get("agenda-mensal-status", type=int)
-   
+    status_agenda_mensal = request.form.get("status_agenda_mensal", type=int)
+       
     agenda_mensal = AgendaMensal(
-        
-            id_agenda_mensal=request.form.get("agenda-mensal-id", type=int),
-            data_inicial_mes= datetime.strptime(request.form.get("data_inicio"),  "%Y-%m-%d").date(),
-            data_final_mes=datetime.strptime(request.form.get("data_fim"),  "%Y-%m-%d").date(),
+            id_agenda_mensal=request.form.get("agenda_id", type=int),
+            data_inicial_mes= datetime.strptime(request.form.get("data_inicio",''),  "%Y-%m-%d").date(),
+            data_final_mes=datetime.strptime(request.form.get("data_fim",''),  "%Y-%m-%d").date(),
             titulo_agenda=request.form.get("titulo_agenda"),
             status_agenda_mensal= not status_agenda_mensal
     )
     
-    return ControladorGestor.atualizar_status_agenda_mensal_barbearia(agenda_mensal)
+       
+    return ControladorAgendaMensal.atualizar_status_agenda_mensal_service(agenda_mensal)
 
 
 ##################################################################################
@@ -181,8 +180,10 @@ def gestorAbaServicos():
 @gestor.route('/painel/servicos/consulta/nome', methods=["POST"])
 def gestor_consultar_servico_nome(): 
     nome_servico = request.form.get("consultar-servico")    
-    return ControladorServico.consultar_servico_nome(nome_servico)
+    return ControladorServico.consultarServicoNome(nome_servico)
 
+
+#=================================================================================================
 # SERVIÇOS - pagina para cadastrar o Serviço
 @gestor.route('/painel/servicos/cadastrar', methods=['GET'])
 def gestorServicoPageCadastrar():
@@ -192,11 +193,11 @@ def gestorServicoPageCadastrar():
 @gestor.route('/painel/servicos/cadastrar', methods=['POST'])
 def gestorServicoCadastrar():
     
-    imagem = request.files.get('srv-imagem')
+    imagem = request.files.get('srv-imagem', None)
     
-    descricao_servico = request.form.get('srv-descricao-servico').strip()
-    valor = request.form.get('srv-valor').strip()
-    duracao = request.form.get('srv-duracao').strip()
+    descricao_servico = request.form.get('srv-descricao-servico','').strip()
+    valor = request.form.get('srv-valor','').strip()
+    duracao = request.form.get('srv-duracao','').strip()
 
     return ControladorServico.cadastrarServico(imagem, descricao_servico, valor, duracao)
 
@@ -207,7 +208,7 @@ def gestor_excluir_servico():
     foto_nome = request.form.get('srv-foto_nome') 
     nome_servico = request.form.get('srv-nome') 
         
-    return ControladorServico.excluir_servico(id_servico, foto_nome,nome_servico)
+    return ControladorServico.excluirServico(id_servico, foto_nome, nome_servico)
   
 
 # SERVIÇOS - Salvar edição do serviço no banco de dados
@@ -218,9 +219,9 @@ def gestorServicoEditar():
     img_padrao = request.form.get('imagem-padrao', None)
     imagem_anterior = request.form.get('srv-foto_nome_anterior')
   
-    descricao_servico = request.form.get('srv-descricao-servico')
-    valor = request.form.get('srv-valor').strip()
-    duracao = request.form.get('srv-duracao').strip()
+    descricao_servico = request.form.get('srv-descricao-servico','')
+    valor = request.form.get('srv-valor','').strip()
+    duracao = request.form.get('srv-duracao','').strip()
     ativo = request.form.get('srv-status', type=int)
     id = request.form.get('srv-id')
   
@@ -250,10 +251,10 @@ def gestor_cadastrar_faltas_justificadas_barbeiro():
     print("o nome é ", nome_barbeiro)
     
     falta_justificada = FaltaJustificadaBarbeiro(
-        data_falta=datetime.strptime(request.form.get("data_falta"),  "%Y-%m-%d").date(),
-        horario_inicio_falta=request.form.get("hora_inicio_falta"),
-        horario_final_falta=request.form.get("hora_fim_falta"),
-        motivo_falta=request.form.get("motivo_falta_justificada")
+        data_falta=datetime.strptime(request.form.get("data_falta",''),  "%Y-%m-%d").date(),
+        horario_inicio_falta=request.form.get("hora_inicio_falta",''),
+        horario_final_falta=request.form.get("hora_fim_falta",''),
+        motivo_falta=request.form.get("motivo_falta_justificada",'')
     )
     
     return ControladorBarbeiro.cadastrar_faltas_do_barbeiro_ativos(id_barbeiro,falta_justificada,nome_barbeiro)
@@ -264,7 +265,7 @@ def gestor_excluir_faltas_justificadas_barbeiro():
       
     falta_justificada = FaltaJustificadaBarbeiro(
         id_falta_justificada=request.form.get("falta-id-excluir", type=int),
-        data_falta=datetime.strptime(request.form.get("falta-data-excluir"),  "%Y-%m-%d").date(),
+        data_falta=datetime.strptime(request.form.get("falta-data-excluir",''),  "%Y-%m-%d").date(),
         horario_inicio_falta=request.form.get("falta-hora-inicial-excluir"),
         horario_final_falta=request.form.get("falta-hora-final-excluir")
         )
@@ -278,7 +279,7 @@ def gestor_atualizar_faltas_justificadas_barbeiro():
     nome_barbeiro = request.form.get("nome_barbeiro_falta")
       
     falta_justificada = FaltaJustificadaBarbeiro(
-        data_falta=datetime.strptime(request.form.get("data_falta"),  "%Y-%m-%d").date(),
+        data_falta=datetime.strptime(request.form.get("data_falta",''),  "%Y-%m-%d").date(),
         horario_inicio_falta=request.form.get("hora_inicio_falta"),
         horario_final_falta=request.form.get("hora_fim_falta"),
         motivo_falta=request.form.get("motivo_falta_justificada"),
@@ -447,12 +448,6 @@ def gestor_atualizar_cliente():
     )
             
     return ControladorGestor.atualizar_cliente_barbearia(cliente)
-
-##################################################################################
-# FINANCEIRO
-@gestor.route('/painel/financeiro')
-def gestorPainelFinaceiro():
-    return render_template('pages/gestor/gestor-painel-financeiro-rp.html')
 
 ##################################################################################
 # CONFIGURAÇÃO DAS ROTAS PRIVADAS

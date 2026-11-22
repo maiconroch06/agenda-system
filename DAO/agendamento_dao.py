@@ -432,6 +432,27 @@ class AgendamentoDAO:
             AgendamentoDAO._mapear_agendamento_todos_dados(registro)
             for registro in resultado
         ]
+        
+    @staticmethod
+    def consultar_total_agendamentos_por_periodo(data_inicio, data_final):
+    
+            sql = text("""
+                SELECT
+                    COUNT(id_agendamento)               
+                FROM agendamento 
+                WHERE data_agendamento BETWEEN :data_inicio AND :data_fim
+        
+            """)
+    
+            resultado = db.session.execute(
+                sql,
+                {
+                    "data_inicio": data_inicio,
+                    "data_fim": data_final
+                }
+            )
+    
+            return resultado.scalar() > 0 
 
     @staticmethod
     def cliente_tem_conflito_horario(

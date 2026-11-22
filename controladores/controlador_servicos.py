@@ -7,14 +7,31 @@ from execoes import ImagemErrorExcecao
 class ControladorServico:
     __servicos_barbearia_service_mvc = ServicoBarbearia()
     __GESTOR_ABAS_SERVICOS = "gestor.gestorAbaServicos"
-    
+
     @classmethod
-    def consultar_servicos_resumido(cls):
+    def cadastrarServico(cls, foto, novo_descricao: str, novo_valor: str, novo_duracao: str):
+
+        try:
+            if cls.__servicos_barbearia_service_mvc.cadastrar_servico_barbearia(foto, novo_descricao, novo_valor,
+                                                                                novo_duracao):
+                return redirect(url_for(cls.__GESTOR_ABAS_SERVICOS))
+
+        except ImagemErrorExcecao as erros:
+            flash(f"{erros}", EnumStatusMensagens.AVISO.value)
+            return redirect(url_for(cls.__GESTOR_ABAS_SERVICOS))
+
+        except Exception as erros:
+            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
+            return redirect(url_for(cls.__GESTOR_ABAS_SERVICOS))
+
+
+    @classmethod
+    def consultarServicoResumido(cls):
         return cls.__servicos_barbearia_service_mvc.consultar_todos_servicos_resumo()
     
 
     @classmethod
-    def consultar_todos_os_servicos(cls):
+    def consultarServicostivos(cls):
         return cls.__servicos_barbearia_service_mvc.consultar_todos_servicos()
             
     @classmethod
@@ -35,7 +52,7 @@ class ControladorServico:
 
 
     @classmethod
-    def excluir_servico(cls, id_servico, foto_nome, nome_servico):
+    def excluirServico(cls, id_servico, foto_nome, nome_servico):
         try:
             cls.__servicos_barbearia_service_mvc.excluir_servico_barbearia(id_servico, foto_nome)
             flash(f"O servico foi excluido com sucesso!", EnumStatusMensagens.SUCESSO.value)
@@ -48,30 +65,15 @@ class ControladorServico:
 
         return redirect(url_for(cls.__GESTOR_ABAS_SERVICOS))
 
-    @classmethod
-    def cadastrarServico(cls, foto, novo_descricao: str, novo_valor: str, novo_duracao: str):
-
-        try:
-            if cls.__servicos_barbearia_service_mvc.cadastrar_servico_barbearia(foto, novo_descricao, novo_valor,
-                                                                                novo_duracao):
-                return redirect(url_for(cls.__GESTOR_ABAS_SERVICOS))
-
-        except ImagemErrorExcecao as erros:
-            flash(f"{erros}", EnumStatusMensagens.AVISO.value)
-            return redirect(url_for(cls.__GESTOR_ABAS_SERVICOS))
-
-        except Exception as erros:
-            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
-            return redirect(url_for(cls.__GESTOR_ABAS_SERVICOS))
 
     @classmethod
     def consultar_servicos(cls):
         return render_template('pages/gestor/gestor-painel-servicos-rp.html', modo=0,
-                               listaServicos=ControladorServico.consultar_todos_os_servicos(),
+                               listaServicos=ControladorServico.consultarServicostivos(),
                                mensagens_status=EnumStatusMensagens)
 
     @classmethod
-    def consultar_servico_nome(cls, nome_servico):
+    def consultarServicoNome(cls, nome_servico):
         return render_template('pages/gestor/gestor-painel-servicos-rp.html', nome_servico=nome_servico, modo=1,
                                listaServicos=cls.__servicos_barbearia_service_mvc.consultar_servico_nome(nome_servico),
                                mensagens_status=EnumStatusMensagens)
