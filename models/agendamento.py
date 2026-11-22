@@ -108,17 +108,3 @@ class Agendamento:
             f"fim={self.__hora_fim}, "
             
         )
-
-    # Validações
-    @staticmethod
-    def _converter_timedelta_para_time(valor):
-
-        if isinstance(valor, timedelta):
-            segundos = int(valor.total_seconds())
-
-            horas, resto = divmod(segundos, 3600)
-            minutos, segundos = divmod(resto, 60)
-
-            return time(horas, minutos, segundos)
-
-        return valor

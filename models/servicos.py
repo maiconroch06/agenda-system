@@ -88,11 +88,11 @@ class Servico:
         self.__data_atualizacao = value
     
     # === vALIDAÇÕES ================    
-    def valoresValidos(self):
+    def validarValorDuracao(self):
         if self.__valor <= Decimal("0") or self.__duracao < -1 :
             raise Exception("Verifique se foi informado algum valor negativo!")
         
-    def valoresVazios(self):
+    def validarValoresVazios(self):
         if not self.__descricao_servico.strip() or  self.__valor <= Decimal("0") or  self.__duracao < -1:
            raise Exception("Campos vazios! Verifique se os campos estão vazios!")
                

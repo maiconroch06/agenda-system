@@ -38,8 +38,8 @@ class ServicoBarbearia:
                 data_atualizacao= datetime.now(timezone.utc)  
             )
             #validar campos com o especialista
-            servico.valoresVazios()
-            servico.valoresValidos()
+            servico.validarValoresVazios()
+            servico.validarValorDuracao()
             
             #salvar a imagem na pasta
             #extensão | validar extensao | pegar o novo nome da imagem

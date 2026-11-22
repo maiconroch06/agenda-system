@@ -156,7 +156,7 @@ class ControladorGestor():
             ControladorAgendaMensal.cadastrar_agenda_mensal_service(agenda_barbearia)
             flash("Agenda da barbearia cadastrada com sucesso", EnumStatusMensagens.SUCESSO.value)
         except Exception :
-            flash(f"Erro ao tentar cadastrar a agenda da barbearia", EnumStatusMensagens.ERRO.value)
+            flash(f"Erro ao tentar cadastrar a agenda da barbearia, já existe uma agenda mensal abrangendo a data inicio ou fim", EnumStatusMensagens.ERRO.value)
         
         return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))       
      

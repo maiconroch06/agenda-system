@@ -99,7 +99,7 @@ function validacoes(){
          erros.push('ATENÇÃO, campo titulo da agenda é obrigatorio!');
     }
     if (ipt_data_inicio.value==='' || ipt_data_fim.value===''){
-         erros.push('ATENÇÃO, campos data inicio e data fim da agenda são obrigatorio!');
+        erros.push('ATENÇÃO, campos data inicio e data fim da agenda são obrigatório!');
     }else if(ipt_data_inicio.value < data_atual.toLocaleDateString('en-CA') || ipt_data_fim.value < data_atual.toLocaleDateString('en-CA')){
         erros.push('ATENÇÃO, campos data inicio e data fim da agenda não pode ser menos que a data atual [ '+data_atual.toLocaleDateString('pt-br')+' ]');
     }

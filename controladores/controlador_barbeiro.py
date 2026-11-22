@@ -100,7 +100,7 @@ class ControladorBarbeiro:
     def cadastrar_faltas_do_barbeiro_ativos(cls, id_barbeiro, falta_justificada, nome_barbeiro):
             try: 
                
-                if FaltasJustificadaBarbeiro.cadastrar_falta_justificada_do_barbeiro(id_barbeiro, falta_justificada):
+                if FaltasJustificadaBarbeiro.cadastrar_falta_justificada_barbeiro(id_barbeiro, falta_justificada):
                     flash(f"Falta justificada do barbeiro {nome_barbeiro} cadastrado com sucesso", EnumStatusMensagens.SUCESSO.value)
                 else:
                      flash(f"Não foi possivel cadastrar a falta justificada do barbeiro {nome_barbeiro}, pois ele ja tem um falta cadastrada com a mesma data e horario", EnumStatusMensagens.AVISO.value)       
@@ -114,7 +114,7 @@ class ControladorBarbeiro:
     def excluir_faltas_do_barbeiro_ativos(cls, id_barbeiro, falta_justificada):
             try: 
                
-                if FaltasJustificadaBarbeiro.excluir_falta_justificada_do_barbeiro( id_barbeiro, falta_justificada):
+                if FaltasJustificadaBarbeiro.excluir_falta_justificada_barbeiro( id_barbeiro, falta_justificada):
                     flash(f"Falta justificada da data: [ {falta_justificada.data_falta} | motivo: {falta_justificada.motivo_falta} ] excluida com sucesso", EnumStatusMensagens.SUCESSO.value)
             except Exception:
             
@@ -125,7 +125,7 @@ class ControladorBarbeiro:
     @classmethod
     def atualizar_faltas_do_barbeiro_ativos(cls, id_barbeiro, falta_justificada,nome_barbeiro):
         try:
-            if FaltasJustificadaBarbeiro.atualizar_falta_justificada_do_barbeiro(id_barbeiro,falta_justificada):
+            if FaltasJustificadaBarbeiro.atualizar_falta_justificada_barbeiro(id_barbeiro,falta_justificada):
                 flash(f"Falta justificada da data: [ {falta_justificada.data_falta} | motivo: {falta_justificada.motivo_falta} ] atualizada com sucesso", EnumStatusMensagens.SUCESSO.value)
             else:
                 flash(f"Falta justificada [ {falta_justificada.data_falta} | motivo: {falta_justificada.motivo_falta} ] não atualizada, já consta um registro de falta cadastrada com a mesma data e horario para  {nome_barbeiro}", EnumStatusMensagens.AVISO.value)       
