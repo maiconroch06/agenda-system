@@ -335,6 +335,7 @@ class BarbeiroDAO:
 
             LEFT JOIN agendamento_servicos ags
                 ON a.id_agendamento = ags.agendamento_id
+
             LEFT JOIN servico s
                 ON ags.servico_id = s.id_servico
 
@@ -477,6 +478,7 @@ class BarbeiroDAO:
             "telefone": FormatarTelefone._formatar_telefone(registro["telefone_cliente"]),
             "servico": registro["nome_servico"],
             "valor": float(registro["valor"] or 0),
-            "status": registro["status_agendamento"]
+            "status": registro["status_agendamento"],
+            "motivo_cancelamento": registro["motivo_cancelamento"]
         }
         

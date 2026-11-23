@@ -28,7 +28,7 @@ def barbeiroLogin():
     return ControladorBarbeiro.login_barbeiro(email_digitado,senha_digitada)
 
 ##################################################################################
-# O que isso esta fazendo? A mesma função existe no gestor
+# Verificação Sesssão
 
 @barbeiro.route('/login')
 def barbeiroLoginPagina():
@@ -98,20 +98,18 @@ def barbeiroPainel():
         dias_semana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
         data_display = f"{dias_semana[data_exibicao.weekday()]}, {data_exibicao.strftime('%d/%m')}"
 
-    # O template NÃO precisa mais das datas anterior/proxima formatadas para a URL
-    context = {
-        'barbeiro': barbeiro,
-        'agendamentos': agendamentos,
-        'concluidos': concluidos,
-        'total_validos': total_validos,
-        'pct_concluidos': pct_concluidos,
-        'pct_cancelados': pct_cancelados,
-        'pct_pendentes': pct_pendentes,
-        'data_display': data_display,
-        'is_hoje': (data_exibicao == hoje)
-    }
-    
-    return render_template('pages/barbeiro/barbeiro-painel-inicio-rp.html', **context)
+    print(f"{agendamentos}")
+
+    return render_template('pages/barbeiro/barbeiro-painel-inicio-rp.html',
+                           barbeiro = barbeiro,
+                            agendamentos = agendamentos,
+                            concluidos = concluidos,
+                            total_validos = total_validos,
+                            pct_concluidos = pct_concluidos,
+                            pct_cancelados = pct_cancelados,
+                            pct_pendentes = pct_pendentes,
+                            data_display = data_display,
+                            is_hoje = (data_exibicao == hoje))
 
 @barbeiro.route('/painel/navegar/<acao>')
 def navegar_painel(acao):
@@ -136,6 +134,7 @@ def atualizar_status(id_agendamento):
     if status_agendamento == 'motivo':
         novo_status = 0
         motivo_cancelamento = request.form.get('motivo')
+        print(f'\n\n{motivo_cancelamento}\n\n')
                 
         ControladorBarbeiro.atualizar_status_agendamento(id_agendamento, novo_status, motivo_cancelamento)
 

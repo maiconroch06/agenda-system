@@ -1,23 +1,22 @@
-
 <!-- MODAL: DETALHES DO ATENDIMENTO GERADO PELO JINJA COM <dialog> -->
 {% for item in agendamentos %}
-<dialog id="modal-detalhe-{{ item.id }}" 
+<dialog id="modal-detalhe-{{ item.id }}"
 class="bg-[#232220] text-[#f1efe8] border border-[#4a473f] rounded-t-2xl sm:rounded-2xl p-0 w-full sm:max-w-md max-h-[85vh] m-auto backdrop:bg-black/65 inset-0 fixed sm:static mt-auto sm:m-auto bottom-0 top-auto sm:top-0 transition-all open:flex flex-col shadow-2xl">
 
-    
+
     <div class="p-5 overflow-y-auto w-full">
-        
+
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-base font-medium">Detalhes do atendimento</h2>
             <div>
                 {% if item.status == 1 %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-amber-400/10 text-amber-200 border-amber-400">Agendado</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]">Agendado</span>
                 {% elif item.status == 2 %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-400/10 text-blue-200 border-blue-400">Em andamento</span>    
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#0c2d48] text-[#7cc4fa] border-[#1d5b8c]">Em andamento</span>
                 {% elif item.status == 3 %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-400/10 text-green-200 border-green-400">Concluído</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#085041] text-[#9fe1cb] border-[#0f6e56]">Concluído</span>
                 {% else %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-red-400/10 text-red-200 border-red-400">Cancelado</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3a1510] text-[#f0997b] border-[#993c1d]">Cancelado</span>
                 {% endif %}
             </div>
             <button class="w-7 h-7 rounded-full bg-[#2a2825] text-[#888780] text-xs flex items-center justify-center hover:bg-[#38362f]" onclick="fecharModalDetalhe('{{ item.id }}')">
@@ -75,13 +74,27 @@ class="bg-[#232220] text-[#f1efe8] border border-[#4a473f] rounded-t-2xl sm:roun
             </div>
         </div>
 
-        <div class="flex items-center gap-3 py-2">
-            <span class="text-sm w-5">{% include "componetizacao/icones/icone-observacao.html" %}</span>
-            <div>
-                <div class="text-[11px] text-[#888780]">Observações</div>
-                <div class="text-sm font-medium">{{ item.observacoes or 'Nenhuma observação' }}</div>
+        <!-- Implementar futuramente -> *Se status cancelado altere as cores para vermelho* -->
+        {% if item.motivo_cancelamento %}
+        <!-- Motivo Cancelamento -->
+            <div class="flex items-center gap-3 py-2">
+                <span class="text-sm w-5 text-[#f0997b]">{% include "componetizacao/icones/icone-observacao.html" %}</span>
+                <div>
+                    <div class="text-[11px] text-[#be816d]">Motivo Cancelamento</div>
+                        <div class="text-sm font-medium text-[#f0997b]">{{ item.motivo_cancelamento }}</div>
+                </div>
             </div>
-        </div>
+
+        {% else %}
+        <!-- Observação (Não implementado) -->
+            <div class="flex items-center gap-3 py-2">
+                <span class="text-sm w-5">{% include "componetizacao/icones/icone-observacao.html" %}</span>
+                <div>
+                    <div class="text-[11px] text-[#888780]">Observações</div>
+                        <div class="text-sm font-medium">{{ item.observacao or 'Nenhuma observação' }}</div>
+                </div>
+            </div>
+        {% endif %}
 
         {% if is_hoje %}
             <div class="flex flex-col gap-2 mt-4">
@@ -111,7 +124,7 @@ class="bg-[#232220] text-[#f1efe8] border border-[#4a473f] rounded-t-2xl sm:roun
     function abrirModalDetalhe(id) {
         const dialog = document.getElementById('modal-detalhe-' + id);
         dialog.showModal();
-        
+
         // Fechar ao clicar fora do modal (no backdrop)
         dialog.addEventListener('click', (e) => {
             const dialogDimensions = dialog.getBoundingClientRect()
@@ -135,7 +148,7 @@ class="bg-[#232220] text-[#f1efe8] border border-[#4a473f] rounded-t-2xl sm:roun
         // Correção na formação da URL
         const basePath = window.location.pathname.includes('/gestor') ? '/gestor' : '/barbeiro';
         document.getElementById('form-cancelamento').action = `${basePath}/atualizar_status/${idAgendamento}`;
-        
+
         document.getElementById('motivo-cancelamento').value = '';
         fecharModalDetalhe(idAgendamento);
         document.getElementById('janela_modal_motivo_cancelamento').showModal();
