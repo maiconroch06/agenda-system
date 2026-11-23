@@ -25,11 +25,13 @@ class ControladorBarbeiro:
     def consultar_todos_barbeiros(cls):
         return cls.__barbeiroService.consultar_barbeiros()
    
+   #Pesquisa os barbeiros pelo nome e retorna apenas os barbeiros que contenham o nome informado %like%
     @classmethod
     def consultar_barbeiros_nome(cls, nome_barbeiro):
         barbeiros = cls.__barbeiroService.consultar_barbeiro_nome(nome_barbeiro)
         return barbeiros
     
+    #Consulta os barbeiros, retornando o id e nomes deles
     @classmethod
     def consultar_nomes_barbeiros(cls):
             barbeiros = cls.__barbeiroService.consultar_nomes_barbeiro()

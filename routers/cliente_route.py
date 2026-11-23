@@ -16,7 +16,10 @@ def clientSource():
  
 @cliente.route('/login', methods=["GET"])
 def clientLoginPage():
-    return render_template('pages/cliente/cliente-login.html',mensagens_status=EnumStatusMensagens)
+    if session.get("dados_cliente") is None:
+        return render_template('pages/cliente/cliente-login.html',mensagens_status=EnumStatusMensagens)
+    
+    return redirect(url_for('cliente.clientAgendamentoServicos'))
 
 @cliente.route('/login', methods=["POST"])
 def clientLogin():   
@@ -121,9 +124,11 @@ def cadastroSucesso():
 def authentication():
     
     if 'dados_gestor' in session:
-        return redirect(url_for('gestor.managerPanel'))
-        
-        
+        return redirect(url_for('gestor.gestorLoginPagina'))
+    
+    if 'dados_barbeiro' in session:
+        return redirect(url_for('barbeiro.barbeiroLoginPagina'))
+            
     #Criando as minhas rotas publicas
     routers_publics = ['cliente.clientLoginPage','cliente.clientLogin','cliente.clientRegisterPage','cliente.clientRegister']
     

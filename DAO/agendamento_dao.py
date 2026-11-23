@@ -78,7 +78,7 @@ class AgendamentoDAO:
         return resultado is not None
 
     @staticmethod
-    def buscar_por_id(id_agendamento: int):
+    def buscarPorIdDao(id_agendamento: int):
         sql = text("""
             SELECT
                 id_agendamento,
@@ -105,7 +105,7 @@ class AgendamentoDAO:
         return AgendamentoDAO._mapear_agendamento(resultado)
 
     @staticmethod
-    def consultar_todos_os_agendamento_do_cliente(id_cliente):
+    def consultarTodosOsAgendamentoDoCliente(id_cliente):
         sql = text("""
             SELECT
                 -- Dados do agendamento
@@ -157,7 +157,7 @@ class AgendamentoDAO:
             print(f"{erros}")
             
     @staticmethod
-    def consultar_todos_os_agendamento_do_dia(data_hoje):
+    def consultarTodosOsAgendamentoDataAtual(data_hoje):
             sql = text("""
                 
                 SELECT
@@ -172,6 +172,9 @@ class AgendamentoDAO:
                     a.fk_id_cliente,
                     a.motivo_cancelamento,
                     a.valor_total_servicos,
+                    
+                    # Junta os nomes dos serviços em uma única linha (Ex: "Corte, Barba")
+                    GROUP_CONCAT(s.descricao_servico SEPARATOR ', ') AS nome_servico,
                                            
                     -- Dados do barbeiro
                     b.id_barbeiro,
@@ -200,10 +203,21 @@ class AgendamentoDAO:
 
                 INNER JOIN usuario ub
                     ON b.id_barbeiro = ub.id_usuario
+                    
+                LEFT JOIN agendamento_servicos ags
+                    ON a.id_agendamento = ags.agendamento_id
+                    
+                LEFT JOIN servico s
+                    ON ags.servico_id = s.id_servico
 
                 WHERE a.data_agendamento = :data_hoje
 
-                ORDER BY a.data_agendamento ASC, a.hora_inicio ASC;
+                -- 5. Agrupa pelo ID do agendamento para não duplicar a linha
+                GROUP BY a.id_agendamento
+                
+                ORDER BY a.data_agendamento ASC, a.hora_inicio ASC
+                
+                
                             """)
     
             
@@ -217,7 +231,7 @@ class AgendamentoDAO:
             return  [dict(registro) for registro in resultados]
          
     @staticmethod
-    def consultar_total_agendamentos_cancelados(data_hoje):
+    def consultarTotalAgendamentosCancelados(data_hoje):
         sql = text("""
             select count(id_agendamento) FROM databasetmsbarbearia.agendamento WHERE status_agendamento = 0 
             """)
@@ -232,7 +246,7 @@ class AgendamentoDAO:
         return resultados.scalar()
     
     @staticmethod
-    def consultar_media_agendamentos_mensal(data_inicio, data_final):
+    def consultarMediaMensalAgendamentoDao(data_inicio, data_final):
             sql = text("""
                     select AVG(valor_total_servicos) 
                     FROM databasetmsbarbearia.agendamento where data_agendamento 
@@ -252,7 +266,7 @@ class AgendamentoDAO:
             return resultados.scalar()
     
     @staticmethod
-    def listar_por_cliente(id_cliente: int):
+    def listarPorClienteDao(id_cliente: int):
         sql = text("""
             SELECT
                 id_agendamento,
@@ -279,7 +293,7 @@ class AgendamentoDAO:
         ]
 
     @staticmethod
-    def listar_por_barbeiro(id_barbeiro: int, data: date = None):
+    def listarPorBarbeiro(id_barbeiro: int, data: date = None):
         sql = """
             SELECT
                 id_agendamento,
@@ -315,24 +329,21 @@ class AgendamentoDAO:
         ]
 
     @staticmethod
-    def atualizar_status_e_motivo_do_cancelamento_agenda_mensal(motivo_cancelamento, status_agendamento, agenda_mensal):
+    def atualizarStatusagendamentoUsuarios(id_agendamento, status_agendamento, motivo_cancelamento):
         sql = text("""
             UPDATE agendamento
             SET
                 motivo_cancelamento = :motivo_cancelamento,
                 status_agendamento = :status_agendamento,
                 data_atualizacao = :data_atualizacao
-            WHERE data_agendamento between :data_inicial_agenda and :data_final_agenda
-            and status_agendamento!=:status_agendamento_concluido
+            WHERE id_agendamento =:id_agendamento        
         """)
 
         resultado = db.session.execute(sql, {
+            "id_agendamento": id_agendamento,
             "motivo_cancelamento": motivo_cancelamento,
             "status_agendamento": status_agendamento,
-            "data_atualizacao": datetime.now(),
-            "data_inicial_agenda": agenda_mensal.data_inicial_mes,
-            "data_final_agenda": agenda_mensal.data_final_mes,       
-            "status_agendamento_concluido": EnumStatusAgendamento.CONCLUIDO.value       
+            "data_atualizacao": datetime.now()     
         })
 
         db.session.commit()
@@ -340,7 +351,32 @@ class AgendamentoDAO:
         return resultado.rowcount > 0
     
     @staticmethod
-    def atualizar_status_e_motivo_do_cancelamento_faltas_justificadas_dao(motivo_cancelamento, status_agendamento, falta_justifica):
+    def atualizarStatusMotivoDoCancelamentoAgendaMensalDao(motivo_cancelamento, status_agendamento, agenda_mensal):
+            sql = text("""
+                UPDATE agendamento
+                SET
+                    motivo_cancelamento = :motivo_cancelamento,
+                    status_agendamento = :status_agendamento,
+                    data_atualizacao = :data_atualizacao
+                WHERE data_agendamento between :data_inicial_agenda and :data_final_agenda
+                and status_agendamento!=:status_agendamento_concluido
+            """)
+    
+            resultado = db.session.execute(sql, {
+                "motivo_cancelamento": motivo_cancelamento,
+                "status_agendamento": status_agendamento,
+                "data_atualizacao": datetime.now(),
+                "data_inicial_agenda": agenda_mensal.data_inicial_mes,
+                "data_final_agenda": agenda_mensal.data_final_mes,       
+                "status_agendamento_concluido": EnumStatusAgendamento.CONCLUIDO.value       
+            })
+    
+            db.session.commit()
+    
+            return resultado.rowcount > 0
+    
+    @staticmethod
+    def atualizarStatusMotivoDoCancelamentoFaltasJustificadasDao(motivo_cancelamento, status_agendamento, falta_justifica):
         sql = text("""
             UPDATE agendamento
             SET
@@ -403,7 +439,7 @@ class AgendamentoDAO:
         return resultado.rowcount > 0
 
     @staticmethod
-    def excluir(id_agendamento: int):
+    def excluirDao(id_agendamento: int):
         sql = text("""
             DELETE FROM agendamento
             WHERE id_agendamento = :id_agendamento
@@ -419,7 +455,7 @@ class AgendamentoDAO:
         return resultado.rowcount > 0
 
     @staticmethod
-    def consultar_agendamentos_por_periodo(data_inicio, data_fim):
+    def consultarAgendamentosPorPeriodoDAO(data_inicio, data_fim):
 
         sql = text("""
             SELECT
@@ -449,8 +485,10 @@ class AgendamentoDAO:
             INNER JOIN usuario u
                 ON b.id_barbeiro = u.id_usuario
 
-            WHERE a.data_agendamento BETWEEN :data_inicio AND :data_fim
-              AND a.status_agendamento = 1
+            WHERE a.data_agendamento 
+                BETWEEN :data_inicio AND :data_fim
+                AND a.status_agendamento = 1
+              
             ORDER BY
                 a.data_agendamento,
                 a.hora_inicio
@@ -470,7 +508,7 @@ class AgendamentoDAO:
         ]
         
     @staticmethod
-    def consultar_total_agendamentos_por_periodo(data_inicio, data_final):
+    def consultarTotalAgendamentosPorPeriodoDao(data_inicio, data_final):
     
             sql = text("""
                 SELECT
@@ -491,7 +529,7 @@ class AgendamentoDAO:
             return resultado.scalar() > 0 
 
     @staticmethod
-    def cliente_tem_conflito_horario(
+    def clienteTemConflitoHorarioDao(
         id_cliente,
         data_agendamento,
         hora_inicio,

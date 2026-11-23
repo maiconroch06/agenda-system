@@ -149,3 +149,26 @@ def atualizar_status(id_agendamento):
     
     # Recarrega o painel após a alteração de status
     return redirect(url_for('barbeiro.barbeiroPainel'))
+
+@barbeiro.before_request
+def authentication():
+    
+    if 'dados_gestor' in session:
+            return redirect(url_for('gestor.gestorLoginPagina'))
+    
+    if 'dados_cliente' in session:
+        return redirect(url_for('cliente.clientAgendamentoServicos'))
+            
+    #Criando as minhas rotas publicas
+    routers_publics = ['barbeiro.barbeiroLoginPagina','barbeiro.barbeiroLogin']
+    
+    # se a rota for publica ele retorna aqui e envia para a rota desejada;
+    if request.endpoint  in routers_publics:
+        return 
+    
+    # Se a rota não estiver nas rotas publicas ele verifica a sessão
+    # Caso o usuario tente acessar uma rota privada ele redireciona para uma rota publica
+    if 'dados_barbeiro' not in session:
+        return redirect(url_for('barbeiro.barbeiroLoginPagina'))
+    
+    

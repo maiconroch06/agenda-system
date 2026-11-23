@@ -48,6 +48,15 @@ def gestorPainel():
 def gestorAbaAgendamento():
     return render_template('pages/gestor/gestor-painel-agendamento-rp.html', lista_barbeiros=ControladorBarbeiro.consultar_nomes_barbeiros(),
                            servicos_descricao=ControladorServico.consultar_descricoes_servico())
+    
+# Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros
+@gestor.route('/painel/agendamento/<status>/<idAgendamento>/<motivoCancelamento>')
+@gestor.route('/painel/agendamento/<status>/<idAgendamento>')
+def gestorAbaAgendamentoAlterarStatus(status, idAgendamento,motivoCancelamento=None):
+    
+    if ControladorAgendamento.atualizar_status_agendamento(idAgendamento, status, motivoCancelamento):
+        flash("Agendamento atualizado com sucesso")
+    return redirect(url_for("gestor.gestorPainel"))
 
 ##################################################################################
 #  HORARIO_FUNCIONAMENTO
@@ -457,7 +466,7 @@ def authentication():
             return redirect(url_for('cliente.clientAgendamentoServicos'))
     
     if 'dados_barbeiro' in session:
-                return redirect(url_for('barbeiro.barbeiroPainel'))
+                return redirect(url_for('barbeiro.barbeiroLoginPagina'))
         
     #Criando as rotas publicas para gestor
     routers_publics = ['gestor.gestorSource','gestor.gestorLoginPagina', 'gestor.gestorLogin']

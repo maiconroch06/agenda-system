@@ -42,6 +42,7 @@ class ControladorCliente():
             else:
                 flash(f"Erro ao cadastrar o cliente", EnumStatusMensagens.ERRO.value)
         except Exception as erros:
+            db.session.rollback()
             flash(f"{erros} ", EnumStatusMensagens.ERRO.value)
             return redirect(url_for('cliente.clientRegisterPage'))
 
@@ -143,6 +144,7 @@ class ControladorCliente():
             }), 200
         
         except Exception as erros:
+            db.session.rollback()
             print(f"ERRO AO CADASTRAR AGENDAMENTO: {erros}")
             return jsonify({
                 "erro": "Não foi possível cadastrar o agendamento."
@@ -190,7 +192,7 @@ class ControladorCliente():
     def excluir_cliente(self, id_usuario, foto_nome, nome_pasta):
         return self.__clienteService.excluir_usuario_barbearia(id_usuario, foto_nome, nome_pasta)
 
-    def atualziar_cliente(self, cliente):
+    def atualizar_cliente(self, cliente):
         return self.__clienteService.alterar_usuario_barbearia(None, None,cliente.foto_usuario,  cliente)
 
 

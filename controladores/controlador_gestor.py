@@ -83,7 +83,7 @@ class ControladorGestor():
     def consultar_agendamentos_data_hoje(cls, data_hoje):
         return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos_flask = cls.__controlador_agendamento.consultar_agendamento_dia(data_hoje),
                                total_cancelados = cls.__controlador_agendamento.consultar_total_agendamento_cancelado_por_dia(data_hoje),
-                               ticket_medio_mensal=ControladorAgendamento.consultar_media_mensal_agendamento(), capacidade_atendimento=ControladorHorarioFuncionamento.consultar_capacidade_realizar_servicos_dia()) 
+                               ticket_medio_mensal=ControladorAgendamento.consultar_valor_ticket_medio_mensal_agendamento(), capacidade_atendimento=ControladorHorarioFuncionamento.consultar_capacidade_realizar_servicos_dia()) 
         
     @classmethod
     def consultar_horario_funcionamento(cls, id_barbearia):
@@ -113,7 +113,7 @@ class ControladorGestor():
     @classmethod
     def atualizar_cliente_barbearia(cls, cliente):
         try:
-            if  cls.__controlador_cliente.atualziar_cliente(cliente):
+            if  cls.__controlador_cliente.atualizar_cliente(cliente):
                 db.session.commit()
                 flash(f"Cliente [ {cliente.nome_completo} ] atualizado com sucesso", EnumStatusMensagens.SUCESSO.value)
         except Exception:
