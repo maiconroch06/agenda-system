@@ -44,11 +44,18 @@
                         {% for item in agendamentos %}
                             <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f] {% if item.status in [0, 3] %}opacity-65{% endif %}" onclick="abrirModalDetalhe('{{ item.id }}')">
                                 
-                                <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">{{ item.hora }}</div>
+                                <div class="flex flex-col items-center justify-center bg-[#191816] border border-[#32302a] rounded-xl px-3 py-2 min-w-[64px] flex-shrink-0">
+                                    <span class="text-sm font-bold text-[#f1efe8] leading-none">
+                                        {{ item.hora_inicio }}
+                                    </span>
+                                    <span class="text-[11px] text-[#888780] mt-1 leading-none">
+                                        {{ item.hora_fim }}
+                                    </span>
+                                </div>
 
                                 <div class="flex-1">
                                     <div class="text-sm font-medium">{{ item.cliente }}</div>
-                                    <div class="text-xs text-[#888780] mt-0.5">{{ item.servico }}</div>
+                                    <div class="text-xs text-[#888780] mt-1">{{ item.servico }}</div>
                                 </div>
 
                                 <div class="flex flex-col items-end gap-1 flex-shrink-0">

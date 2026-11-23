@@ -1963,6 +1963,15 @@
   .pt-28 {
     padding-top: calc(var(--spacing) * 28);
   }
+  .pb-0 {
+    padding-bottom: 0px;
+  }
+  .pb-0\.5 {
+    padding-bottom: calc(var(--spacing) * 0.5);
+  }
+  .pb-0\.25 {
+    padding-bottom: calc(var(--spacing) * 0.25);
+  }
   .pb-1 {
     padding-bottom: var(--spacing);
   }

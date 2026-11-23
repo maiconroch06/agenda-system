@@ -54,7 +54,7 @@ class="bg-[#232220] text-[#f1efe8] border border-[#4a473f] rounded-t-2xl sm:roun
             <span class="text-sm w-5">{% include "componetizacao/icones/icone-agenda-mensal.html" %}</span>
             <div>
                 <div class="text-[11px] text-[#888780]">Horário</div>
-                <div class="text-sm font-medium">{{ item.data }} às {{ item.hora }}</div>
+                <div class="text-sm font-medium">{{ item.data }} das {{ item.hora_inicio }} às {{ item.hora_fim }}</div>
             </div>
         </div>
 
