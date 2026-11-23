@@ -46,6 +46,10 @@ def barbeiroPainel():
     if not barbeiro:
         return redirect(url_for('barbeiro.barbeiroLoginPagina'))
 
+    if request.args.get('reset_data') == 'true':
+        session.pop('data_exibicao_painel', None)
+        return redirect(url_for('barbeiro.barbeiroPainel'))
+
     hoje = datetime.now().date()
     
     data_param = session.get('data_exibicao_painel')

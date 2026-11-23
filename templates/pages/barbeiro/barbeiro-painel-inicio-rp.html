@@ -85,7 +85,7 @@
                             <span class="text-sm font-semibold text-[#f1efe8]">{{ data_display }}</span>
                             
                             {% if not is_hoje %}
-                            <a href="{{ url_for('barbeiro.barbeiroPainel') }}" class="text-[10px] text-[#f0c05a] hover:underline mt-0.5">
+                            <a href="{{ url_for('barbeiro.barbeiroPainel', reset_data='true') }}" class="text-[10px] text-[#f0c05a] hover:underline mt-0.5">
                                 Voltar para Hoje
                             </a>
                             {% endif %}
