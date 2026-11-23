@@ -57,16 +57,6 @@ class BarbeiroService(UsuarioService):
                 return barbeiros
             except Exception :
                 flash(f"Erro ao buscar os barbeiros cadastrados no banco")
-       
-    def consultar_agendamentos_barbeiro(self, barbeiro:dict):
-        try:
-            id_barbeiro = barbeiro.get('id_barbeiro', 0) # exibe 0 se chave não existir
-            return self.__barbeiroRepositorio.listar_agendamentos_barbeiro(id_barbeiro)
-
-        except Exception as error:
-            print("\n ERRO NO SERVICE:", repr(error)) # <-- Vai mostrar o erro exato no terminal
-            flash(f"\n # ERRO AO BUSCAR AGENDAMENTOS MARCADOS AO BARBEIRO '{barbeiro.get('nome_completo', 0)}")
-            return []
         
     def consultar_faltas_por_barbeiro_ativo(self):
         return self.__barbeiroRepositorio.consultar_faltas_por_barbeiro_ativo()
@@ -95,29 +85,6 @@ class BarbeiroService(UsuarioService):
 
     def buscar_barbeiro_id(self, id_barbeiro):
         return self.__barbeiroRepositorio.buscar_por_id(id_barbeiro)
-    
-    def alterar_status_agendamento(self, id_agendamento:int, status_agendamento:int):
-        try:
-            data_hoje = datetime.today()
-            data_hoje = data_hoje.strftime("%Y-%m-%d")
-            
-            return self.__barbeiroRepositorio.atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje)
-        except Exception as erros: 
-            print(f"\n ERRO NO SERVICE: {repr(erros)}\n\n") # <-- Vai mostrar o erro exato no terminal
-            flash(f"\n\n # ERRO AO #\n {erros}\n\n")
-            return 
-    
-    def alterar_status_agendamento(self, id_agendamento:int, status_agendamento:int, motivo_cancelamento):
-        try:
-            data_hoje = datetime.today()
-            data_hoje = data_hoje.strftime("%Y-%m-%d")
-            
-            return self.__barbeiroRepositorio.atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje, motivo_cancelamento)
-        except Exception as erros: 
-            print(f"\n ERRO NO SERVICE: {repr(erros)}\n\n") # <-- Vai mostrar o erro exato no terminal
-            flash(f"\n\n # ERRO AO #\n {erros}\n\n")
-            return 
-         
 
     # def validarDadosBarbeiro(self, barbeiro, fotoTemp):
     def definir_pasta_imagem_usuario(self):

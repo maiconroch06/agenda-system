@@ -4,6 +4,7 @@ from database import db
 from models import Agendamento, Barbeiro, Servico
 from datetime import date, datetime
 from enums import EnumStatusAgendamento
+from utilitarios import FormatarHoras, FormatarTelefone, FormatarData
 
 class AgendamentoDAO:
 
@@ -293,39 +294,75 @@ class AgendamentoDAO:
         ]
 
     @staticmethod
-    def listarPorBarbeiro(id_barbeiro: int, data: date = None):
-        sql = """
+    def listarPorBarbeiro(id_barbeiro:int):
+        sql = text("""
             SELECT
-                id_agendamento,
-                data_agendamento,
-                hora_inicio,
-                hora_fim,
-                status_agendamento,
-                data_atualizacao,
-                fk_id_barbeiro,
-                fk_id_cliente
-            FROM agendamento
-            WHERE fk_id_barbeiro = :id_barbeiro
-        """
+                a.id_agendamento,
+                a.fk_id_barbeiro,
+                a.fk_id_cliente,
+                a.status_agendamento,
+                a.motivo_cancelamento,
+                a.valor_total_servicos AS valor,
+                
+                # Junta os nomes dos serviços em uma única linha (Ex: "Corte, Barba")
+                GROUP_CONCAT(s.descricao_servico SEPARATOR ', ') AS nome_servico,
+                
+                a.data_agendamento,
+                a.hora_inicio,
+                a.hora_fim,
+                
+                ub.nome_completo AS nome_barbeiro,
+                uc.nome_completo AS nome_cliente,
+                uc.telefone AS telefone_cliente
+                
+            FROM agendamento a
 
-        parametros = {
-            "id_barbeiro": id_barbeiro
-        }
+            JOIN barbeiro b
+                ON a.fk_id_barbeiro = b.id_barbeiro
+            JOIN usuario ub
+                ON b.id_barbeiro = ub.id_usuario
 
-        if data is not None:
-            sql += " AND data_agendamento = :data"
-            parametros["data"] = data
+            JOIN cliente c
+                ON a.fk_id_cliente = c.id_cliente
+            JOIN usuario uc
+                ON c.id_cliente = uc.id_usuario
 
-        sql += " ORDER BY data_agendamento, hora_inicio"
+            LEFT JOIN agendamento_servicos ags
+                ON a.id_agendamento = ags.agendamento_id
 
-        resultados = db.session.execute(
-            text(sql),
-            parametros
+            LEFT JOIN servico s
+                ON ags.servico_id = s.id_servico
+
+            WHERE a.fk_id_barbeiro = :id_barbeiro
+                AND b.status_barbeiro = 1
+
+            -- 5. Agrupa pelo ID do agendamento para não duplicar a linha
+            GROUP BY a.id_agendamento
+
+        """)
+        
+        registros = db.session.execute(
+            sql,
+            {"id_barbeiro": id_barbeiro}
         ).mappings().all()
-
+        
+        print("TAMANHO DOS BARNEIOROS", len(registros))
+        
         return [
-            AgendamentoDAO._mapear_agendamento(registro)
-            for registro in resultados
+            {
+                "id": str(registro["id_agendamento"]),
+                "barbeiro": registro["nome_barbeiro"],
+                "data": FormatarData._formatar_data(registro["data_agendamento"]),
+                "hora_inicio": FormatarHoras._formatar_hora(registro["hora_inicio"]),
+                "hora_fim": FormatarHoras._formatar_hora(registro["hora_fim"]),
+                "motivo_cancelamento": registro["motivo_cancelamento"],
+                "cliente": registro["nome_cliente"],
+                "telefone": FormatarTelefone._formatar_telefone(registro["telefone_cliente"]),
+                "servico": registro["nome_servico"],
+                "valor": float(registro["valor"] or 0),
+                "status": registro["status_agendamento"],
+            }
+            for registro in registros
         ]
 
     @staticmethod
@@ -402,6 +439,49 @@ class AgendamentoDAO:
             "status_agendamento_concluido": EnumStatusAgendamento.CONCLUIDO.value       
         })
 
+        db.session.commit()
+
+        return resultado.rowcount > 0
+    
+    def atualizar_status_agendamento(id_agendamento:int, status_agendamento:int, data_hoje:str):
+        sql = text("""
+            UPDATE agendamento
+            SET
+                status_agendamento = :status_agendamento,
+                data_atualizacao = NOW()
+                
+            WHERE id_agendamento = :id_agendamento
+                AND data_agendamento = :data_hoje
+        """)
+        
+        resultado = db.session.execute(sql, {
+            "id_agendamento": id_agendamento,
+            "status_agendamento": status_agendamento,
+            "data_hoje": data_hoje
+        })
+        
+        db.session.commit()
+
+        return resultado.rowcount > 0
+    
+    def cancelar_agendamento(id_agendamento:int, data_hoje:str, motivo_cancelamento:str):
+        sql = text("""
+            UPDATE agendamento
+            SET
+                status_agendamento = 0,
+                motivo_cancelamento = :motivo_cancelamento,
+                data_atualizacao = NOW()
+                
+            WHERE id_agendamento = :id_agendamento
+                AND data_agendamento = :data_hoje
+        """)
+        
+        resultado = db.session.execute(sql, {
+            "id_agendamento": id_agendamento,
+            "motivo_cancelamento": motivo_cancelamento,
+            "data_hoje": data_hoje
+        })
+        
         db.session.commit()
 
         return resultado.rowcount > 0
@@ -604,3 +684,19 @@ class AgendamentoDAO:
             barbeiro=None,
             cliente=None
         )
+
+    # @staticmethod
+    # def _mapear_agendamento(registro):
+    #     return {
+    #         "id_agendamento": str(registro["id_agendamento"]),
+    #         "barbeiro": registro["nome_barbeiro"],
+    #         "data": FormatarData._formatar_data(registro["data_agendamento"]),
+    #         "hora_inico": FormatarHoras._formatar_hora(registro["hora_inicio"]),
+    #         "hora_fim": FormatarHoras._formatar_hora(registro["hora_fim"]),
+    #         "motivo_cancelamento": registro["motivo_cancelamento"],
+    #         "cliente": registro["nome_cliente"],
+    #         "telefone": FormatarTelefone._formatar_telefone(registro["telefone_cliente"]),
+    #         "servico": registro["nome_servico"],
+    #         "valor": float(registro["valor"] or 0),
+    #         "status": registro["status_agendamento"],
+    #     }

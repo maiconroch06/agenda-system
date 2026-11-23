@@ -33,10 +33,8 @@ class AgendamentoRepositorio:
         return AgendamentoDAO.listarPorClienteDao(id_cliente)
 
     @staticmethod
-    def listarPorBarbeiro(id_barbeiro, data=None):
-        return AgendamentoDAO.listarPorBarbeiro(
-            id_barbeiro, data
-        )
+    def listarPorBarbeiro(id_barbeiro):
+        return AgendamentoDAO.listarPorBarbeiro(id_barbeiro)
 
     @staticmethod
     def atualizar(agendamento):
@@ -53,7 +51,15 @@ class AgendamentoRepositorio:
     @staticmethod
     def atualizarStatusMotivoDoCancelamentoFaltasJustificadas(motivo_cancelamento, status_agendamento,falta_justificada):
         return AgendamentoDAO.atualizarStatusMotivoDoCancelamentoFaltasJustificadasDao(motivo_cancelamento, status_agendamento,falta_justificada)
-
+    
+    @staticmethod
+    def atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje):
+        return AgendamentoDAO.atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje)
+    
+    @staticmethod
+    def cancelar_agendamento(id_agendamento, data_hoje, motivo_cancelamento):
+        return AgendamentoDAO.cancelar_agendamento(id_agendamento, data_hoje, motivo_cancelamento)
+    
     @staticmethod
     def consultarAgendamentosPorPeriodo(data_inicio, data_fim):
         return AgendamentoDAO.consultarAgendamentosPorPeriodoDAO(data_inicio, data_fim)

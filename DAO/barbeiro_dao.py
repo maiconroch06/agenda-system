@@ -299,65 +299,6 @@ class BarbeiroDAO:
             self._mapear_barbeiro(registro)
             for registro in registros
         ]
-    
-    def consultar_agendamentos_barbeiro(self, id_barbeiro: int):
-        sql = text("""
-            SELECT
-                a.id_agendamento,
-                a.fk_id_barbeiro,
-                a.fk_id_cliente,
-                a.status_agendamento,
-                a.motivo_cancelamento,
-                a.valor_total_servicos AS valor,
-                
-                # Junta os nomes dos serviços em uma única linha (Ex: "Corte, Barba")
-                GROUP_CONCAT(s.descricao_servico SEPARATOR ', ') AS nome_servico,
-                
-                a.data_agendamento,
-                a.hora_inicio,
-                a.hora_fim,
-                
-                ub.nome_completo AS nome_barbeiro,
-                uc.nome_completo AS nome_cliente,
-                uc.telefone AS telefone_cliente
-                
-            FROM agendamento a
-
-            JOIN barbeiro b
-                ON a.fk_id_barbeiro = b.id_barbeiro
-            JOIN usuario ub
-                ON b.id_barbeiro = ub.id_usuario
-
-            JOIN cliente c
-                ON a.fk_id_cliente = c.id_cliente
-            JOIN usuario uc
-                ON c.id_cliente = uc.id_usuario
-
-            LEFT JOIN agendamento_servicos ags
-                ON a.id_agendamento = ags.agendamento_id
-
-            LEFT JOIN servico s
-                ON ags.servico_id = s.id_servico
-
-            WHERE a.fk_id_barbeiro = :id_barbeiro
-                AND b.status_barbeiro = 1
-
-            -- 5. Agrupa pelo ID do agendamento para não duplicar a linha
-            GROUP BY a.id_agendamento
-
-        """)
-        
-        registros = db.session.execute(
-            sql,
-            {"id_barbeiro": id_barbeiro}
-        ).mappings().all()
-        
-        print("TAMANHO DOS BARNEIOROS", len(registros))
-        
-        return [
-            self._mapear_agendamento(registro)
-            for registro in registros
-        ]
 
     def atualizar_informacoes_barbeiro(self, barbeiro: Barbeiro):
         sql = text("""
@@ -380,50 +321,6 @@ class BarbeiroDAO:
             "data_inicio_carreira": barbeiro.data_inicio_carreira
         })
 
-        db.session.commit()
-
-        return resultado.rowcount > 0
-    
-    def atualizar_status_agendamento(self, id_agendamento:int, status_agendamento:int, data_hoje:str):
-        sql = text("""
-            UPDATE agendamento
-            SET
-                status_agendamento = :status_agendamento,
-                data_atualizacao = NOW()
-                
-            WHERE id_agendamento = :id_agendamento
-                AND data_agendamento = :data_hoje
-        """)
-        
-        resultado = db.session.execute(sql, {
-            "id_agendamento": id_agendamento,
-            "status_agendamento": status_agendamento,
-            "data_hoje": data_hoje
-        })
-        
-        db.session.commit()
-
-        return resultado.rowcount > 0
-    
-    def atualizar_status_agendamento(self, id_agendamento:int, status_agendamento:int, data_hoje:str, motivo_cancelamento:str):
-        sql = text("""
-            UPDATE agendamento
-            SET
-                status_agendamento = :status_agendamento,
-                motivo_cancelamento = :motivo_cancelamento,
-                data_atualizacao = NOW()
-                
-            WHERE id_agendamento = :id_agendamento
-                AND data_agendamento = :data_hoje
-        """)
-        
-        resultado = db.session.execute(sql, {
-            "id_agendamento": id_agendamento,
-            "status_agendamento": status_agendamento,
-            "motivo_cancelamento": motivo_cancelamento,
-            "data_hoje": data_hoje
-        })
-        
         db.session.commit()
 
         return resultado.rowcount > 0

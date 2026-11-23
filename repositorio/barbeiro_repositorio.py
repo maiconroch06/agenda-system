@@ -28,14 +28,5 @@ class BarbeiroRepositorio:
     def listar_todos_ativos(self):
         return self.__barbeiroDao.consultar_todos_ativos()
     
-    def listar_agendamentos_barbeiro(self, id_barbeiro):
-        return self.__barbeiroDao.consultar_agendamentos_barbeiro(id_barbeiro)
-    
     def atualizar(self, barbeiro):
         return self.__barbeiroDao.atualizar_informacoes_barbeiro(barbeiro)
-        
-    def atualizar_status_agendamento(self, id_agendamento, status_agendamento, data_hoje):
-        return self.__barbeiroDao.atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje)
-    
-    def atualizar_status_agendamento(self, id_agendamento, status_agendamento, data_hoje, motivo_cancelamento):
-        return self.__barbeiroDao.atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje, motivo_cancelamento)
