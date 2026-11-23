@@ -87,7 +87,7 @@ class AgendamentoDAO:
                 hora_fim,
                 status_agendamento,
                 data_atualizacao,
-               valor_total_servicos,
+                valor_total_servicos,
                 fk_id_barbeiro,
                 fk_id_cliente
             FROM agendamento

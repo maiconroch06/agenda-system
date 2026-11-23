@@ -136,9 +136,7 @@ def atualizar_status(id_agendamento):
     if status_agendamento == 'motivo':
         novo_status = 0
         motivo_cancelamento = request.form.get('motivo')
-        
-        print(f"\n\n PASSEI AQUI {status_agendamento} \n\n")
-        
+                
         ControladorBarbeiro.atualizar_status_agendamento(id_agendamento, novo_status, motivo_cancelamento)
 
     else:

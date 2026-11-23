@@ -35,22 +35,31 @@
                         </div>
                     </div>
 
-                    {% set tsc = namespace(total_servicos_concluidos=0) %}
-                    
+                    {% set tsc = namespace(total_servicos_concluidos=0, total_servicos_cancelados=0, total_servicos_agendado=0, total_servicos_em_andamento=0, valor_total_servicos=0) %}
+
                     {% for agenda in agendamentos_flask %}
+                    {% if agenda.status_agendamento==0 %}
+                    {% set tsc.total_servicos_cancelados = tsc.total_servicos_cancelados + 1 %}
+                    {% endif %}
+                    {% if agenda.status_agendamento==1 %}
+                    {% set tsc.total_servicos_agendado = tsc.total_servicos_agendado + 1 %}
+                    {% endif %}
+                    {% if agenda.status_agendamento==2 %}
+                    {% set tsc.total_servicos_em_andamento = tsc.total_servicos_em_andamento + 1 %}
+                    {% endif %}
                     {% if agenda.status_agendamento==3 %}
                     {% set tsc.total_servicos_concluidos = tsc.total_servicos_concluidos + 1 %}
+                    {% set tsc.valor_total_servicos = tsc.valor_total_servicos + agenda.valor_total_servicos %}
                     {% endif %}
 
                     {% endfor %}
 
                     <!-- KPIS OPERACIONAIS -->
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                    <div class="grid grid-cols-3 lg:grid-cols-3 gap-3 mb-6">
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
                             <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faturamento Hoje</div>
-                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faturamento-hoje">{% set total_dia =
-                                agendamentos_flask | sum(attribute='valor_total_servicos') %}
-                                R$ {{ "%.2f"|format(total_dia)|replace('.', ',') }}</div>
+                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faturamento-hoje">
+                                R$ {{ "%.2f"|format(tsc.valor_total_servicos)|replace('.', ',') }}</div>
                         </div>
                         <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
                             <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Ticket Médio Mensal
@@ -66,16 +75,38 @@
                                 ((tsc.total_servicos_concluidos / (capacidade_atendimento / 30)) * 100) | round(2) }} %
                             </div>
                         </div>
-                        <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-4">
-                            <div class="text-[11px] text-[#888780] uppercase tracking-wider mb-1">Faltas / Cancelados
+
+                    </div>
+
+                    <div class="grid grid-cols-2 lg:grid-cols-4 mb-10 gap-4">
+                        <div
+                            class="flex flex-col items-start justify-start px-2.5 py-5 rounded-2xl text-xs font-medium border bg-red-400/10  border-red-400 text-red-100">
+                            <div class="text-lg"> Cancelamentos
                             </div>
-                            <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-faltas-hoje">{{ total_cancelados }}
+                            <div class="text-5xl font-bold text-[#f1efe8] mt-3" id="kpi-faltas-hoje">{{ tsc.total_servicos_cancelados }}
+                            </div>
+                        </div>
+                        <div
+                            class="flex flex-col items-start justify-start px-2.5 py-5 rounded-2xl text-xs font-medium border bg-amber-400/10  border-amber-400 text-amber-200">
+                        <div class="text-lg"> Agendados
+                            </div>
+                            <div class="text-5xl font-bold text-[#f1efe8] mt-3" id="kpi-faltas-hoje">{{ tsc.total_servicos_agendado }}
+                            </div>
+                        </div>
+                        <div
+                            class="flex flex-col items-start justify-start px-2.5 py-5 rounded-2xl text-xs font-medium border  bg-blue-400/10  border-blue-400 text-blue-200">
+                            <div class="text-lg"> Em Andamento
+                            </div>
+                            <div class="text-5xl font-bold text-[#f1efe8] mt-3" id="kpi-faltas-hoje">{{ tsc.total_servicos_em_andamento }}<small class="font-normal">/{{ (agendamentos_flask | length) - tsc.total_servicos_cancelados}}</small>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-start justify-start px-2.5 py-5 rounded-2xl text-xs font-medium border bg-green-400/10 text-green-200 border-green-400">
+                            <div class="text-lg"> Concluidos </div>
+                            <div class="text-5xl font-bold text-[#f1efe8] mt-3" id="kpi-faltas-hoje">{{ tsc.total_servicos_concluidos }}<small class="font-normal">/{{ (agendamentos_flask | length) - tsc.total_servicos_cancelados}}</small>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card de Progresso de Conclusão dos Agendamentos -->
-                    {% include "componetizacao/Cards/card-progresso-agendamentos.html" %}
 
                     <!-- Listagem dos agendamentos de hoje -->
                     <div class="mb-6">
@@ -136,17 +167,17 @@
                                     class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#302e28]">
                                     {% if item.status_agendamento == 0 %}
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3a1510] text-[#f0997b] border-[#993c1d]">Cancelado</span>
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-red-400/10 text-red-200 border-red-400">Cancelado</span>
                                     {% elif item.status_agendamento == 1 %}
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#3d2e05] text-[#f0c05a] border-[#7a5c0a]">Agendado</span>
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-amber-400/10 text-amber-200 border-amber-400">Agendado</span>
                                     {% elif item.status_agendamento == 2 %}
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#0c2d48] text-[#7cc4fa] border-[#1d5b8c]">Em
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-400/10 text-blue-200 border-blue-400">Em
                                         andamento</span>
                                     {% else %}
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-[#085041] text-[#9fe1cb] border-[#0f6e56]">Concluído</span>
+                                        class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium border bg-green-400/10 text-green-200 border-green-400">Concluído</span>
                                     {% endif %}
 
                                     <div class="text-xs text-[#888780]">
