@@ -82,7 +82,7 @@ def gestorAbaAgendamentoAlterarStatus(status, idAgendamento,motivoCancelamento=N
 
 @gestor.route('/painel/horario_funcionamento')
 def gestor_horario_funcionamento_barbearia():
-    data_atual = datetime.now(timezone.utc).date()
+    data_atual = date.today()
     return render_template('pages/gestor/gestor-painel-agenda-rp.html', data_atual=data_atual,modo=0, botao_filtro=0,  horario_funcionamento = ControladorGestor.consultar_horario_funcionamento(1), agendas = ControladorAgendaMensal.consultar_todas_agendas_mensais_service() ,mensagens_status=EnumStatusMensagens)
 
 @gestor.route('/painel/horario_funcionamento/consultar/mes_atual')
