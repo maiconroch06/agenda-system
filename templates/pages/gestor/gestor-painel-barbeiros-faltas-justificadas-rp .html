@@ -10,10 +10,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img_uploads/logos/favicon.png') }}">
     <style>
-        .hidden-step { display: none !important; }
+        .hidden-step {
+            display: none !important;
+        }
     </style>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
+
 
 </head>
 
@@ -31,150 +33,193 @@
 
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
+
+              
+
                 <p id="titulo-modal" class="hidden">Barbeiro</p>
-                 <!-- ============================================================
+                <!-- ============================================================
                 COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
                 ============================================================ -->
                 {% set mensagens = mensagens_status %}
                 {% include "componetizacao/mensagens/mensagens.html" %}
-                
+
                 <!-- ABA 4: BARBEIROS -->
                 <section class="aba-func" id="aba-profissionais">
                     <div class="flex items-center justify-between mb-5 gap-3">
-                        <div>
-                            <h1 class="text-lg lg:text-xl font-semibold">Faltas justificadas dos barbeiros</h1>
-                            <p class="text-xs text-[#888780]" id="data-atual-str"></p>
+                        <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                            <div>
+                                <h1 class="text-lg lg:text-xl font-semibold">Faltas justificadas dos barbeiros</h1>
+                                <p class="text-xs text-[#888780]" id="data-atual-str"></p>
+                            </div>
                         </div>
-
-                    
+                        <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                            <small>Filtro intervalo: </small>
+                            <button id="consulta_faltas_barbeiro_mensal" type="button"
+                                class="h-9 md:h-10 px-4 rounded-xl {{'bg-green-700 text-white' if botao_mes and botao_mes==1 else 'rounded-full border border-[#4a473f] bg-transparent' }} text-xs font-bold hover:bg-amber-300 hover:text-black transition-colors cursor-pointer ">
+                                 mês atual
+                            </button>
+                            <button id="consulta_faltas_barbeiro_anual" type="button"
+                                class="h-9 md:h-10 px-4 rounded-xl {{'bg-green-700 text-white' if botao_mes and botao_mes==2 else 'rounded-full border border-[#4a473f] bg-transparent' }} text-xs font-bold hover:bg-amber-300 hover:text-black transition-colors cursor-pointer ">
+                                 ano atual
+                            </button>
+                            <button id="limpar_consulta_faltas_barbeiro_mensal" type="button"
+                                class="h-9 md:h-10 px-4 rounded-xl bg-red-700 text-white text-xs font-semibold hover:bg-red-500 transition-colors cursor-pointer {{'hidden' if modo==0 else ''}}">
+                                Limpar filtro
+                            </button>
+                        </div>
                     </div>
-
-                    
                     <div id="lista-profissionais-painel" class="flex flex-col  w-full">
 
                         {% if barbeiros_faltas_justificadas %}
-                            {% for barbeiro in barbeiros_faltas_justificadas %}
-                               
-                            
-                            <div class="w-full pY-5 mb-6">
-                            
-                                <div class="divide-y divide-white/10 border-y border-white/10">
-                                   
-                                    <details class="group">
-                                        <summary class="flex py-2 flex-row items-center justify-between  w-full bg-[#232220]  rounded-2xl border border-zinc-700/60 
+                        {% for barbeiro in barbeiros_faltas_justificadas %}
+
+
+                        <div class="w-full pY-5 mb-6">
+
+                            <div class="divide-y divide-white/10 border-y border-white/10">
+
+                                <details class="group">
+                                    <summary
+                                        class="flex py-2 flex-row items-center justify-between  w-full bg-[#232220]  rounded-2xl border border-zinc-700/60 
                                          cursor-pointer select-none list-none gap-4  text-base font-medium text-white transition-colors hover:text-brand-gold sm:text-lg [&::-webkit-details-marker]:hidden">
-                                            <div id="card_servicos" class="">
-                                                <div class="flex flex-row gap-4 my-0.5 items-center">
-                                                    <img class="ml-5 w-10 h-10 rounded-full object-cover shrink-0 border-2 border-amber-500"
-                                                    src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario) }}"
+                                        <div id="card_servicos" class="">
+                                            <div class="flex flex-row gap-4 my-0.5 items-center">
+                                                <img class="ml-5 w-10 h-10 rounded-full object-cover shrink-0 border-2 border-amber-500"
+                                                    src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ barbeiro.foto_usuario) }}"
                                                     alt="Foto de {{ barbeiro.nome_completo }}">
-                                                    
-                                                    <div class="flex flex-col min-w-0 text-left">
-                                                        <h3  class="font-bold text-white text-base">
-                                                            {{ barbeiro.nome_completo }}
-                                                        </h3>
-                                                        
-                                                    </div>
-                                                    <button type="button" id="botao_cadastrar_falta_barbeiro" value="{{barbeiro.id_usuario}}#{{barbeiro.nome_completo}}"
-                                                       class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] hover:text-[#cecece] hover:border-[#cecece] text-xs font-medium cursor-pointer transition-all inline-flex items-center gap-4">
-                                                        + Cadastrar falta
-                                                    </button>
+
+                                                <div class="flex flex-col min-w-0 text-left">
+                                                    <h3 class="font-bold text-white text-base">
+                                                        {{ barbeiro.nome_completo }}
+                                                    </h3>
+
                                                 </div>
-                                                  
+                                                <button type="button" id="botao_cadastrar_falta_barbeiro"
+                                                    value="{{barbeiro.id_usuario}}#{{barbeiro.nome_completo}}"
+                                                    class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] hover:text-[#cecece] hover:border-[#cecece] text-xs font-medium cursor-pointer transition-all inline-flex items-center gap-4">
+                                                    + Cadastrar falta
+                                                </button>
                                             </div>
-                                            <span aria-hidden="true" class=" mr-5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/20 text-lg text-brand-gold transition-transform duration-300 group-open:rotate-180   group-open:border-brand-gold">↓</span>
-                                            
-                                        </summary>
-                                        <div class="  border-r-2  border-l-2 border-t-0 border-l-[#38362f] border-b-[#38362f] border-r-[#38362f]  rounded-b-xs rounded-r-xs rounded-l-xs  overflow-hidden mb-6">
-                                            <div class="overflow-x-auto">
-                                                <table class="w-full text-left border-collapse">
-                                                    <thead>
-                                                        <tr class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
-                                                            <th class="p-3.5 px-4">Data da falta</th>
-                                                            <th class="p-3.5 px-4">hora inicio</th>
-                                                            <th class="p-3.5 px-4">hora final</th>
-                                                            <th class="p-3.5 px-4">motivo</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tabela-clientes-corpo" class="text-xs text-[#f1efe8]">
-                                                        {% if barbeiro.faltas_justificadas %}
-                                                            {% for falta in barbeiro.faltas_justificadas %}
-                                                                <tr class="cliente-row border-b border-[#38362f] hover:bg-[#2a2825]/50 transition-colors">
-                                                                    <td class="cliente-nome p-3.5 px-4 font-medium text-[#f1efe8]">{{ falta.data_falta.strftime('%d/%m/%Y') }}</td>
-                                                                    <td class="cliente-tel p-3.5 px-4 text-[#888780]">
-                                                                         {{ falta.horario_inicio_falta.strftime('%H:%M')}}
-                                                                    </td>
-                                                                    <td class="p-3.5 px-4 text-[#888780]">{{ falta.horario_final_falta.strftime('%H:%M') }}</td>
-                                                                    <td class="p-3.5 px-4 font-medium text-[#f1efe8]">{{ falta.motivo_falta }}</td>
-                                                                    <td class="p-3.5 px-4 font-medium text-[#f1efe8]"> 
-                                                                        <div class="flex  justify-between">
-                                                                            <button type="button" id="editar-agenda-mensal" value="{{barbeiro.id_usuario}}#{{barbeiro.nome_completo}}#{{ falta.id_falta_justificada }}#{{falta.data_falta}}#{{ falta.horario_inicio_falta}}#{{ falta.horario_final_falta}}#{{ falta.motivo_falta }}"
-                                                                                class="flex-1 min-w-0 py-2 px-2 h-full rounded-lg bg-[#0b0b0c] border border-[#38362f] text-gray-300 hover:bg-[#0c0c0b] hover:border-amber-400  text-xs font-medium transition-colors">
-                                                                                Atualizar
-                                                                            </button>
-                                                                            <form action="/gestor/painel/barbeiros/faltas-justificadas/excluir" id="form-confirmar-exclusao" method="POST" class="ml-10 flex-1 min-w-0">
-                                                                                
-                                                                                <input type="hidden" name="falta-id-excluir" value="{{ falta.id_falta_justificada }}">
-                                                                                <input type="hidden" name="falta-data-excluir" value="{{ falta.data_falta}}">
-                                                                                <input type="hidden" name="falta-hora-inicial-excluir" value="{{ falta.horario_inicio_falta }}">
-                                                                                <input type="hidden" name="falta-hora-final-excluir" value="{{ falta.horario_final_falta}}">
-                                                                                <input type="hidden" name="falta-id-barbeiro-excluir" value="{{ barbeiro.id_usuario}}">
-                                                                                <input type="hidden" class="nome-exclusao"  name="" value="{{ barbeiro.nome_completo }}">
-                                    
-                                                                                <button type="submit" class="w-full h-full py-2 px-2 rounded-lg bg-red-600 border border-[#38362f] text-white hover:bg-red-800 text-xs font-bold transition-colors">
-                                                                                    Excluir
-                                                                                </button>
-                                                                            </form>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            {% endfor %}
-                                                        {% else %}
-                                                            <tr id="linha-vazia">
-                                                                <td colspan="5" class="p-6 text-center border-b-2 border-b-[#38362f] text-[#888780]">
-                                                                    Nenhuma falta cadastrada.
-                                                                </td>
-                                                            </tr>
-                                                        {% endif %}
-                                                    </tbody>
-                                                </table>
-                                            </div>
+
                                         </div>
-                                    </details>
-                                </div>
+                                        <span aria-hidden="true"
+                                            class=" mr-5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/20 text-lg text-brand-gold transition-transform duration-300 group-open:rotate-180   group-open:border-brand-gold">↓</span>
+
+                                    </summary>
+                                    <div
+                                        class="  border-r-2  border-l-2 border-t-0 border-l-[#38362f] border-b-[#38362f] border-r-[#38362f]  rounded-b-xs rounded-r-xs rounded-l-xs  overflow-hidden mb-6">
+                                        <div class="overflow-x-auto">
+                                            <table class="w-full text-left border-collapse">
+                                                <thead>
+                                                    <tr
+                                                        class="border-b border-[#38362f] text-[11px] uppercase tracking-wider text-[#888780]">
+                                                        <th class="p-3.5 px-4">Data da falta</th>
+                                                        <th class="p-3.5 px-4">hora inicio</th>
+                                                        <th class="p-3.5 px-4">hora final</th>
+                                                        <th class="p-3.5 px-4">motivo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tabela-clientes-corpo" class="text-xs text-[#f1efe8]">
+                                                    {% if barbeiro.faltas_justificadas %}
+                                                    {% for falta in barbeiro.faltas_justificadas %}
+                                                    <tr
+                                                        class="cliente-row border-b border-[#38362f] hover:bg-[#2a2825]/50 transition-colors">
+                                                        <td class="cliente-nome p-3.5 px-4 font-medium text-[#f1efe8]">
+                                                            {{ falta.data_falta.strftime('%d/%m/%Y') }}</td>
+                                                        <td class="cliente-tel p-3.5 px-4 text-[#888780]">
+                                                            {{ falta.horario_inicio_falta.strftime('%H:%M')}}
+                                                        </td>
+                                                        <td class="p-3.5 px-4 text-[#888780]">{{
+                                                            falta.horario_final_falta.strftime('%H:%M') }}</td>
+                                                        <td class="p-3.5 px-4 font-medium text-[#f1efe8]">{{
+                                                            falta.motivo_falta }}</td>
+                                                        <td class="p-3.5 px-4 font-medium text-[#f1efe8]">
+                                                            <div class="flex  justify-between">
+                                                                <button type="button" id="editar-agenda-mensal"
+                                                                    value="{{barbeiro.id_usuario}}#{{barbeiro.nome_completo}}#{{ falta.id_falta_justificada }}#{{falta.data_falta}}#{{ falta.horario_inicio_falta}}#{{ falta.horario_final_falta}}#{{ falta.motivo_falta }}"
+                                                                    class="flex-1 min-w-0 py-2 px-2 h-full rounded-lg bg-[#0b0b0c] border border-[#38362f] text-gray-300 hover:bg-[#0c0c0b] hover:border-amber-400  text-xs font-medium transition-colors">
+                                                                    Atualizar
+                                                                </button>
+                                                                <form
+                                                                    action="/gestor/painel/barbeiros/faltas-justificadas/excluir"
+                                                                    id="form-confirmar-exclusao" method="POST"
+                                                                    class="ml-10 flex-1 min-w-0">
+
+                                                                    <input type="hidden" name="falta-id-excluir"
+                                                                        value="{{ falta.id_falta_justificada }}">
+                                                                    <input type="hidden" name="falta-motivo-excluir"
+                                                                        value="{{ falta.motivo_falta }}">
+                                                                    <input type="hidden" name="falta-data-excluir"
+                                                                        value="{{ falta.data_falta}}">
+                                                                    <input type="hidden"
+                                                                        name="falta-hora-inicial-excluir"
+                                                                        value="{{ falta.horario_inicio_falta }}">
+                                                                    <input type="hidden" name="falta-hora-final-excluir"
+                                                                        value="{{ falta.horario_final_falta}}">
+                                                                    <input type="hidden"
+                                                                        name="falta-id-barbeiro-excluir"
+                                                                        value="{{ barbeiro.id_usuario}}">
+                                                                    <input type="hidden" class="nome-exclusao" name=""
+                                                                        value="{{ barbeiro.nome_completo }}">
+
+                                                                    <button type="submit"
+                                                                        class="w-full h-full py-2 px-2 rounded-lg bg-red-600 border border-[#38362f] text-white hover:bg-red-800 text-xs font-bold transition-colors">
+                                                                        Excluir
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    {% else %}
+                                                    <tr id="linha-vazia">
+                                                        <td colspan="5"
+                                                            class="p-6 text-center border-b-2 border-b-[#38362f] text-[#888780]">
+                                                            Nenhuma falta cadastrada.
+                                                        </td>
+                                                    </tr>
+                                                    {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
-                            {% endfor %}
+                        </div>
+                        {% endfor %}
                         {% else %}
-                            <div id="card_servicos" class="flex flex-col items-center w-full min-w-0 bg-[#232220] rounded-2xl  border border-zinc-700/60 hover:border-amber-500/40 transition-all">
-                                <h1 class="text-zinc-300">Nenhuma Falta para este mês</h1>
-                            </div>
+                        <div id="card_servicos"
+                            class="flex flex-col items-center w-full min-w-0 bg-[#232220] rounded-2xl  border border-zinc-700/60 hover:border-amber-500/40 transition-all">
+                            <h1 class="text-zinc-300">Nenhuma Falta para este mês</h1>
+                        </div>
                         {% endif %}
 
                     </div>
 
-                    {% include "componetizacao/modals/modal-editar-barbeiro.html" %}   
-                    {% include "componetizacao/modals/modal-editar-endereco.html" %}  
+                    {% include "componetizacao/modals/modal-editar-barbeiro.html" %}
+                    {% include "componetizacao/modals/modal-editar-endereco.html" %}
                     {% include "componetizacao/modals/modal-confimacao-excluir-padrao.html" %}
                     <!-- MODAL: BLOQUEIO DE HORÁRIO * -->
                     {% include "componetizacao/modals/modal-faltas-justificadas-barbeiro.html" %}
                 </section>
             </main>
         </div>
-       
+
         <!-- NAVEGAÇÃO INFERIOR MOBILE -->
         {% include "componetizacao/SiderBar/sider-bar-gestor-mobile.html" %}
 
     </div>
 
-  
+
     <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
 
     <script src="{{ url_for('static', filename='js/janelas_modais/js_confirmar_excluir_padrao.js') }}"></script>
     <script src="{{ url_for('static', filename='js/janelas_modais/js_validar_editar_endereco.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/janelas_modais/js_validar_editar_barbeiro.js') }}"></script>
+    
     <!-- icones personlaizados -->
     <script> lucide.createIcons();</script>
-    <script src="{{ url_for('static', filename='js/janelas_modais/js_cadastrar_editar_falta_justificada_barbeiro.js') }}"></script>    
+    <script
+        src="{{ url_for('static', filename='js/janelas_modais/js_cadastrar_editar_falta_justificada_barbeiro.js') }}"></script>
 </body>
 
 

@@ -103,7 +103,7 @@
                                     class="barber-tab absolute w-full max-w-[200px] flex flex-col items-center justify-center gap-2 rounded-xl border border-brand-border bg-brand-bg-card p-4 text-center transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold/80 aria-selected:border-brand-gold aria-selected:bg-brand-gold/5">
                                     
                                     <span class="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-brand-border bg-[#22252a] transition-colors group-aria-selected:border-brand-gold sm:h-28 sm:w-28">
-                                        <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_nome_usuario) }}"
+                                        <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_usuario) }}"
                                         alt="Foto do barbeiro {{ b.nome_completo }}" width="112" height="112" loading="lazy" class="h-full w-full aspect-[3/4] object-cover">
                                     </span>
                                     <span>
@@ -149,7 +149,7 @@
                                 </div>
 
                                 <div class="relative w-full md:w-[300px] shrink-0 overflow-hidden md:border-l border-brand-border/30 aspect-square md:aspect-[3/4] bg-brand-bg-card">
-                                    <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_nome_usuario) }}" 
+                                    <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_usuario) }}" 
                                         alt="Foto do barbeiro {{ b.nome_completo }}" 
                                         loading="lazy" 
                                         class="h-full w-full aspect-[3/4] object-cover [mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]
@@ -189,9 +189,9 @@
                         <div id="carousel-track" class="relative flex h-full w-full items-center justify-center">
                         
                                 {% for servico in servicos %}
-                                    <article class="service-card absolute w-full max-w-[280px] sm:max-w-[300px] flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold">
+                                    <article class="service-card gap-4 absolute w-full max-w-[280px] sm:max-w-[300px] flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold">
                                         <div>           
-                                            <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/servicos-imagens/' ~ servico.foto_nome_servico) }}" alt="{{ servico.descricao }}" class="w-full object-cover rounded-lg mb-3">
+                                            <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/servicos-imagens/' ~ servico.foto_servico) }}" alt="{{ servico.descricao_servico }}" class="w-full h-full object-center rounded-lg mb-3">
                                             
                                             <h3 class="font-title mb-1 text-xl text-white">{{ servico.descricao_servico }}</h3>
                                             <p class="text-sm leading-relaxed text-brand-muted">Duração: {{ servico.duracao }} min</p>
@@ -268,7 +268,7 @@
             
             if (totalBarbers === 0) return;
 
-            // Se houver 3 ou menos barbeiros, alinhar horizontalmente sem quebrar
+            // Se houver 2 ou menos barbeiros, alinhar horizontalmente sem quebrar
             if (totalBarbers <= 2) {
                 const track = document.getElementById('barber-carousel-track');
                 track.classList.remove('relative');
@@ -379,18 +379,59 @@
             
             if (totalCards === 0) return;
     
-            // Proteção: Se houver 3 ou menos cards, desativa o 3D e alinha no centro (sem quebrar o layout)
-            if (totalCards <= 3) {
+            // Proteção: Se houver 2 ou menos cards, desativa o 3D e alinha no centro (sem quebrar o layout)
+            if (totalCards <= 2) {
                 const track = document.getElementById('carousel-track');
-                track.classList.remove('relative');
-                track.classList.add('flex', 'gap-4', 'flex-wrap');
-                
+                const container = track.parentElement;
+            
+                container.classList.remove('h-[450px]', 'md:h-[420px]');
+                container.classList.add('h-auto');
+            
+                track.classList.remove('relative', 'flex', 'items-center', 'justify-center', 'h-full');
+                if (totalCards === 2) {
+                    track.classList.add('grid', 'grid-cols-2', 'gap-3', 'sm:flex', 'sm:justify-center', 'sm:gap-6');
+                } else {
+                    track.classList.add('flex', 'justify-center');
+                }
+            
                 document.querySelectorAll('#btn-prev-service, #btn-next-service, #btn-prev-mobile, #btn-next-mobile')
                     .forEach(btn => btn.style.display = 'none');
-                
+            
                 cards.forEach(card => {
-                    card.classList.remove('absolute', 'opacity-0', 'scale-50');
-                    card.classList.add('opacity-100', 'scale-100');
+                    card.classList.remove('absolute', 'opacity-0', 'scale-50', 'p-7', 'max-w-[280px]');
+                    card.classList.add('opacity-100', 'scale-100', 'p-3.5', 'sm:p-7', 'sm:max-w-[300px]');
+            
+                    if (totalCards === 2) {
+                        // Padroniza a altura da imagem para os dois cards ficarem alinhados
+                        const img = card.querySelector('img');
+                        if (img) img.classList.add('aspect-[4/3]', 'mb-2.5', 'sm:mb-3');
+            
+                        // Reduz o título e a duração no mobile
+                        const title = card.querySelector('h3');
+                        if (title) {
+                            title.classList.remove('text-xl');
+                            title.classList.add('text-base', 'leading-tight', 'sm:text-xl');
+                        }
+                        const duration = card.querySelector('p');
+                        if (duration) {
+                            duration.classList.remove('text-sm');
+                            duration.classList.add('text-xs', 'sm:text-sm');
+                        }
+            
+                        // Empilha o preço e o botão "Agendar →" no mobile para não espremer
+                        const footer = card.querySelector('div.border-t');
+                        if (footer) {
+                            footer.classList.remove('mt-8', 'pt-5', 'items-center', 'justify-between');
+                            footer.classList.add('mt-4', 'pt-3', 'flex-col', 'items-start', 'gap-2', 'sm:mt-8', 'sm:pt-5', 'sm:flex-row', 'sm:items-center', 'sm:justify-between');
+                        }
+            
+                        // Ajusta o tamanho do preço no mobile
+                        const price = card.querySelector('span.text-brand-gold');
+                        if (price) {
+                            price.classList.remove('text-xl');
+                            price.classList.add('text-base', 'sm:text-xl');
+                        }
+                    }
                 });
                 return;
             }

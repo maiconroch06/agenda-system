@@ -20,6 +20,26 @@ const form_campo_hora_fim_falta = document.getElementById("hora_fim_falta");
 const form_campo_motivo_falta = document.getElementById("motivo_falta_justificada");
 const botao_cadastrar_editar_faltas_justificadas_modal = document.getElementById("cadastrar-editar-falta");
 
+const botao_faltas_justificadas_mensais_global = document.getElementById("consulta_faltas_barbeiro_mensal");
+const botao_faltas_justificadas_anual_global = document.getElementById("consulta_faltas_barbeiro_anual");
+const botao_limpar_faltas_justificadas_mensais_global = document.getElementById("limpar_consulta_faltas_barbeiro_mensal");
+
+botao_faltas_justificadas_mensais_global.addEventListener("click", () => {
+    console.log("passou aqui");
+    window.location.href = "/gestor/painel/barbeiros/faltas-justificadas/consultar/mensal";
+});
+
+botao_limpar_faltas_justificadas_mensais_global.addEventListener("click", () => {
+    console.log("passou aqui");
+    window.location.href = "/gestor/painel/barbeiros/faltas-justificadas";
+});
+
+botao_faltas_justificadas_anual_global.addEventListener("click", () => {
+    console.log("passou aqui");
+    window.location.href = "/gestor/painel/barbeiros/faltas-justificadas/consultar/anual";
+});
+
+
 botao_editar_faltas_justificadas_global.forEach((editar)=>{
     editar.addEventListener("click", ()=>{
        const dados_barbeiro =editar.value.split("#");
@@ -49,6 +69,8 @@ botao_cadastrar_faltas_justificadas_global.forEach((cadastrar)=>{
         form_campo_id_barbeiro.value = dados_barbeiro[0];
         form_campo_nome_barbeiro.value = dados_barbeiro[1];
         form_campo_data_falta_justificada.value=new Date().toLocaleDateString("en-CA");
+
+        form_campo_motivo_falta.value ='';
         
         botao_cadastrar_editar_faltas_justificadas_modal.textContent = "Cadastrar falta justificada";
         titulo_modal_faltas_justificadas.textContent = botao_cadastrar_editar_faltas_justificadas_modal.textContent;

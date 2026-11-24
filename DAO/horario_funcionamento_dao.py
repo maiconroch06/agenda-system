@@ -32,6 +32,20 @@ class HorarioFuncionamentoDAO:
 
         return self._mapear_horario_funcionamento(registro)
 
+    def consultar_capacidade_realizar_servicos_dia(self):
+        sql = text("""
+            SELECT
+            (
+                TIME_TO_SEC(TIMEDIFF(horario_inicio_intrajornada, horario_abertura)) +
+                TIME_TO_SEC(TIMEDIFF(horario_fechamento,horario_fim_intrajornada))
+            ) / 60 AS total_minutos from horario_funcionamento;
+        """)
+        
+        registro = db.session.execute(
+                    sql
+        )
+                
+        return registro.scalar()
 
     def atualizar(self, horario_funcionamento: HorarioFuncionamento):
         sql = text("""

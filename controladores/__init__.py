@@ -3,3 +3,5 @@ from .controlador_barbeiro import ControladorBarbeiro
 from .controlador_gestor import ControladorGestor
 from .controlador_servicos import ControladorServico
 from .controlador_agenda_mensal import ControladorAgendaMensal
+from .controlador_recesso   import ControladorRecesso
+from .controlador_agendamento   import ControladorAgendamento

@@ -9,7 +9,7 @@ class AgendaMensal:
         data_inicial_mes = None,
         data_final_mes = None,
         titulo_agenda = None,
-        status_agenda_mensal = True
+        status_agenda_mensal = False
         
     ):
         self.id_agenda_mensal = id_agenda_mensal

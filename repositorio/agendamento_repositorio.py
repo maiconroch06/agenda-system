@@ -9,35 +9,75 @@ class AgendamentoRepositorio:
         return AgendamentoDAO.salvar(agendamento)
 
     @staticmethod
-    def buscar_por_id(id_agendamento):
-        return AgendamentoDAO.buscar_por_id(id_agendamento)
+    def buscarPorId(id_agendamento):
+        return AgendamentoDAO.buscarPorIdDao(id_agendamento)
 
     @staticmethod
-    def consultar_agendamento_status_agendados(id_cliente):
-        return AgendamentoDAO.consultar_todos_os_agendamento_do_cliente(id_cliente)
+    def consultarAgendamentoStatusAgendados(id_cliente):
+        return AgendamentoDAO.consultarTodosOsAgendamentoDoCliente(id_cliente)
 
     @staticmethod
-    def listar_por_cliente(id_cliente):
-        return AgendamentoDAO.listar_por_cliente(id_cliente)
+    def consultar_agendamento_filtros(barbeiro_id,  status,servico_id,data_inicio,data_fim):
+        return AgendamentoDAO.consultar_agendamento_filtros(barbeiro_id,  status,servico_id,data_inicio,data_fim)
+ 
+    @staticmethod
+    def consultarAgendamentoDataAtual(data_hoje):
+        return AgendamentoDAO.consultarTodosOsAgendamentoDataAtual(data_hoje)
+   
+    @staticmethod
+    def consultarTotalAgendamentoCanceladoPorDia(data_hoje):
+        return AgendamentoDAO.consultarTotalAgendamentosCancelados(data_hoje)
+    
+    @staticmethod
+    def consultarMediaMensalAgendamento(data_inicio, data_final):
+        return AgendamentoDAO.consultarMediaMensalAgendamentoDao(data_inicio, data_final)
 
     @staticmethod
-    def listar_por_barbeiro(id_barbeiro, data=None):
-        return AgendamentoDAO.listar_por_barbeiro(
-            id_barbeiro, data
-        )
+    def listarPorCliente(id_cliente):
+        return AgendamentoDAO.listarPorClienteDao(id_cliente)
+
+    @staticmethod
+    def listarPorBarbeiro(id_barbeiro):
+        return AgendamentoDAO.listarPorBarbeiro(id_barbeiro)
 
     @staticmethod
     def atualizar(agendamento):
         return AgendamentoDAO.atualizar(agendamento)
 
     @staticmethod
-    def atualizar_status_e_motivo_do_cancelamento(motivo_cancelamento, status_agendamento,agenda_mensal):
-        return AgendamentoDAO.atualizar_status_e_motivo_do_cancelamento_agenda_mensal(motivo_cancelamento, status_agendamento,agenda_mensal)
+    def atualizarStatusMotivoDoCancelamentoAgendaMensal(motivo_cancelamento, status_agendamento,agenda_mensal):
+        return AgendamentoDAO.atualizarStatusMotivoDoCancelamentoAgendaMensalDao(motivo_cancelamento, status_agendamento,agenda_mensal)
+    
+    @staticmethod
+    def atualizarStatusAgendamentoUsuarios(id_agendamento, status_agendamento, motivo_cancelamento):
+         return AgendamentoDAO.atualizarStatusagendamentoUsuarios(id_agendamento, status_agendamento,motivo_cancelamento)
 
     @staticmethod
-    def atualizar_status_e_motivo_do_cancelamento_faltas_justificadas(motivo_cancelamento, status_agendamento,falta_justificada,id_barbeiro):
-        return AgendamentoDAO.atualizar_status_e_motivo_do_cancelamento_faltas_justificadas_dao(motivo_cancelamento, status_agendamento,falta_justificada,id_barbeiro)
+    def atualizarStatusMotivoDoCancelamentoFaltasJustificadas(motivo_cancelamento, status_agendamento,falta_justificada):
+        return AgendamentoDAO.atualizarStatusMotivoDoCancelamentoFaltasJustificadasDao(motivo_cancelamento, status_agendamento,falta_justificada)
+    
+    @staticmethod
+    def atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje):
+        return AgendamentoDAO.atualizar_status_agendamento(id_agendamento, status_agendamento, data_hoje)
+    
+    @staticmethod
+    def cancelar_agendamento(id_agendamento, data_hoje, motivo_cancelamento):
+        return AgendamentoDAO.cancelar_agendamento(id_agendamento, data_hoje, motivo_cancelamento)
+    
+    @staticmethod
+    def consultarAgendamentosPorPeriodo(data_inicio, data_fim):
+        return AgendamentoDAO.consultarAgendamentosPorPeriodoDAO(data_inicio, data_fim)
+
+    @staticmethod
+    def clienteTemConflitoHorario(id_cliente, data_agendamento, hora_inicio, hora_fim):
+        return AgendamentoDAO.clienteTemConflitoHorarioDao(id_cliente, data_agendamento, hora_inicio, hora_fim)
+   
+    @staticmethod
+    def consultarTotalAgendamentosPorPeriodo(data_inicio, data_final):
+        return AgendamentoDAO.consultarTotalAgendamentosPorPeriodoDao(data_inicio, data_final)
 
     @staticmethod
     def excluir(id_agendamento):
-        return AgendamentoDAO.excluir(id_agendamento)
+        return AgendamentoDAO.excluirDao(id_agendamento)
+    
+    

@@ -13,10 +13,6 @@
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
-    {# ───────── DADOS MOCK VS FLASK ───────── #}
-    {% include "componetizacao/preCadastro/dados.html" %}
-    {# ─────────────────────────────────────── #}
-
     <!-- HEADER (Exibe apenas para o mobile)-->
     {% include "componetizacao/Header/header-barbeiro-painel.html" %}
 
@@ -39,18 +35,27 @@
                     <!-- Card de Progresso de Conclusão dos Agendamentos -->
                     {% include "componetizacao/Cards/card-progresso-agendamentos.html" %}
 
-                    <div class="text-xs font-medium text-[#888780] uppercase tracking-wider mb-3">Atendimentos de hoje</div>
+                    <div class="text-xs font-medium text-[#888780] uppercase tracking-wider mb-3">
+                        {% if is_hoje %}Atendimentos de hoje{% else %}Atendimentos de {{ data_display }}{% endif %}
+                    </div>
 
                     <!-- Listagem dos agendamentos de hoje via Jinja -->
                     <div class="flex flex-col gap-2" id="lista-inicio-hoje">
-                        {% for item in agendamentos_flask %}
+                        {% for item in agendamentos %}
                             <div class="bg-[#232220] border border-[#38362f] rounded-2xl p-3.5 flex gap-3 items-start cursor-pointer transition-colors hover:border-[#4a473f] {% if item.status in [0, 3] %}opacity-65{% endif %}" onclick="abrirModalDetalhe('{{ item.id }}')">
                                 
-                                <div class="min-w-[44px] text-center text-sm font-semibold leading-tight text-[#f1efe8]">{{ item.hora }}</div>
+                                <div class="flex flex-col items-center justify-center bg-[#191816] border border-[#32302a] rounded-xl px-3 py-2 min-w-[64px] flex-shrink-0">
+                                    <span class="text-sm font-bold text-[#f1efe8] leading-none">
+                                        {{ item.hora_inicio }}
+                                    </span>
+                                    <span class="text-[11px] text-[#888780] mt-1 leading-none">
+                                        {{ item.hora_fim }}
+                                    </span>
+                                </div>
 
                                 <div class="flex-1">
                                     <div class="text-sm font-medium">{{ item.cliente }}</div>
-                                    <div class="text-xs text-[#888780] mt-0.5">{{ item.servico }}</div>
+                                    <div class="text-xs text-[#888780] mt-1">{{ item.servico }}</div>
                                 </div>
 
                                 <div class="flex flex-col items-end gap-1 flex-shrink-0">
@@ -74,31 +79,33 @@
 
                     <div class="flex justify-center items-center mt-6 mb-2">
                         <!-- Botão de Voltar Dia -->
-                        <button onclick="mudarDia(-1)" 
+                        <a href="{{ url_for('barbeiro.navegar_painel', acao='anterior') }}" 
                             class="w-8 h-8 flex items-center justify-center rounded-full bg-[#232220] border border-[#38362f] text-[#f1efe8] hover:bg-[#38362f] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f0c05a] active:scale-95" 
                             aria-label="Dia Anterior">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
-                        </button> 
+                        </a> 
 
                         <!-- Exibição da Data Atual na Navegação -->
                         <div class="flex flex-col items-center justify-center min-w-[140px]">
-                            <span id="nav-data-display" class="text-sm font-semibold text-[#f1efe8]">Hoje</span>
-                            <!-- Botão para voltar ao dia de hoje (oculto por padrão) -->
-                            <button id="btn-hoje" onclick="irParaHoje()" class="text-[10px] text-[#f0c05a] hover:underline mt-0.5 hidden">
+                            <span class="text-sm font-semibold text-[#f1efe8]">{{ data_display }}</span>
+                            
+                            {% if not is_hoje %}
+                            <a href="{{ url_for('barbeiro.barbeiroPainel', reset_data='true') }}" class="text-[10px] text-[#f0c05a] hover:underline mt-0.5">
                                 Voltar para Hoje
-                            </button>
+                            </a>
+                            {% endif %}
                         </div>
 
                         <!-- Botão de Avançar Dia -->
-                        <button onclick="mudarDia(1)" 
+                        <a href="{{ url_for('barbeiro.navegar_painel', acao='proximo') }}" 
                             class="w-8 h-8 flex items-center justify-center rounded-full bg-[#232220] border border-[#38362f] text-[#f1efe8] hover:bg-[#38362f] transition-colors focus:outline-none focus:ring-2 focus:ring-[#f0c05a] active:scale-95" 
                             aria-label="Próximo Dia">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
-                        </button> 
+                        </a> 
                     </div>
 
                 </section>
@@ -115,9 +122,6 @@
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso">
     </div>
-
-    <script src="{{ url_for('static', filename='js/barbeiro-painel-utilitarios.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/barbeiro-painel-inicio.js') }}"></script>
 
 </body>
 

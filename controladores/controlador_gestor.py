@@ -1,10 +1,10 @@
+from calendar import c
+
 from flask import session, redirect, url_for, flash, render_template
-from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 from database import db
 from enums import EnumStatusMensagens, EnumNomesPastaImagem
-from services_mvc import GestorServiceMVC, ServicoBarbearia, BarbeiroService, RecessoService
-from execoes import ImagemErrorExcecao 
+from services_mvc import GestorServiceMVC, BarbeiroService
 from models import Barbeiro
 from werkzeug.utils import secure_filename
 from .controlador_cliente import ControladorCliente
@@ -17,8 +17,6 @@ from .controlador_agenda_mensal import ControladorAgendaMensal
 
 class ControladorGestor():
     __gestor_service_mvc = GestorServiceMVC()
-    __recesso_service = RecessoService()
-    __servicos_barbearia_service_mvc = ServicoBarbearia()
     __barbeiro_service_mvc = BarbeiroService()
     __controlador_cliente = ControladorCliente()
     __controlador_barbeiro = ControladorBarbeiro()
@@ -27,8 +25,9 @@ class ControladorGestor():
     @classmethod
     def login_gestor(cls, email:str, senha:str):
         try:
-            cls.__gestor_service_mvc.gestor_realizar_login_service(email,senha)   
-            return redirect(url_for('gestor.gestorPainel'))
+            cls.__gestor_service_mvc.gestor_realizar_login_service(email,senha)
+            if cls.__gestor_service_mvc.atualizarUltimoAcesso(session.get('dados_gestor',{}).get("id_usuario")):
+                return redirect(url_for('gestor.gestorPainel'))
         
         except Exception as error:
             flash(f"{error}")
@@ -60,190 +59,73 @@ class ControladorGestor():
     
     @classmethod
     def atualizar_barbeiro(cls, imagem_form, img_padrao, imagem_anterior, barbeiro):
-            try:              
-                                
-                if not cls.__controlador_barbeiro.atualizar_informacoes_barbeiro(imagem_form, img_padrao, imagem_anterior, barbeiro):
-                       flash(f"Erro ao atualizar o barbeiro", EnumStatusMensagens.ERRO.value)      
-            except Exception:
-                flash(f"Nenhuma informação do babeiro foi atualizada.", EnumStatusMensagens.ERRO.value)
-                
-            return redirect(url_for('gestor.gestorAbaBarbeiros'))  
+        try:                            
+            if not cls.__controlador_barbeiro.atualizar_informacoes_barbeiro(imagem_form, img_padrao, imagem_anterior, barbeiro):
+                    flash(f"Erro ao atualizar o barbeiro", EnumStatusMensagens.ERRO.value)      
+        except Exception:
+            flash(f"Nenhuma informação do babeiro foi atualizada.", EnumStatusMensagens.ERRO.value)
+            
+        return redirect(url_for('gestor.gestorAbaBarbeiros'))
 
     @classmethod
-    def cadastrarServico(cls, foto, novo_descricao: str, novo_valor: str, novo_duracao:str ):
-        
-        try:
-            if cls.__servicos_barbearia_service_mvc.cadastrar_servico_barbearia(foto, novo_descricao, novo_valor, novo_duracao):
-                return redirect(url_for('gestor.gestorAbaServicos'))
-        
-        except ImagemErrorExcecao as erros:
-            flash(f"{erros}", EnumStatusMensagens.AVISO.value)
-            return redirect(url_for('gestor.gestorAbaServicos'))
-        
-        except Exception as erros:
-            flash(f"{erros}", EnumStatusMensagens.ERRO.value)
-            return redirect(url_for('gestor.gestorAbaServicos'))
-             
-    @classmethod
-    def excluir_servico(cls, id_servico, foto_nome,nome_servico):
-        try:
-            cls.__servicos_barbearia_service_mvc.excluir_servico_barbearia(id_servico,foto_nome ) 
-            flash(f"O servico foi excluido com sucesso!", EnumStatusMensagens.SUCESSO.value)
-                              
-        except IntegrityError :
-            flash(f"O serviço [ {nome_servico}] não pode ser excluido, pois ele pertence a um agendamento.", EnumStatusMensagens.ERRO.value)
-        except Exception :
-            flash(f"Erro o excluir o serviço [ {nome_servico}], contate o suporte", EnumStatusMensagens.ERRO.value)
-            
-        return redirect(url_for('gestor.gestorAbaServicos'))  
-           
-    @classmethod
-    def editarServico(cls, id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo):
-       
-        try:
-         
-            cls.__servicos_barbearia_service_mvc.editar_servico_barbearia(id, imagem_form, img_padrao, imagem_anterior, descricao_servico, valor, duracao, ativo)
-            flash(f"Servico {descricao_servico} atualizado com sucesso.", EnumStatusMensagens.SUCESSO.value)
-        except Exception as erros:
-           print(f"erro ao tentar atualizar a agenda: {erros}")       
-        
-        return redirect(url_for("gestor.gestorAbaServicos")) 
-             
-            
-    @classmethod
-    def consultar_servicos(cls):
-            return render_template('pages/gestor/gestor-painel-servicos-rp.html', listaServicos = ControladorServico.consultar_todos_os_servicos(), mensagens_status=EnumStatusMensagens)
+    def consultar_clientes(cls):
+        return render_template('pages/gestor/gestor-painel-clientes-rp.html', lista_clientes= cls.__controlador_cliente.consultar_todos_clientes(), modo=0, mensagens_status=EnumStatusMensagens)
    
     @classmethod
-    def consultar_clientes(cls):
-        return render_template('pages/gestor/gestor-painel-clientes-rp.html', lista_clientes= cls.__controlador_cliente.consultar_todos_clientes(),  mensagens_status=EnumStatusMensagens)
+    def consultar_cliente_nome(cls,nome_cliente):
+        return render_template('pages/gestor/gestor-painel-clientes-rp.html',nome_cliente=nome_cliente, lista_clientes= cls.__controlador_cliente.consultar_cliente_nome(nome_cliente), modo=1, mensagens_status=EnumStatusMensagens)
 
     @classmethod
     def consultar_agendamentos(cls, status_agendamento):
         return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos = cls.__controlador_agendamento.consultar_agendamento(status_agendamento)) 
     
-    
+    @classmethod
+    def consultar_agendamento_data_atual(cls, data_hoje):
+        return render_template('pages/gestor/gestor-painel-inicio-rp.html', 
+                               agendamentos_flask = cls.__controlador_agendamento.consultar_agendamento_data_atual(data_hoje),
+                               total_cancelados = cls.__controlador_agendamento.consultar_total_agendamento_cancelado_por_dia(data_hoje),
+                               ticket_medio_mensal=ControladorAgendamento.consultar_valor_ticket_medio_mensal_agendamento(),
+                               total_babeiros =ControladorBarbeiro.consultar_total_barbeiro_ativo(),
+                               capacidade_atendimento=ControladorHorarioFuncionamento.consultar_capacidade_realizar_servicos_dia(),
+                               mensagens_status=EnumStatusMensagens) 
+        
     @classmethod
     def consultar_horario_funcionamento(cls, id_barbearia):
         return ControladorHorarioFuncionamento.consultar_horario_funcionamento(id_barbearia)
-    
+   
     @classmethod
     def atualizar_horario_funcionamento_barbearia(cls, horario_funcionamento_barbearia):
             
             try:
                 ControladorHorarioFuncionamento.atualizar_horario_funcionamento(horario_funcionamento_barbearia)
-                flash("Horario de funcionmento da barbearia atualziado com sucesso", EnumStatusMensagens.SUCESSO.value)
+                flash("Horario de funcionmento da barbearia atualizado com sucesso", EnumStatusMensagens.SUCESSO.value)
             except Exception :
                 flash(f"Erro ao tentar atualizar o horario de funcionmento da barbearia", EnumStatusMensagens.ERRO.value)
             
-            return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))   
-        
-    @classmethod
-    def cadastrar_agenda_mensal_barbearia(cls, agenda_barbearia):        
-        try:
-            ControladorAgendaMensal.cadastrar_agenda_mensal_service(agenda_barbearia)
-            flash("Agenda da barbearia cadastrada com sucesso", EnumStatusMensagens.SUCESSO.value)
-        except Exception :
-            flash(f"Erro ao tentar cadastrar a agenda da barbearia", EnumStatusMensagens.ERRO.value)
-        
-        return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))       
-     
-    @classmethod
-    def atualizar_agenda_mensal_barbearia(cls, agenda_barbearia):        
-        try:
-            resultaodo = ControladorAgendaMensal.atualizar_agenda_mensal_service(agenda_barbearia)
-            if  resultaodo > 0:
-                flash(f"Agenda da barbearia atualizada com sucesso{resultaodo}", EnumStatusMensagens.SUCESSO.value)
-        except Exception as erros:
-            flash(f"Erro ao tentar atualizar a agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)
-        
-        return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))       
-        
-    @classmethod
-    def consultar_agenda_mensal_barbearia(cls):        
-        try:
-            return ControladorAgendaMensal.consultar_todas_agenda_mensal_service()
-        except Exception as erros:
-            flash(f"Erro na consulta da agenda da barbearia {erros}", EnumStatusMensagens.ERRO.value)     
-    
-    @classmethod
-    def atualizar_status_agenda_mensal_barbearia(cls, agenda_mensal):        
-        try:
-            resultado = ControladorAgendaMensal.atualizar_status_agenda_mensal_service(agenda_mensal)
-            if resultado > 0:
-                status = "ativada" if agenda_mensal.status_agenda_mensal else "desativada"
-                flash(f"Agenda mensal {status} com sucesso", EnumStatusMensagens.SUCESSO.value)
-            else:
-                flash(f"Agenda mensal não atualizado com sucesso", EnumStatusMensagens.ERRO.value)       
-                
-        except Exception as erros:
-            flash(f"Erro ao tentar alterar o status da agenda {erros}", EnumStatusMensagens.ERRO.value)  
-        
-        return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))        
+            return redirect(url_for("gestor.gestor_horario_funcionamento_barbearia"))
 
     @classmethod
-    def consultar_recessos_barbearia_por_mes(cls):        
-        try:
-            return cls.__recesso_service.consultar_recessos_por_mes_services()  
-        except Exception as erros:
-            flash(f"Erro consultar os recessos da barbearia {erros}", EnumStatusMensagens.ERRO.value)  
-              
-    @classmethod
-    def cadastrar_recessos_barbearia_por_mes(cls, recesso):        
-        try:
-            if cls.__recesso_service.cadastrar_recessos_services(recesso):
-                flash(f"Recesso [ {recesso.descricao_recesso } ] cadastrado com sucesso.", EnumStatusMensagens.SUCESSO.value)  
-        except Exception as error:
-            flash(f"Erro cadastrar o recesso da barbearia {error}", EnumStatusMensagens.ERRO.value)  
-        
-        return redirect(url_for("gestor.gestor_recesso_consultar"))
-    
-    @classmethod
-    def atualizar_recessos_barbearia(cls, recesso):        
-        try:
-            if cls.__recesso_service.atualizar_recessos_services(recesso):
-                flash(f"Recesso [ {recesso.descricao_recesso} ] atualizado com sucesso", EnumStatusMensagens.SUCESSO.value)  
-        except Exception as erros:
-            flash(f"Erro atualizar o recesso [ {recesso.descricao_recesso} ] {erros}da barbearia", EnumStatusMensagens.ERRO.value)
-            
-        return redirect(url_for("gestor.gestor_recesso_consultar"))         
-    
-    @classmethod
-    def excluir_recessos_barbearia_por_mes(cls, recesso):        
-        try: 
-            if  cls.__recesso_service.excluir_recessos_services(recesso.id_recesso):
-                flash(f"Recesso [ {recesso.descricao_recesso} ] excluido com sucesso", EnumStatusMensagens.SUCESSO.value) 
-        except Exception:
-            flash(f"Erro ao tentar excluir o recesso [ {recesso.descricao_recesso} ] da barbearia", EnumStatusMensagens.ERRO.value)  
-        
-        return redirect(url_for("gestor.gestor_recesso_consultar"))
-    
-    @classmethod
     def excluir_cliente_barbearia(cls,  id_usuario, foto_nome, nome_cliente):
-        try: 
+        try:
             if  cls.__controlador_cliente.excluir_cliente(id_usuario,foto_nome,EnumNomesPastaImagem.IMAGENS_CLIENTE):
-                flash(f"Cliente [ {nome_cliente} ] excluido com sucesso", EnumStatusMensagens.SUCESSO.value) 
+                flash(f"Cliente [ {nome_cliente} ] excluido com sucesso", EnumStatusMensagens.SUCESSO.value)
         except Exception:
-            flash(f"Erro ao tentar excluir o cliente [ {nome_cliente} ] da barbearia", EnumStatusMensagens.ERRO.value)  
-               
-        return redirect(url_for("gestor.gestorExibirClientes")) 
-    
+            flash(f"Erro ao tentar excluir o cliente [ {nome_cliente} ] da barbearia", EnumStatusMensagens.ERRO.value)
+
+        return redirect(url_for("gestor.gestorExibirClientes"))
+
     @classmethod
     def atualizar_cliente_barbearia(cls, cliente):
-        try: 
-            if  cls.__controlador_cliente.atualziar_cliente(cliente):
+        try:
+            if  cls.__controlador_cliente.atualizar_cliente(cliente):
                 db.session.commit()
-                flash(f"Cliente [ {cliente.nome_completo} ] atualizado com sucesso", EnumStatusMensagens.SUCESSO.value) 
+                flash(f"Cliente [ {cliente.nome_completo} ] atualizado com sucesso", EnumStatusMensagens.SUCESSO.value)
         except Exception:
-            flash(f"Erro ao tentar atualizar o cliente [ {cliente.nome_completo} ] da barbearia", EnumStatusMensagens.ERRO.value)  
-               
-        return redirect(url_for("gestor.gestorExibirClientes")) 
+            flash(f"Erro ao tentar atualizar o cliente [ {cliente.nome_completo} ] da barbearia", EnumStatusMensagens.ERRO.value)
+
+        return redirect(url_for("gestor.gestorExibirClientes"))
     
-    
-    
-    
-    
-    
+   
     
     
            

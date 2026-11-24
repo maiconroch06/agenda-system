@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
+from requests import PreparedRequest
 from controladores import ControladorCliente
 from models import Cliente, Agendamento
 from datetime import datetime, timezone
@@ -15,18 +16,21 @@ def clientSource():
  
 @cliente.route('/login', methods=["GET"])
 def clientLoginPage():
-    return render_template('pages/cliente/cliente-login.html',mensagens_status=EnumStatusMensagens)
+    if session.get("dados_cliente") is None:
+        return render_template('pages/cliente/cliente-login.html',mensagens_status=EnumStatusMensagens)
+    
+    return redirect(url_for('cliente.clientAgendamentoServicos'))
 
 @cliente.route('/login', methods=["POST"])
 def clientLogin():   
     # Verificando o tipo de request POST
    if request.method == "POST":
-        email_digitado = request.form.get('email')
-        senha_digitada = request.form.get('senha')
+        email_digitado = request.form.get('email','')
+        senha_digitada = request.form.get('senha','')
         
         controladorCliente = ControladorCliente()
 
-        return controladorCliente.login(email_digitado,senha_digitada)
+        return controladorCliente.login(email_digitado, senha_digitada)
         
 
 @cliente.route('/logout', methods=["GET","POST"])
@@ -54,12 +58,12 @@ def clientRegister():
             cpf=None,
             email=request.form.get('email'),
             senha= request.form.get('senha'),
-            foto_nome_usuario= None,
+            foto_usuario= None,
             motivo_bloqueio=None,
             endereco = None,
             status_usuario=1,
-            data_cadastro=datetime.now(timezone.utc),
-            data_ultimo_acesso=datetime.now(timezone.utc)
+            data_cadastro=datetime.now(),
+            data_ultimo_acesso=datetime.now()
     )
     
     controladorCliente = ControladorCliente() 
@@ -75,6 +79,7 @@ def clientAgendamentoServicos():
 def clientAgendamentoServicosCadastro():
     dados = request.get_json(silent=True)
     dados_session = session.get('dados_cliente')
+     
 
     cliente = Cliente(
         id_usuario=dados_session.get('id_cliente'),
@@ -89,11 +94,12 @@ def clientAgendamentoServicosCadastro():
 
     agendamento = Agendamento(
         data_agendamento=dados.get('data'),
-        hora_inicio=dados.get('horario'),
-        hora_fim=dados.get('horario'),
+        hora_inicio=dados.get('horario_inicio'),
+        hora_fim=dados.get('horario_fim'),
         status_agendamento=True,
-        data_ultimo_acesso=datetime.now(),
+        data_atualizacao=datetime.now(),
         motivo_cancelamento=None,
+        valor_total_servicos=dados.get("valor_total_servicos_agendamento"),
         barbeiro=None,
         cliente=cliente
     )
@@ -118,9 +124,11 @@ def cadastroSucesso():
 def authentication():
     
     if 'dados_gestor' in session:
-        return redirect(url_for('gestor.managerPanel'))
-        
-        
+        return redirect(url_for('gestor.gestorLoginPagina'))
+    
+    if 'dados_barbeiro' in session:
+        return redirect(url_for('barbeiro.barbeiroLoginPagina'))
+            
     #Criando as minhas rotas publicas
     routers_publics = ['cliente.clientLoginPage','cliente.clientLogin','cliente.clientRegisterPage','cliente.clientRegister']
     

@@ -33,6 +33,11 @@
                 
                 <!-- ABA 5: CLIENTES -->
                 <section id="aba-clientes">
+                    <!-- Mensagem form consultar por nome vazio -->
+                    <div id='div-validation-message'
+                        class="bg-red-500/10 border border-red-500/30 mb-8 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide hidden ">
+                        <p id="validation-menssage"></p>
+                    </div>
                     <!-- ============================================================
                     COMPONENTIZADO - SISTEMA DE ALERTAS PERSONALIZADO (FIXED COLORS)
                     ============================================================ -->
@@ -40,17 +45,24 @@
                     {% include "componetizacao/mensagens/mensagens.html" %}
 
                     <div class="flex items-center justify-between mb-5 gap-3">
+                        
+                       
+
                         <div>
                             <h1 class="text-lg lg:text-xl font-semibold">Gestão de Clientes</h1>
                             <p class="text-xs text-[#888780]" id="data-atual-str"></p>
                         </div>
 
                         <div>
-                            <form action="#" method="post">
-                                <input class="h-9 md:h-10 px-3 w-32 md:w-64 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none"
-                                id="busca-cliente" name="buscar-cliente" type="text" placeholder="Buscar por nome ou telefone...">
-                                <button id="consultar-cliente" type="submit" class="px-4 py-2 md: ml-3 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
+                            <form action="/gestor/painel/cliente/consultar/nome" method="post" id="form-consultar-cliente-nome">
+                                <input id="input-nome-cliente-consulta"
+                                 class="h-9 md:h-10 px-3 w-32 md:w-64 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none"
+                                name="consultar-cliente" type="text" placeholder="Buscar por nome ..." value="{{nome_cliente if nome_cliente else ''}}">
+                                <button id="button-consultar-cliente" type="submit" class="px-4 py-2 md: ml-3 rounded-xl bg-[#f1efe8] text-[#161513] text-xs font-semibold hover:bg-[#e2dfd7] transition-colors cursor-pointer">
                                     Consultar Cliente
+                                </button>                                    
+                                <button id="limpar-consulta-cliente" type="reset" class="px-4 py-2 md: ml-3 rounded-xl bg-red-700 text-white text-xs font-semibold hover:bg-red-500 transition-colors cursor-pointer {{'hidden' if modo==0 else ''}}">
+                                    Limpar consulta
                                 </button>                                    
                             </form>
                         </div>

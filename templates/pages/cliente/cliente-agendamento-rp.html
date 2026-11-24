@@ -68,8 +68,11 @@
         </ol>
         
         <!-- Mensagem de Erro -->
-        {% set mensagens =  mensagens_status %}
-        {% include "componetizacao/mensagens/mensagens.html" %}
+        <div id="mensagens-flash">
+            {% set mensagens=mensagens_status %}
+            {% include "componetizacao/mensagens/mensagens.html" %}
+        </div>
+        
 
         <!-- PAINEL 1: SERVIÇO -->
         <section id="painel-1">
@@ -128,7 +131,7 @@
                             data-foto="{{ url_for(
                                 'static',
                                 filename=config['UPLOAD_FILES'].replace('static/', '') ~
-                                '/servicos-imagens/' ~ servico.foto_nome_servico
+                                '/servicos-imagens/' ~ servico.foto_servico
                             ) }}"
                         >
 
@@ -148,7 +151,7 @@
                                     src="{{ url_for(
                                         'static',
                                         filename=config['UPLOAD_FILES'].replace('static/', '') ~
-                                        '/servicos-imagens/' ~ servico.foto_nome_servico
+                                        '/servicos-imagens/' ~ servico.foto_servico
                                     ) }}"
                                     alt="{{ servico.descricao_servico }}"
                                     class="w-full h-full object-cover object-center
@@ -247,7 +250,7 @@
                             data-foto="{{ url_for(
                                 'static',
                                 filename=config['UPLOAD_FILES'].replace('static/', '') ~
-                                '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario
+                                '/barbeiro-imagens/' ~ barbeiro.foto_usuario
                             ) }}"
                         >
 
@@ -265,7 +268,7 @@
                                     src="{{ url_for(
                                         'static',
                                         filename=config['UPLOAD_FILES'].replace('static/', '') ~
-                                        '/barbeiro-imagens/' ~ barbeiro.foto_nome_usuario
+                                        '/barbeiro-imagens/' ~ barbeiro.foto_usuario
                                     ) }}"
                                     alt="{{ barbeiro.nome }}"
                                     class="w-full h-full object-cover object-center
@@ -357,12 +360,16 @@
                 Selecione um dia e depois escolha um horário disponível
             </p>
 
-            <div class="flex gap-2.5 overflow-x-auto mb-6 pt-1.5 pb-2" id="abas-dias">
+            <div
+                class="flex gap-2.5 overflow-x-auto mb-6 pt-1.5 pb-2"
+                id="abas-dias">
             </div>
+    
 
-            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5 p-1" id="grade-horarios">
+            <div
+                class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5 p-1"
+                id="grade-horarios">
             </div>
-
         </section>
 
 
@@ -482,13 +489,22 @@
 
     <script>
         const AGENDA_DISPONIVEL = {{ (agenda_mensal is not none) | tojson }};
+
         const AGENDA_MENSAL = {{ {
             "id": agenda_mensal.id_agenda_mensal,
             "dataInicial": agenda_mensal.data_inicial_mes.isoformat(),
             "dataFinal": agenda_mensal.data_final_mes.isoformat()
         } | tojson if agenda_mensal else 'null' }};
+
+        const HORARIOS_BARBEARIA = {{ horarios_barbearia | tojson }};
+        const DIAS_FUNCIONAMENTO = {{ dados_barbearia.horario_funcionamento.dias_funcionamento | tojson }};
+        const RECESSOS = {{ recessos | tojson }};
+        const FALTAS_BARBEIROS = {{ barbeiro_faltas | tojson }};
+
         const URL_CADASTRAR_AGENDAMENTO = {{ url_for('cliente.clientAgendamentoServicosCadastro') | tojson }};
         const URL_MEUS_AGENDAMENTOS = {{ url_for('cliente.clientMeusAgendamentos') | tojson }};
+
+        const AGENDAMENTOS = {{ agendamentos | tojson }};
 
         document.getElementById("btn_novo_agendamento").addEventListener("click",()=>{
         window.location.href = "/cliente/agendamento/servicos";

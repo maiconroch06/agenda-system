@@ -37,7 +37,7 @@ class ClienteDAO:
                 u.cpf,
                 u.email,
                 u.senha,
-                u.foto_nome_usuario,
+                u.foto_usuario,
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_ultimo_acesso,
@@ -69,7 +69,7 @@ class ClienteDAO:
                 u.cpf,
                 u.email,
                 u.senha,
-                u.foto_nome_usuario,
+                u.foto_usuario,
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_ultimo_acesso,
@@ -100,7 +100,7 @@ class ClienteDAO:
                 u.email,
                 u.cpf,
                 u.status_usuario,
-                u.foto_nome_usuario,
+                u.foto_usuario,
                 u.motivo_bloqueio,
                 u.data_ultimo_acesso,
                 (select count(id_agendamento) from agendamento where fk_id_cliente=c.id_cliente) as total_servicos,
@@ -115,6 +115,32 @@ class ClienteDAO:
         registros = db.session.execute(sql).mappings().all()
 
         return [dict(registro) for registro in registros]
+    
+    def consultar_clientes_nome_resumido(self, nome_completo):
+            sql = text("""
+                SELECT u.id_usuario,
+                    u.nome_completo,
+                    u.telefone,
+                    u.email,
+                    u.cpf,
+                    u.status_usuario,
+                    u.foto_usuario,
+                    u.motivo_bloqueio,
+                    u.data_ultimo_acesso,
+                    (select count(id_agendamento) from agendamento where fk_id_cliente=c.id_cliente) as total_servicos,
+                    (select sum(valor_total_servicos) from agendamento where fk_id_cliente=c.id_cliente) as valor_total,
+                    c.data_ultimo_servico
+                FROM usuario u
+                INNER JOIN cliente c
+                    ON c.id_cliente = u.id_usuario
+                WHERE
+                    u.nome_completo LIKE :nome_completo
+                ORDER BY u.nome_completo
+            """)
+    
+            registros = db.session.execute(sql, {"nome_completo": f"%{nome_completo}%"}).mappings().all()
+    
+            return [dict(registro) for registro in registros]
 
     def atualizar(self, cliente: Cliente):
         sql_usuario = text("""
@@ -125,7 +151,7 @@ class ClienteDAO:
                 cpf = :cpf,
                 email = :email,
                 senha = :senha,
-                foto_nome_usuario = :foto_nome_usuario,
+                foto_usuario = :foto_usuario,
                 status_usuario = :status_usuario,
                 data_ultimo_acesso = :data_ultimo_acesso,
                 fk_id_endereco = :fk_id_endereco
@@ -147,7 +173,7 @@ class ClienteDAO:
             "cpf": cliente.cpf,
             "email": cliente.email,
             "senha": cliente.senha,
-            "foto_nome_usuario": cliente.foto_nome_usuario,
+            "foto_usuario": cliente.foto_usuario,
             "status_usuario": cliente.status_usuario,
             "data_ultimo_acesso": cliente.data_ultimo_acesso,
             "fk_id_endereco": cliente.fk_id_endereco,
@@ -198,7 +224,7 @@ class ClienteDAO:
             cpf=registro["cpf"],
             email=registro["email"],
             senha=registro["senha"],
-            foto_nome_usuario=registro["foto_nome_usuario"],
+            foto_usuario=registro["foto_usuario"],
             status_usuario=bool(registro["status_usuario"]),
             data_cadastro=registro["data_cadastro"],
             data_ultimo_acesso=registro["data_ultimo_acesso"],

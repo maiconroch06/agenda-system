@@ -13,6 +13,25 @@ const txt_titulo_modal_recesso = document.getElementById("form-title-recesso");
 
 const formulario = document.getElementById("form-agenda-recesso");
 
+const botao_faltas_justificadas_mensais_global = document.getElementById("consulta_recesso_barbearia_mensal");
+const botao_faltas_justificadas_anual_global = document.getElementById("consulta_recesso_barbearia_anual");
+const botao_limpar_faltas_justificadas_mensais_global = document.getElementById("limpar_consulta_recesso_barbearia");
+
+botao_faltas_justificadas_mensais_global.addEventListener("click", () => {
+    console.log("passou aqui");
+    window.location.href = "/gestor/painel/recessos/consultar/mes_atual";
+});
+
+botao_limpar_faltas_justificadas_mensais_global.addEventListener("click", () => {
+    console.log("passou aqui");
+    window.location.href = "/gestor/painel/recessos";
+});
+
+botao_faltas_justificadas_anual_global.addEventListener("click", () => {
+    console.log("passou aqui");
+    window.location.href = "/gestor/painel/recessos/consultar/ano_atual";
+});
+
 botao_editar_recesso_global.forEach(
 
     (editar)=>{
@@ -97,7 +116,7 @@ function validacoes(){
     }else if(form_campo_data_inicio_recesso.value < data_atual.toLocaleDateString('en-CA') || form_campo_data_fim_recesso.value < data_atual.toLocaleDateString('en-CA')){
         erros.push('ATENÇÃO, campos data inicio e data fim da recesso não pode ser menos que a data atual [ '+data_atual.toLocaleDateString('pt-br')+' ]');
     }
-    else if(form_campo_data_inicio_recesso.value > form_campo_data_fim_recesso.value){
+    else if(form_campo_data_inicio_recesso.value.trim() > form_campo_data_fim_recesso.value.trim()){
         erros.push('ATENÇÃO, A data inicio do recesso não pode ser maior que sua data fim.');
     }
 

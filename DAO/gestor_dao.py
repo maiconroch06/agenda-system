@@ -16,7 +16,7 @@ class GestorDAO:
                 u.cpf,
                 u.email,
                 u.senha,
-                u.foto_nome_usuario,
+                u.foto_usuario,
                 u.status_usuario,
                 u.data_cadastro,
                 u.data_ultimo_acesso,

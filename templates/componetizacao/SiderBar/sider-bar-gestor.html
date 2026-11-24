@@ -33,7 +33,7 @@
         </a>
         <!-- Recessos -->
         <a href="/gestor/painel/recessos">
-            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/agenda' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/recessos' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
                 <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-recesso.html" %}</span> Recessos
             </button>
         </a>
@@ -54,7 +54,7 @@
        
         <!-- Faltas dos Barbeiros -->
         <a href="/gestor/painel/barbeiros/faltas-justificadas">
-            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/barbeiros/faltas_justificadas' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
+            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/barbeiros/faltas-justificadas' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
                 <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-barbeiro-faltas-justificadas.html" %}</span> Faltas dos barbeiros
             </button>
         </a>
@@ -63,13 +63,6 @@
         <a href="/gestor/painel/clientes">
             <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/clientes' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
                 <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-clientes.html" %}</span> Clientes
-            </button>
-        </a>
-        
-        <!-- Financeiro -->
-        <a href="/gestor/painel/financeiro">
-            <button class="flex items-center gap-2.5 p-2.5 px-3 rounded-lg border-none font-medium text-sm cursor-pointer text-left w-full transition-colors {{ 'bg-[#2a2825] text-[#f1efe8]' if request.path == '/gestor/painel/financeiro' else 'bg-transparent text-[#888780] hover:bg-[#2a2825] hover:text-[#f1efe8]' }}">
-                <span class="text-lg w-5.5 text-center">{% include "componetizacao/icones/icone-financeiro.html" %}</span> Financeiro
             </button>
         </a>
     </nav>

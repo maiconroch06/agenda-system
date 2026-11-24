@@ -1,5 +1,5 @@
 from datetime import date, time, datetime, timedelta
-from .barbeiros import Barbeiro
+from .barbeiro import Barbeiro
 from .cliente import Cliente
 from .servicos import Servico
 
@@ -17,6 +17,7 @@ class Agendamento:
         barbeiro: Barbeiro= None,
         cliente: Cliente= None,
         id_agendamento = None,
+        valor_total_servicos = None
     ):
         self.__id_agendamento = id_agendamento
         self.__data_agendamento = data_agendamento
@@ -27,6 +28,7 @@ class Agendamento:
         self.__data_atualizacao = data_atualizacao
         self.__barbeiro = barbeiro
         self.__cliente = cliente
+        self.__valor_total_servicos = valor_total_servicos
 
     @property
     def id_agendamento(self):
@@ -99,26 +101,20 @@ class Agendamento:
     @cliente.setter
     def cliente(self, value):
         self.__cliente = value
+   
+    @property
+    def valor_total_servicos(self):
+        return self.__valor_total_servicos
+
+    @valor_total_servicos.setter
+    def valor_total_servicos(self, value):
+        self.__valor_total_servicos = value
  
     def _str__(self):
         return (
-            f"Agendamento(id={self.__id}, "
+            f"Agendamento(id={self.__id_agendamento}, "
             f"data={self.__data_agendamento}, "
             f"inicio={self.__hora_inicio}, "
             f"fim={self.__hora_fim}, "
             
         )
-
-    # Validações
-    @staticmethod
-    def _converter_timedelta_para_time(valor):
-
-        if isinstance(valor, timedelta):
-            segundos = int(valor.total_seconds())
-
-            horas, resto = divmod(segundos, 3600)
-            minutos, segundos = divmod(resto, 60)
-
-            return time(horas, minutos, segundos)
-
-        return valor

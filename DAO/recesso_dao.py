@@ -1,8 +1,6 @@
 
 from sqlalchemy import text
 from database import db
-from datetime import date, timezone
-import calendar
 
 from models import Recesso
 from DAO.agenda_mensal_dao import AgendaMensalDAO
@@ -39,7 +37,8 @@ class RecessoDAO:
 
         return resultado.rowcount > 0
 
-    def listar_por_mes (self):
+
+    def consultar_recessos (self, data_inicio, data_final):
         sql = text("""
             SELECT
                 id_recesso,
@@ -53,8 +52,8 @@ class RecessoDAO:
         resultado = db.session.execute(
             sql,
             {
-                "data_inicio": date.today().replace(day=1),
-                "data_final": date.today().replace(day=calendar.monthrange(date.today().year, date.today().month)[1]),
+                "data_inicio": data_inicio,
+                "data_final": data_final,
              }
         ).mappings().all()
 
@@ -80,8 +79,6 @@ class RecessoDAO:
             {"data_inicio_mes": recesso.data_inicio_recesso}
         )
         
-        db.session.commit()
-
         return resultado.scalar()
     
     
@@ -103,9 +100,7 @@ class RecessoDAO:
                
                 }
         )
-        
-        db.session.commit()
-        
+
         return resultado.scalar()
 
     def listar_todos(self):
@@ -125,6 +120,28 @@ class RecessoDAO:
                     self.__mapear_recesso(registro)
                     for registro in resultados
                 ]
+        
+    def consultar_recessos_por_intervalo_datas(self, data_inicio, data_final):
+            sql = text("""
+                SELECT
+                    id_recesso,
+                    descricao_recesso,
+                    data_inicio_recesso,
+                    data_fim_recesso
+                FROM recesso
+                    WHERE data_inicio_recesso >= :data_inicio AND data_fim_recesso <= :data_final
+                ORDER BY data_fim_recesso DESC
+            """)
+    
+            resultados = db.session.execute(sql, {
+                "data_inicio": data_inicio,
+                "data_final":data_final
+                }).mappings().all()
+    
+            return  [
+                        self.__mapear_recesso(registro)
+                        for registro in resultados
+                    ]
             
 
     def atualizar(self, recesso: Recesso):
@@ -165,7 +182,7 @@ class RecessoDAO:
         return resultado.rowcount > 0
 
     def __mapear_recesso(self, registro):
-        
+                
         return Recesso(
             id_recesso=registro["id_recesso"],
             data_inicio_recesso=registro["data_inicio_recesso"],
