@@ -82,12 +82,14 @@ def barbeiroPainel():
 
     # Cálculos para o Card de Progresso
     total = len(agendamentos)
-    concluidos = sum(1 for a in agendamentos if a.get('status') == 2)
+    concluidos = sum(1 for a in agendamentos if a.get('status') == 3)
+    emAndamento = sum(1 for a in agendamentos if a.get('status') == 2)
     cancelados = sum(1 for a in agendamentos if a.get('status') == 0)
-    pendentes = total - concluidos - cancelados
+    pendentes = total - concluidos - cancelados - emAndamento
     total_validos = total - cancelados
 
     pct_concluidos = (concluidos / total * 100) if total > 0 else 0
+    pct_emAndamento = (emAndamento / total * 100) if total > 0 else 0
     pct_cancelados = (cancelados / total * 100) if total > 0 else 0
     pct_pendentes = (pendentes / total * 100) if total > 0 else 0
 
@@ -102,7 +104,7 @@ def barbeiroPainel():
         dias_semana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
         data_display = f"{dias_semana[data_exibicao.weekday()]}, {data_exibicao.strftime('%d/%m')}"
 
-    print(f"{agendamentos}")
+    print(f"\n\nPASSOU AQUI EM PAINEL: {agendamentos}\n\n")
 
     return render_template('pages/barbeiro/barbeiro-painel-inicio-rp.html',
                            barbeiro = barbeiro,
@@ -110,6 +112,7 @@ def barbeiroPainel():
                             concluidos = concluidos,
                             total_validos = total_validos,
                             pct_concluidos = pct_concluidos,
+                            pct_emAndamento = pct_emAndamento,
                             pct_cancelados = pct_cancelados,
                             pct_pendentes = pct_pendentes,
                             data_display = data_display,

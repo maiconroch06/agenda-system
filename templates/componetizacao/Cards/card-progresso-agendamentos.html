@@ -16,6 +16,13 @@
             id="progresso-fill"
             title="Concluídos">
         </div>
+
+        <!-- Barra Verde-Clarin (Em Andamento) -->
+        <div style="width: {{ pct_emAndamento }}%;" 
+            class="bg-[#7cc4fa] transition-all duration-500" 
+            id="progresso-emAndamento"
+            title="emAndamento">
+        </div>
         
         <!-- Barra Amarela (Pendentes/Agendados) -->
         <div style="width: {{ pct_pendentes }}%;" 
@@ -35,6 +42,7 @@
     <!-- Mini legenda indicativa abaixo da barra -->
     <div class="flex gap-4 mt-3 text-[10px] text-[#888780] font-medium">
         <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#085041]"></span> Concluído</div>
+        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#7cc4fa]"></span> Em andamento</div>
         <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f0c05a]"></span> Pendente</div>
         <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#881c1c]"></span> Cancelado</div>
     </div>
