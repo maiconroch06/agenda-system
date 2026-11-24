@@ -65,7 +65,7 @@ def barbeiroPainel():
     data_str = data_exibicao.strftime('%d/%m/%Y')
 
     # Consultar agendamentos brutos
-    agendamentos_brutos = ControladorBarbeiro.consultar_agendamentos_barbeiro(barbeiro)
+    agendamentos_brutos = ControladorBarbeiro.consultar_agendamentos_barbeiro(barbeiro.get('id_barbeiro'))
     
     # Filtrar pela data de exibição
     agendamentos = [a for a in agendamentos_brutos if a.get('data') == data_str]
@@ -77,7 +77,7 @@ def barbeiroPainel():
         else: return 4 
         
     agendamentos = sorted(
-        agendamentos, key=lambda a: (peso_status(a.get('status')), a.get('hora', '00:00'))
+        agendamentos, key=lambda a: (peso_status(a.get('status')), a.get('hora_inicio', '00:00'))
     )
 
     # Cálculos para o Card de Progresso
@@ -138,9 +138,9 @@ def atualizar_status(id_agendamento):
     if status_agendamento == 'motivo':
         novo_status = 0
         motivo_cancelamento = request.form.get('motivo')
-        print(f'\n\n{motivo_cancelamento}\n\n')
+        print(f'\n\n{id_agendamento} - {motivo_cancelamento}\n\n')
                 
-        ControladorBarbeiro.atualizar_status_agendamento(id_agendamento, novo_status, motivo_cancelamento)
+        ControladorBarbeiro.cancelar_agendamento(id_agendamento, motivo_cancelamento)
 
     else:
         try:
@@ -148,7 +148,7 @@ def atualizar_status(id_agendamento):
         except (ValueError, TypeError):
             novo_status = status_agendamento
             
-        ControladorBarbeiro.atualizar_status_agendamento(id_agendamento, novo_status, None)
+        ControladorBarbeiro.atualizar_status_agendamento(id_agendamento, novo_status)
     
     # Recarrega o painel após a alteração de status
     return redirect(url_for('barbeiro.barbeiroPainel'))

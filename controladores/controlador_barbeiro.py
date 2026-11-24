@@ -4,11 +4,13 @@ from database import db
 from enums import EnumStatusMensagens
 from services_mvc import BarbeiroService
 from .controlador_faltas_justificadas import FaltasJustificadaBarbeiro
+from services_mvc import AgendamentoService
 
 
 class ControladorBarbeiro:
 
     __barbeiroService = BarbeiroService()
+    __agendamentoService = AgendamentoService()
     
     @classmethod
     def login_barbeiro(cls, email:str, senha:str):
@@ -43,8 +45,8 @@ class ControladorBarbeiro:
         
              
     @classmethod
-    def consultar_agendamentos_barbeiro(cls, barbeiro:dict):
-        return cls.__barbeiroService.consultar_agendamentos_barbeiro(barbeiro)
+    def consultar_agendamentos_barbeiro(cls, id_barbeiro):
+        return cls.__agendamentoService.consultar_agendamentos_por_barbeiro(id_barbeiro)
     
     @classmethod
     def atualizar_endereco_barbeiro(cls, endereco):
@@ -59,17 +61,17 @@ class ControladorBarbeiro:
     @classmethod
     def atualizar_status_agendamento(cls, id_agendamento:int, status_agendamento:int):
         try:
-            cls.__barbeiroService.alterar_status_agendamento(id_agendamento, status_agendamento)
+            cls.__agendamentoService.alterar_status_agendamento(id_agendamento, status_agendamento)
             flash("Agendamento alterado com sucesso", EnumStatusMensagens.SUCESSO.value)
         except Exception as erros:
             flash(f"Não foi possivel alterar o status do agendamento, contate o suporte", EnumStatusMensagens.AVISO.value)
             flash(f"{erros}")
     
     @classmethod
-    def atualizar_status_agendamento(cls, id_agendamento:int, status_agendamento:int, motivo_cancelamento:str):
+    def cancelar_agendamento(cls, id_agendamento:int, motivo_cancelamento:str):
         try:
-            cls.__barbeiroService.alterar_status_agendamento(id_agendamento, status_agendamento, motivo_cancelamento)
-            flash("Agendamento alterado com sucesso", EnumStatusMensagens.SUCESSO.value)
+            cls.__agendamentoService.cancelar_agendamento(id_agendamento, motivo_cancelamento)
+            flash("Agendamento cancelado com sucesso", EnumStatusMensagens.SUCESSO.value)
         except Exception as erros:
             flash(f"Não foi possivel alterar o status do agendamento, contate o suporte", EnumStatusMensagens.AVISO.value)
             flash(f"{erros}")
