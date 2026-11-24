@@ -80,10 +80,14 @@ class ControladorGestor():
         return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos = cls.__controlador_agendamento.consultar_agendamento(status_agendamento)) 
     
     @classmethod
-    def consultar_agendamentos_data_hoje(cls, data_hoje):
-        return render_template('pages/gestor/gestor-painel-inicio-rp.html', agendamentos_flask = cls.__controlador_agendamento.consultar_agendamento_dia(data_hoje),
+    def consultar_agendamento_data_atual(cls, data_hoje):
+        return render_template('pages/gestor/gestor-painel-inicio-rp.html', 
+                               agendamentos_flask = cls.__controlador_agendamento.consultar_agendamento_data_atual(data_hoje),
                                total_cancelados = cls.__controlador_agendamento.consultar_total_agendamento_cancelado_por_dia(data_hoje),
-                               ticket_medio_mensal=ControladorAgendamento.consultar_valor_ticket_medio_mensal_agendamento(), capacidade_atendimento=ControladorHorarioFuncionamento.consultar_capacidade_realizar_servicos_dia()) 
+                               ticket_medio_mensal=ControladorAgendamento.consultar_valor_ticket_medio_mensal_agendamento(),
+                               total_babeiros =ControladorBarbeiro.consultar_total_barbeiro_ativo(),
+                               capacidade_atendimento=ControladorHorarioFuncionamento.consultar_capacidade_realizar_servicos_dia(),
+                               mensagens_status=EnumStatusMensagens) 
         
     @classmethod
     def consultar_horario_funcionamento(cls, id_barbearia):

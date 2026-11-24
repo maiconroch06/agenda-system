@@ -24,6 +24,9 @@ class BarbeiroRepositorio:
     
     def consultar_nomes_barbeiro(self):
         return self.__barbeiroDao.consultar_nomes_barbeiro()
+   
+    def consultar_total_barbeiro_ativo(self):
+        return self.__barbeiroDao.consultar_total_barbeiro_ativo()
 
     def listar_todos_ativos(self):
         return self.__barbeiroDao.consultar_todos_ativos()

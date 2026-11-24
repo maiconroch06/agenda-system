@@ -16,6 +16,9 @@ class AgendamentoService:
     
     def consultar_agendamento_data_atual(self, data_hoje): 
         return self.__agendamento_repositorio.consultarAgendamentoDataAtual(data_hoje)
+   
+    def consultar_agendamento_filtros(self, barbeiro_id, status,servico_id,data_inicio,data_fim): 
+        return self.__agendamento_repositorio.consultar_agendamento_filtros(barbeiro_id,  status,servico_id,data_inicio,data_fim)
     
     def consultar_total_agendamento_cancelado_data_hoje(self, data_hoje): 
         return self.__agendamento_repositorio.consultarTotalAgendamentoCanceladoPorDia(data_hoje)

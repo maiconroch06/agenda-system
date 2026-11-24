@@ -50,6 +50,13 @@ class BarbeiroService(UsuarioService):
             return barbeiros
         except Exception as error:
             flash(f"Erro ao buscar os barbeiros cadastrados no banco {error}")
+   
+    def consultar_total_barbeiro_ativo(self):
+        try:
+            barbeiros = self.__barbeiroRepositorio.consultar_total_barbeiro_ativo()
+            return barbeiros
+        except Exception as error:
+            flash(f"Erro ao buscar total de barbeiros ativos no banco {error}")
 
     def consultar_barbeiros_ativos(self):
             try:

@@ -164,8 +164,8 @@ class AgendamentoDAO:
                     -- Dados do agendamento
                     a.id_agendamento,
                     a.data_agendamento,
-                    a.hora_inicio,
-                    a.hora_fim,
+                    TIME_FORMAT(a.hora_inicio, '%H:%i') hora_inicio,
+                    TIME_FORMAT(a.hora_fim, '%H:%i') hora_fim,
                     a.status_agendamento,
                     a.data_atualizacao,
                     a.fk_id_barbeiro,
@@ -179,6 +179,7 @@ class AgendamentoDAO:
                     -- Dados do barbeiro
                     b.id_barbeiro,
                     ub.nome_completo,
+                    ub.foto_usuario,
                     ub.email,
                     ub.telefone,
                     ub.cpf,
@@ -264,6 +265,101 @@ class AgendamentoDAO:
             
             
             return resultados.scalar()
+    
+    @staticmethod
+    def consultar_agendamento_filtros(barbeiro_id,status,servico_id,data_inicio,data_fim):
+        sql = text("""
+                    
+                    SELECT
+                        -- Dados do agendamento
+                        a.id_agendamento,
+                        a.data_agendamento,
+                        TIME_FORMAT(a.hora_inicio, '%H:%i') hora_inicio,
+                        TIME_FORMAT(a.hora_fim, '%H:%i') hora_fim,
+                        a.status_agendamento,
+                        a.data_atualizacao,
+                        a.fk_id_barbeiro,
+                        a.fk_id_cliente,
+                        a.motivo_cancelamento,
+                        a.valor_total_servicos,
+                        
+                        # Junta os nomes dos serviços em uma única linha (Ex: "Corte, Barba")
+                        GROUP_CONCAT(s.descricao_servico SEPARATOR ', ') AS nome_servico,
+                                               
+                        # Dados do barbeiro
+                        b.id_barbeiro,
+                        ub.nome_completo,
+                        ub.foto_usuario,
+                        ub.email,
+                        ub.telefone,
+                        ub.cpf,
+                        ub.data_ultimo_acesso,
+                        b.bio,
+    
+                        # Dados do cliente
+                        c.id_cliente,
+                        uc.nome_completo AS nome_cliente,
+                        uc.telefone AS telefone_cliente
+    
+                    FROM agendamento a
+    
+                    INNER JOIN barbeiro b
+                        ON a.fk_id_barbeiro = b.id_barbeiro
+    
+                    INNER JOIN cliente c
+                        ON a.fk_id_cliente = c.id_cliente
+    
+                    INNER JOIN usuario uc
+                        ON c.id_cliente = uc.id_usuario
+    
+                    INNER JOIN usuario ub
+                        ON b.id_barbeiro = ub.id_usuario
+                        
+                    LEFT JOIN agendamento_servicos ags
+                        ON a.id_agendamento = ags.agendamento_id
+                        
+                    LEFT JOIN servico s
+                        ON ags.servico_id = s.id_servico
+    
+                    WHERE
+                       
+                        a.data_agendamento BETWEEN :data_inicio AND :data_fim
+
+                       
+                        AND (
+                            :id_barbeiro = -1
+                            OR a.fk_id_barbeiro = :id_barbeiro
+                        )
+
+                       
+                        AND (
+                            :id_servico = -1
+                            OR s.id_servico = :id_servico
+                        )
+
+    
+                        AND (
+                            :status_agendamento = -1
+                            OR a.status_agendamento = :status_agendamento
+                        )
+
+                    # 5. Agrupa pelo ID do agendamento para não duplicar a linha
+                    GROUP BY a.id_agendamento
+                    
+                    ORDER BY a.data_agendamento ASC, a.hora_inicio ASC
+                    
+                    
+                                """)
+        
+        resultados = db.session.execute(sql, {
+                        'data_inicio': data_inicio,
+                        'data_fim': data_fim,
+                        'id_barbeiro': barbeiro_id,
+                        'id_servico': servico_id,
+                        'status_agendamento': status
+        }).mappings().all()
+                
+        return  [dict(registro) for registro in resultados]
     
     @staticmethod
     def listarPorClienteDao(id_cliente: int):

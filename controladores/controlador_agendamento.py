@@ -11,8 +11,12 @@ class ControladorAgendamento:
         return cls.__agendamentos.consultar_agendamento_agendados(status_agendamento)
     
     @classmethod
-    def consultar_agendamento_dia(cls, data_hoje):
+    def consultar_agendamento_data_atual(cls, data_hoje):
         return cls.__agendamentos.consultar_agendamento_data_atual(data_hoje)
+    
+    @classmethod
+    def consultar_agendamento_filtros(cls, barbeiro_id,  status,servico_id,data_inicio,data_fim):
+        return cls.__agendamentos.consultar_agendamento_filtros(barbeiro_id, status,servico_id,data_inicio,data_fim)
     
     @classmethod
     def consultar_total_agendamento_cancelado_por_dia(cls, data_hoje):

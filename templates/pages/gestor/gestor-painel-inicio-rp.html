@@ -26,6 +26,10 @@
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
+                <!-- MENSAGENS  -->
+                {% set mensagens=mensagens_status %}
+                {% include "componetizacao/mensagens/mensagens.html" %}
+
                 <!-- ABA INICIO -->
                 <section class="aba-func block" id="aba-inicio">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
@@ -74,7 +78,7 @@
                                 dia</div>
                             <div class="text-2xl font-bold text-[#f1efe8]" id="kpi-ocupacao-hoje">{{
                                 (( ((agendamentos_flask | length) - tsc.total_servicos_cancelados) /
-                                (capacidade_atendimento / 30)) * 100) | round(2) }} %
+                                (capacidade_atendimento * total_babeiros / 30)) * 100)  | round(2) }} %
                             </div>
                         </div>
 
@@ -87,7 +91,7 @@
                             </div>
                             <div class="text-5xl font-bold text-[#f1efe8] mt-3" id="kpi-faltas-hoje">{{
                                 tsc.total_servicos_cancelados }}<small class="font-normal text-blue-100">/{{
-                                    (agendamentos_flask | length) - tsc.total_servicos_cancelados}}</small>
+                                    (agendamentos_flask | length)}}</small>
                             </div>
                         </div>
                         <div
@@ -96,7 +100,7 @@
                             </div>
                             <div class="text-5xl font-bold text-[#f1efe8] mt-3" id="kpi-faltas-hoje">{{
                                 tsc.total_servicos_agendado }}<small class="font-normal text-blue-100">/{{
-                                    (agendamentos_flask | length) - tsc.total_servicos_cancelados}}</small>
+                                    (agendamentos_flask | length) }}</small>
                             </div>
                         </div>
                         <div
@@ -105,7 +109,7 @@
                             </div>
                             <div class="text-5xl font-bold text-[#f1efe8] mt-3" id="kpi-faltas-hoje">{{
                                 tsc.total_servicos_em_andamento }}<small class="font-normal text-blue-100">/{{
-                                    (agendamentos_flask | length) - tsc.total_servicos_cancelados}}</small>
+                                    (agendamentos_flask | length) }}</small>
                             </div>
                         </div>
                         <div
@@ -113,7 +117,7 @@
                             <div class="text-lg"> Concluidos </div>
                             <div class="text-5xl font-bold text-[#f1efe8] mt-3" id="kpi-faltas-hoje">{{
                                 tsc.total_servicos_concluidos }}<small class="font-normal text-blue-100">/{{
-                                    (agendamentos_flask | length) - tsc.total_servicos_cancelados}}</small>
+                                    (agendamentos_flask | length) }}</small>
                             </div>
                         </div>
                     </div>
@@ -129,166 +133,152 @@
                             </h2>
 
                         </div>
-
                         <!-- Listagem dos agendamentos de hoje -->
-                        <div class="flex flex-col gap-2" id="lista-inicio-hoje">
-                            {% for item in agendamentos_flask %}
-                            <div id="div_agendamentos"
-                                class=" rounded-2xl p-4 flex flex-col gap-4 transition-all duration-200 hover:border-2 hover:bg-[#272623] {{ 'bg-[#232220] border border-green-700' if item.status_agendamento==3 else 'bg-[#232220] border-[#524f46]' }}">
+                        <div id="lista-profissionais-painel"
+                            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-7 w-full">
 
-                                <!-- Informações principais -->
-                                <div class="flex items-start gap-3.5 min-w-0">
+                            {% for agendamento in agendamentos_flask or []%}
+                            <div id="card_servicos"
+                                class="flex flex-col  items-center bg-[#232220] rounded-2xl p-4 border hover:border-amber-500/40 transition-all {{' border-green-400' if agendamento.status_agendamento == 3 else ( 'border-red-400'if agendamento.status_agendamento==0 else 'border-zinc-700/60')}}">
 
-                                    <!-- Horário -->
-                                    <div
-                                        class="flex flex-col items-center justify-center bg-[#191816] border border-[#32302a] rounded-xl px-3 py-2 min-w-[64px] flex-shrink-0">
-                                        <span class="text-sm font-bold text-[#f1efe8] leading-none">
-                                            {{ item.hora_inicio }}
-                                        </span>
-                                        <span class="text-[11px] text-[#888780] mt-1 leading-none">
-                                            {{ item.hora_fim }}
-                                        </span>
-                                    </div>
+                                <!-- Status -->
+                                <div class="w-full text-sm font-normal flex items-center flex-row gap-2 justify-end mb-4">
+                                  
+                                    {% if agendamento.status_agendamento == 0 %}
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full  border bg-red-400/10 text-red-200 border-red-400">
+                                        Cancelado
+                                    </span>
+                                
+                                    {% elif agendamento.status_agendamento == 1 %}
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full  border bg-amber-400/10 text-amber-200 border-amber-400">
+                                        Agendado
+                                    </span>
+                                
+                                    {% elif agendamento.status_agendamento == 2 %}
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full   border bg-blue-400/10 text-blue-200 border-blue-400">
+                                        Em andamento
+                                    </span>
+                                
+                                    {% else %}
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full   border bg-green-400/10 text-green-200 border-green-400">
+                                        Concluído
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500"
+                                    src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ agendamento.foto_usuario ) }}">
 
-                                    <!-- Cliente, barbeiro, serviços e status -->
-                                    <div
-                                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] gap-x-5 gap-y-3 flex-1 min-w-0">
 
-                                        <!-- Cliente -->
-                                        <div class="min-w-0">
-                                            <span
-                                                class="block text-[10px] uppercase tracking-wider text-[#888780] font-semibold">
-                                                Cliente
-                                            </span>
-                                            <p class="text-sm font-semibold text-[#f1efe8] truncate">
-                                                {{ item.nome_cliente }}
-                                            </p>
-                                        </div>
+                                <p class="text-xl font-bold text-[#e6c67c] truncate">
+                                    {{ agendamento.nome_completo }}
+                                </p>
 
-                                        <!-- Barbeiro -->
-                                        <div class="min-w-0">
-                                            <span
-                                                class="block text-[10px] uppercase tracking-wider text-[#888780] font-semibold">
-                                                Barbeiro
-                                            </span>
-                                            <p class="text-sm font-semibold text-[#e6c67c] truncate">
-                                                {{ item.nome_completo }}
-                                            </p>
-                                        </div>
-
-                                        <!-- Serviços -->
-                                        <div class="min-w-0">
-                                            <span
-                                                class="block text-[10px] uppercase tracking-wider text-[#888780] font-semibold">
-                                                Serviços
-                                            </span>
-                                            <p class="text-sm text-[#9e9c95] truncate">
-                                                {{ item.nome_servico }}
-                                            </p>
-                                        </div>
-
-                                        <!-- Status -->
-                                        <div class="min-w-0 lg:w-fit">
-                                            <span
-                                                class="block text-[10px] uppercase tracking-wider text-[#888780] font-semibold mb-1">
-                                                Status
-                                            </span>
-
-                                            {% if item.status_agendamento == 0 %}
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-red-400/10 text-red-200 border-red-400">
-                                                Cancelado
-                                            </span>
-
-                                            {% elif item.status_agendamento == 1 %}
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-amber-400/10 text-amber-200 border-amber-400">
-                                                Agendado
-                                            </span>
-
-                                            {% elif item.status_agendamento == 2 %}
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-400/10 text-blue-200 border-blue-400">
-                                                Em andamento
-                                            </span>
-
-                                            {% else %}
-                                            <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-green-400/10 text-green-200 border-green-400">
-                                                Concluído
-                                            </span>
-                                            {% endif %}
-                                        </div>
-
-                                    </div>
+                                <div class="text-xl text-gray-300 text-center mb-3 mt-4">
+                                    <span
+                                        class="block tracking-wider text-[#888780] font-normal">
+                                        nome cliente
+                                    </span>
+                                    <p class="text-xl font-semibold text-[#f1efe8] truncate">
+                                        {{ agendamento.nome_cliente }}
+                                    </p>
                                 </div>
 
-                                <!-- Área de ações -->
-                                <div class="flex flex-col gap-3 border-t border-[#302e28] pt-3">
+                                <div
+                                    class="w-full min-w-0  text-[#9e9c95] mb-4 bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/40">
+                                    <p>Serviços: </p><br>
+                                    <span class=" w-full text-xls ">{{ agendamento.nome_servico }}</span>
+                                </div>
 
-                                    <!-- Valor total -->
-                                    <div class="flex justify-end">
-                                        <div class="text-xs text-[#888780]">
-                                            Total:
-                                            <span class="text-sm font-semibold text-[#f1efe8]">
-                                                R$ {{ "%.2f"|format(item.valor_total_servicos)|replace('.', ',') }}
+                                <div class="flex flex-col gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
+                                    <!-- Horário -->
+                                    <div
+                                        class="flex flex-row items-center justify-center bg-[#191816] border border-[#32302a] rounded-xl px-3 py-4 ">
+
+                                        <span class="text-xl font-bold text-amber-200 leading-none">
+
+                                            {{ agendamento.hora_inicio }}
+                                            <span class="text-xl font-normal text-gray-100 leading-none">
+                                                ás {{ agendamento.hora_fim }}
                                             </span>
-                                        </div>
+                                        </span>
+
                                     </div>
 
-                                    <!-- Botões -->
-                                    <div class="flex flex-wrap justify-end gap-2">
+
+                                </div>
+                                <!-- Área de ações -->
+                                <div class="w-full flex flex-col items-end gap-2 mt-auto border-t border-[#302e28] pt-3">
+                                
+                                    <!-- Valor total -->
                                     
-                                        {% if item.status_agendamento == 0 %}
-                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=1, idAgendamento=item.id_agendamento ) }}"
-                                            class="flex w-44 shrink-0 items-center justify-center text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-[#e6c67c] text-[#232220] border border-[#e6c67c] transition-all duration-200 hover:bg-[#f1d99b] hover:shadow-md active:scale-95">
+                                        <div class=" text-[#888780]">
+                                            Total:
+                                            <span class="text-2xl font-bold text-[#f1efe8]">
+                                                R$ {{ "%.2f"|format(agendamento.valor_total_servicos)|replace('.', ',') }}
+                                            </span>
+                                        </div>
+                                
+                                    
+                                
+                                    <!-- Botões -->
+                                    <div class="w-full flex flex-col justify-center gap-2">
+                                
+                                        {% if agendamento.status_agendamento == 0 %}
+                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=1, idAgendamento=agendamento.id_agendamento ) }}"
+                                            class=" w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-[#e6c67c] text-[#232220] border border-[#e6c67c] transition-all duration-200 hover:bg-[#f1d99b] hover:shadow-md active:scale-95">
                                             ReaAgendar
                                         </a>
-                                    
-                                        {% elif item.status_agendamento == 1 %}
-                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=0, idAgendamento=item.id_agendamento ,motivoCancelamento='Cancelado pelo gestor: cliente ausente' ) }}"
-                                            class="flex w-44 shrink-0 items-center justify-center text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-red-400/10 text-red-300 border border-red-400/40 transition-all duration-200 hover:bg-red-400/20 hover:border-red-400 active:scale-95">
+                                
+                                        {% elif agendamento.status_agendamento == 1 %}
+                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=0, idAgendamento=agendamento.id_agendamento ,motivoCancelamento='Cancelado pelo gestor: cliente ausente' ) }}"
+                                            class=" w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-red-400/10 text-red-300 border border-red-400/40 transition-all duration-200 hover:bg-red-400/20 hover:border-red-400 active:scale-95">
                                             Cancelar
                                         </a>
-                                    
-                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=2, idAgendamento=item.id_agendamento) }}"
-                                            class="flex w-44 shrink-0 items-center justify-center text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-blue-400/10 text-blue-300 border border-blue-400/40 transition-all duration-200 hover:bg-blue-400/20 hover:border-blue-400 active:scale-95">
+                                
+                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=2, idAgendamento=agendamento.id_agendamento) }}"
+                                            class="w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-blue-400/10 text-blue-300 border border-blue-400/40 transition-all duration-200 hover:bg-blue-400/20 hover:border-blue-400 active:scale-95">
                                             Iniciar atendimento
                                         </a>
-                                    
-                                        {% elif item.status_agendamento == 2 %}
-                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=1, idAgendamento=item.id_agendamento) }}"
-                                            class="flex w-44 shrink-0 items-center justify-center text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-[#e6c67c] text-[#232220] border border-[#e6c67c] transition-all duration-200 hover:bg-[#f1d99b] hover:shadow-md active:scale-95">
+                                
+                                        {% elif agendamento.status_agendamento == 2 %}
+                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=1, idAgendamento=agendamento.id_agendamento) }}"
+                                            class="w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-[#e6c67c] text-[#232220] border border-[#e6c67c] transition-all duration-200 hover:bg-[#f1d99b] hover:shadow-md active:scale-95">
                                             Voltar para Agendado
                                         </a>
-                                    
-                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=0, idAgendamento=item.id_agendamento ,motivoCancelamento='Cancelado pelo gestor: cliente ausente' ) }}"
-                                            class="flex w-44 shrink-0 items-center justify-center text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-red-400/10 text-red-300 border border-red-400/40 transition-all duration-200 hover:bg-red-400/20 hover:border-red-400 active:scale-95">
+                                
+                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=0, idAgendamento=agendamento.id_agendamento ,motivoCancelamento='Cancelado pelo gestor: cliente ausente' ) }}"
+                                            class="w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-red-400/10 text-red-300 border border-red-400/40 transition-all duration-200 hover:bg-red-400/20 hover:border-red-400 active:scale-95">
                                             Cancelar
                                         </a>
-                                    
-                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=3, idAgendamento=item.id_agendamento) }}"
-                                            class="flex w-44 shrink-0 items-center justify-center text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-green-400/10 text-green-300 border border-green-400/40 transition-all duration-200 hover:bg-green-400/20 hover:border-green-400 active:scale-95">
+                                
+                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=3, idAgendamento=agendamento.id_agendamento) }}"
+                                            class="w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-green-400/10 text-green-300 border border-green-400/40 transition-all duration-200 hover:bg-green-400/20 hover:border-green-400 active:scale-95">
                                             Concluir atendimento
                                         </a>
-                                    
-                                        {% elif item.status_agendamento == 3 %}
-                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=2, idAgendamento=item.id_agendamento) }}"
-                                            class="flex w-44 shrink-0 items-center justify-center text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-blue-400/10 text-blue-300 border border-blue-400/40 transition-all duration-200 hover:bg-blue-400/20 hover:border-blue-400 active:scale-95">
+                                
+                                        {% elif agendamento.status_agendamento == 3 %}
+                                        <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=2, idAgendamento=agendamento.id_agendamento) }}"
+                                            class="w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-blue-400/10 text-blue-300 border border-blue-400/40 transition-all duration-200 hover:bg-blue-400/20 hover:border-blue-400 active:scale-95">
                                             Voltar: Em andamento
                                         </a>
                                         {% endif %}
-                                    
+                                
                                     </div>
-
-
+                                
+                                
                                 </div>
-
                             </div>
-                            {% else %}
-                            <p class="text-center text-[#888780] text-sm py-8 italic">Nenhum agendamento para hoje.</p>
-                            {% endfor %}
+                            
+                            {%endfor%}
                         </div>
+
+                      
+                       
+
 
                     </div>
 

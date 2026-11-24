@@ -41,12 +41,31 @@ def gestorLogout():
 # Painel Gestor - Aba inicial
 @gestor.route('/painel', methods=['POST','GET'])
 def gestorPainel():
-    return ControladorGestor.consultar_agendamentos_data_hoje(date.today())
+    return ControladorGestor.consultar_agendamento_data_atual(date.today())
 
 # Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros
-@gestor.route('/painel/agendamento')
+@gestor.route('/painel/agendamento', methods=['POST','GET'])
 def gestorAbaAgendamento():
-    return render_template('pages/gestor/gestor-painel-agendamento-rp.html', lista_barbeiros=ControladorBarbeiro.consultar_nomes_barbeiros(),
+    return render_template('pages/gestor/gestor-painel-agendamento-rp.html',
+                           agendamentos_flask = ControladorAgendamento.consultar_agendamento_data_atual(date.today()),
+                           lista_barbeiros=ControladorBarbeiro.consultar_nomes_barbeiros(),
+                           servicos_descricao=ControladorServico.consultar_descricoes_servico())
+
+# Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros
+@gestor.route('/painel/agendamento/filtros', methods=['POST','GET'])
+def gestorAbaAgendamentoFiltros():
+    
+    filtro_ativado = request.form.get("filtro_ativado")
+    barbeiro_id = request.form.get("barbeiro")
+    status = request.form.get("status")
+    servico_id = request.form.get("servico")
+    data_inicio = request.form.get("data_inicio")
+    data_fim = request.form.get("data_fim")
+       
+    return render_template('pages/gestor/gestor-painel-agendamento-rp.html', 
+                           filtro_ativado=filtro_ativado, 
+                           agendamentos_flask = ControladorAgendamento.consultar_agendamento_filtros(barbeiro_id,status,servico_id,data_inicio,data_fim), 
+                           lista_barbeiros=ControladorBarbeiro.consultar_nomes_barbeiros(),
                            servicos_descricao=ControladorServico.consultar_descricoes_servico())
     
 # Painel Gestor - Aba de visualização da Agenda de todos os Barbeiros

@@ -13,9 +13,6 @@
 
 <body class="bg-[#161513] text-[#f1efe8] font-sans antialiased min-h-screen">
 
-    {# ───────── DADOS MOCK VS FLASK ───────── #}
-    {% include "componetizacao/preCadastro/dados.html" %}
-    {# ─────────────────────────────────────── #}
 
     <!-- Header (Exibe apenas para o mobile)-->
     {% include "componetizacao/Header/header-painel.html" %}
@@ -30,97 +27,274 @@
             <!-- CONTEÚDO PRINCIPAL -->
             <main class="w-full flex-1 p-4 pt-5 md:p-6 lg:p-8 xl:p-10 overflow-x-hidden">
 
-                <!-- ABA AGENDA -->
+                <!-- Mensagens de Erro / Aviso -->
+                <div id="exibir-menssagem-erros-agendamento"
+                    class="bg-red-500/10 border border-red-500/30 mb-8 text-red-500 text-xs sm:text-sm p-3 rounded-lg text-center font-medium tracking-wide hidden">
+                    <p id="menssagem-erros-agendamento"></p>
+                </div>
+
+                <!-- ABA AGENDAMENTO -->
                 <section id="aba-agenda">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-3">
+                    <div class="flex flex-col mb-4 gap-4">
+
+                        <!-- Cabeçalho -->
                         <div>
-                            <h1 class="text-lg lg:text-xl font-semibold">Agendamentos</h1>
+                            <h1 id="agendamento_titulo_filtro" class="text-3xl font-semibold"> Total de  {{ (agendamentos_flask | length)}} agendamentos  </h1>
                             <p class="text-xs text-[#888780]" id="data-atual-str"></p>
                         </div>
+                 
+                        <!-- Filtros -->
+                        <form id="agendamento_form_filtros" action="/gestor/painel/agendamento/filtros" method="post" class="grid grid-cols-2 lg:grid-cols-7 gap-3 items-end">
 
-                        <div class="flex flex-1 justify-end gap-2">
-                            
-                            <div class="hidden md:flex items-center gap-2">
-                                <label for="filtro-barbeiro-agenda" class="text-xs text-[#888780]">Barbeiro:</label>
-                                <select id="filtro-barbeiro-agenda"
-                                    class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer"
-                                    onchange="filtrarPorBarbeiro(this.value)">
-                                    <option value="todos">Todos os Barbeiros</option>
+
+                            <!-- Filtro por Barbeiro -->
+                            <div class="flex flex-col gap-1 min-w-0">
+                                <label for="agendamento-filtro-barbeiro" class="text-xs text-[#888780]">
+                                    Barbeiro:
+                                </label>
+
+                                <select id="agendamento-filtro-barbeiro" name="barbeiro"
+                                    class="w-full h-10 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer">
+
+                                    <option value="-1">Todos os Barbeiros</option>
+
                                     {% for b in lista_barbeiros %}
-                                        <option value="{{ b.id_usuario }}">{{ b.nome_completo }}</option>
+                                    <option value="{{ b.id_usuario }}">
+                                        {{ b.nome_completo }}
+                                    </option>
                                     {% endfor %}
+
                                 </select>
                             </div>
-                            
-                            <!-- Não tem JS atualizado -->
-                            <div class="hidden md:flex items-center gap-2">
-                                <label for="filtro-status-agenda" class="text-xs text-[#888780]">Status:</label>
-                                <select id="filtro-status-agenda"
-                                    class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer"
-                                    onchange="filtrarPorStatus(this.value)">
-                                    <option value="todos">Todos os status</option>
+
+                            <!-- Filtro por Status -->
+                            <div class="flex flex-col gap-1 min-w-0">
+                                <label for="agendamento-filtro-status" class="text-xs text-[#888780]">
+                                    Status:
+                                </label>
+
+                                <select id="agendamento-filtro-status" name="status"
+                                    class="w-full h-10 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer">
+
+                                    <option value="-1">Todos os status</option>
                                     <option value="1">Agendado</option>
                                     <option value="2">Em andamento</option>
                                     <option value="0">Cancelado</option>
                                     <option value="3">Concluído</option>
+
                                 </select>
                             </div>
-                            <!-- Não tem JS atualizado -->
-                            <div class="hidden md:flex items-center gap-2">
-                                <label for="filtro-servico-agenda" class="text-xs text-[#888780]">Serviços:</label>
-                                <select id="filtro-servico-agenda"
-                                    class="h-9 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer"
-                                    onchange="filtrarPorServico(this.value)">
+
+                            <!-- Filtro por Serviço -->
+                            <div class="flex flex-col gap-1 min-w-0">
+                                <label for="agendamento-filtro-servico" class="text-xs text-[#888780]">
+                                    Serviços:
+                                </label>
+
+                                <select id="agendamento-filtro-servico" name="servico"
+                                    class="w-full h-10 px-3 rounded-xl border border-[#38362f] bg-[#232220] text-[#f1efe8] text-xs focus:outline-none cursor-pointer">
+
                                     <option value="-1">Todos os Serviços</option>
+
                                     {% for servico in servicos_descricao %}
-                                        <option value="{{servico.id_servico}}">{{servico.descricao_servico}}</option>
+                                    <option value="{{ servico.id_servico }}">
+                                        {{ servico.descricao_servico }}
+                                    </option>
                                     {% endfor %}
+
                                 </select>
                             </div>
 
+                            <!-- Data de Início -->
+                            <div class="flex flex-col gap-1 min-w-0">
+                                <label for="agendamento-data-inicio" class="text-xs font-medium text-[#888780]">
+                                    Data de Início
+                                </label>
+
+                                <input type="date" name="data_inicio" id="agendamento-data-inicio"
+                                    style="color-scheme: dark;"
+                                    class="w-full h-10 px-3 rounded-xl border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+                            </div>
+
+                            <!-- Data de Fim -->
+                            <div class="flex flex-col gap-1 min-w-0">
+                                <label for="agendamento-data-fim" class="text-xs font-medium text-[#888780]">
+                                    Data de Fim
+                                </label>
+
+                                <input type="date" name="data_fim" id="agendamento-data-fim" style="color-scheme: dark;"
+                                    class="w-full h-10 px-3 rounded-xl border border-[#4a473f] bg-[#161513] text-[#f1efe8] text-xs focus:outline-none focus:border-[#0f6e56] focus:ring-2 focus:ring-[#04342c] transition-all">
+                            </div>
+                            <input type="hidden" name="filtro_ativado" id="agendamento-data-fim" value="1">
+                            <!-- Botões -->
+                            <div class="col-span-2 lg:col-span-2 flex flex-row gap-2">
+
+                                <button type="submit"
+                                    class="flex-1 h-10 px-4 rounded-xl bg-[#0f6e56] hover:bg-[#0c5b47] text-white text-xs font-semibold transition-colors">
+                                    Filtrar
+                                </button>
+
+                                {% if filtro_ativado %}
+                                <a href="/gestor/painel/agendamento" 
+                                    class="flex flex-1 h-10 px-4 rounded-xl items-center justify-center border border-[#38362f] bg-[#232220] hover:bg-[#302e2a] text-[#f1efe8] text-xs font-semibold transition-colors">
+                                    remover filtros
+                                </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+
+
+
+                    <!-- Listagem dos agendamentos de hoje -->
+                    <div id="lista-profissionais-painel"
+                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-7 w-full">
+
+                        {% for agendamento in agendamentos_flask or [] %}
+                        <div id="card_servicos"
+                            class="flex flex-col  items-center bg-[#232220] rounded-2xl p-4 border hover:border-amber-500/40 transition-all {{' border-green-400' if agendamento.status_agendamento == 3 else ( 'border-red-400'if agendamento.status_agendamento==0 else 'border-zinc-700/60')}}">
+
+                            <!-- Status -->
+                            <div class="w-full text-sm font-normal flex items-center flex-row gap-2 justify-end mb-4">
+
+                                {% if agendamento.status_agendamento == 0 %}
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full  border bg-red-400/10 text-red-200 border-red-400">
+                                    Cancelado
+                                </span>
+
+                                {% elif agendamento.status_agendamento == 1 %}
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full  border bg-amber-400/10 text-amber-200 border-amber-400">
+                                    Agendado
+                                </span>
+
+                                {% elif agendamento.status_agendamento == 2 %}
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full   border bg-blue-400/10 text-blue-200 border-blue-400">
+                                    Em andamento
+                                </span>
+
+                                {% else %}
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full   border bg-green-400/10 text-green-200 border-green-400">
+                                    Concluído
+                                </span>
+                                {% endif %}
+                            </div>
+                            <img class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-amber-500"
+                                src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ agendamento.foto_usuario ) }}">
+
+
+                            <p class="text-xl font-bold text-[#e6c67c] truncate">
+                                {{ agendamento.nome_completo }}
+                            </p>
+
+                            <div class="text-xl text-gray-300 text-center mb-3 mt-4">
+                                <span class="block tracking-wider text-[#888780] font-normal">
+                                    nome cliente
+                                </span>
+                                <p class="text-xl font-semibold text-[#f1efe8] truncate">
+                                    {{ agendamento.nome_cliente }}
+                                </p>
+                            </div>
+
+                            <div
+                                class="w-full min-w-0  text-[#9e9c95] mb-4 bg-zinc-800/50 p-3 rounded-xl border border-zinc-700/40">
+                                <p>Serviços: </p><br>
+                                <span class=" w-full text-xls ">{{ agendamento.nome_servico }}</span>
+                            </div>
+
+                            <div class="flex flex-col gap-2 w-full mt-auto pt-3 border-t border-zinc-700/50">
+                                <!-- Horário -->
+                                <div
+                                    class="flex flex-col items-center justify-center bg-[#191816] border border-[#32302a] rounded-xl px-3 py-4 ">
+                                    
+                                    <p class="text-xl"> {{agendamento.data_agendamento.strftime('%d-%m-%Y')}}</p>
+
+                                    <span class="text-xl font-bold text-amber-200 leading-none">
+
+                                        {{ agendamento.hora_inicio }}
+                                        <span class="text-xl font-normal text-gray-100 leading-none">
+                                            ás {{ agendamento.hora_fim }}
+                                        </span>
+                                    </span>
+
+                                </div>
+
+
+                            </div>
+                            <!-- Área de ações -->
+                            <div class="w-full flex flex-col items-end gap-2 mt-auto border-t border-[#302e28] pt-3">
+
+                                <!-- Valor total -->
+
+                                <div class=" text-[#888780]">
+                                    Total:
+                                    <span class="text-2xl font-bold text-[#f1efe8]">
+                                        R$ {{ "%.2f"|format(agendamento.valor_total_servicos)|replace('.', ',') }}
+                                    </span>
+                                </div>
+
+
+
+                                <!-- Botões -->
+                                <div class="w-full flex flex-col justify-center gap-2">
+
+                                    {% if agendamento.status_agendamento == 0 %}
+                                    <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=1, idAgendamento=agendamento.id_agendamento ) }}"
+                                        class=" w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-[#e6c67c] text-[#232220] border border-[#e6c67c] transition-all duration-200 hover:bg-[#f1d99b] hover:shadow-md active:scale-95">
+                                        ReaAgendar
+                                    </a>
+
+                                    {% elif agendamento.status_agendamento == 1 %}
+                                    <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=0, idAgendamento=agendamento.id_agendamento ,motivoCancelamento='Cancelado pelo gestor: cliente ausente' ) }}"
+                                        class=" w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-red-400/10 text-red-300 border border-red-400/40 transition-all duration-200 hover:bg-red-400/20 hover:border-red-400 active:scale-95">
+                                        Cancelar
+                                    </a>
+
+                                    <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=2, idAgendamento=agendamento.id_agendamento) }}"
+                                        class="w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-blue-400/10 text-blue-300 border border-blue-400/40 transition-all duration-200 hover:bg-blue-400/20 hover:border-blue-400 active:scale-95">
+                                        Iniciar atendimento
+                                    </a>
+
+                                    {% elif agendamento.status_agendamento == 2 %}
+                                    <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=1, idAgendamento=agendamento.id_agendamento) }}"
+                                        class="w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-[#e6c67c] text-[#232220] border border-[#e6c67c] transition-all duration-200 hover:bg-[#f1d99b] hover:shadow-md active:scale-95">
+                                        Voltar para Agendado
+                                    </a>
+
+                                    <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=0, idAgendamento=agendamento.id_agendamento ,motivoCancelamento='Cancelado pelo gestor: cliente ausente' ) }}"
+                                        class="w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-red-400/10 text-red-300 border border-red-400/40 transition-all duration-200 hover:bg-red-400/20 hover:border-red-400 active:scale-95">
+                                        Cancelar
+                                    </a>
+
+                                    <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=3, idAgendamento=agendamento.id_agendamento) }}"
+                                        class="w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-green-400/10 text-green-300 border border-green-400/40 transition-all duration-200 hover:bg-green-400/20 hover:border-green-400 active:scale-95">
+                                        Concluir atendimento
+                                    </a>
+
+                                    {% elif agendamento.status_agendamento == 3 %}
+                                    <a href="{{ url_for('gestor.gestorAbaAgendamentoAlterarStatus', status=2, idAgendamento=agendamento.id_agendamento) }}"
+                                        class="w-full text-center px-3 py-2.5 rounded-lg text-xs font-semibold bg-blue-400/10 text-blue-300 border border-blue-400/40 transition-all duration-200 hover:bg-blue-400/20 hover:border-blue-400 active:scale-95">
+                                        Voltar: Em andamento
+                                    </a>
+                                    {% endif %}
+
+                                </div>
+
+
+                            </div>
                         </div>
 
+                        {%endfor%}
                     </div>
-
-                    <div class="flex justify-between">
-                        <div class="flex gap-1.5 mb-4 flex-wrap">
-                            <button class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#f1efe8] bg-[#f1efe8] text-[#161513] text-xs font-medium cursor-pointer transition-all"
-                                data-filtro="dia" onclick="mudarVisaoAgenda('dia')">Dia</button>
-                            <button class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all"
-                                data-filtro="semana" onclick="mudarVisaoAgenda('semana')">Semana</button>
-                            <button class="filtro-btn px-3.5 py-1.5 rounded-full border border-[#4a473f] bg-transparent text-[#888780] text-xs font-medium cursor-pointer transition-all"
-                                data-filtro="mes" onclick="mudarVisaoAgenda('mes')">Mês</button>
-                        </div>
-                       
-                    </div>
-                    
-                    <div id="agenda-visao-dia">
-                        <span class="text-xs font-semibold uppercase tracking-wider text-[#888780] block mb-3">
-                            Sexta-feira, 06 de novembro de 2026
-                        </span>
-                        <div class="flex flex-col gap-2" id="lista-agenda-dia"></div>
-                    </div>
-
-                    <div id="agenda-visao-semana" class="hidden">
-                        <div class="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-none" id="semana-scroll"></div>
-                    </div>
-
-                    <div id="agenda-visao-mes" class="hidden">
-                        <div class="flex items-center justify-between mb-3">
-                            <button
-                                class="w-8 h-8 rounded-full border border-[#4a473f] bg-transparent text-[#f1efe8] hover:bg-[#2a2825] cursor-pointer text-base flex items-center justify-center"
-                                onclick="mudarMes(-1)">‹</button>
-                            <h3 class="text-sm font-medium" id="mes-titulo">—</h3>
-                            <button
-                                class="w-8 h-8 rounded-full border border-[#4a473f] bg-transparent text-[#4a473f] hover:bg-[#2a2825] cursor-pointer text-base flex items-center justify-center text-[#f1efe8]"
-                                onclick="mudarMes(1)">›</button>
-                        </div>
-                        <div class="grid grid-cols-7 gap-1" id="mes-grid"></div>
-                        <div class="text-xs font-medium text-[#888780] uppercase tracking-wider mt-5 mb-3"
-                            id="mes-dia-selecionado-titulo">Selecione um dia</div>
-                        <div class="flex flex-col gap-2" id="lista-mes-dia"></div>
-                    </div>
-
                 </section>
             </main>
         </div>
@@ -134,16 +308,16 @@
     {% include "componetizacao/modals/modal-detalhes-atendimento.html" %}
 
     <!-- MODAL: * FILTRA AGENDA * Deve ser implementado -->
-    {% include "componetizacao/modals/modal-agenda-filtro-gestor.html" %} 
-    
-    
+    {% include "componetizacao/modals/modal-agenda-filtro-gestor.html" %}
+
+
 
     <!-- TOAST AVISO -->
     <div class="fixed bottom-20 left-1/2 -translate-x-1/2 translate-y-2.5 bg-[#f1efe8] text-[#161513] px-4 py-2 rounded-lg text-xs opacity-0 pointer-events-none transition-all duration-200 z-[500] whitespace-nowrap"
         id="aviso"></div>
 
-    <script src="{{ url_for('static', filename='js/gestor-painel-utilitarios.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/gestor-painel-agenda.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/agendamento_gestor_filtros.js') }}"></script>
 </body>
 
 </html>

@@ -103,7 +103,7 @@
                                     class="barber-tab absolute w-full max-w-[200px] flex flex-col items-center justify-center gap-2 rounded-xl border border-brand-border bg-brand-bg-card p-4 text-center transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold/80 aria-selected:border-brand-gold aria-selected:bg-brand-gold/5">
                                     
                                     <span class="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-brand-border bg-[#22252a] transition-colors group-aria-selected:border-brand-gold sm:h-28 sm:w-28">
-                                        <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_nome_usuario) }}"
+                                        <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_usuario) }}"
                                         alt="Foto do barbeiro {{ b.nome_completo }}" width="112" height="112" loading="lazy" class="h-full w-full aspect-[3/4] object-cover">
                                     </span>
                                     <span>
@@ -149,7 +149,7 @@
                                 </div>
 
                                 <div class="relative w-full md:w-[300px] shrink-0 overflow-hidden md:border-l border-brand-border/30 aspect-square md:aspect-[3/4] bg-brand-bg-card">
-                                    <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_nome_usuario) }}" 
+                                    <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/barbeiro-imagens/' ~ b.foto_usuario) }}" 
                                         alt="Foto do barbeiro {{ b.nome_completo }}" 
                                         loading="lazy" 
                                         class="h-full w-full aspect-[3/4] object-cover [mask-image:radial-gradient(circle_at_center,black_40%,transparent_90%)]
@@ -189,9 +189,9 @@
                         <div id="carousel-track" class="relative flex h-full w-full items-center justify-center">
                         
                                 {% for servico in servicos %}
-                                    <article class="service-card absolute w-full max-w-[280px] sm:max-w-[300px] flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold">
+                                    <article class="service-card gap-4 absolute w-full max-w-[280px] sm:max-w-[300px] flex flex-col justify-between rounded-xl border border-brand-border bg-brand-bg-card p-7 transition-all duration-500 ease-in-out opacity-0 scale-50 z-0 group hover:border-brand-gold">
                                         <div>           
-                                            <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/servicos-imagens/' ~ servico.foto_servico) }}" alt="{{ servico.descricao_servico }}" class="w-full object-cover rounded-lg mb-3">
+                                            <img src="{{ url_for('static', filename=config['UPLOAD_FILES'].replace('static/', '') ~ '/servicos-imagens/' ~ servico.foto_servico) }}" alt="{{ servico.descricao_servico }}" class="w-full h-full object-center rounded-lg mb-3">
                                             
                                             <h3 class="font-title mb-1 text-xl text-white">{{ servico.descricao_servico }}</h3>
                                             <p class="text-sm leading-relaxed text-brand-muted">Duração: {{ servico.duracao }} min</p>

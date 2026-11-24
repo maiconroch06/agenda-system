@@ -242,6 +242,22 @@ class BarbeiroDAO:
                 registros = db.session.execute(sql).mappings().all()
         
                 return [dict(registro) for registro in registros]
+            
+    def consultar_total_barbeiro_ativo(self):
+        sql = text("""
+            SELECT
+                COUNT(b.id_barbeiro)                       
+            FROM usuario u
+
+            INNER JOIN barbeiro b
+                ON b.id_barbeiro = u.id_usuario
+
+            ORDER BY u.nome_completo
+        """)
+
+        registros = db.session.execute(sql)
+
+        return registros.scalar()
 
     def consultar_todos_ativos(self):
         sql = text("""

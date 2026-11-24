@@ -17,6 +17,10 @@ class AgendamentoRepositorio:
         return AgendamentoDAO.consultarTodosOsAgendamentoDoCliente(id_cliente)
 
     @staticmethod
+    def consultar_agendamento_filtros(barbeiro_id,  status,servico_id,data_inicio,data_fim):
+        return AgendamentoDAO.consultar_agendamento_filtros(barbeiro_id,  status,servico_id,data_inicio,data_fim)
+ 
+    @staticmethod
     def consultarAgendamentoDataAtual(data_hoje):
         return AgendamentoDAO.consultarTodosOsAgendamentoDataAtual(data_hoje)
    

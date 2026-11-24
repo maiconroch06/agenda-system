@@ -36,7 +36,12 @@ class ControladorBarbeiro:
     def consultar_nomes_barbeiros(cls):
             barbeiros = cls.__barbeiroService.consultar_nomes_barbeiro()
             return barbeiros
-     
+     #Consulta os barbeiros, retornando o id e nomes deles
+    @classmethod
+    def consultar_total_barbeiro_ativo(cls):
+        return  cls.__barbeiroService.consultar_total_barbeiro_ativo()
+        
+             
     @classmethod
     def consultar_agendamentos_barbeiro(cls, barbeiro:dict):
         return cls.__barbeiroService.consultar_agendamentos_barbeiro(barbeiro)
